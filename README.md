@@ -68,8 +68,6 @@ Each chapter includes:
 
 ## ⚙️ Tech Stack
 
-> *(To be updated depending on implementation)*
-
 - Language: Java
 - Database: SQLite
 - Tools: Android Studio
@@ -86,8 +84,6 @@ Each chapter includes:
 ---
 
 ## 🚀 How to Run
-
-> *(To be updated when implementation begins)*
 
 1. Clone this repo:
    ```bash
