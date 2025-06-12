@@ -1,6 +1,6 @@
 package com.example.wallstreettycoon.useraccount;
 
-public class user { //Data model
+public class User { //Data model
     int userID; //Uniquely ID user
     String userFirstName;
     String userLastName;
@@ -8,7 +8,7 @@ public class user { //Data model
     String userPassword;
     Float userBalance;
 
-    public user(String userPassword, String userUsername, String userLastName, String userFirstName, int userID) {
+    public User(String userPassword, String userUsername, String userLastName, String userFirstName, int userID) {
         this.userPassword = userPassword;
         this.userUsername = userUsername;
         this.userLastName = userLastName;
