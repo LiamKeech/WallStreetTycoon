@@ -78,4 +78,10 @@ public class Stock {
     public void setStockPrice(BigDecimal stockPrice) {
         this.stockPrice = stockPrice;
     }
+
+    @Override
+    public String toString()
+    {
+        return stockName;
+    }
 }
