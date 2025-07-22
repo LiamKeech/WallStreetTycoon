@@ -6,14 +6,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.wallstreettycoon.stock.Stock;
+import com.example.wallstreettycoon.stock.StockPriceHistory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DatabaseCreator extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "localdata.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public DatabaseCreator(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,41 +51,43 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         // StockPriceHistory table
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS stockPriceHistory (" +
-                        "stockPriceHistoryID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "stockPriceHistoryID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "amplitudes TEXT, " +
                         "frequencies TEXT, " +
-                        "FOREIGN KEY (stockID) REFERENCES stocks(stockID))"
+                        "stockID INTEGER, " +
+                        "FOREIGN KEY (stockID) REFERENCES stocks(stockID)" +
+                        ")"
         );
 
         db.execSQL("INSERT INTO stockPriceHistory (amplitudes, frequencies, stockID) VALUES " +
-                "('[8.2,6.5,4.9,3.3,2.8,2.1,1.7,1.3,1.0,0.8]', '[0.6,1.1,1.9,2.5,3.2,4.0,5.7,6.8,8.3,9.7]', 1)");
+                "('8.2,6.5,4.9,3.3,2.8,2.1,1.7,1.3,1.0,0.8', '0.6,1.1,1.9,2.5,3.2,4.0,5.7,6.8,8.3,9.7', 1)");
 
         db.execSQL("INSERT INTO stockPriceHistory (amplitudes, frequencies, stockID) VALUES " +
-                "('[7.5,6.0,5.2,4.1,3.0,2.5,1.8,1.2,1.1,0.9]', '[0.8,1.4,2.2,3.0,3.9,5.1,6.3,7.5,8.4,9.6]', 2)");
+                "('7.5,6.0,5.2,4.1,3.0,2.5,1.8,1.2,1.1,0.9', '0.8,1.4,2.2,3.0,3.9,5.1,6.3,7.5,8.4,9.6', 2)");
 
         db.execSQL("INSERT INTO stockPriceHistory (amplitudes, frequencies, stockID) VALUES " +
-                "('[9.0,5.7,4.6,3.4,2.6,2.2,1.5,1.1,0.7,0.6]', '[0.5,1.2,2.4,3.3,4.7,6.1,7.2,8.5,9.0,10.3]', 3)");
+                "('9.0,5.7,4.6,3.4,2.6,2.2,1.5,1.1,0.7,0.6', '0.5,1.2,2.4,3.3,4.7,6.1,7.2,8.5,9.0,10.3', 3)");
 
         db.execSQL("INSERT INTO stockPriceHistory (amplitudes, frequencies, stockID) VALUES " +
-                "('[6.4,5.9,4.7,4.0,2.8,2.1,1.6,1.2,1.0,0.5]', '[1.0,1.8,2.6,3.5,4.3,5.0,6.6,7.3,8.9,9.9]', 4)");
+                "('6.4,5.9,4.7,4.0,2.8,2.1,1.6,1.2,1.0,0.5', '1.0,1.8,2.6,3.5,4.3,5.0,6.6,7.3,8.9,9.9', 4)");
 
         db.execSQL("INSERT INTO stockPriceHistory (amplitudes, frequencies, stockID) VALUES " +
-                "('[8.0,6.3,5.5,4.8,3.6,2.7,2.1,1.4,0.9,0.6]', '[0.9,1.6,2.8,3.9,4.2,5.4,6.8,7.9,8.6,10.1]', 5)");
+                "('8.0,6.3,5.5,4.8,3.6,2.7,2.1,1.4,0.9,0.6', '0.9,1.6,2.8,3.9,4.2,5.4,6.8,7.9,8.6,10.1', 5)");
 
         db.execSQL("INSERT INTO stockPriceHistory (amplitudes, frequencies, stockID) VALUES " +
-                "('[7.3,5.8,4.5,3.7,3.1,2.0,1.5,1.0,0.8,0.4]', '[0.7,1.5,2.3,3.7,4.5,5.9,6.4,7.8,8.2,9.5]', 6)");
+                "('7.3,5.8,4.5,3.7,3.1,2.0,1.5,1.0,0.8,0.4', '0.7,1.5,2.3,3.7,4.5,5.9,6.4,7.8,8.2,9.5', 6)");
 
         db.execSQL("INSERT INTO stockPriceHistory (amplitudes, frequencies, stockID) VALUES " +
-                "('[9.2,7.1,5.3,4.4,3.0,2.2,1.7,1.3,0.9,0.5]', '[0.4,1.7,2.9,3.6,4.8,6.0,7.2,8.0,9.3,10.5]', 7)");
+                "('9.2,7.1,5.3,4.4,3.0,2.2,1.7,1.3,0.9,0.5', '0.4,1.7,2.9,3.6,4.8,6.0,7.2,8.0,9.3,10.5', 7)");
 
         db.execSQL("INSERT INTO stockPriceHistory (amplitudes, frequencies, stockID) VALUES " +
-                "('[6.8,5.4,4.1,3.6,2.7,1.9,1.3,1.1,0.7,0.3]', '[1.2,2.1,3.2,4.6,5.5,6.7,7.1,8.4,9.0,10.2]', 8)");
+                "('6.8,5.4,4.1,3.6,2.7,1.9,1.3,1.1,0.7,0.3', '1.2,2.1,3.2,4.6,5.5,6.7,7.1,8.4,9.0,10.2', 8)");
 
         db.execSQL("INSERT INTO stockPriceHistory (amplitudes, frequencies, stockID) VALUES " +
-                "('[7.9,6.6,4.2,3.3,2.4,1.8,1.5,1.1,0.8,0.6]', '[0.3,1.3,2.5,3.4,4.1,5.3,6.5,7.7,9.1,10.0]', 9)");
+                "('7.9,6.6,4.2,3.3,2.4,1.8,1.5,1.1,0.8,0.6', '0.3,1.3,2.5,3.4,4.1,5.3,6.5,7.7,9.1,10.0', 9)");
 
         db.execSQL("INSERT INTO stockPriceHistory (amplitudes, frequencies, stockID) VALUES " +
-                "('[8.5,6.9,5.1,4.2,3.5,2.3,1.9,1.4,1.0,0.7]', '[0.5,1.9,2.6,3.1,4.4,5.6,6.3,7.5,8.8,10.6]', 10)");
+                "('8.5,6.9,5.1,4.2,3.5,2.3,1.9,1.4,1.0,0.7', '0.5,1.9,2.6,3.1,4.4,5.6,6.3,7.5,8.8,10.6', 10)");
 
 
 
@@ -152,7 +156,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Handle schema migrations here
+
     }
 
     //getter for stockList
@@ -180,5 +184,37 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         db.close();
 
         return stockList;
+    }
+
+    //getter for stockpricehistory
+
+    public List<StockPriceHistory> getStockPriceHistories(){
+        List<StockPriceHistory> stockPriceHistories = new ArrayList<>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM stockPriceHistory",null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Integer stockPriceHistoryID = cursor.getInt(cursor.getColumnIndexOrThrow("stockPriceHistoryID"));
+                String[] amplitudesString = cursor.getString(cursor.getColumnIndexOrThrow("amplitudes")).split(",");
+                Double[] amplitudes = Arrays.stream(amplitudesString)
+                        .map(Double::parseDouble)
+                        .toArray(Double[]::new);
+
+                String[] frequenciesString = cursor.getString(cursor.getColumnIndexOrThrow("frequencies")).split(",");
+                Double[] frequencies = Arrays.stream(frequenciesString)
+                        .map(Double::parseDouble)
+                        .toArray(Double[]::new);
+
+                Integer stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+
+                StockPriceHistory s = new StockPriceHistory(stockPriceHistoryID, amplitudes, frequencies, stockID);
+                stockPriceHistories.add(s);
+            } while (cursor.moveToNext());
+        }
+
+        return stockPriceHistories;
     }
 }
