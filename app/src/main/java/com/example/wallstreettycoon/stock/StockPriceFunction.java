@@ -1,26 +1,15 @@
 package com.example.wallstreettycoon.stock;
 
-import android.database.sqlite.SQLiteDatabase;
-
-import com.example.wallstreettycoon.databaseHelper.DatabaseCreator;
-
-import java.math.BigDecimal;
-
-public class StockPriceHistory {
+public class StockPriceFunction {
     Integer pk;
     Double[] amplitudes;
     Double[] frequencies;
     Integer fk;
-    public StockPriceHistory(Integer pk, Double[] amplitudes, Double[] frequencies, Integer fk){
+    public StockPriceFunction(Integer pk, Double[] amplitudes, Double[] frequencies, Integer fk){
         this.pk = pk;
         this.amplitudes = amplitudes;
         this.frequencies = frequencies;
         this.fk = fk;
-    }
-
-    @Override
-    public String toString(){
-        return amplitudes[0].toString();
     }
 
     public Double getCurrentPrice(Integer timeStamp){

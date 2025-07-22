@@ -1,6 +1,5 @@
 package com.example.wallstreettycoon;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -11,8 +10,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.wallstreettycoon.databaseHelper.DatabaseCreator;
-import com.example.wallstreettycoon.stock.Stock;
-import com.example.wallstreettycoon.stock.StockPriceHistory;
+import com.example.wallstreettycoon.stock.StockPriceFunction;
 
 import java.util.List;
 
@@ -23,10 +21,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         DatabaseCreator dbCreator = new DatabaseCreator(this);
-        //SQLiteDatabase db = dbCreator.getWritableDatabase();
 
-        List<StockPriceHistory> stockPriceHistoryList = dbCreator.getStockPriceHistories();
-        Log.d(stockPriceHistoryList.getFirst().toString(), " ");
+        List<StockPriceFunction> stockPriceFunctionList = dbCreator.getStockPriceFunctions();
+        Log.d(stockPriceFunctionList.get(1).getCurrentPrice(1).toString(), " ");
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);

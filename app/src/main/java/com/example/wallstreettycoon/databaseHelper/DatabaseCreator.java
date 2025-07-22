@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.wallstreettycoon.stock.Stock;
-import com.example.wallstreettycoon.stock.StockPriceHistory;
+import com.example.wallstreettycoon.stock.StockPriceFunction;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.List;
 
 public class DatabaseCreator extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "localdata.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
     public DatabaseCreator(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -173,7 +173,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                BigDecimal stockPrice = new BigDecimal(cursor.getDouble(cursor.getColumnIndexOrThrow("price")));
+                Double stockPrice = Double.valueOf("price");
 
                 Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
                 stockList.add(stock);
@@ -188,8 +188,8 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
     //getter for stockpricehistory
 
-    public List<StockPriceHistory> getStockPriceHistories(){
-        List<StockPriceHistory> stockPriceHistories = new ArrayList<>();
+    public List<StockPriceFunction> getStockPriceFunctions(){
+        List<StockPriceFunction> stockPriceHistories = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -210,7 +210,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
                 Integer stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
 
-                StockPriceHistory s = new StockPriceHistory(stockPriceHistoryID, amplitudes, frequencies, stockID);
+                StockPriceFunction s = new StockPriceFunction(stockPriceHistoryID, amplitudes, frequencies, stockID);
                 stockPriceHistories.add(s);
             } while (cursor.moveToNext());
         }

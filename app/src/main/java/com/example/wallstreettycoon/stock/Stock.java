@@ -8,10 +8,10 @@ public class Stock {
     private String symbol;
     private String category;
     private String description;
-    private BigDecimal stockPrice;
+    private Double stockPrice;
 
     //Constructor with all parameters
-    public Stock(int stockID, String stockName, String symbol, String category, String description, BigDecimal stockPrice){
+    public Stock(int stockID, String stockName, String symbol, String category, String description, Double stockPrice){
         this.stockID = stockID;
         this.stockName = stockName;
         this.symbol = symbol;
@@ -71,11 +71,13 @@ public class Stock {
     }
 
     // Getter and Setter for stockPrice
-    public BigDecimal getStockPrice() {
+    public Double getStockPrice() {
+
         return stockPrice;
     }
 
-    public void setStockPrice(BigDecimal stockPrice) {
+    public void setStockPrice(Double stockPrice) {
+        //TODO make get current stock price referenced from stock easily
         this.stockPrice = stockPrice;
     }
 
