@@ -49,16 +49,14 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         // StockPriceHistory table
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS stockPriceHistory (" +
-                        "priceID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "chapterStockID INTEGER, " +
-                        "timeIncreaseStamp TEXT, " +
-                        "percentageInc REAL, " +
-                        "timeDecreaseStamp TEXT, " +
-                        "percentageDec REAL, " +
-                        "FOREIGN KEY (chapterStockID) REFERENCES chapter_stock(ChapterStockID))"
+                        "stockPriceHistoryID INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "amplitudes TEXT, " +
+                        "frequencies TEXT, " +
+                        "FOREIGN KEY (stockID) REFERENCES stocks(stockID))"
         );
 
         //TODO populate stockprice history table
+
 
         // Chapter table
         db.execSQL(
