@@ -1,14 +1,14 @@
 package com.example.wallstreettycoon.useraccount;
 
 public class User { //Data model
-    int userID; //Uniquely ID user
+    Integer userID; //Uniquely ID user
     String userFirstName;
     String userLastName;
     String userUsername;
     String userPassword;
     Float userBalance;
 
-    public User(String userPassword, String userUsername, String userLastName, String userFirstName, int userID) {
+    public User(String userPassword, String userUsername, String userLastName, String userFirstName, Integer userID) {
         this.userPassword = userPassword;
         this.userUsername = userUsername;
         this.userLastName = userLastName;

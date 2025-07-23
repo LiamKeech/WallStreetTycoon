@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
+import com.example.wallstreettycoon.useraccount.User;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -84,5 +85,9 @@ public class DatabaseUtil {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    public void setUser(User user){
+
     }
 }
