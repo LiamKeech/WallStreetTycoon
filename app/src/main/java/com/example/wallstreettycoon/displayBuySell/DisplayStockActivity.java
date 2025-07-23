@@ -1,6 +1,8 @@
 package com.example.wallstreettycoon.displayBuySell;
 
 import android.os.Bundle;
+import android.widget.Button;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.wallstreettycoon.R;
@@ -26,13 +28,38 @@ public class DisplayStockActivity extends AppCompatActivity {
         initialData = new ArrayList<>();
         generateInitialData();
 
-        // Time range
-        findViewById(R.id.btn1D).setOnClickListener(v -> updateChart("1D"));
-        findViewById(R.id.btn1W).setOnClickListener(v -> updateChart("1W"));
-        findViewById(R.id.btn1M).setOnClickListener(v -> updateChart("1M")); // Regen/revert to initial
+        Button btn1D = findViewById(R.id.btn1D);
+        Button btn1W = findViewById(R.id.btn1W);
+        Button btn1M = findViewById(R.id.btn1M);
 
-        // Buy and sell
-        //TODO: Fragment should be in landscape orientation
+        // Set initial colors (e.g., 1M as default selected)
+        btn1M.setBackgroundTintList(getColorStateList(R.color.LightBlue));
+        btn1D.setBackgroundTintList(getColorStateList(R.color.Orange));
+        btn1W.setBackgroundTintList(getColorStateList(R.color.Orange));
+
+        // Time range button listeners with color changes
+        btn1D.setOnClickListener(v -> {
+            updateChart("1D");
+            btn1M.setBackgroundTintList(getColorStateList(R.color.Orange));
+            btn1D.setBackgroundTintList(getColorStateList(R.color.LightBlue));
+            btn1W.setBackgroundTintList(getColorStateList(R.color.Orange));
+        });
+
+        btn1W.setOnClickListener(v -> {
+            updateChart("1W");
+            btn1M.setBackgroundTintList(getColorStateList(R.color.Orange));
+            btn1D.setBackgroundTintList(getColorStateList(R.color.Orange));
+            btn1W.setBackgroundTintList(getColorStateList(R.color.LightBlue));
+        });
+
+        btn1M.setOnClickListener(v -> {
+            updateChart("1M");
+            btn1M.setBackgroundTintList(getColorStateList(R.color.LightBlue));
+            btn1D.setBackgroundTintList(getColorStateList(R.color.Orange));
+            btn1W.setBackgroundTintList(getColorStateList(R.color.Orange));
+        });
+
+        // Buy and Sell button listeners
         findViewById(R.id.btnBuy).setOnClickListener(v -> {
             BuyDialogFragment buyDialog = new BuyDialogFragment();
             buyDialog.show(getSupportFragmentManager(), "BuyDialog");
@@ -72,6 +99,7 @@ public class DisplayStockActivity extends AppCompatActivity {
             entries.add(new Entry(0, 70f));
             entries.add(new Entry(1, 70.5f));
             entries.add(new Entry(2, 69.8f));
+
         } else if ("1W".equals(range)) {
             for (int i = 0; i < 7; i++) {
                 entries.add(new Entry(i, 70f + i + (float)(Math.random() * 2)));

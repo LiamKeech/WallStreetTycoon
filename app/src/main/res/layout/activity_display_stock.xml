@@ -14,7 +14,7 @@
         android:layout_height="49dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:backgroundTint="#FF9800"
+        android:backgroundTint="@color/LightGrey"
         android:contentDescription="Back"
         android:padding="8dp"
         android:src="@drawable/ic_back"
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Stock Symbol:"
-                android:textColor="#2196F3"
+                android:textColor="@color/LightBlue"
                 android:textStyle="bold" />
 
             <TextView
@@ -83,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Current Price:"
-                android:textColor="#2196F3"
+                android:textColor="@color/LightBlue"
                 android:textStyle="bold" />
 
             <TextView
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Description:"
-                android:textColor="#2196F3"
+                android:textColor="@color/LightBlue"
                 android:textStyle="bold" />
 
             <EditText
@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:backgroundTint="#4CAF50"
+                    android:backgroundTint="@color/Green"
                     android:padding="12dp"
                     android:text="BUY"
                     android:textColor="#FFFFFF"
@@ -143,7 +143,7 @@
                     android:id="@+id/btnSell"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#F44336"
+                    android:backgroundTint="@color/Red"
                     android:padding="12dp"
                     android:text="SELL"
                     android:textColor="#FFFFFF"
@@ -186,28 +186,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
-            android:backgroundTint="#BBDEFB"
+            android:backgroundTint="@color/Orange"
             android:padding="8dp"
             android:text="1D"
-            android:textColor="#2196F3" />
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btn1W"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
-            android:backgroundTint="#BBDEFB"
+            android:backgroundTint="@color/Orange"
             android:padding="8dp"
             android:text="1W"
-            android:textColor="#2196F3" />
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/btn1M"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="#BBDEFB"
+            android:backgroundTint="@color/LightBlue"
             android:padding="8dp"
             android:text="1M"
-            android:textColor="#2196F3" />
+            android:textColor="@color/white" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
