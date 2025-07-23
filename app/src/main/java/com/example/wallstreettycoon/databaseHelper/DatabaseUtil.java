@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DatabaseUtil {
     public static DatabaseCreator dbCreator;
-    public static void createDatabase(Context context) {
+    public DatabaseUtil(Context context) {
         dbCreator = new DatabaseCreator(context);
     }
 
@@ -49,7 +49,7 @@ public class DatabaseUtil {
 
         SQLiteDatabase db = dbCreator.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery("SELECT * FROM stockPriceHistory",null);
+        Cursor cursor = db.rawQuery("SELECT * FROM stockPriceFunction",null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -77,9 +77,7 @@ public class DatabaseUtil {
     public Double getCurrentStockPrice(Integer stockID, Integer timeStamp){
         //Stock stock = getStockList().get(stockID);
         StockPriceFunction stockPriceFunction = getStockPriceFunctions().get(stockID);
-        Double currentPrice = stockPriceFunction.getCurrentPrice(timeStamp);
 
-
-        return currentPrice;
+        return stockPriceFunction.getCurrentPrice(timeStamp);
     }
 }

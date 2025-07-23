@@ -21,11 +21,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseUtil dbUtil = new DatabaseUtil();
-        dbUtil.createDatabase(this);
+        DatabaseUtil dbUtil = new DatabaseUtil(this);
 
         Double p = dbUtil.getCurrentStockPrice(1, 10);
-        List<StockPriceFunction> stockPriceFunctionList = dbUtil.getStockPriceFunctions();
+
         String message = "The current price of Apple is: " + p.toString();
         Log.d(message, " ");
 
