@@ -17,6 +17,15 @@ public class User { //Data model
         this.userBalance = 0.0F;
     }
 
+    //user constructor with no user id
+    public User(String userPassword, String userUsername, String userLastName, String userFirstName) {
+        this.userPassword = userPassword;
+        this.userUsername = userUsername;
+        this.userLastName = userLastName;
+        this.userFirstName = userFirstName;
+        this.userBalance = 0.0F;
+    }
+
     public int getUserID() {
         return userID;
     }
