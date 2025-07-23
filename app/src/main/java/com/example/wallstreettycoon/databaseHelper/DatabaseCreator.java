@@ -26,8 +26,8 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         //User table
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS users (" +
-                        "userID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "userFName TEXT, userLName TEXT, username TEXT, password TEXT, balance REAL)"
+                        "username TEXT PRIMARY KEY, " +
+                        "userFName TEXT, userLName TEXT, password TEXT, balance REAL)"
         );
 
         //Stock table

@@ -95,4 +95,23 @@ public class DatabaseUtil {
         Double balance = user.getUserBalance();
         db.execSQL("INSERT INTO users (userFName, userLName, username, password, balance) VALUES (fName, lName, username, password, balance)");
     }
+
+    public User getUser(String username){
+        Cursor cursor = db.rawQuery("SELECT userFName from users WHERE username = " + username,null);
+        String fName = cursor.getString(cursor.getColumnIndexOrThrow("userFName"));
+        String lName = cursor.getString(cursor.getColumnIndexOrThrow("userLName"));
+        String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
+        Double balance = cursor.getDouble(cursor.getColumnIndexOrThrow("balance"));
+
+        return new User(username, fName, lName, password, balance);
+    }
+
+    public void updatePortfolio(Stock stock){
+
+    }
+    public List<Stock> getPortfolio(){
+        List<Stock> list = new ArrayList<>();
+
+        return list;
+    }
 }

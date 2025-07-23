@@ -33,14 +33,13 @@ public class miniGame1 extends AppCompatActivity {
 
         startButton.setOnClickListener(view -> {
             startButton.setVisibility(View.INVISIBLE);
-            if(true)
-                flashButtonAfterRandomDelay();
+            flashButtonAfterRandomDelay();
         });
 
     }
 
     private void flashButtonAfterRandomDelay() {
-        // Generate a random delay between 1 and 5 seconds
+        // Generate a random delay between 1 and 2 seconds
         int delayMillis = 1000 + random.nextInt(2000);
 
         handler.postDelayed(() -> {

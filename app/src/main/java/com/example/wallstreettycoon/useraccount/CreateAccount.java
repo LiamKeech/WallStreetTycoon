@@ -2,6 +2,7 @@ package com.example.wallstreettycoon.useraccount;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,11 +49,15 @@ public class CreateAccount extends AppCompatActivity {
                 String password = passwordInput.getText().toString();
 
                 if (!name.isEmpty() && !surname.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
-                    User newUser = new User(name, surname, username, password, 1000);
+                    User newUser = new User(username, name, surname,  password, 1000.0);
 
                     //insert user into db:
                     DatabaseUtil dbUtil = new DatabaseUtil(context);
                     dbUtil.setUser(newUser);
+
+                    //test
+                    User test = dbUtil.getUser(username);
+                    Log.d(test.getUserUsername(), "");
                 }
 
             }

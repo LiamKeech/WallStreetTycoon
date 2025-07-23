@@ -1,37 +1,19 @@
 package com.example.wallstreettycoon.useraccount;
 
 public class User { //Data model
-    Integer userID; //Uniquely ID user
+    String username; //Uniquely ID user
     String userFirstName;
     String userLastName;
-    String userUsername;
+
     String userPassword;
     Double userBalance;
 
-    public User(String userPassword, String userUsername, String userLastName, String userFirstName, Integer userID) {
+    public User(String username, String userFirstName, String userLastName, String userPassword, Double userBalance) {
         this.userPassword = userPassword;
-        this.userUsername = userUsername;
-        this.userLastName = userLastName;
-        this.userFirstName = userFirstName;
-        this.userID = userID;
-        this.userBalance = 0.0;
-    }
-
-    //user constructor with no user id
-    public User(String userPassword, String userUsername, String userLastName, String userFirstName) {
-        this.userPassword = userPassword;
-        this.userUsername = userUsername;
+        this.username = username;
         this.userLastName = userLastName;
         this.userFirstName = userFirstName;
         this.userBalance = 0.0;
-    }
-
-    public int getUserID() {
-        return userID;
-    }
-
-    public void setUserID(int userID) {
-        this.userID = userID;
     }
 
     public String getUserFirstName() {
@@ -51,11 +33,11 @@ public class User { //Data model
     }
 
     public String getUserUsername() {
-        return userUsername;
+        return username;
     }
 
-    public void setUserUsername(String userUsername) {
-        this.userUsername = userUsername;
+    public void setusername(String userUsername) {
+        this.username = userUsername;
     }
 
     public String getUserPassword() {
