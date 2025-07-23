@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -76,6 +78,11 @@ public class DatabaseUtil {
         //Stock stock = getStockList().get(stockID);
         StockPriceFunction stockPriceFunction = getStockPriceFunctions().get(stockID);
 
-        return stockPriceFunction.getCurrentPrice(timeStamp);
+        //I am rounding using BigDecimal for better precision
+
+        Double value = stockPriceFunction.getCurrentPrice(timeStamp);
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
