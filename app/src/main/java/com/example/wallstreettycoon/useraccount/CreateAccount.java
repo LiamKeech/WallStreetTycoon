@@ -3,6 +3,7 @@ package com.example.wallstreettycoon.useraccount;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,12 +27,25 @@ public class CreateAccount extends AppCompatActivity {
             return insets;
         });
 
+
+
         btnCreateAccount = findViewById(R.id.btnCreate);
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //is the user class/activity used here to make a user object and then add to db?
                 //write code here
+                EditText nameInput = findViewById(R.id.edtNameCreate);
+                EditText surnameInput = findViewById(R.id.edtSurnameCreate;
+                EditText usernameInput = findViewById(R.id.edtUsernameLogin);
+                EditText passwordInput = findViewById(R.id.edtPasswLogin);
+
+                String name = nameInput.getText().toString();
+                String surname = surnameInput.getText().toString();
+                String username = usernameInput.getText().toString();
+                String password = passwordInput.getText().toString();
+
+                User newUser = new User(name, surname, username, password, 1000);
+
             }
         });
     }
