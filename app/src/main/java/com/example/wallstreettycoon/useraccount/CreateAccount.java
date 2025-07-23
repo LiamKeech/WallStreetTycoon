@@ -30,6 +30,7 @@ public class CreateAccount extends AppCompatActivity {
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //is the user class/activity used here to make a user object and then add to db?
                 //write code here
             }
         });
