@@ -48,7 +48,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('NVIDIA Corp.', 'NVDA', 'Semiconductors', 'Graphics processing and AI chips manufacturer.', 128.88)");
         db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('Johnson & Johnson', 'JNJ', 'Healthcare', 'Global healthcare and pharmaceutical company.', 170.55)");
 
-        // StockPriceHistory table
+        // StockPriceFunction table
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS stockPriceFunction (" +
                         "stockPriceHistoryID INTEGER PRIMARY KEY AUTOINCREMENT, " +
