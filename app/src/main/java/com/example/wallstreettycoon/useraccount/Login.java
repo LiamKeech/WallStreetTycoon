@@ -2,10 +2,12 @@ package com.example.wallstreettycoon.useraccount;
 
 import static java.security.AccessController.getContext;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +20,7 @@ import com.example.wallstreettycoon.R;
 
 public class Login extends AppCompatActivity {
     Button btnLoginAccount;
+    TextView txtCreateAccount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +33,22 @@ public class Login extends AppCompatActivity {
             return insets;
         });
 
-        EditText usernameInput = findViewById(R.id.edtUsernameLogin);
-        EditText passwordInput = findViewById(R.id.edtPasswLogin);
+        txtCreateAccount = findViewById(R.id.txtCreate);
+        txtCreateAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Login.this, CreateAccount.class);
+                startActivity(intent);
+            }
+        });
 
         btnLoginAccount = findViewById(R.id.btnLogin);
         btnLoginAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //check all text fields filled in:
+                EditText usernameInput = findViewById(R.id.edtUsernameLogin);
+                EditText passwordInput = findViewById(R.id.edtPasswLogin);
                 //username:
                 String username = usernameInput.getText().toString();
                 if (!username.isEmpty())
