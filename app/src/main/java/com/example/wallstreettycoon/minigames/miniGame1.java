@@ -19,6 +19,7 @@ import java.util.Random;
 public class miniGame1 extends AppCompatActivity {
 
     Button buyButton;
+    Button startButton;
     Handler handler = new Handler(Looper.getMainLooper());
     Random random = new Random();
 
@@ -27,21 +28,32 @@ public class miniGame1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mini_game1);
 
-        buyButton = findViewById(R.id.my_button);
+        startButton = findViewById(R.id.start_button);
+        buyButton = findViewById(R.id.buy_button);
 
-        // Start the random delay task
-        showButtonAfterRandomDelay();
+        startButton.setOnClickListener(view -> {
+            startButton.setVisibility(View.INVISIBLE);
+            if(true)
+                flashButtonAfterRandomDelay();
+        });
+
     }
 
-    private void showButtonAfterRandomDelay() {
+    private void flashButtonAfterRandomDelay() {
         // Generate a random delay between 1 and 5 seconds
-        int delayMillis = 1000 + random.nextInt(4000);
+        int delayMillis = 1000 + random.nextInt(2000);
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                buyButton.setVisibility(View.VISIBLE);
-            }
+        handler.postDelayed(() -> {
+            buyButton.setVisibility(View.VISIBLE);
+            hideButtonAfterRandomDelay();
+            flashButtonAfterRandomDelay();
         }, delayMillis);
+
+
+    }
+    private void hideButtonAfterRandomDelay() {
+        int delayMillis = 200 + random.nextInt(400);
+
+        handler.postDelayed(() -> buyButton.setVisibility(View.INVISIBLE), delayMillis);
     }
 }
