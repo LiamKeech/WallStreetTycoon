@@ -88,6 +88,11 @@ public class DatabaseUtil {
     }
 
     public void setUser(User user){
-
+        String fName = user.getUserFirstName();
+        String lName = user.getUserLastName();
+        String username = user.getUserUsername();
+        String password = user.getUserPassword();
+        Double balance = user.getUserBalance();
+        db.execSQL("INSERT INTO users (userFName, userLName, username, password, balance) VALUES (fName, lName, username, password, balance)");
     }
 }
