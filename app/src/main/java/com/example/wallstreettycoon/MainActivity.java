@@ -10,6 +10,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.wallstreettycoon.databaseHelper.DatabaseCreator;
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
 
 import java.util.List;
@@ -20,9 +21,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseCreator dbCreator = new DatabaseCreator(this);
+        DatabaseUtil dbUtil = new DatabaseUtil();
+        dbUtil.createDatabase(this);
 
-        List<StockPriceFunction> stockPriceFunctionList = dbCreator.getStockPriceFunctions();
+        List<StockPriceFunction> stockPriceFunctionList = dbUtil.getStockPriceFunctions();
         Log.d(stockPriceFunctionList.get(1).getCurrentPrice(1).toString(), " ");
 
         EdgeToEdge.enable(this);
