@@ -24,8 +24,10 @@ public class MainActivity extends AppCompatActivity {
         DatabaseUtil dbUtil = new DatabaseUtil();
         dbUtil.createDatabase(this);
 
+        Double p = dbUtil.getCurrentStockPrice(1, 10);
         List<StockPriceFunction> stockPriceFunctionList = dbUtil.getStockPriceFunctions();
-        Log.d(stockPriceFunctionList.get(1).getCurrentPrice(1).toString(), " ");
+        String message = "The current price of Apple is: " + p.toString();
+        Log.d(message, " ");
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);

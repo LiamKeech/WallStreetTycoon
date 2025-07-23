@@ -73,4 +73,13 @@ public class DatabaseUtil {
 
         return stockPriceHistories;
     }
+
+    public Double getCurrentStockPrice(Integer stockID, Integer timeStamp){
+        //Stock stock = getStockList().get(stockID);
+        StockPriceFunction stockPriceFunction = getStockPriceFunctions().get(stockID);
+        Double currentPrice = stockPriceFunction.getCurrentPrice(timeStamp);
+
+
+        return currentPrice;
+    }
 }
