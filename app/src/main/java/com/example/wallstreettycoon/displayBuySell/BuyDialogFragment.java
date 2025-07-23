@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
@@ -68,5 +67,16 @@ public class BuyDialogFragment extends DialogFragment {
         cancelButton.setOnClickListener(v -> dismiss());
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Set dialog to full width in landscape
+        getDialog().getWindow().setLayout(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+        getDialog().getWindow().setDimAmount(0.5f); // Maintain dimming
     }
 }
