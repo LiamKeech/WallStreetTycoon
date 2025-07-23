@@ -2,6 +2,7 @@ package com.example.wallstreettycoon.useraccount;
 
 import static java.security.AccessController.getContext;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,8 +18,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 
 public class Login extends AppCompatActivity {
+    Context context = this;
     Button btnLoginAccount;
     TextView txtCreateAccount;
 
@@ -51,19 +54,19 @@ public class Login extends AppCompatActivity {
                 EditText passwordInput = findViewById(R.id.edtPasswLogin);
                 //username:
                 String username = usernameInput.getText().toString();
-                if (!username.isEmpty())
+                /*if (!username.isEmpty())
                 {
                     Toast.makeText(v.getContext(), "Valid username", Toast.LENGTH_SHORT).show();
-                }
+                }*/
 
                 String password = passwordInput.getText().toString();
-                if (!password.isEmpty())
+                /*if (!password.isEmpty())
                 {
                     Toast.makeText(v.getContext(), "valid password", Toast.LENGTH_SHORT).show();
-                }
+                }*/
 
                 //check that details exist and match in database:
-
+                DatabaseUtil dbUtil = new DatabaseUtil(context);
 
                 //taken to Dashboard:
 
