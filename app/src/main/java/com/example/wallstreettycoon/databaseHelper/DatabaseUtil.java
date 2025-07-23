@@ -13,15 +13,15 @@ import java.util.List;
 
 public class DatabaseUtil {
     public static DatabaseCreator dbCreator;
-    public static void createDatabase(Context context) {
+    public static SQLiteDatabase db;
+    public DatabaseUtil(Context context) {
         dbCreator = new DatabaseCreator(context);
+        db = dbCreator.getWritableDatabase();
     }
 
     //getter for stockList
     public List<Stock> getStockList(){
         List<Stock> stockList = new ArrayList<>();
-
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
 
         Cursor cursor = db.rawQuery("SELECT * FROM stocks", null);
         if (cursor.moveToFirst()) {
@@ -47,9 +47,7 @@ public class DatabaseUtil {
     public List<StockPriceFunction> getStockPriceFunctions(){
         List<StockPriceFunction> stockPriceHistories = new ArrayList<>();
 
-        SQLiteDatabase db = dbCreator.getReadableDatabase();
-
-        Cursor cursor = db.rawQuery("SELECT * FROM stockPriceHistory",null);
+        Cursor cursor = db.rawQuery("SELECT * FROM stockPriceFunction",null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -72,5 +70,12 @@ public class DatabaseUtil {
         }
 
         return stockPriceHistories;
+    }
+
+    public Double getCurrentStockPrice(Integer stockID, Integer timeStamp){
+        //Stock stock = getStockList().get(stockID);
+        StockPriceFunction stockPriceFunction = getStockPriceFunctions().get(stockID);
+
+        return stockPriceFunction.getCurrentPrice(timeStamp);
     }
 }

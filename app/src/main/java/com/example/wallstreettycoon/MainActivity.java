@@ -21,11 +21,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        DatabaseUtil dbUtil = new DatabaseUtil();
-        dbUtil.createDatabase(this);
+        DatabaseUtil dbUtil = new DatabaseUtil(this);
 
-        List<StockPriceFunction> stockPriceFunctionList = dbUtil.getStockPriceFunctions();
-        Log.d(stockPriceFunctionList.get(1).getCurrentPrice(1).toString(), " ");
+        Double p = dbUtil.getCurrentStockPrice(1, 10);
+
+        String message = "The current price of Apple is: " + p.toString();
+        Log.d(message, " ");
 
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
