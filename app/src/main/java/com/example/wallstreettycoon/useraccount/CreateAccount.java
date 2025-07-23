@@ -1,5 +1,6 @@
 package com.example.wallstreettycoon.useraccount;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,8 +13,10 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 
 public class CreateAccount extends AppCompatActivity {
+    Context context = this;
     Button btnCreateAccount;
 
     @Override
@@ -33,9 +36,9 @@ public class CreateAccount extends AppCompatActivity {
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //write code here
+                //obtain information, check and validate, create user obj:
                 EditText nameInput = findViewById(R.id.edtNameCreate);
-                EditText surnameInput = findViewById(R.id.edtSurnameCreate;
+                EditText surnameInput = findViewById(R.id.edtSurnameCreate);
                 EditText usernameInput = findViewById(R.id.edtUsernameLogin);
                 EditText passwordInput = findViewById(R.id.edtPasswLogin);
 
@@ -44,7 +47,13 @@ public class CreateAccount extends AppCompatActivity {
                 String username = usernameInput.getText().toString();
                 String password = passwordInput.getText().toString();
 
-                User newUser = new User(name, surname, username, password, 1000);
+                if (!name.isEmpty() && !surname.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
+                    User newUser = new User(name, surname, username, password, 1000);
+
+                    //insert user into db:
+                    DatabaseUtil dbUtil = new DatabaseUtil(context);
+                    dbUtil.setUser(newUser);
+                }
 
             }
         });
