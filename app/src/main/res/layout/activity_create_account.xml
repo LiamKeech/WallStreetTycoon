@@ -8,186 +8,218 @@
     android:background="@color/LightGrey"
     tools:context=".useraccount.CreateAccount">
 
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="83dp"
-        android:layout_height="79dp"
-        app:layout_constraintBottom_toTopOf="@+id/navigationView"
-        app:layout_constraintEnd_toStartOf="@+id/navigationView2"
-        app:layout_constraintHorizontal_bias="0.188"
+    <TextView
+        android:id="@+id/lblCreateHeading"
+        android:layout_width="264dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="6dp"
+        android:background="@drawable/rounded_textview"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Create Account"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/FieldCreate"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.301"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintVertical_bias="1.0" />
 
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigationView"
-        android:layout_width="661dp"
-        android:layout_height="259dp"
-        android:layout_marginBottom="20dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/FieldCreate"
+        android:layout_width="511dp"
+        android:layout_height="310dp"
+        android:background="@drawable/rounded_nav_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" >
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/edtSurname"
-                android:layout_width="191dp"
-                android:layout_height="38dp"
-                android:layout_marginTop="12dp"
-                android:ems="10"
-                android:inputType="text"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/edtName" />
-
-            <EditText
-                android:id="@+id/edtName"
-                android:layout_width="191dp"
-                android:layout_height="38dp"
-                android:layout_marginTop="16dp"
-                android:ems="10"
-                android:inputType="text"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <EditText
-                android:id="@+id/edtUsername"
-                android:layout_width="191dp"
-                android:layout_height="38dp"
-                android:layout_marginTop="4dp"
-                android:ems="10"
-                android:inputType="text"
-                android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@+id/edtSurname"
-                tools:layout_editor_absoluteX="235dp" />
-
-            <EditText
-                android:id="@+id/edtPassword"
-                android:layout_width="191dp"
-                android:layout_height="38dp"
-                android:layout_marginTop="12dp"
-                android:ems="10"
-                android:inputType="text"
-                android:textSize="16sp"
-                app:layout_constraintTop_toBottomOf="@+id/edtUsername"
-                tools:layout_editor_absoluteX="235dp" />
-
-            <TextView
-                android:id="@+id/lblPassword"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Password"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edtPassword"
-                app:layout_constraintHorizontal_bias="0.559"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lblUsername"
-                app:layout_constraintVertical_bias="0.238" />
-
-            <TextView
-                android:id="@+id/lblUsername"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Username"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edtUsername"
-                app:layout_constraintHorizontal_bias="0.559"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lblSurname"
-                app:layout_constraintVertical_bias="0.174" />
-
-            <TextView
-                android:id="@+id/lblSurname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Surname"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edtSurname"
-                app:layout_constraintHorizontal_bias="0.559"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/lblName"
-                app:layout_constraintVertical_bias="0.134" />
-
-            <Button
-                android:id="@+id/btnCreate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Create"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/btnCancel"
-                app:layout_constraintHorizontal_bias="0.682"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.971" />
-
-            <Button
-                android:id="@+id/btnCancel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="200dp"
-                android:text="Cancel"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.971" />
-
-            <TextView
-                android:id="@+id/lblName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Name"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/edtName"
-                app:layout_constraintHorizontal_bias="0.559"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.083" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.navigation.NavigationView>
-
-    <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigationView2"
-        android:layout_width="200dp"
-        android:layout_height="79dp"
-        app:layout_constraintBottom_toTopOf="@+id/navigationView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.301" >
+        app:layout_constraintVertical_bias="0.756">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/lblNameCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textColor="@color/LightBlue"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/edtNameCreate"
+            app:layout_constraintHorizontal_bias="0.65"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.059" />
 
-            <TextView
-                android:id="@+id/lblCreateAccount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Create Account"
-                tools:layout_editor_absoluteX="52dp"
-                tools:layout_editor_absoluteY="30dp" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </com.google.android.material.navigation.NavigationView>
+        <TextView
+            android:id="@+id/lblSurnameCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Surname"
+            android:textColor="@color/LightBlue"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/edtSurnameCreate"
+            app:layout_constraintHorizontal_bias="0.573"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblNameCreate"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/lblUsernameCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Username"
+            android:textColor="@color/LightBlue"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/edtUserrnameCreate"
+            app:layout_constraintHorizontal_bias="0.526"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblSurnameCreate"
+            app:layout_constraintVertical_bias="0.006" />
+
+        <TextView
+            android:id="@+id/lblPasswCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Password"
+            android:textColor="@color/LightBlue"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/editPasswCreate"
+            app:layout_constraintHorizontal_bias="0.535"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblUsernameCreate"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/btnCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:backgroundTint="@color/Orange"
+            android:text="Create"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            app:cornerRadius="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnCancelCreate"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <Button
+            android:id="@+id/btnCancelCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="3dp"
+            android:backgroundTint="@color/Orange"
+            android:text="Cancel"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            app:cornerRadius="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnCreate"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <EditText
+            android:id="@+id/edtNameCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:background="@drawable/textbox_border"
+            android:ems="10"
+            android:inputType="text"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.04000002" />
+
+        <EditText
+            android:id="@+id/edtSurnameCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="176dp"
+            android:background="@drawable/textbox_border"
+            android:ems="10"
+            android:inputType="text"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.601"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtNameCreate"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <EditText
+            android:id="@+id/edtUserrnameCreate"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="100dp"
+            android:background="@drawable/textbox_border"
+            android:ems="10"
+            android:inputType="text"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.604"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtSurnameCreate"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <EditText
+            android:id="@+id/editPasswCreate"
+            android:layout_width="178dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="84dp"
+            android:background="@drawable/textbox_border"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.609"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edtUserrnameCreate"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imgLogo3"
+        android:layout_width="100dp"
+        android:layout_height="95dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/lblCreateHeading"
+        app:layout_constraintHorizontal_bias="0.04"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.02"
+        app:srcCompat="@drawable/balance_removebg_preview" />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnLoginCreate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/LightBlue"
         android:text="Login"
-        app:layout_constraintBottom_toTopOf="@+id/navigationView"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:cornerRadius="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.8"
-        app:layout_constraintStart_toEndOf="@+id/navigationView2"
+        app:layout_constraintHorizontal_bias="0.887"
+        app:layout_constraintStart_toEndOf="@+id/lblCreateHeading"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19" />
+        app:layout_constraintVertical_bias="0.044" />
 </androidx.constraintlayout.widget.ConstraintLayout>
