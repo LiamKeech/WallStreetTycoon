@@ -115,7 +115,6 @@
             android:text="Create account"
             android:textColor="@color/LightBlue"
             android:textSize="15sp"
-            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.03"

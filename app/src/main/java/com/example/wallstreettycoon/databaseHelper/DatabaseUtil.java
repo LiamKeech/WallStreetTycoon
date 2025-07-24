@@ -106,6 +106,15 @@ public class DatabaseUtil {
         return new User(username, fName, lName, password, balance);
     }
 
+    public boolean userExists(String username) {
+        String query = "SELECT 1 FROM users WHERE username = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{username});
+
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
     public void updatePortfolio(Stock stock){
 
     }
