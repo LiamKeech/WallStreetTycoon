@@ -19,7 +19,6 @@ import java.util.Random;
 public class miniGame1 extends AppCompatActivity {
 
     Button buyButton;
-    Button startButton;
     Handler handler = new Handler(Looper.getMainLooper());
     Random random = new Random();
 
@@ -28,13 +27,8 @@ public class miniGame1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mini_game1);
 
-        startButton = findViewById(R.id.start_button);
         buyButton = findViewById(R.id.buy_button);
-
-        startButton.setOnClickListener(view -> {
-            startButton.setVisibility(View.INVISIBLE);
-            flashButtonAfterRandomDelay();
-        });
+        //flashButtonAfterRandomDelay();
 
     }
 
