@@ -99,9 +99,9 @@ public class miniGame1 extends AppCompatActivity {
         button.setLayoutParams(params);
         container.addView(button);
 
-        // Animate size using ValueAnimator
+        // animate size
         ValueAnimator resizeAnimator = ValueAnimator.ofFloat(0.5f, 1f);
-        resizeAnimator.setDuration(4000);
+        resizeAnimator.setDuration(8000);
         resizeAnimator.addUpdateListener(animation -> {
             float scale = (float) animation.getAnimatedValue();
 
@@ -114,11 +114,11 @@ public class miniGame1 extends AppCompatActivity {
         });
         AtomicReference<Float> currentPrice = new AtomicReference<>(0f);
 
-        // Animate the price of stock
-        ValueAnimator priceAnimator = ValueAnimator.ofFloat(0, 50);
-        priceAnimator.setDuration(4000);
-        priceAnimator.setInterpolator(new AccelerateInterpolator());//can change later depending on gameplay
-        priceAnimator.addUpdateListener(animation -> {
+        // animate the price of stock
+        ValueAnimator priceIncreaseAnimator = ValueAnimator.ofFloat(0, random.nextFloat(100) + 100);
+        priceIncreaseAnimator.setDuration(8000);
+        priceIncreaseAnimator.setInterpolator(new AccelerateInterpolator());//can change later depending on gameplay
+        priceIncreaseAnimator.addUpdateListener(animation -> {
             float price = (float) animation.getAnimatedValue();
             if(!held.get())
                 button.setText(String.format("Buy %s $%.2f",stock.getSymbol(), price));
@@ -127,8 +127,22 @@ public class miniGame1 extends AppCompatActivity {
             currentPrice.set(price);
             });
 
-        // Start animations together
-        priceAnimator.start();
+//        ValueAnimator priceDecreaseAnimator = ValueAnimator.ofFloat(50, 1);
+//        priceDecreaseAnimator.setDuration(300);
+//        priceDecreaseAnimator.setStartDelay(8000);
+//        priceDecreaseAnimator.addUpdateListener(animation -> {
+//            float price = (float) animation.getAnimatedValue();
+//            if(!held.get())
+//                button.setText(String.format("Buy %s $%.2f",stock.getSymbol(), price));
+//            else
+//                button.setText(String.format("Sell %s $%.2f",stock.getSymbol(), price));
+//            currentPrice.set(price);
+//        });
+
+
+        // start animations together
+        priceIncreaseAnimator.start();
+        //priceDecreaseAnimator.start(); //starts delayed
         resizeAnimator.start();
         button.animate()
                 .translationY(-container.getHeight() + btnHeightPx)
