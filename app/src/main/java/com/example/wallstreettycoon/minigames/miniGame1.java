@@ -163,7 +163,7 @@ public class miniGame1 extends AppCompatActivity {
 
                 TextView stockView = new TextView(this);
                 stockView.setText(String.format("%s: $%.2f", stock.getSymbol(), boughtPrice));
-                stockView.setTextColor(Color.WHITE);
+                stockView.setTextColor(Color.BLACK);
                 stockView.setTextSize(14);
                 buyListLayout.addView(stockView);
                 stockTextViews.put(stock, stockView);
