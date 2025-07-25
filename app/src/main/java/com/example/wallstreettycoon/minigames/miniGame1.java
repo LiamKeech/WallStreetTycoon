@@ -36,6 +36,8 @@ public class miniGame1 extends AppCompatActivity {
     FrameLayout container;
     Random random = new Random();
     Map<Stock, Float> stockBoughtPrice = new HashMap<>();
+    Float profit = 0f;
+
     private Handler handler = new Handler(Looper.getMainLooper());
 
 
@@ -63,6 +65,10 @@ public class miniGame1 extends AppCompatActivity {
     private void spawnFloatingButton(Stock stock) {
         //Add stock to held stocks after clicked at price when it is clicked
         LinearLayout buyListLayout = findViewById(R.id.buy_list_layout);
+
+        TextView profitLabel = findViewById(R.id.profit_label);
+        profitLabel.setText(String.format("Profit: $%.2f", profit));
+
         Button button = new Button(this);
         AtomicBoolean held = new AtomicBoolean(false);
 
@@ -94,7 +100,7 @@ public class miniGame1 extends AppCompatActivity {
         container.addView(button);
 
         // Animate size using ValueAnimator
-        ValueAnimator resizeAnimator = ValueAnimator.ofFloat(0.5f, 1f);  // scale from full size to 0
+        ValueAnimator resizeAnimator = ValueAnimator.ofFloat(0.5f, 1f);
         resizeAnimator.setDuration(4000);
         resizeAnimator.addUpdateListener(animation -> {
             float scale = (float) animation.getAnimatedValue();
@@ -129,6 +135,8 @@ public class miniGame1 extends AppCompatActivity {
                 .setDuration(4000)
                 .start();
 
+        Map<Stock, TextView> stockTextViews = new HashMap<>();
+
         button.setOnClickListener(v -> {
             if(!held.get()) {
                 held.set(true);
@@ -137,17 +145,34 @@ public class miniGame1 extends AppCompatActivity {
                 Float boughtPrice = currentPrice.get();
                 stockBoughtPrice.put(stock, boughtPrice);
 
+                profit -= boughtPrice;
+
                 TextView stockView = new TextView(this);
                 stockView.setText(String.format("%s: $%.2f", stock.getSymbol(), boughtPrice));
                 stockView.setTextColor(Color.WHITE);
                 stockView.setTextSize(14);
-                buyListLayout.addView(stockView, 0);
+                buyListLayout.addView(stockView);
+                stockTextViews.put(stock, stockView);
+
+                profitLabel.setText(String.format("Profit: $%.2f", profit));
             }
             else{
                 held.set(false);
                 shape.setColor(Color.parseColor("#48C73C")); // green
 
+                Float sellPrice = currentPrice.get();
+                profit += sellPrice;
+                //remove from held stocks
+                stockBoughtPrice.remove(stock);
 
+                // Remove the TextView from layout
+                TextView viewToRemove = stockTextViews.get(stock);
+                if (viewToRemove != null) {
+                    buyListLayout.removeView(viewToRemove);
+                    stockTextViews.remove(stock);
+                }
+
+                profitLabel.setText(String.format("Profit: $%.2f", profit));
             }
         });
     }

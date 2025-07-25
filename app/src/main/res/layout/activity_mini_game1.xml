@@ -21,8 +21,27 @@
             android:orientation="vertical"
             android:layout_gravity="top|end"
             android:padding="16dp"
-            android:background="#66000000"> <!-- Optional translucent bg -->
+            android:background="#66000000">
+            <TextView
+                android:id="@+id/buy_list_heading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your stocks:"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:paddingBottom="8dp"/>
         </LinearLayout>
+        <TextView
+            android:id="@+id/profit_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:text="Profit: $0.00"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
