@@ -4,6 +4,7 @@ import static java.security.AccessController.getContext;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +19,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 
 public class Login extends AppCompatActivity {
@@ -40,6 +42,7 @@ public class Login extends AppCompatActivity {
         txtCreateAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                txtCreateAccount.setTypeface(null, Typeface.ITALIC);
                 Intent intent = new Intent(Login.this, CreateAccount.class);
                 startActivity(intent);
             }
@@ -52,24 +55,34 @@ public class Login extends AppCompatActivity {
                 //check all text fields filled in:
                 EditText usernameInput = findViewById(R.id.edtUsernameLogin);
                 EditText passwordInput = findViewById(R.id.edtPasswLogin);
-                //username:
+
+                //check if username is in database, if it is check that password matches:
                 String username = usernameInput.getText().toString();
-                /*if (!username.isEmpty())
-                {
-                    Toast.makeText(v.getContext(), "Valid username", Toast.LENGTH_SHORT).show();
-                }*/
-
                 String password = passwordInput.getText().toString();
-                /*if (!password.isEmpty())
+
+                if (!username.isEmpty() && !password.isEmpty())
                 {
-                    Toast.makeText(v.getContext(), "valid password", Toast.LENGTH_SHORT).show();
-                }*/
-
-                //check that details exist and match in database:
-                DatabaseUtil dbUtil = new DatabaseUtil(context);
-
-                //taken to Dashboard:
-
+                    DatabaseUtil dbUtil = new DatabaseUtil(context);
+                    if (dbUtil.userExists(username)) {
+                        User user = dbUtil.getUser(username);
+                        if (user.getUserPassword().equals(password)) {
+                            Intent loginIntent = new Intent(Login.this, ListStocks.class);
+                            startActivity((loginIntent));
+                        }
+                    }
+                    else {
+                        Toast.makeText(v.getContext(), "Username does not exist.", Toast.LENGTH_SHORT).show();
+                        usernameInput.setBackgroundResource(R.drawable.red_textbox_border);
+                    }
+                }
+                else if (username.isEmpty()) {
+                    Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                    usernameInput.setBackgroundResource(R.drawable.red_textbox_border);
+                }
+                else if (password.isEmpty()) {
+                    Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                    passwordInput.setBackgroundResource(R.drawable.red_textbox_border);
+                }
             }
         });
     }
