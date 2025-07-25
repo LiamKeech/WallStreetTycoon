@@ -1,7 +1,5 @@
 package com.example.wallstreettycoon.minigames;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -11,19 +9,14 @@ import android.os.Looper;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,10 +28,8 @@ import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.stock.Stock;
 
-import java.util.Random;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-
-import kotlin.collections.ArrayDeque;
 
 public class miniGame1 extends AppCompatActivity {
 
@@ -53,15 +44,12 @@ public class miniGame1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mini_game1);
 
-
-
         Context context = this;
         DatabaseUtil dbUtil = new DatabaseUtil(context);
 
         container = findViewById(R.id.container);
         List<Stock> stockList = dbUtil.getStockList();
 
-        Log.d(stockList.getFirst().getStockName(), "");
         int delay = 600;
         for(Stock stock: stockList){ //TODO change to just technology stocks
             handler.postDelayed(() -> {
@@ -76,6 +64,7 @@ public class miniGame1 extends AppCompatActivity {
         //Add stock to held stocks after clicked at price when it is clicked
         LinearLayout buyListLayout = findViewById(R.id.buy_list_layout);
         Button button = new Button(this);
+        AtomicBoolean held = new AtomicBoolean(false);
 
         int btnSize = 100;
 
@@ -125,7 +114,10 @@ public class miniGame1 extends AppCompatActivity {
         priceAnimator.setInterpolator(new AccelerateInterpolator());//can change later depending on gameplay
         priceAnimator.addUpdateListener(animation -> {
             float price = (float) animation.getAnimatedValue();
-            button.setText(String.format("Buy %s $%.2f",stock.getSymbol(), price));
+            if(!held.get())
+                button.setText(String.format("Buy %s $%.2f",stock.getSymbol(), price));
+            else
+                button.setText(String.format("Sell %s $%.2f",stock.getSymbol(), price));
             currentPrice.set(price);
             });
 
@@ -133,24 +125,30 @@ public class miniGame1 extends AppCompatActivity {
         priceAnimator.start();
         resizeAnimator.start();
         button.animate()
-                .translationY(-container.getHeight() - btnHeightPx)
+                .translationY(-container.getHeight() + btnHeightPx)
                 .setDuration(4000)
-                .withEndAction(() -> container.removeView(button))
                 .start();
 
         button.setOnClickListener(v -> {
-            shape.setColor(Color.parseColor("#FF6417")); // orange
+            if(!held.get()) {
+                held.set(true);
+                shape.setColor(Color.parseColor("#FF6417")); // orange
 
-            Float boughtPrice = currentPrice.get();
-            stockBoughtPrice.put(stock, boughtPrice);
+                Float boughtPrice = currentPrice.get();
+                stockBoughtPrice.put(stock, boughtPrice);
 
-            Log.d(stock.getStockName() + " bought at: " + String.valueOf(currentPrice.get()), "");
+                TextView stockView = new TextView(this);
+                stockView.setText(String.format("%s: $%.2f", stock.getSymbol(), boughtPrice));
+                stockView.setTextColor(Color.WHITE);
+                stockView.setTextSize(14);
+                buyListLayout.addView(stockView, 0);
+            }
+            else{
+                held.set(false);
+                shape.setColor(Color.parseColor("#48C73C")); // green
 
-            TextView stockView = new TextView(this);
-            stockView.setText(String.format("%s: $%.2f", stock.getSymbol(), boughtPrice));
-            stockView.setTextColor(Color.WHITE); // Or any style you want
-            stockView.setTextSize(14);
-            buyListLayout.addView(stockView, 0);
+
+            }
         });
     }
 
