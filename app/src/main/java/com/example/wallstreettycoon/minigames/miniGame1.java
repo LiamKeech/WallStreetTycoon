@@ -13,6 +13,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
@@ -22,7 +23,9 @@ import android.widget.RelativeLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import android.animation.ValueAnimator;
 
@@ -31,16 +34,16 @@ import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.stock.Stock;
 
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicReference;
 
 import kotlin.collections.ArrayDeque;
 
 public class miniGame1 extends AppCompatActivity {
-    Context context = this;
-    DatabaseUtil dbUtil = new DatabaseUtil(context);
+
     FrameLayout container;
     Random random = new Random();
 
-    List<Stock> stocksBought = new ArrayList<>();
+    Map<Stock, Float> stockBoughtPrice = new HashMap<>();
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
@@ -49,8 +52,10 @@ public class miniGame1 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mini_game1);
 
-        container = findViewById(R.id.container);
+        Context context = this;
+        DatabaseUtil dbUtil = new DatabaseUtil(context);
 
+        container = findViewById(R.id.container);
         List<Stock> stockList = dbUtil.getStockList();
 
         Log.d(stockList.getFirst().getStockName(), "");
@@ -108,14 +113,16 @@ public class miniGame1 extends AppCompatActivity {
             button.setTextSize(TypedValue.COMPLEX_UNIT_PX, btnTextSize * scale);
             button.setLayoutParams(btnParams);
         });
+        AtomicReference<Float> currentPrice = new AtomicReference<>(0f);
 
         // Animate the price of stock
         ValueAnimator priceAnimator = ValueAnimator.ofFloat(0, 50);
         priceAnimator.setDuration(4000);
-        priceAnimator.setInterpolator(new DecelerateInterpolator());//can change later depending on gameplay
+        priceAnimator.setInterpolator(new AccelerateInterpolator());//can change later depending on gameplay
         priceAnimator.addUpdateListener(animation -> {
             float price = (float) animation.getAnimatedValue();
-            button.setText(String.format("Buy %s $%.2f",stock.getStockName(), price));
+            button.setText(String.format("Buy %s $%.2f",stock.getSymbol(), price));
+            currentPrice.set(price);
             });
 
         // Start animations together
@@ -128,7 +135,8 @@ public class miniGame1 extends AppCompatActivity {
                 .start();
 
         button.setOnClickListener(v -> {
-            stocksBought.add(stock);
+            stockBoughtPrice.put(stock, currentPrice.get());
+            Log.d(stock.getStockName() + " bought at: " + String.valueOf(currentPrice.get()), "");
         });
     }
 
