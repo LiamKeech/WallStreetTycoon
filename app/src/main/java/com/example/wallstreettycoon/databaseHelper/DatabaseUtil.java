@@ -34,7 +34,7 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double stockPrice = Double.valueOf("price");
+                Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
                 Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
                 stockList.add(stock);
