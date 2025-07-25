@@ -18,6 +18,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import android.animation.ValueAnimator;
+import android.widget.TextView;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
@@ -42,15 +44,16 @@ public class miniGame1 extends AppCompatActivity {
 
     FrameLayout container;
     Random random = new Random();
-
     Map<Stock, Float> stockBoughtPrice = new HashMap<>();
-
     private Handler handler = new Handler(Looper.getMainLooper());
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mini_game1);
+
+
 
         Context context = this;
         DatabaseUtil dbUtil = new DatabaseUtil(context);
@@ -71,6 +74,7 @@ public class miniGame1 extends AppCompatActivity {
 
     private void spawnFloatingButton(Stock stock) {
         //Add stock to held stocks after clicked at price when it is clicked
+        LinearLayout buyListLayout = findViewById(R.id.buy_list_layout);
         Button button = new Button(this);
 
         int btnSize = 100;
@@ -135,8 +139,18 @@ public class miniGame1 extends AppCompatActivity {
                 .start();
 
         button.setOnClickListener(v -> {
-            stockBoughtPrice.put(stock, currentPrice.get());
+            shape.setColor(Color.parseColor("#FF6417")); // orange
+
+            Float boughtPrice = currentPrice.get();
+            stockBoughtPrice.put(stock, boughtPrice);
+
             Log.d(stock.getStockName() + " bought at: " + String.valueOf(currentPrice.get()), "");
+
+            TextView stockView = new TextView(this);
+            stockView.setText(String.format("%s: $%.2f", stock.getSymbol(), boughtPrice));
+            stockView.setTextColor(Color.WHITE); // Or any style you want
+            stockView.setTextSize(14);
+            buyListLayout.addView(stockView, 0);
         });
     }
 
