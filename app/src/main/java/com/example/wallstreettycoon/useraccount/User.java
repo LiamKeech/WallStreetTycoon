@@ -6,14 +6,14 @@ public class User { //Data model
     String userLastName;
 
     String userPassword;
-    Double userBalance;
+    Double userBalance = 0.0;
 
     public User(String username, String userFirstName, String userLastName, String userPassword, Double userBalance) {
         this.userPassword = userPassword;
         this.username = username;
         this.userLastName = userLastName;
         this.userFirstName = userFirstName;
-        this.userBalance = 0.0;
+        this.userBalance = userBalance;
     }
 
     public String getUserFirstName() {
@@ -36,7 +36,7 @@ public class User { //Data model
         return username;
     }
 
-    public void setusername(String userUsername) {
+    public void setUsername(String userUsername) {
         this.username = userUsername;
     }
 
