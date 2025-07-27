@@ -129,6 +129,14 @@ public class DatabaseUtil {
         return user;
     }
 
+    public void updateBalance(double balance, String username){
+        String sql = "UPDATE users SET balance = ? WHERE username = ?";
+        SQLiteStatement stmt = db.compileStatement(sql);
+        stmt.bindDouble(1, balance);
+        stmt.bindString(2, username);
+        stmt.executeUpdateDelete();
+    }
+
     public boolean userExists(String username) {
         String query = "SELECT 1 FROM users WHERE username = ?";
         Cursor cursor = db.rawQuery(query, new String[]{username});
