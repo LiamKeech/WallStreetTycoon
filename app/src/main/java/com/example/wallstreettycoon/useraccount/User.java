@@ -1,5 +1,7 @@
 package com.example.wallstreettycoon.useraccount;
 
+import com.example.wallstreettycoon.portfolio.Portfolio;
+
 public class User { //Data model
     String username; //Uniquely ID user
     String userFirstName;
@@ -7,6 +9,7 @@ public class User { //Data model
 
     String userPassword;
     Double userBalance = 0.0;
+    private Portfolio portfolio;
 
     public User(String username, String userFirstName, String userLastName, String userPassword, Double userBalance) {
         this.userPassword = userPassword;
@@ -54,5 +57,16 @@ public class User { //Data model
 
     public void setUserBalance(Double userBalance) {
         this.userBalance = userBalance;
+    }
+
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+        if (portfolio != null) {
+            portfolio.setUser(this);
+        }
     }
 }

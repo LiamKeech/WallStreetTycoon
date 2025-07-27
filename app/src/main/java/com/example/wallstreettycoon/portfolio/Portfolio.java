@@ -1,8 +1,11 @@
 package com.example.wallstreettycoon.portfolio;
 
+import com.example.wallstreettycoon.useraccount.User;
+
 public class Portfolio { //Data Model
     private int portfolioID;
     private String ownerUsername; //FK
+    private User user;
 
     //TODO: total portfolio value
 
@@ -17,5 +20,16 @@ public class Portfolio { //Data Model
 
     public String getOwnerUsername() {
         return ownerUsername;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        if (user != null) {
+            this.ownerUsername = user.getUserUsername();
+        }
     }
 }
