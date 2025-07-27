@@ -106,13 +106,27 @@ public class DatabaseUtil {
     }
 
     public User getUser(String username){
-        Cursor cursor = db.rawQuery("SELECT userFName from users WHERE username = " + username,null);
-        String fName = cursor.getString(cursor.getColumnIndexOrThrow("userFName"));
-        String lName = cursor.getString(cursor.getColumnIndexOrThrow("userLName"));
-        String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
-        Double balance = cursor.getDouble(cursor.getColumnIndexOrThrow("balance"));
+        Cursor cursor = db.rawQuery(
+                "SELECT userFName, userLName, password, balance FROM users WHERE username = ?",
+                new String[]{username}
+        );
 
-        return new User(username, fName, lName, password, balance);
+        User user = null;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            String fName = cursor.getString(cursor.getColumnIndexOrThrow("userFName"));
+            String lName = cursor.getString(cursor.getColumnIndexOrThrow("userLName"));
+            String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
+            double balance = cursor.getDouble(cursor.getColumnIndexOrThrow("balance"));
+
+            user = new User(username, fName, lName, password, balance);
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        return user;
     }
 
     public boolean userExists(String username) {
