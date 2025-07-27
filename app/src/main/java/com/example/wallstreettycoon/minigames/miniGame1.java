@@ -59,7 +59,6 @@ public class miniGame1 extends AppCompatActivity {
             }, delay);
             delay += 600;
         }
-
     }
 
     private void spawnFloatingButton(Stock stock) {
@@ -99,55 +98,11 @@ public class miniGame1 extends AppCompatActivity {
         button.setLayoutParams(params);
         container.addView(button);
 
-        // animate size
-        ValueAnimator resizeAnimator = ValueAnimator.ofFloat(0.5f, 1f);
-        resizeAnimator.setDuration(8000);
-        resizeAnimator.addUpdateListener(animation -> {
-            float scale = (float) animation.getAnimatedValue();
-
-            ViewGroup.LayoutParams btnParams = button.getLayoutParams();
-            btnParams.width = (int) (btnWidthPx * scale);
-            btnParams.height = (int) (btnHeightPx * scale);
-
-            button.setTextSize(TypedValue.COMPLEX_UNIT_PX, btnTextSize * scale);
-            button.setLayoutParams(btnParams);
-        });
         AtomicReference<Float> currentPrice = new AtomicReference<>(0f);
 
-        // animate the price of stock
-        ValueAnimator priceIncreaseAnimator = ValueAnimator.ofFloat(0, random.nextFloat(100) + 100);
-        priceIncreaseAnimator.setDuration(8000);
-        priceIncreaseAnimator.setInterpolator(new AccelerateInterpolator());//can change later depending on gameplay
-        priceIncreaseAnimator.addUpdateListener(animation -> {
-            float price = (float) animation.getAnimatedValue();
-            if(!held.get())
-                button.setText(String.format("Buy %s $%.2f",stock.getSymbol(), price));
-            else
-                button.setText(String.format("Sell %s $%.2f",stock.getSymbol(), price));
-            currentPrice.set(price);
-            });
-
-//        ValueAnimator priceDecreaseAnimator = ValueAnimator.ofFloat(50, 1);
-//        priceDecreaseAnimator.setDuration(300);
-//        priceDecreaseAnimator.setStartDelay(8000);
-//        priceDecreaseAnimator.addUpdateListener(animation -> {
-//            float price = (float) animation.getAnimatedValue();
-//            if(!held.get())
-//                button.setText(String.format("Buy %s $%.2f",stock.getSymbol(), price));
-//            else
-//                button.setText(String.format("Sell %s $%.2f",stock.getSymbol(), price));
-//            currentPrice.set(price);
-//        });
-
-
-        // start animations together
-        priceIncreaseAnimator.start();
-        //priceDecreaseAnimator.start(); //starts delayed
-        resizeAnimator.start();
-        button.animate()
-                .translationY(-container.getHeight() + btnHeightPx)
-                .setDuration(4000)
-                .start();
+        increasePrice(button, currentPrice, held, stock, btnWidthPx, btnHeightPx, btnTextSize, () -> {
+            decreasePrice(button, currentPrice, held, stock, btnWidthPx, btnHeightPx, btnTextSize);
+        });
 
         Map<Stock, TextView> stockTextViews = new HashMap<>();
 
@@ -189,6 +144,91 @@ public class miniGame1 extends AppCompatActivity {
                 profitLabel.setText(String.format("Profit: $%.2f", profit));
             }
         });
+    }
+
+    public void increasePrice(Button button, AtomicReference<Float> currentPrice, AtomicBoolean held, Stock stock, int btnWidthPx, int btnHeightPx, int btnTextSize, Runnable onComplete){
+        // animate size increasing
+        ValueAnimator resizeAnimator = ValueAnimator.ofFloat(0.5f, 1f);
+        resizeAnimator.setDuration(4000);
+        resizeAnimator.addUpdateListener(animation -> {
+            float scale = (float) animation.getAnimatedValue();
+
+            ViewGroup.LayoutParams btnParams = button.getLayoutParams();
+            btnParams.width = (int) (btnWidthPx * scale);
+            btnParams.height = (int) (btnHeightPx * scale);
+
+            button.setTextSize(TypedValue.COMPLEX_UNIT_PX, btnTextSize * scale);
+            button.setLayoutParams(btnParams);
+        });
+        //end region
+
+        // animate the price increasing
+        ValueAnimator priceIncreaseAnimator = ValueAnimator.ofFloat(0, random.nextFloat(100) + 100);
+        priceIncreaseAnimator.setDuration(4000);
+        priceIncreaseAnimator.setInterpolator(new AccelerateInterpolator());//can change later depending on gameplay
+        priceIncreaseAnimator.addUpdateListener(animation -> {
+            float price = (float) animation.getAnimatedValue();
+            if(!held.get())
+                button.setText(String.format("Buy %s $%.2f",stock.getSymbol(), price));
+            else
+                button.setText(String.format("Sell %s $%.2f",stock.getSymbol(), price));
+            currentPrice.set(price);
+        });
+        //end region
+
+        // When price increase finishes, run the callback
+        priceIncreaseAnimator.addListener(new android.animation.AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(android.animation.Animator animation) {
+                if (onComplete != null) onComplete.run();
+            }
+        });
+
+        // start animations together
+        priceIncreaseAnimator.start();
+        resizeAnimator.start();
+        button.animate()
+                .translationY(-container.getHeight() + btnHeightPx)
+                .setDuration(4000)
+                .start();
+    }
+    public void decreasePrice(Button button, AtomicReference<Float> currentPrice, AtomicBoolean held, Stock stock, int btnWidthPx, int btnHeightPx, int btnTextSize){
+        // animate size increasing
+        ValueAnimator resizeAnimator = ValueAnimator.ofFloat(1f, 0.5f);
+        resizeAnimator.setDuration(1000);
+        resizeAnimator.addUpdateListener(animation -> {
+            float scale = (float) animation.getAnimatedValue();
+
+            ViewGroup.LayoutParams btnParams = button.getLayoutParams();
+            btnParams.width = (int) (btnWidthPx * scale);
+            btnParams.height = (int) (btnHeightPx * scale);
+
+            button.setTextSize(TypedValue.COMPLEX_UNIT_PX, btnTextSize * scale);
+            button.setLayoutParams(btnParams);
+        });
+        //end region
+
+        // animate the price increasing
+        ValueAnimator priceDecreaseAnimator = ValueAnimator.ofFloat(currentPrice.get(), random.nextFloat(5));
+        priceDecreaseAnimator.setDuration(1000);
+        priceDecreaseAnimator.setInterpolator(new AccelerateInterpolator());//can change later depending on gameplay
+        priceDecreaseAnimator.addUpdateListener(animation -> {
+            float price = (float) animation.getAnimatedValue();
+            if(!held.get())
+                button.setText(String.format("Buy %s $%.2f",stock.getSymbol(), price));
+            else
+                button.setText(String.format("Sell %s $%.2f",stock.getSymbol(), price));
+            currentPrice.set(price);
+        });
+        //end region
+
+        // start animations together
+        priceDecreaseAnimator.start();
+        resizeAnimator.start();
+        button.animate()
+                .translationY(0)
+                .setDuration(1000)
+                .start();
     }
 
     @Override

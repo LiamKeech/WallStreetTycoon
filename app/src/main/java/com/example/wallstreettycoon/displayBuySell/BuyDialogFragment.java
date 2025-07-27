@@ -25,7 +25,7 @@ public class BuyDialogFragment extends DialogFragment {
         header.setText("Buy AAA");
 
         // Set stock details
-        TextView symbol = view.findViewById(R.id.stockSymbol);
+        TextView symbol = view.findViewById(R.id.stockSymbolLabel);
         symbol.setText("AAA");
         TextView price = view.findViewById(R.id.currentPrice);
         price.setText("$50.00");
