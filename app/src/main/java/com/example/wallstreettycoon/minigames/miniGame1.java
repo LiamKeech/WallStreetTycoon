@@ -39,7 +39,6 @@ public class miniGame1 extends AppCompatActivity {
     Random random = new Random();
     Map<Stock, Float> stockBoughtPrice = new HashMap<>();
     Float profit = 0f;
-
     private Handler handler = new Handler(Looper.getMainLooper());
 
 

@@ -51,15 +51,16 @@
             android:id="@+id/profit_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:background="#48C73C"
+            android:padding="16dp"
             android:text="Profit: $0.00"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_margin="16dp"
-            android:padding="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -74,7 +74,7 @@
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/edtUserrnameCreate"
+            app:layout_constraintEnd_toStartOf="@+id/edtUsernameCreate"
             app:layout_constraintHorizontal_bias="0.526"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblSurnameCreate"
@@ -89,7 +89,7 @@
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/editPasswCreate"
+            app:layout_constraintEnd_toStartOf="@+id/edtPasswCreate"
             app:layout_constraintHorizontal_bias="0.535"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblUsernameCreate"
@@ -160,7 +160,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <EditText
-            android:id="@+id/edtUserrnameCreate"
+            android:id="@+id/edtUsernameCreate"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
@@ -177,7 +177,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <EditText
-            android:id="@+id/editPasswCreate"
+            android:id="@+id/edtPasswCreate"
             android:layout_width="178dp"
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
@@ -190,7 +190,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.609"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtUserrnameCreate"
+            app:layout_constraintTop_toBottomOf="@+id/edtUsernameCreate"
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

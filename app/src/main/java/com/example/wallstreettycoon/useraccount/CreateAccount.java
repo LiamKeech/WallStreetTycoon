@@ -43,13 +43,17 @@ public class CreateAccount extends AppCompatActivity {
                 //obtain information, check and validate, create user obj:
                 EditText nameInput = findViewById(R.id.edtNameCreate);
                 EditText surnameInput = findViewById(R.id.edtSurnameCreate);
-                EditText usernameInput = findViewById(R.id.edtUsernameLogin);
-                EditText passwordInput = findViewById(R.id.edtPasswLogin);
+                EditText usernameInput = findViewById(R.id.edtUsernameCreate);
+                EditText passwordInput = findViewById(R.id.edtPasswCreate);
 
                 String name = nameInput.getText().toString();
+                Log.d(name, "");
                 String surname = surnameInput.getText().toString();
+                Log.d(surname, "");
                 String username = usernameInput.getText().toString();
+                Log.d(username, "");
                 String password = passwordInput.getText().toString();
+                Log.d(password, "");
 
                 if (!name.isEmpty() && !surname.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
                     User newUser = new User(username, name, surname,  password, 1000.0);

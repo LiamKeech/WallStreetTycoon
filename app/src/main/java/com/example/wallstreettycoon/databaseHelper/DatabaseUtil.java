@@ -3,6 +3,7 @@ package com.example.wallstreettycoon.databaseHelper;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
@@ -93,7 +94,15 @@ public class DatabaseUtil {
         String username = user.getUserUsername();
         String password = user.getUserPassword();
         Double balance = user.getUserBalance();
-        db.execSQL("INSERT INTO users (userFName, userLName, username, password, balance) VALUES (fName, lName, username, password, balance)");
+
+        String sql = "INSERT INTO users (userFName, userLName, username, password, balance) VALUES (?, ?, ?, ?, ?)";
+        SQLiteStatement stmt = db.compileStatement(sql);
+        stmt.bindString(1, fName);
+        stmt.bindString(2, lName);
+        stmt.bindString(3, username);
+        stmt.bindString(4, password);
+        stmt.bindDouble(5, balance);
+        stmt.executeInsert();
     }
 
     public User getUser(String username){
