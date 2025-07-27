@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
+import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
 import com.example.wallstreettycoon.useraccount.User;
@@ -22,6 +23,8 @@ public class DatabaseUtil {
         dbCreator = new DatabaseCreator(context);
         db = dbCreator.getWritableDatabase();
     }
+
+    // Stock related methods
 
     //getter for stockList
     public List<Stock> getStockList(){
@@ -76,23 +79,36 @@ public class DatabaseUtil {
         return stockPriceHistories;
     }
 
-    public Double getCurrentStockPrice(Integer stockID, Integer timeStamp){
-        //Stock stock = getStockList().get(stockID);
-        StockPriceFunction stockPriceFunction = getStockPriceFunctions().get(stockID);
+//    public Double getCurrentStockPrice(Integer stockID, Integer timeStamp){
+//        //Stock stock = getStockList().get(stockID);
+//        StockPriceFunction stockPriceFunction = getStockPriceFunctions().get(stockID);
+//
+//        //I am rounding using BigDecimal for better precision
+//
+//        Double value = stockPriceFunction.getCurrentPrice(timeStamp);
+//        BigDecimal bd = new BigDecimal(value);
+//        bd = bd.setScale(2, RoundingMode.HALF_UP);
+//        return bd.doubleValue();
+//    }
 
-        //I am rounding using BigDecimal for better precision
-
-        Double value = stockPriceFunction.getCurrentPrice(timeStamp);
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+    public Double getCurrentStockPrice(Integer stockID, Integer timeStamp) {
+        List<StockPriceFunction> functions = getStockPriceFunctions();
+        for (StockPriceFunction stockPriceFunction : functions) {
+            if (stockPriceFunction.getStockID() == (stockID)) {
+                Double value = stockPriceFunction.getCurrentPrice(timeStamp);
+                BigDecimal bd = new BigDecimal(value);
+                return bd.setScale(2, RoundingMode.HALF_UP).doubleValue();
+            }
+        }
+        return 0.0;
     }
 
+    // User related methods
     public void setUser(User user){
         String fName = user.getUserFirstName();
         String lName = user.getUserLastName();
         String username = user.getUserUsername();
-        String password = user.getUserPassword();
+        String password = user.getUserPassword(); //future password hashing?
         Double balance = user.getUserBalance();
 
         String sql = "INSERT INTO users (userFName, userLName, username, password, balance) VALUES (?, ?, ?, ?, ?)";
@@ -146,12 +162,50 @@ public class DatabaseUtil {
         return exists;
     }
 
-    public void updatePortfolio(Stock stock){
+    // Portfolio related methods
 
+    public int getPortfolioID(String username) {
+        Cursor cursor = db.rawQuery("SELECT portfolioID FROM portfolio WHERE username = ?", new String[]{username});
+        int portfolioID = -1;
+        if (cursor.moveToFirst()) {
+            portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+        }
+        cursor.close();
+        return portfolioID;
     }
-    public List<Stock> getPortfolio(){
-        List<Stock> list = new ArrayList<>();
 
+
+    public List<PortfolioStock> getPortfolio(String username) {
+        List<PortfolioStock> list = new ArrayList<>();
+        int portfolioID = getPortfolioID(username);
+
+        if (portfolioID == -1) return list;
+
+        String query = "SELECT ps.portfolioID, ps.stockID, ps.quantity, ps.buyPrice, ps.buyDate, s.stockID AS stock_ref_id, s.stockName, s.symbol, s.category, s.description FROM portfolioStock ps JOIN stocks s ON ps.stockID = s.stockID WHERE ps.portfolioID = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(portfolioID)});
+
+        while (cursor.moveToNext()) {
+            int portfolioIDValue = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+            int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+            double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
+            String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
+            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+            Double stockPrice = getCurrentStockPrice(stockID, (int) (System.currentTimeMillis() / 1000)); // Example timestamp
+
+            // Create Stock object
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
+            // Create PortfolioStock with the Stock reference
+            PortfolioStock ps = new PortfolioStock(portfolioIDValue, String.valueOf(stockID), quantity, buyPrice, buyDate, stock);
+            list.add(ps);
+        }
+
+        cursor.close();
         return list;
     }
+
 }
