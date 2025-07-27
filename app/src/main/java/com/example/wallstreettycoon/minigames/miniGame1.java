@@ -32,7 +32,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class miniGame1 extends AppCompatActivity {
-
+    LinearLayout buyListLayout;
+    TextView profitLabel;
+    Map<Stock, TextView> stockTextViews = new HashMap<>();
     FrameLayout container;
     Random random = new Random();
     Map<Stock, Float> stockBoughtPrice = new HashMap<>();
@@ -52,20 +54,19 @@ public class miniGame1 extends AppCompatActivity {
         container = findViewById(R.id.container);
         List<Stock> stockList = dbUtil.getStockList();
 
-        int delay = 600;
+        int delay = 1000;
         for(Stock stock: stockList){ //TODO change to just technology stocks
             handler.postDelayed(() -> {
                 spawnFloatingButton(stock);
             }, delay);
-            delay += 600;
+            delay += 1000;
         }
     }
 
     private void spawnFloatingButton(Stock stock) {
-        //Add stock to held stocks after clicked at price when it is clicked
-        LinearLayout buyListLayout = findViewById(R.id.buy_list_layout);
+        buyListLayout = findViewById(R.id.buy_list_layout);
 
-        TextView profitLabel = findViewById(R.id.profit_label);
+        profitLabel = findViewById(R.id.profit_label);
         profitLabel.setText(String.format("Profit: $%.2f", profit));
 
         Button button = new Button(this);
@@ -104,44 +105,14 @@ public class miniGame1 extends AppCompatActivity {
             decreasePrice(button, currentPrice, held, stock, btnWidthPx, btnHeightPx, btnTextSize);
         });
 
-        Map<Stock, TextView> stockTextViews = new HashMap<>();
+
 
         button.setOnClickListener(v -> {
             if(!held.get()) {
-                held.set(true);
-                shape.setColor(Color.parseColor("#FF6417")); // orange
-
-                Float boughtPrice = currentPrice.get();
-                stockBoughtPrice.put(stock, boughtPrice);
-
-                profit -= boughtPrice;
-
-                TextView stockView = new TextView(this);
-                stockView.setText(String.format("%s: $%.2f", stock.getSymbol(), boughtPrice));
-                stockView.setTextColor(Color.BLACK);
-                stockView.setTextSize(14);
-                buyListLayout.addView(stockView);
-                stockTextViews.put(stock, stockView);
-
-                profitLabel.setText(String.format("Profit: $%.2f", profit));
+                addStockToHeldStocksList(held, shape, currentPrice, stock);
             }
             else{
-                held.set(false);
-                shape.setColor(Color.parseColor("#48C73C")); // green
-
-                Float sellPrice = currentPrice.get();
-                profit += sellPrice;
-                //remove from held stocks
-                stockBoughtPrice.remove(stock);
-
-                // Remove the TextView from layout
-                TextView viewToRemove = stockTextViews.get(stock);
-                if (viewToRemove != null) {
-                    buyListLayout.removeView(viewToRemove);
-                    stockTextViews.remove(stock);
-                }
-
-                profitLabel.setText(String.format("Profit: $%.2f", profit));
+                removeStockFromHeldStocksList(held, shape, currentPrice, stock);
             }
         });
     }
@@ -229,6 +200,52 @@ public class miniGame1 extends AppCompatActivity {
                 .translationY(0)
                 .setDuration(1000)
                 .start();
+
+        button.postDelayed(() -> {
+            removeStockFromHeldStocksList(held, (GradientDrawable) button.getBackground(), currentPrice, stock);
+
+            container.removeView(button);
+        }, 3000);
+    }
+
+    public void addStockToHeldStocksList(AtomicBoolean held, GradientDrawable shape, AtomicReference<Float> currentPrice, Stock stock){
+        held.set(true);
+        shape.setColor(Color.parseColor("#FF6417")); // orange
+
+        Float boughtPrice = currentPrice.get();
+        stockBoughtPrice.put(stock, boughtPrice);
+
+        profit -= boughtPrice;
+
+        TextView stockView = new TextView(this);
+        stockView.setText(String.format("%s: $%.2f", stock.getSymbol(), boughtPrice));
+        stockView.setTextColor(Color.BLACK);
+        stockView.setTextSize(14);
+        buyListLayout.addView(stockView);
+        stockTextViews.put(stock, stockView);
+
+        profitLabel.setText(String.format("Profit: $%.2f", profit));
+    }
+
+    public void removeStockFromHeldStocksList(AtomicBoolean held, GradientDrawable shape, AtomicReference<Float> currentPrice, Stock stock){
+        if(held.get()) {
+            held.set(false);
+            shape.setColor(Color.parseColor("#48C73C")); // green
+
+            Float sellPrice = currentPrice.get();
+            profit += sellPrice;
+            //remove from held stocks
+            stockBoughtPrice.remove(stock);
+
+            // Remove the TextView from layout
+            TextView viewToRemove = stockTextViews.get(stock);
+            if (viewToRemove != null) {
+                buyListLayout.removeView(viewToRemove);
+                stockTextViews.remove(stock);
+            }
+
+            profitLabel.setText(String.format("Profit: $%.2f", profit));
+        }
     }
 
     @Override
