@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.wallstreettycoon.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.stock.Stock;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DisplayStockActivity extends AppCompatActivity {
+    Game game = new Game();
     private LineChart chart;
     private DatabaseUtil dbUtil;
     private Stock currentStock;
@@ -40,7 +42,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         //currentUsername = intentFromList.getStringExtra("username");
 
         int stockID = 1;
-        currentUsername = "admin";
+        currentUsername = game.currentUser.getUserUsername();
 
         Log.d("DisplayStock", "Intent received: stockID=" + stockID + ", username=" + currentUsername);
 
