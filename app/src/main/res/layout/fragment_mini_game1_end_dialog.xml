@@ -24,14 +24,14 @@
 
     <TextView
         android:id="@+id/profit_end_textview"
-        android:layout_width="210dp"
-        android:layout_height="61dp"
+        android:layout_width="139dp"
+        android:layout_height="60dp"
         android:layout_margin="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/rounded_textview"
         android:lineSpacingExtra="6dp"
         android:padding="16dp"
-        android:text="You made: "
+        android:text=""
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

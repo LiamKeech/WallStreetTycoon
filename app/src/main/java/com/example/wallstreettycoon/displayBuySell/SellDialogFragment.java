@@ -35,7 +35,7 @@ public class SellDialogFragment extends DialogFragment {
         TextView symbol = view.findViewById(R.id.stockSymbolLabel);
         symbol.setText(symbolText);
         TextView price = view.findViewById(R.id.currentPrice);
-        price.setText(String.format("$%.2f", currentPriceValue);
+        price.setText(String.format("$%.2f", currentPriceValue));
 
         // Quantity and total cost logic
         EditText quantityInput = view.findViewById(R.id.quantityInput);
