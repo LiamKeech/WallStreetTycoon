@@ -2,6 +2,7 @@ package com.example.wallstreettycoon.dashboard;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,9 @@ public class ListStocks extends AppCompatActivity {
         DatabaseUtil dbUtil = new DatabaseUtil(context);
 
         RecyclerView stockRV = findViewById(R.id.RVstock);
+        TextView viewBalance = findViewById(R.id.viewBalance);
+        String userBalance = "$" + String.valueOf(dbUtil.getUser("admin").getUserBalance());
+        viewBalance.setText(userBalance);
 
         // Here, we have created new array list and added data to it
         List<Stock> allStockList = dbUtil.getStockList();

@@ -46,7 +46,7 @@ public class ManageUserAccount extends AppCompatActivity {
 
         btnUpdate = findViewById(R.id.btnUpdateManage);
         btnUpdate.setOnClickListener(v -> {
-            EditText edtUser = findViewById(R.id.edtUserrnameManage);
+            EditText edtUser = findViewById(R.id.edtUsernameManage);
             EditText edtName = findViewById(R.id.edtNameManage);
             EditText edtSurname = findViewById(R.id.edtSurnameManage);
             EditText edtPassw = findViewById(R.id.editTextTextPassword);
