@@ -30,12 +30,8 @@
         </activity>
         <activity
             android:name=".displayBuySell.DisplayStockActivity"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false" >
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".useraccount.CreateAccount"
@@ -44,7 +40,12 @@
         </activity>
         <activity
             android:name=".useraccount.Login"
-            android:exported="false">
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".useraccount.ManageUserAccount"
