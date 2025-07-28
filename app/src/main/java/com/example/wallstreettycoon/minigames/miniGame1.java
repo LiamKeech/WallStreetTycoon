@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.displayBuySell.SellDialogFragment;
 import com.example.wallstreettycoon.stock.Stock;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -59,6 +60,12 @@ public class miniGame1 extends AppCompatActivity {
             }, delay);
             delay += 1000;
         }
+
+        handler.postDelayed(() -> {
+            miniGame1EndDialogFragment endDialogFragment = new miniGame1EndDialogFragment();
+            endDialogFragment.show(getSupportFragmentManager(), "miniGame1End");
+
+        }, stockList.size() * (1000 + 100) + 2000);
     }
 
     private void spawnFloatingButton(Stock stock) {
@@ -205,7 +212,6 @@ public class miniGame1 extends AppCompatActivity {
             container.removeView(button);
         }, 3000);
     }
-
     public void addStockToHeldStocksList(AtomicBoolean held, GradientDrawable shape, AtomicReference<Float> currentPrice, Stock stock){
         held.set(true);
         shape.setColor(Color.parseColor("#FF6417")); // orange
@@ -224,7 +230,6 @@ public class miniGame1 extends AppCompatActivity {
 
         profitLabel.setText(String.format("Profit: $%.2f", profit));
     }
-
     public void removeStockFromHeldStocksList(AtomicBoolean held, GradientDrawable shape, AtomicReference<Float> currentPrice, Stock stock){
         if(held.get()) {
             held.set(false);

@@ -84,7 +84,7 @@ public class DatabaseUtil {
                 stockPriceHistories.add(s);
             } while (cursor.moveToNext());
         }
-
+        cursor.close();
         return stockPriceHistories;
     }
 
@@ -134,7 +134,7 @@ public class DatabaseUtil {
 
         User user = null;
 
-        if (cursor != null && cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             String fName = cursor.getString(cursor.getColumnIndexOrThrow("userFName"));
             String lName = cursor.getString(cursor.getColumnIndexOrThrow("userLName"));
             String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
@@ -142,10 +142,8 @@ public class DatabaseUtil {
 
             user = new User(username, fName, lName, password, balance);
         }
+        cursor.close();
 
-        if (cursor != null) {
-            cursor.close();
-        }
 
         return user;
     }
@@ -169,9 +167,8 @@ public class DatabaseUtil {
 
     public void updateUser(String username, String name, String surname, String passw)
     {
-        String query = "UPDATE users SET userFName = name, userLname = surname, password = passw WHERE username = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{username});
-        cursor.close();
+        String query = "UPDATE users SET userFName = ?, userLName = ?, password = ? WHERE username = ?";
+        db.execSQL(query, new Object[]{name, surname, passw, username});
     }
 
     // Portfolio related methods
