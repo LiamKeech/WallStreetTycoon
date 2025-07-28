@@ -15,6 +15,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.wallstreettycoon.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.displayBuySell.BuyDialogFragment;
@@ -37,6 +38,16 @@ public class ManageUserAccount extends AppCompatActivity {
             return insets;
         });
 
+        //set initial values to logged in user:
+        EditText edtUser = findViewById(R.id.edtUsernameManage);
+        edtUser.setText(Game.currentUser.getUserUsername());
+        EditText edtName = findViewById(R.id.edtNameManage);
+        edtName.setText(Game.currentUser.getUserFirstName());
+        EditText edtSurname = findViewById(R.id.edtSurnameManage);
+        edtSurname.setText(Game.currentUser.getUserLastName());
+        EditText edtPassw = findViewById(R.id.editTextTextPassword);
+        edtPassw.setText(Game.currentUser.getUserPassword());
+
         txtChangePassw = findViewById(R.id.lblChangePassw);
         txtChangePassw.setOnClickListener(v -> {
             txtChangePassw.setTypeface(null, Typeface.ITALIC);
@@ -46,11 +57,6 @@ public class ManageUserAccount extends AppCompatActivity {
 
         btnUpdate = findViewById(R.id.btnUpdateManage);
         btnUpdate.setOnClickListener(v -> {
-            EditText edtUser = findViewById(R.id.edtUsernameManage);
-            EditText edtName = findViewById(R.id.edtNameManage);
-            EditText edtSurname = findViewById(R.id.edtSurnameManage);
-            EditText edtPassw = findViewById(R.id.editTextTextPassword);
-
             DatabaseUtil dbUtil = new DatabaseUtil(context);
             dbUtil.updateUser(edtUser.getText().toString(), edtName.getText().toString(),
                     edtSurname.getText().toString(), edtPassw.getText().toString());
