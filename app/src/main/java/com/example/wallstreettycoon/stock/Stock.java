@@ -26,7 +26,7 @@ public class Stock { //Data Model
     }
 
     // Getter and Setter for stockID
-    public int getStockID() {
+    public Integer getStockID() {
         return stockID;
     }
 

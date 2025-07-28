@@ -49,6 +49,16 @@ public class DatabaseUtil {
 
         return stockList;
     }
+
+    public Stock getStock(Integer stockID){
+        for(Stock stock : getStockList()){
+            if(stock.getStockID().equals(stockID)){
+                return stock;
+            }
+        }
+        return null;
+    }
+
     //getter for stockPriceFunction
     public List<StockPriceFunction> getStockPriceFunctions(){
         List<StockPriceFunction> stockPriceHistories = new ArrayList<>();
@@ -76,6 +86,15 @@ public class DatabaseUtil {
         }
 
         return stockPriceHistories;
+    }
+
+    public StockPriceFunction getStockPriceFunction(Integer stockID){
+        for (StockPriceFunction stockPriceFunction : getStockPriceFunctions()) {
+            if (stockPriceFunction.getStockID().equals(stockID)) {
+                return stockPriceFunction;
+            }
+        }
+        return null;
     }
 
     public Double getCurrentStockPrice(Integer stockID, Integer timeStamp){

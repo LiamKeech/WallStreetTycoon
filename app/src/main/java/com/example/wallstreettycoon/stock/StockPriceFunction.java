@@ -13,7 +13,7 @@ public class StockPriceFunction {
         this.stockID = fk;
     }
 
-    public int getStockID() { return stockID; }
+    public Integer getStockID() { return stockID; }
 
     public Double getCurrentPrice(Integer timeStamp){
         Double price = 0.0;
