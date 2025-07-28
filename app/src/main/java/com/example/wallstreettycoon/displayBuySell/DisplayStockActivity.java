@@ -43,7 +43,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         //currentUsername = intentFromList.getStringExtra("username");
 
         int stockID = 1;
-        currentUsername = game.currentUser.getUserUsername();
+        currentUsername = "admin";
 
         Log.d("DisplayStock", "Intent received: stockID=" + stockID + ", username=" + currentUsername);
 
