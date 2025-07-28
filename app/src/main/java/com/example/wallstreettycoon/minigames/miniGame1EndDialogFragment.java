@@ -1,5 +1,6 @@
 package com.example.wallstreettycoon.minigames;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,16 +14,38 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.ColorRes;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
 
+import org.w3c.dom.Text;
+
 public class miniGame1EndDialogFragment extends DialogFragment {
+    Float profit;
+    TextView profitLabel;
+    Button homeButton;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mini_game1_end_dialog, container, false);
         getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
+        if (getArguments() != null) {
+            profit = getArguments().getFloat("profit");
+        }
+
+        profitLabel = view.findViewById(R.id.profit_end_textview);
+        if(profit > 0.0){
+            profitLabel.setText(String.format("+ $%.2f", profit));
+            profitLabel.setBackgroundColor(Color.parseColor("#48C73C")); // green
+        }
+        else{
+            profitLabel.setText(String.format("- $%.2f", profit));
+            profitLabel.setBackgroundColor(Color.parseColor("#E80A00")); // red
+        }
+
+        homeButton = view.findViewById(R.id.home_button);
 
         return view;
     }

@@ -13,8 +13,11 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wallstreettycoon.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.portfolio.PortfolioStock;
+import com.example.wallstreettycoon.portfolio.PortfolioStockAdapter;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockAdapter;
 
@@ -50,13 +53,15 @@ public class ListStocks extends AppCompatActivity {
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 stockRV.setLayoutManager(linearLayoutManager);
                 stockRV.setAdapter(stockAdapter);
+                btnToggle.setText("P");
             }
             else if (btnToggle.getText().toString().equals("P")) { //Portfolio
-                List<Stock> portfolioStock = dbUtil.getPortfolio();
-                StockAdapter stockAdapter = new StockAdapter(this, portfolioStock);
+                List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+                PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, portfolioStock);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 stockRV.setLayoutManager(linearLayoutManager);
                 stockRV.setAdapter(stockAdapter);
+                btnToggle.setText("M");
             }
         });
 
