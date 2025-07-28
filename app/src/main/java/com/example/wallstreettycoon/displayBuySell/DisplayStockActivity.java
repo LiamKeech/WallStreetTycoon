@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -67,6 +68,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         TextView stockName = findViewById(R.id.stockNameHeader);
         TextView stockSymbol = findViewById(R.id.stockSymbolValue);
         TextView currentPrice = findViewById(R.id.currentPriceValue);
+        EditText description = findViewById(R.id.stockDescription);
 
         if (stockName != null) {
             stockName.setText("Viewing " + currentStock.getStockName());
@@ -79,6 +81,10 @@ public class DisplayStockActivity extends AppCompatActivity {
         double currentPriceValue = dbUtil.getCurrentStockPrice(currentStock.getStockID(), currentTime);
         if (currentPrice != null) {
             currentPrice.setText(String.format("$%.2f", currentPriceValue));
+        }
+
+        if (description != null) {
+            description.setText(currentStock.getDescription());
         }
 
         Button btn1D = findViewById(R.id.btn1D);
