@@ -97,7 +97,7 @@ public class DatabaseUtil {
     }
 
     public User getUser(String username){
-        Cursor cursor = db.rawQuery("SELECT userFName from users WHERE username = " + username,null);
+        Cursor cursor = db.rawQuery("SELECT userFName, userLname, username, password from users WHERE username = " + username,null);
         String fName = cursor.getString(cursor.getColumnIndexOrThrow("userFName"));
         String lName = cursor.getString(cursor.getColumnIndexOrThrow("userLName"));
         String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
@@ -113,6 +113,13 @@ public class DatabaseUtil {
         boolean exists = cursor.getCount() > 0;
         cursor.close();
         return exists;
+    }
+
+    public void updateUser(String username, String name, String surname, String passw)
+    {
+        String query = "UPDATE users SET userFName = name, userLname = surname, password = passw WHERE username = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{username});
+        cursor.close();
     }
 
     public void updatePortfolio(Stock stock){

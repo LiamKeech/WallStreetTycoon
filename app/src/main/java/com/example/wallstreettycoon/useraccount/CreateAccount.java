@@ -52,14 +52,25 @@ public class CreateAccount extends AppCompatActivity {
                 String password = passwordInput.getText().toString();
 
                 if (!name.isEmpty() && !surname.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
-                    User newUser = new User(username, name, surname,  password, 1000.0);
 
                     //check if username doesn't already exist:
                     DatabaseUtil dbUtil = new DatabaseUtil(context);
                     if (!dbUtil.userExists(username)) {
 
                         //insert user into db:
+                        User newUser = new User(username, name, surname,  password, 1000.0);
                         dbUtil.setUser(newUser);
+
+                        //load account details:
+                        EditText nameDisplay = findViewById(R.id.edtNameManage);
+                        nameDisplay.setText(name);
+                        EditText surnameDisplay = findViewById(R.id.edtSurnameManage);
+                        surnameDisplay.setText(surname);
+                        EditText usernameDisplay = findViewById(R.id.edtUserrnameManage);
+                        usernameDisplay.setText(username);
+                        EditText passwDisplay = findViewById(R.id.editTextTextPassword);
+                        passwDisplay.setText(password);
+
                         //take to list stocks/dashboard:
                         Intent createdIntent = new Intent(CreateAccount.this, ListStocks.class);
                         startActivity(createdIntent);
