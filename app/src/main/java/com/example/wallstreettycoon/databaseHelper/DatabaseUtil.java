@@ -160,7 +160,7 @@ public class DatabaseUtil {
 
 
     //sell stock
-    public void sellStock(String username, int stockID, int quantityToSell, double pricePerUnit) {
+    public boolean sellStock(String username, int stockID, int quantityToSell, double pricePerUnit) {
         int portfolioID = getPortfolioID(username);
 
         // check how many shares user owns
@@ -171,7 +171,7 @@ public class DatabaseUtil {
 
             if (quantityToSell > existingQty) {
                 cursor.close();
-                return; // insufficient shares
+                return false; // insufficient shares
             }
 
             int remainingQty = existingQty - quantityToSell;
@@ -203,6 +203,7 @@ public class DatabaseUtil {
         }
 
         cursor.close();
+        return true;
     }
 
     // User related methods

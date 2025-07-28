@@ -40,7 +40,7 @@ public class BuyDialogFragment extends DialogFragment {
         // Quantity and total cost logic
         EditText quantityInput = view.findViewById(R.id.quantityInput);
         TextView totalCost = view.findViewById(R.id.totalCost);
-        double currentPrice = 50.00;
+        //double currentPrice = 50.00;
 
         quantityInput.addTextChangedListener(new TextWatcher() {
             @Override
