@@ -113,7 +113,7 @@ public class DatabaseUtil {
             user = new User(username, fName, lName, password, balance);
         }
 
-        return new User(username, fName, lName, password, balance);
+        return user;
     }
 
     public boolean userExists(String username) {
