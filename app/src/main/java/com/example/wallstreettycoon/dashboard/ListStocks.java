@@ -2,6 +2,7 @@ package com.example.wallstreettycoon.dashboard;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -41,8 +42,27 @@ public class ListStocks extends AppCompatActivity {
         String userBalance = "$" + String.valueOf(dbUtil.getUser("admin").getUserBalance());
         viewBalance.setText(userBalance);
 
-        // Here, we have created new array list and added data to it
+        Button btnToggle = findViewById(R.id.btnToggleList);
+        btnToggle.setOnClickListener(v -> {
+            if (btnToggle.getText().toString().equals("M")) { //Market
+                List<Stock> allStockList = dbUtil.getStockList();
+                StockAdapter stockAdapter = new StockAdapter(this, allStockList);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                stockRV.setLayoutManager(linearLayoutManager);
+                stockRV.setAdapter(stockAdapter);
+            }
+            else if (btnToggle.getText().toString().equals("P")) { //Portfolio
+                List<Stock> portfolioStock = dbUtil.getPortfolio();
+                StockAdapter stockAdapter = new StockAdapter(this, portfolioStock);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                stockRV.setLayoutManager(linearLayoutManager);
+                stockRV.setAdapter(stockAdapter);
+            }
+        });
+
+        /*// Here, we have created new array list and added data to it
         List<Stock> allStockList = dbUtil.getStockList();
+        List<Stock> portfolioStock = dbUtil.getPortfolio();
 
         // we are initializing our adapter class and passing our arraylist to it.
         StockAdapter courseAdapter = new StockAdapter(this, allStockList);
@@ -53,6 +73,6 @@ public class ListStocks extends AppCompatActivity {
 
         // in below two lines we are setting layoutmanager and adapter to our recycler view.
         stockRV.setLayoutManager(linearLayoutManager);
-        stockRV.setAdapter(courseAdapter);
+        stockRV.setAdapter(courseAdapter);*/
     }
 }
