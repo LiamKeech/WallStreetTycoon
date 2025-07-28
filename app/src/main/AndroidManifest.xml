@@ -13,9 +13,6 @@
         android:theme="@style/Theme.WallStreetTycoon"
         tools:targetApi="31">
         <activity
-            android:name=".minigames.miniGame1End"
-            android:exported="false" />
-        <activity
             android:name=".minigames.miniGame1Starter"
             android:exported="true">
 
