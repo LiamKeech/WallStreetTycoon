@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.stock.Stock;
@@ -122,7 +123,9 @@ public class DatabaseUtil {
         User user = getUser(username);
         double newBalance = user.getUserBalance() - totalCost;
         if (newBalance < 0) return; // insufficient funds
+
         updateBalance(newBalance, username);
+        Log.d("DB_LOG", "User " + username + " balance updated to: " + newBalance);
 
         // Check if stock already in portfolio
         Cursor cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?", new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
@@ -139,6 +142,7 @@ public class DatabaseUtil {
             stmt.bindLong(4, stockID);
 
             stmt.executeUpdateDelete(); //method is used for updates
+            Log.d("DB_LOG", "Updated existing stock: stockID=" + stockID + ", newQty=" + updatedQty + " for user " + username);
         } else {
             SQLiteStatement stmt = db.compileStatement("INSERT INTO portfolioStock (portfolioID, stockID, quantity, buyPrice, buyDate) VALUES (?, ?, ?, ?, date('now'))");
 
@@ -148,6 +152,7 @@ public class DatabaseUtil {
             stmt.bindDouble(4, pricePerUnit);
 
             stmt.executeInsert();
+            Log.d("DB_LOG", "Inserted new stock: stockID=" + stockID + ", qty=" + quantity + " for user " + username);
         }
 
         cursor.close();
@@ -175,6 +180,7 @@ public class DatabaseUtil {
             // Calculate balance
             User user = getUser(username);
             updateBalance(user.getUserBalance() + totalValue, username);
+            Log.d("DB_LOG", "User " + username + " balance updated to: " + totalValue);
 
             if (remainingQty == 0) { //remove from table if all shares sold
                 SQLiteStatement stmt = db.compileStatement("DELETE FROM portfolioStock WHERE portfolioID = ? AND stockID = ?");
@@ -182,6 +188,8 @@ public class DatabaseUtil {
                 stmt.bindLong(1, portfolioID);
                 stmt.bindLong(2, stockID);
                 stmt.executeUpdateDelete();
+
+                Log.d("DB_LOG", "Stock fully sold: stockID=" + stockID + " removed from portfolio for user " + username);
             } else {
                 SQLiteStatement stmt = db.compileStatement("UPDATE portfolioStock SET quantity = ? WHERE portfolioID = ? AND stockID = ?"); //update quantity with shares
 
@@ -189,6 +197,8 @@ public class DatabaseUtil {
                 stmt.bindLong(2, portfolioID);
                 stmt.bindLong(3, stockID);
                 stmt.executeUpdateDelete();
+
+                Log.d("DB_LOG", "Stock partially sold: stockID=" + stockID + ", remainingQty=" + remainingQty + " for user " + username);
             }
         }
 
