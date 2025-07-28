@@ -82,10 +82,15 @@ public class SellDialogFragment extends DialogFragment {
                 int quantity = Integer.parseInt(quantityStr);
 
                 DatabaseUtil dbUtil = new DatabaseUtil(requireContext());
-                dbUtil.sellStock(username, stockID, quantity, currentPriceValue);
 
-                Toast.makeText(getContext(), "Sold " + quantity + " shares of " + symbolText, Toast.LENGTH_SHORT).show();
-                dismiss();
+                boolean success =  dbUtil.sellStock(username, stockID, quantity, currentPriceValue);
+
+                if (success) {
+                    Toast.makeText(getContext(), "Sold!", Toast.LENGTH_SHORT).show();
+                    dismiss();
+                } else {
+                    Toast.makeText(getContext(), "Failed to sell: Not enough shares", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

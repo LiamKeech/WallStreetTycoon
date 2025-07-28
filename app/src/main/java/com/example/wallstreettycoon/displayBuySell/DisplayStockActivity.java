@@ -40,7 +40,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         //currentUsername = intentFromList.getStringExtra("username");
 
         int stockID = 1;
-        currentUsername = "c";
+        currentUsername = "admin";
 
         Log.d("DisplayStock", "Intent received: stockID=" + stockID + ", username=" + currentUsername);
 
@@ -76,7 +76,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         int currentTime = 0; //FIXME
         double currentPriceValue = dbUtil.getCurrentStockPrice(currentStock.getStockID(), currentTime);
         if (currentPrice != null) {
-            currentPrice.setText(String.format("$.2f", currentPriceValue));
+            currentPrice.setText(String.format("$%.2f", currentPriceValue));
         }
 
         Button btn1D = findViewById(R.id.btn1D);
