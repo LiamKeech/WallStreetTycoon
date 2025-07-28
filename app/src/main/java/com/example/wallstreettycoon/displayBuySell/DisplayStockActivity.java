@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.stock.Stock;
+import com.example.wallstreettycoon.stock.StockPriceFunction;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -44,8 +45,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         initialiseUI();
 
         //load data
-
-
+        updateChart("1M");
     }
 
     private void initialiseUI() {
@@ -121,21 +121,34 @@ public class DisplayStockActivity extends AppCompatActivity {
                 break;
         }
 
-//        List<Entry> entries = dbUtil.generatePriceHistory(currentStock.getStockID(), timeRange);
-//
-//        LineDataSet dataSet = new LineDataSet(entries, "Price History");
-//        dataSet.setColor(android.graphics.Color.BLUE);
-//        dataSet.setDrawValues(false);
-//        dataSet.setLineWidth(2f);
-//        dataSet.setDrawCircles(false);
-//
-//        LineData lineData = new LineData(dataSet);
-//        chart.setData(lineData);
-//        chart.getDescription().setEnabled(false);
-//        chart.getAxisRight().setEnabled(false);
-//        chart.getXAxis().setEnabled(true);
-//        chart.getLegend().setEnabled(false);
-//        chart.getAxisLeft().setAxisMinimum(0f);
-//        chart.invalidate();
+        List<Entry> entries = getPriceHistory(currentStock.getStockID(), timeRange);
+
+        LineDataSet dataSet = new LineDataSet(entries, "Price History");
+        dataSet.setColor(android.graphics.Color.BLUE);
+        dataSet.setDrawValues(false);
+        dataSet.setLineWidth(2f);
+        dataSet.setDrawCircles(false);
+
+        LineData lineData = new LineData(dataSet);
+        chart.setData(lineData);
+        chart.getDescription().setEnabled(false);
+        chart.getAxisRight().setEnabled(false);
+        chart.getXAxis().setEnabled(true);
+        chart.getLegend().setEnabled(false);
+        chart.getAxisLeft().setAxisMinimum(0f);
+        chart.invalidate();
+    }
+
+    public List<Entry> getPriceHistory(int stockID, int daysBack) {
+        List<Entry> entries = new ArrayList<>();
+        StockPriceFunction func = dbUtil.getStockPriceFunction(stockID);
+        if (func == null) return entries;
+
+        for (int t = 0; t <= daysBack; t++) {
+            double price = func.getCurrentPrice(t);
+            entries.add(new Entry(t, (float) price));
+        }
+
+        return entries;
     }
 }
