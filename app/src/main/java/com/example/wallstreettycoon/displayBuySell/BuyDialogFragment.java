@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 
 public class BuyDialogFragment extends DialogFragment {
     @Override
@@ -20,15 +21,21 @@ public class BuyDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_buy_dialog, container, false);
         getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
+        Bundle args = getArguments();
+        int stockID = args.getInt("stockID");
+        String symbolText = args.getString("stockSymbol");
+        double currentPriceValue = args.getDouble("currentPrice");
+        String username = args.getString("username");
+
         // Set dialog title
         TextView header = view.findViewById(R.id.dialogHeader);
-        header.setText("Buy AAA");
+        header.setText("Buy " + symbolText);
 
         // Set stock details
         TextView symbol = view.findViewById(R.id.stockSymbolLabel);
-        symbol.setText("AAA");
+        symbol.setText(symbolText);
         TextView price = view.findViewById(R.id.currentPrice);
-        price.setText("$50.00");
+        price.setText(String.format("$%.2f", currentPriceValue));
 
         // Quantity and total cost logic
         EditText quantityInput = view.findViewById(R.id.quantityInput);
@@ -38,27 +45,47 @@ public class BuyDialogFragment extends DialogFragment {
         quantityInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().isEmpty()) {
-                    int quantity = Integer.parseInt(s.toString());
-                    double total = quantity * currentPrice;
-                    totalCost.setText(String.format("Total Cost: $%.2f", total));
+                String input = s.toString().trim(); //remove spaces
+                if (!input.isEmpty()) {
+                    try {
+                        int quantity = Integer.parseInt(input);
+
+                        if (quantity > 0) {
+                            double total = quantity * currentPriceValue; //calculate the total cost if input is valid and positive
+                            totalCost.setText(String.format("Total Cost: $%.2f", total));
+                        } else {
+                            totalCost.setText("Enter a positive amount");
+                        }
+
+                    } catch (NumberFormatException e) {
+                        totalCost.setText("Invalid input");
+                    }
                 } else {
-                    totalCost.setText("Total Cost: $0.00");
+                    totalCost.setText("Total Cost: $0.00"); //default
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {}
         });
+
 
         // Button actions
         Button confirmButton = view.findViewById(R.id.btnConfirm);
         confirmButton.setText("Buy");
         confirmButton.setOnClickListener(v -> {
-            String quantity = quantityInput.getText().toString();
-            if (!quantity.isEmpty()) {
-                Toast.makeText(getContext(), "Bought " + quantity + " shares of AAA", Toast.LENGTH_SHORT).show();
+            String quantityStr = quantityInput.getText().toString();
+
+            if (!quantityStr.isEmpty()) {
+                int quantity = Integer.parseInt(quantityStr);
+
+                DatabaseUtil dbUtil = new DatabaseUtil(requireContext());
+                dbUtil.buyStock(username, stockID, quantity, currentPriceValue);//FIXME
+
+                Toast.makeText(getContext(), "Bought " + quantityStr + " shares of " + symbolText, Toast.LENGTH_SHORT).show();
                 dismiss();
             }
         });

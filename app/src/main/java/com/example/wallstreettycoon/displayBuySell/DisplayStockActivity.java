@@ -108,11 +108,27 @@ public class DisplayStockActivity extends AppCompatActivity {
 
         findViewById(R.id.btnBuy).setOnClickListener(v -> {
             BuyDialogFragment buyDialog = new BuyDialogFragment();
+
+            Bundle args = new Bundle(); //to communicate with a dialog fragment
+            args.putInt("stockID", currentStock.getStockID());
+            args.putString("stockSymbol", currentStock.getSymbol());
+            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID(), 0));
+            args.putString("username", currentUsername);
+
+            buyDialog.setArguments(args);
             buyDialog.show(getSupportFragmentManager(), "BuyDialog");
         });
 
         findViewById(R.id.btnSell).setOnClickListener(v -> {
             SellDialogFragment sellDialog = new SellDialogFragment();
+
+            Bundle args = new Bundle();
+            args.putInt("stockID", currentStock.getStockID());
+            args.putString("stockSymbol", currentStock.getSymbol());
+            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID(), 0));
+            args.putString("username", currentUsername);
+
+            sellDialog.setArguments(args);
             sellDialog.show(getSupportFragmentManager(), "SellDialog");
         });
     }
