@@ -47,21 +47,21 @@ public class ListStocks extends AppCompatActivity {
 
         Button btnToggle = findViewById(R.id.btnToggleList);
         btnToggle.setOnClickListener(v -> {
-            if (btnToggle.getText().toString().equals("M")) { //Market
+            if (btnToggle.getText().toString().equals("P")) { //Market
                 List<Stock> allStockList = dbUtil.getStockList();
                 StockAdapter stockAdapter = new StockAdapter(this, allStockList);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 stockRV.setLayoutManager(linearLayoutManager);
                 stockRV.setAdapter(stockAdapter);
-                btnToggle.setText("P");
+                btnToggle.setText("M");
             }
-            else if (btnToggle.getText().toString().equals("P")) { //Portfolio
+            else if (btnToggle.getText().toString().equals("M")) { //Portfolio
                 List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
                 PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, portfolioStock);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 stockRV.setLayoutManager(linearLayoutManager);
                 stockRV.setAdapter(stockAdapter);
-                btnToggle.setText("M");
+                btnToggle.setText("P");
             }
         });
 
