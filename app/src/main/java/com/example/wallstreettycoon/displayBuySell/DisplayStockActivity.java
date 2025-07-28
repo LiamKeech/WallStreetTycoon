@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.wallstreettycoon.Game;
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
@@ -42,6 +44,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         //int stockID = intentFromList.getIntExtra("stockID", 1);
         //currentUsername = intentFromList.getStringExtra("username");
 
+
         int stockID = 1;
         currentUsername = "admin";
 
@@ -69,6 +72,13 @@ public class DisplayStockActivity extends AppCompatActivity {
         TextView stockSymbol = findViewById(R.id.stockSymbolValue);
         TextView currentPrice = findViewById(R.id.currentPriceValue);
         EditText description = findViewById(R.id.stockDescription);
+        ImageButton backButton = findViewById(R.id.backButton);
+
+        backButton.setOnClickListener(v -> {
+            Intent intent = new Intent(DisplayStockActivity.this, ListStocks.class);
+            intent.putExtra("username", currentUsername);
+            startActivity(intent);
+        });
 
         if (stockName != null) {
             stockName.setText("Viewing " + currentStock.getStockName());

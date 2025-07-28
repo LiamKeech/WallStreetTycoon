@@ -115,14 +115,14 @@ public class DatabaseUtil {
     }
 
     //buy stock
-    public void buyStock(String username, int stockID, int quantity, double pricePerUnit) {
+    public boolean buyStock(String username, int stockID, int quantity, double pricePerUnit) {
         int portfolioID = getPortfolioID(username);
         double totalCost = quantity * pricePerUnit;
 
         // Calculate balance
         User user = getUser(username);
         double newBalance = user.getUserBalance() - totalCost;
-        if (newBalance < 0) return; // insufficient funds
+        if (newBalance < 0) return false; // insufficient funds
 
         updateBalance(newBalance, username);
         Log.d("DB_LOG", "User " + username + " balance updated to: " + newBalance);
@@ -156,6 +156,7 @@ public class DatabaseUtil {
         }
 
         cursor.close();
+        return true;
     }
 
 
