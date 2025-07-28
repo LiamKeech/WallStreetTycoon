@@ -97,11 +97,21 @@ public class DatabaseUtil {
     }
 
     public User getUser(String username){
-        Cursor cursor = db.rawQuery("SELECT userFName, userLname, username, password from users WHERE username = " + username,null);
-        String fName = cursor.getString(cursor.getColumnIndexOrThrow("userFName"));
-        String lName = cursor.getString(cursor.getColumnIndexOrThrow("userLName"));
-        String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
-        Double balance = cursor.getDouble(cursor.getColumnIndexOrThrow("balance"));
+        Cursor cursor = db.rawQuery(
+                "SELECT userFName, userLName, password, balance FROM users WHERE username = ?",
+                new String[]{username}
+        );
+
+        User user = null;
+
+        if (cursor != null && cursor.moveToFirst()) {
+            String fName = cursor.getString(cursor.getColumnIndexOrThrow("userFName"));
+            String lName = cursor.getString(cursor.getColumnIndexOrThrow("userLName"));
+            String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
+            double balance = cursor.getDouble(cursor.getColumnIndexOrThrow("balance"));
+
+            user = new User(username, fName, lName, password, balance);
+        }
 
         return new User(username, fName, lName, password, balance);
     }
@@ -123,6 +133,27 @@ public class DatabaseUtil {
     }
 
     public void updatePortfolio(Stock stock){
+    // Portfolio related methods
+
+    public int getPortfolioID(String username) {
+        Cursor cursor = db.rawQuery("SELECT portfolioID FROM portfolio WHERE username = ?", new String[]{username});
+        int portfolioID = -1;
+        if (cursor.moveToFirst()) {
+            portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+        }
+        cursor.close();
+        return portfolioID;
+    }
+
+    public List<PortfolioStock> getPortfolio(String username) {
+        List<PortfolioStock> list = new ArrayList<>();
+        int portfolioID = getPortfolioID(username);
+
+        if (portfolioID == -1) return list;
+
+        String query = "SELECT ps.portfolioID, ps.stockID, ps.quantity, ps.buyPrice, ps.buyDate, s.stockID AS stock_ref_id, s.stockName, s.symbol, s.category, s.description FROM portfolioStock ps JOIN stocks s ON ps.stockID = s.stockID WHERE ps.portfolioID = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(portfolioID)});
 
     }
     public List<Stock> getPortfolio(){

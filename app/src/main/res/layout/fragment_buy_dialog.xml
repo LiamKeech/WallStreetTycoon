@@ -34,7 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialogHeader" />
     <TextView
-        android:id="@+id/stockSymbol"
+        android:id="@+id/stockID"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="AAA"
@@ -54,14 +54,14 @@
         android:textColor="@color/LightBlue"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stockSymbol" />
+        app:layout_constraintTop_toBottomOf="@id/stockID" />
     <TextView
         android:id="@+id/currentPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="$50.00"
         android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/stockSymbol"
+        app:layout_constraintTop_toBottomOf="@id/stockID"
         app:layout_constraintStart_toEndOf="@id/currentPriceLabel"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp" />

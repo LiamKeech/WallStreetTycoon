@@ -13,8 +13,14 @@
         android:theme="@style/Theme.WallStreetTycoon"
         tools:targetApi="31">
         <activity
-            android:name=".minigames.miniGameStarter"
-            android:exported="false"/>
+            android:name=".minigames.miniGame1Starter"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".minigames.miniGame1"
             android:exported="false"/>
@@ -31,12 +37,12 @@
         </activity>
         <activity
             android:name=".useraccount.Login"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false" >
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".useraccount.ManageUserAccount"

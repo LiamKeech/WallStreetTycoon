@@ -1,16 +1,19 @@
 package com.example.wallstreettycoon.stock;
 
 public class StockPriceFunction {
-    Integer pk;
+    Integer stockPriceHistoryID;
     Double[] amplitudes;
     Double[] frequencies;
-    Integer fk;
-    public StockPriceFunction(Integer pk, Double[] amplitudes, Double[] frequencies, Integer fk){
-        this.pk = pk;
+    Integer stockID;
+    Double offset = 0.0;
+    public StockPriceFunction(Integer stockPrceHistoryID, Double[] amplitudes, Double[] frequencies, Integer fk){
+        this.stockPriceHistoryID = stockPrceHistoryID;
         this.amplitudes = amplitudes;
         this.frequencies = frequencies;
-        this.fk = fk;
+        this.stockID = fk;
     }
+
+    public int getStockID() { return stockID; }
 
     public Double getCurrentPrice(Integer timeStamp){
         Double price = 0.0;
@@ -19,7 +22,7 @@ public class StockPriceFunction {
             price += amplitudes[i] * Math.sin(frequencies[i] * timeStamp.doubleValue());
         }
 
-        return price;
+        return price + offset;
     }
 
 }

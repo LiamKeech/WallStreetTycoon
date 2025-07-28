@@ -1,19 +1,22 @@
 package com.example.wallstreettycoon.useraccount;
 
+import com.example.wallstreettycoon.portfolio.Portfolio;
+
 public class User { //Data model
     String username; //Uniquely ID user
     String userFirstName;
     String userLastName;
 
     String userPassword;
-    Double userBalance;
+    Double userBalance = 0.0;
+    private Portfolio portfolio;
 
     public User(String username, String userFirstName, String userLastName, String userPassword, Double userBalance) {
         this.userPassword = userPassword;
         this.username = username;
         this.userLastName = userLastName;
         this.userFirstName = userFirstName;
-        this.userBalance = 0.0;
+        this.userBalance = userBalance;
     }
 
     public String getUserFirstName() {
@@ -36,7 +39,7 @@ public class User { //Data model
         return username;
     }
 
-    public void setusername(String userUsername) {
+    public void setUsername(String userUsername) {
         this.username = userUsername;
     }
 
@@ -54,5 +57,16 @@ public class User { //Data model
 
     public void setUserBalance(Double userBalance) {
         this.userBalance = userBalance;
+    }
+
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
+        if (portfolio != null) {
+            portfolio.setUser(this);
+        }
     }
 }
