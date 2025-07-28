@@ -16,6 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.wallstreettycoon.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
@@ -65,6 +66,7 @@ public class Login extends AppCompatActivity {
                         User user = dbUtil.getUser(username);
                         if (user.getUserPassword().equals(password)) {
                             Intent loginIntent = new Intent(Login.this, ListStocks.class);
+                            Game.currentUser = user;
                             startActivity((loginIntent));
                         }
                     }

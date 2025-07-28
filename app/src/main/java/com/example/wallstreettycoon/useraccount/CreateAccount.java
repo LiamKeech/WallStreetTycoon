@@ -75,8 +75,8 @@ public class CreateAccount extends AppCompatActivity {
                         EditText passwDisplay = findViewById(R.id.edtPasswCreate);
                         passwDisplay.setText(password);
 
-                        //take to list stocks/dashboard:
-                        Intent createdIntent = new Intent(CreateAccount.this, ListStocks.class);
+                        //user taken back to Login:
+                        Intent createdIntent = new Intent(CreateAccount.this, Login.class);
                         startActivity(createdIntent);
 
                         //test
