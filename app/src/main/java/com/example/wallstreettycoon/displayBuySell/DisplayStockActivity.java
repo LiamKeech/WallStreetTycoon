@@ -40,7 +40,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         //currentUsername = intentFromList.getStringExtra("username");
 
         int stockID = 1;
-        currentUsername = "c";
+        currentUsername = "admin";
 
         Log.d("DisplayStock", "Intent received: stockID=" + stockID + ", username=" + currentUsername);
 
@@ -112,7 +112,7 @@ public class DisplayStockActivity extends AppCompatActivity {
             Bundle args = new Bundle(); //to communicate with a dialog fragment
             args.putInt("stockID", currentStock.getStockID());
             args.putString("stockSymbol", currentStock.getSymbol());
-            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID(), 0));
+            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID(), 1));
             args.putString("username", currentUsername);
 
             buyDialog.setArguments(args);
@@ -125,7 +125,7 @@ public class DisplayStockActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putInt("stockID", currentStock.getStockID());
             args.putString("stockSymbol", currentStock.getSymbol());
-            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID(), 0));
+            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID(), 1));
             args.putString("username", currentUsername);
 
             sellDialog.setArguments(args);
