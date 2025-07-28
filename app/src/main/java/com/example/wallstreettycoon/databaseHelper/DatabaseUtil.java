@@ -158,7 +158,7 @@ public class DatabaseUtil {
     // Portfolio related methods
 
     public int getPortfolioID(String username) {
-        Cursor cursor = db.rawQuery("SELECT portfolioID FROM portfolio WHERE username = ?", new String[]{username});
+        Cursor cursor = db.rawQuery("SELECT portfolioID FROM portfolios WHERE username = ?", new String[]{username});
         int portfolioID = -1;
         if (cursor.moveToFirst()) {
             portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
@@ -218,14 +218,13 @@ public class DatabaseUtil {
             db.delete("portfolioStock", "username = ? AND stockSymbol = ?",
                     new String[]{ tx.getUsername(), tx.getStockSymbol() });
         } else {
-            // update
-            if (currentQty == 0) {
+            if (currentQty == 0) { // update
                 SQLiteStatement ins = db.compileStatement("INSERT INTO portfolioStock (username, stockSymbol, quantity) VALUES (?, ?, ?);");
                 ins.bindString(1, tx.getUsername());
                 ins.bindString(2, tx.getStockSymbol());
                 ins.bindLong(3, newQty);
                 ins.executeInsert();
-            } else {// insert
+            } else { // insert
                 SQLiteStatement upd = db.compileStatement("UPDATE portfolioStock SET quantity = ? WHERE username = ? AND stockSymbol = ?;");
                 upd.bindLong(1, newQty);
                 upd.bindString(2, tx.getUsername());
