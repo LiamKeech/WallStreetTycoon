@@ -13,9 +13,12 @@ import com.example.wallstreettycoon.useraccount.User;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DatabaseUtil {
     public static DatabaseCreator dbCreator;
@@ -24,6 +27,8 @@ public class DatabaseUtil {
         dbCreator = new DatabaseCreator(context);
         db = dbCreator.getWritableDatabase();
     }
+
+    // Stock related methods
 
     //getter for stockList
     public List<Stock> getStockList(){
@@ -107,6 +112,90 @@ public class DatabaseUtil {
         bd = bd.setScale(2, RoundingMode.HALF_UP);
         return bd.doubleValue();
     }
+
+    //buy stock
+    public void buyStock(String username, int stockID, int quantity, double pricePerUnit) {
+        int portfolioID = getPortfolioID(username);
+        double totalCost = quantity * pricePerUnit;
+
+        // Calculate balance
+        User user = getUser(username);
+        double newBalance = user.getUserBalance() - totalCost;
+        if (newBalance < 0) return; // insufficient funds
+        updateBalance(newBalance, username);
+
+        // Check if stock already in portfolio
+        Cursor cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?", new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
+
+        if (cursor.moveToFirst()) {
+            int existingQty = cursor.getInt(0);
+            int updatedQty = existingQty + quantity;
+
+            SQLiteStatement stmt = db.compileStatement("UPDATE portfolioStock SET quantity = ?, buyPrice = ?, buyDate = date('now') WHERE portfolioID = ? AND stockID = ?");
+
+            stmt.bindLong(1, updatedQty);
+            stmt.bindDouble(2, pricePerUnit);
+            stmt.bindLong(3, portfolioID);
+            stmt.bindLong(4, stockID);
+
+            stmt.executeUpdateDelete(); //method is used for updates
+        } else {
+            SQLiteStatement stmt = db.compileStatement("INSERT INTO portfolioStock (portfolioID, stockID, quantity, buyPrice, buyDate) VALUES (?, ?, ?, ?, date('now'))");
+
+            stmt.bindLong(1, portfolioID);
+            stmt.bindLong(2, stockID);
+            stmt.bindLong(3, quantity);
+            stmt.bindDouble(4, pricePerUnit);
+
+            stmt.executeInsert();
+        }
+
+        cursor.close();
+    }
+
+
+    //sell stock
+    public void sellStock(String username, int stockID, int quantityToSell, double pricePerUnit) {
+        int portfolioID = getPortfolioID(username);
+
+        // check how many shares user owns
+        Cursor cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?", new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
+
+        if (cursor.moveToFirst()) {
+            int existingQty = cursor.getInt(0);
+
+            if (quantityToSell > existingQty) {
+                cursor.close();
+                return; // insufficient shares
+            }
+
+            int remainingQty = existingQty - quantityToSell;
+            double totalValue = quantityToSell * pricePerUnit;
+
+            // Calculate balance
+            User user = getUser(username);
+            updateBalance(user.getUserBalance() + totalValue, username);
+
+            if (remainingQty == 0) { //remove from table if all shares sold
+                SQLiteStatement stmt = db.compileStatement("DELETE FROM portfolioStock WHERE portfolioID = ? AND stockID = ?");
+
+                stmt.bindLong(1, portfolioID);
+                stmt.bindLong(2, stockID);
+                stmt.executeUpdateDelete();
+            } else {
+                SQLiteStatement stmt = db.compileStatement("UPDATE portfolioStock SET quantity = ? WHERE portfolioID = ? AND stockID = ?"); //update quantity with shares
+
+                stmt.bindLong(1, remainingQty);
+                stmt.bindLong(2, portfolioID);
+                stmt.bindLong(3, stockID);
+                stmt.executeUpdateDelete();
+            }
+        }
+
+        cursor.close();
+    }
+
+    // User related methods
 
     public void setUser(User user){
         String fName = user.getUserFirstName();
