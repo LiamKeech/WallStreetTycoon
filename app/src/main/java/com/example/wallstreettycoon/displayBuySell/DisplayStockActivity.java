@@ -77,7 +77,7 @@ public class DisplayStockActivity extends AppCompatActivity {
             stockSymbol.setText(currentStock.getSymbol());
         }
 
-        int currentTime = 0; //FIXME
+        int currentTime = 1; //FIXME
         double currentPriceValue = dbUtil.getCurrentStockPrice(currentStock.getStockID(), currentTime);
         if (currentPrice != null) {
             currentPrice.setText(String.format("$%.2f", currentPriceValue));
