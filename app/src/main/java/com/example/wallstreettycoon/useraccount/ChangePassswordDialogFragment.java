@@ -1,5 +1,7 @@
 package com.example.wallstreettycoon.useraccount;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.DialogFragment;
@@ -24,7 +26,7 @@ public class ChangePassswordDialogFragment extends DialogFragment {
         TextView NewPasswInput = view.findViewById(R.id.edtNewPassw);
         TextView ConfirmPasswInput = view.findViewById(R.id.edtConfirmPassw);
         Button btnSave = view.findViewById(R.id.btnSave);
-        //TextView viewPassw = view.findViewById(R.id.editTextTextPassword);
+
         btnSave.setOnClickListener(v -> {
             String newPassw = NewPasswInput.getText().toString();
             String confPassw = ConfirmPasswInput.getText().toString();
@@ -32,7 +34,9 @@ public class ChangePassswordDialogFragment extends DialogFragment {
             if (!newPassw.isEmpty() && !confPassw.isEmpty()) {
                 if (newPassw.equals(confPassw)) {
                     //put password into password textbox on manage account activity:
-                    //viewPassw.setText(newPassw);
+                    Intent changePassw = new Intent(getActivity(), ManageUserAccount.class);
+                    changePassw.putExtra("new", newPassw);
+                    startActivity(changePassw);
                 }
             }
             else if (newPassw.isEmpty()) {
