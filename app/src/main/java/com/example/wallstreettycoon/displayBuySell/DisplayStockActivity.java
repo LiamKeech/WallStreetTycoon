@@ -2,6 +2,7 @@ package com.example.wallstreettycoon.displayBuySell;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -36,10 +37,15 @@ public class DisplayStockActivity extends AppCompatActivity {
         int stockID = intentFromList.getIntExtra("stockID", 1);
         currentUsername = intentFromList.getStringExtra("username");
 
+        Log.d("DisplayStock", "Intent received: stockID=" + stockID + ", username=" + currentUsername);
+
         currentStock = dbUtil.getStock(stockID);
         if (currentStock == null) {
             finish(); //close if stock not found
         }
+
+        Log.d("DisplayStock", "Stock loaded: " + currentStock.getStockName());
+
 
         //get UI
         initialiseUI();
@@ -122,6 +128,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         }
 
         List<Entry> entries = getPriceHistory(currentStock.getStockID(), timeRange);
+        Log.d("DisplayStock", "Generated " + entries.size() + " entries for chart");
 
         LineDataSet dataSet = new LineDataSet(entries, "Price History");
         dataSet.setColor(android.graphics.Color.BLUE);
