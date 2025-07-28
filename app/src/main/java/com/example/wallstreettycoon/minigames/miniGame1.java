@@ -64,6 +64,11 @@ public class miniGame1 extends AppCompatActivity {
 
         handler.postDelayed(() -> {
             miniGame1EndDialogFragment endDialogFragment = new miniGame1EndDialogFragment();
+
+            Bundle bundle = new Bundle();
+            bundle.putFloat("profit", profit);
+            endDialogFragment.setArguments(bundle);
+
             endDialogFragment.show(getSupportFragmentManager(), "miniGame1End");
 
         }, stockList.size() * (1000 + 100) + 2000);
