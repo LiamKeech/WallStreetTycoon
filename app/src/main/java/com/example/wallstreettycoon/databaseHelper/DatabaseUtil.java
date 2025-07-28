@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
 import com.example.wallstreettycoon.useraccount.User;
@@ -113,7 +114,7 @@ public class DatabaseUtil {
             user = new User(username, fName, lName, password, balance);
         }
 
-        return new User(username, fName, lName, password, balance);
+        return user;
     }
 
     public boolean userExists(String username) {
@@ -132,7 +133,6 @@ public class DatabaseUtil {
         cursor.close();
     }
 
-    public void updatePortfolio(Stock stock){
     // Portfolio related methods
 
     public int getPortfolioID(String username) {
@@ -152,13 +152,30 @@ public class DatabaseUtil {
         if (portfolioID == -1) return list;
 
         String query = "SELECT ps.portfolioID, ps.stockID, ps.quantity, ps.buyPrice, ps.buyDate, s.stockID AS stock_ref_id, s.stockName, s.symbol, s.category, s.description FROM portfolioStock ps JOIN stocks s ON ps.stockID = s.stockID WHERE ps.portfolioID = ?";
-
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(portfolioID)});
 
-    }
-    public List<Stock> getPortfolio(){
-        List<Stock> list = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            int portfolioIDValue = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+            int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+            double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
+            String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
+            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+            Double stockPrice = getCurrentStockPrice(stockID, (int) (System.currentTimeMillis() / 1000)); //FIXME: pick right time
 
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
+            PortfolioStock ps = new PortfolioStock(portfolioIDValue, String.valueOf(stockID), quantity, buyPrice, buyDate, stock);
+            list.add(ps);
+        }
+
+        cursor.close();
         return list;
+    }
+
+    public void updatePortfolio(Stock stock){
+
     }
 }
