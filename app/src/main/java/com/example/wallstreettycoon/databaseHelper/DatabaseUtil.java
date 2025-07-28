@@ -3,10 +3,12 @@ package com.example.wallstreettycoon.databaseHelper;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteStatement;
 
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
+import com.example.wallstreettycoon.transaction.Transaction;
 import com.example.wallstreettycoon.useraccount.User;
 
 import java.math.BigDecimal;
@@ -177,5 +179,45 @@ public class DatabaseUtil {
 
     public void updatePortfolio(Stock stock){
 
+    }
+
+    // Transaction
+    public void processTransaction(Transaction tx) {
+        int currentQty = getQuantity(tx.getUsername(), tx.getStockSymbol());
+        int changeInQty = tx.getType().equalsIgnoreCase("BUY")
+                ? tx.getQuantity()
+                : -tx.getQuantity();
+        int newQty = currentQty + changeInQty;
+
+        if (newQty <= 0) {
+            // remove if zero or negative
+            db.delete("portfolioStock", "username = ? AND stockSymbol = ?",
+                    new String[]{ tx.getUsername(), tx.getStockSymbol() });
+        } else {
+            // update
+            if (currentQty == 0) {
+                SQLiteStatement ins = db.compileStatement("INSERT INTO portfolioStock (username, stockSymbol, quantity) VALUES (?, ?, ?);");
+                ins.bindString(1, tx.getUsername());
+                ins.bindString(2, tx.getStockSymbol());
+                ins.bindLong(3, newQty);
+                ins.executeInsert();
+            } else {// insert
+                SQLiteStatement upd = db.compileStatement("UPDATE portfolioStock SET quantity = ? WHERE username = ? AND stockSymbol = ?;");
+                upd.bindLong(1, newQty);
+                upd.bindString(2, tx.getUsername());
+                upd.bindString(3, tx.getStockSymbol());
+                upd.executeUpdateDelete();
+            }
+        }
+    }
+
+    private int getQuantity(String username, String symbol) {
+        Cursor c = db.rawQuery("SELECT quantity FROM portfolioStock WHERE username = ? AND stockSymbol = ?;", new String[]{ username, symbol });
+        int qty = 0;
+        if (c.moveToFirst()) {
+            qty = c.getInt(c.getColumnIndexOrThrow("quantity"));
+        }
+        c.close();
+        return qty;
     }
 }
