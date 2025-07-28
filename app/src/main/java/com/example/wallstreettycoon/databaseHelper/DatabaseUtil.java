@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteStatement;
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
+import com.example.wallstreettycoon.transaction.Transaction;
 import com.example.wallstreettycoon.useraccount.User;
 
 import java.math.BigDecimal;
@@ -174,7 +175,6 @@ public class DatabaseUtil {
         return portfolioID;
     }
 
-
     public List<PortfolioStock> getPortfolio(String username) {
         List<PortfolioStock> list = new ArrayList<>();
         int portfolioID = getPortfolioID(username);
@@ -206,6 +206,54 @@ public class DatabaseUtil {
 
         cursor.close();
         return list;
+    }
+
+    // Transaction related methods
+
+    // insert or update row in portfolio stock
+    public void processTransaction(Transaction tx) {
+        int currentQuantity = getQuantity(tx.getUsername(), tx.getStockSymbol());
+
+        int changeInQuantity;
+        if (tx.getType().equalsIgnoreCase("BUY")) {
+            changeInQuantity = tx.getQuantity();
+        } else {
+            changeInQuantity = -tx.getQuantity();
+        }
+
+        int newQuantity = currentQuantity + changeInQuantity;
+
+        if (newQuantity <= 0) { // delete
+            db.delete("portfolioStock", "username = ? AND stockSymbol = ?", new String[]{ tx.getUsername(), tx.getStockSymbol() });
+        } else {
+            if (currentQuantity == 0) { // update
+                SQLiteStatement insert = db.compileStatement(
+                        "INSERT INTO portfolioStock (username, stockSymbol, quantity) VALUES (?, ?, ?);"
+                );
+                insert.bindString(1, tx.getUsername());
+                insert.bindString(2, tx.getStockSymbol());
+                insert.bindLong(3, newQuantity);
+                insert.executeInsert();
+            } else { //insert
+                SQLiteStatement update = db.compileStatement("UPDATE portfolioStock SET quantity = ? WHERE username = ? AND stockSymbol = ?;");
+
+                update.bindLong(1, newQuantity);
+                update.bindString(2, tx.getUsername());
+                update.bindString(3, tx.getStockSymbol());
+                update.executeUpdateDelete();
+            }
+        }
+    }
+
+    // getter for current quantity of a stock in portfolioStock
+    private int getQuantity(String username, String symbol) {
+        Cursor c = db.rawQuery("SELECT quantity FROM portfolioStock WHERE username = ? AND stockSymbol = ?;", new String[]{ username, symbol });
+        int Qty = 0;
+        if (c.moveToFirst()) {
+            Qty = c.getInt(c.getColumnIndexOrThrow("quantity"));
+        }
+        c.close();
+        return Qty;
     }
 
 }
