@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +34,15 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         return new ViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull StockAdapter.ViewHolder holder, int position) {
         // to set data to textview and imageview of each card layout
         Stock stock = stockArrayList.get(position);
         holder.stockSym.setText(stock.getSymbol());
         holder.stockName.setText(stock.getStockName());
-        holder.stockPrice.setText(String.format("%.2f",stock.getStockPrice()));
+        DatabaseUtil dbUtil = new DatabaseUtil(context);
+        holder.stockPrice.setText(String.format("%.2f",dbUtil.getCurrentStockPrice(stock.getStockID(), 1)));
     }
 
     @Override
