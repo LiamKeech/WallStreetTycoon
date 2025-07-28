@@ -30,6 +30,8 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "userFName TEXT, userLName TEXT, password TEXT, balance REAL)"
         );
 
+        db.execSQL("INSERT INTO  users (username, userFName, userLName, password, balance) VALUES ('testUser', 'testSurname', 'admin', 'admin1', 1000000)");
+
         //Stock table
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS stocks (" +

@@ -1,5 +1,6 @@
 package com.example.wallstreettycoon.displayBuySell;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,17 +26,21 @@ public class DisplayStockActivity extends AppCompatActivity {
     private DatabaseUtil dbUtil;
     private Stock currentStock;
     private String currentUsername;
+    Context context = this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_stock);
 
-        dbUtil = new DatabaseUtil(this);
+        dbUtil = new DatabaseUtil(context);
 
         Intent intentFromList = getIntent();
-        int stockID = intentFromList.getIntExtra("stockID", 1);
-        currentUsername = intentFromList.getStringExtra("username");
+        //int stockID = intentFromList.getIntExtra("stockID", 1);
+        //currentUsername = intentFromList.getStringExtra("username");
+
+        int stockID = 1;
+        currentUsername = "c";
 
         Log.d("DisplayStock", "Intent received: stockID=" + stockID + ", username=" + currentUsername);
 

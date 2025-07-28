@@ -45,7 +45,6 @@ public class DatabaseUtil {
         }
 
         cursor.close();
-        db.close();
 
         return stockList;
     }
