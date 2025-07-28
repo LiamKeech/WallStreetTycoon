@@ -1,14 +1,11 @@
 package com.example.wallstreettycoon.stock;
 
-import java.math.BigDecimal;
-
 public class Stock { //Data Model
     private int stockID;
     private String stockName;
     private String symbol;
     private String category;
     private String description;
-    //private Double stockPrice;
 
     //Constructor with all parameters
     public Stock(int stockID, String stockName, String symbol, String category, String description, Double stockPrice){
@@ -70,16 +67,6 @@ public class Stock { //Data Model
         this.description = description;
     }
 
-//    // Getter and Setter for stockPrice
-//    public Double getStockPrice() {
-//
-//        return stockPrice;
-//    }
-//
-//    public void setStockPrice(Double stockPrice) {
-//        //TODO make get current stock price referenced from stock easily
-//        this.stockPrice = stockPrice;
-//    }
 
     @Override
     public String toString()
