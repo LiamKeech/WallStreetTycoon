@@ -24,7 +24,7 @@ public class ChangePassswordDialogFragment extends DialogFragment {
         TextView NewPasswInput = view.findViewById(R.id.edtNewPassw);
         TextView ConfirmPasswInput = view.findViewById(R.id.edtConfirmPassw);
         Button btnSave = view.findViewById(R.id.btnSave);
-        TextView viewPassw = view.findViewById(R.id.editTextTextPassword);
+        TextView viewPassw = view.findViewById(R.id.viewPassword);
         btnSave.setOnClickListener(v -> {
             String newPassw = NewPasswInput.getText().toString();
             String confPassw = ConfirmPasswInput.getText().toString();

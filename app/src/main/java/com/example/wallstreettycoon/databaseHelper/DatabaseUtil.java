@@ -37,7 +37,7 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double stockPrice = Double.valueOf("price");
+                Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
                 Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
                 stockList.add(stock);
@@ -96,7 +96,15 @@ public class DatabaseUtil {
         String username = user.getUserUsername();
         String password = user.getUserPassword();
         Double balance = user.getUserBalance();
-        db.execSQL("INSERT INTO users (userFName, userLName, username, password, balance) VALUES (fName, lName, username, password, balance)");
+
+        String sql = "INSERT INTO users (userFName, userLName, username, password, balance) VALUES (?, ?, ?, ?, ?)";
+        SQLiteStatement stmt = db.compileStatement(sql);
+        stmt.bindString(1, fName);
+        stmt.bindString(2, lName);
+        stmt.bindString(3, username);
+        stmt.bindString(4, password);
+        stmt.bindDouble(5, balance);
+        stmt.executeInsert();
     }
 
     public User getUser(String username){
@@ -116,7 +124,19 @@ public class DatabaseUtil {
             user = new User(username, fName, lName, password, balance);
         }
 
+        if (cursor != null) {
+            cursor.close();
+        }
+
         return user;
+    }
+
+    public void updateBalance(double balance, String username){
+        String sql = "UPDATE users SET balance = ? WHERE username = ?";
+        SQLiteStatement stmt = db.compileStatement(sql);
+        stmt.bindDouble(1, balance);
+        stmt.bindString(2, username);
+        stmt.executeUpdateDelete();
     }
 
     public boolean userExists(String username) {
@@ -149,27 +169,31 @@ public class DatabaseUtil {
 
     public List<PortfolioStock> getPortfolio(String username) {
         List<PortfolioStock> list = new ArrayList<>();
-        int portfolioID = getPortfolioID(username);
 
-        if (portfolioID == -1) return list;
+        String query = "SELECT ps.portfolioID, ps.stockID, ps.quantity, ps.buyPrice, ps.buyDate " +
+                "FROM portfolioStock ps " +
+                "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
+                "JOIN stocks s ON ps.stockID = s.stockID " +
+                "WHERE p.username = ?";
 
-        String query = "SELECT ps.portfolioID, ps.stockID, ps.quantity, ps.buyPrice, ps.buyDate, s.stockID AS stock_ref_id, s.stockName, s.symbol, s.category, s.description FROM portfolioStock ps JOIN stocks s ON ps.stockID = s.stockID WHERE ps.portfolioID = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(portfolioID)});
+        Cursor cursor = db.rawQuery(query, new String[]{username});
 
         while (cursor.moveToNext()) {
-            int portfolioIDValue = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+            int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
             int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
             double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
             String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
-            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-            Double stockPrice = getCurrentStockPrice(stockID, (int) (System.currentTimeMillis() / 1000)); //FIXME: pick right time
 
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
-            PortfolioStock ps = new PortfolioStock(portfolioIDValue, String.valueOf(stockID), quantity, buyPrice, buyDate, stock);
+
+            // PortfolioStock(int portfolioID, String stockID, int quantity, double buyPrice, String buyDate)
+            PortfolioStock ps = new PortfolioStock(
+                    portfolioID,
+                    String.valueOf(stockID),
+                    quantity,
+                    buyPrice, buyDate
+            );
+
             list.add(ps);
         }
 
@@ -181,7 +205,7 @@ public class DatabaseUtil {
 
     }
 
-    // Transaction
+     //Transaction
     public void processTransaction(Transaction tx) {
         int currentQty = getQuantity(tx.getUsername(), tx.getStockSymbol());
         int changeInQty = tx.getType().equalsIgnoreCase("BUY")

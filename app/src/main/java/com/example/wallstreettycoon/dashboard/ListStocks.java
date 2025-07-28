@@ -16,7 +16,6 @@ import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ListStocks extends AppCompatActivity {

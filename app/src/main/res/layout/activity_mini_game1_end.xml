@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeButton"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".minigames.miniGame1End"
+    android:background="@color/LightGrey">
+
+    <TextView
+        android:id="@+id/game_over_textview"
+        android:layout_width="264dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_textview"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Game Over"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/profit_end_textview"
+        android:layout_width="210dp"
+        android:layout_height="61dp"
+        android:layout_margin="16dp"
+        android:layout_marginBottom="36dp"
+        android:background="@drawable/rounded_textview"
+        android:lineSpacingExtra="6dp"
+        android:padding="16dp"
+        android:text="You made: "
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/game_over_textview"
+        app:layout_constraintVertical_bias="0.331"
+        app:layout_constraintWidth_percent="0.4" />
+
+    <Button
+        android:id="@+id/home_button"
+        android:layout_width="172dp"
+        android:layout_height="88dp"
+        android:backgroundTint="@color/Orange"
+        android:text="Home"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:cornerRadius="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profit_end_textview"
+        app:layout_constraintVertical_bias="0.361" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

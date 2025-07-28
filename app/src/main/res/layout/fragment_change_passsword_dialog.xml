@@ -53,6 +53,19 @@
         app:layout_constraintTop_toBottomOf="@+id/txtNewPassw"
         app:layout_constraintVertical_bias="0.34" />
 
+    <TextView
+        android:id="@+id/viewPassword"
+        android:layout_width="77dp"
+        android:layout_height="46dp"
+        android:layout_marginStart="52dp"
+        android:background="@drawable/rounded_textview"
+        android:gravity="center"
+        android:text=""
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="233dp" />
+
     <EditText
         android:id="@+id/edtNewPassw"
         android:layout_width="wrap_content"

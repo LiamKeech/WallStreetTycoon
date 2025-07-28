@@ -124,17 +124,13 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
         //TODO populate minigames table
 
-        // Portfolio table (1-1 with User)
+        // Portfolio table, will be empty on creation
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS portfolios (" +
                         "portfolioID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "userID INTEGER, " +
+                        "username TEXT, " +
                         "FOREIGN KEY (username) REFERENCES users(username))"
         );
-
-        // Initial portfolio data
-        db.execSQL("INSERT INTO portfolios (username) VALUES ('johndoe')");
-        db.execSQL("INSERT INTO portfolios (username) VALUES ('janedoe')");
 
         // PortfolioStock table (many-to-many between portfolio and stock)
         db.execSQL(
@@ -148,11 +144,6 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "FOREIGN KEY (portfolioID) REFERENCES portfolios(portfolioID), " +
                         "FOREIGN KEY (stockID) REFERENCES stocks(stockID))"
         );
-
-        // Initial portfolio stock data
-        db.execSQL("INSERT INTO portfolioStock (portfolioID, stockID, quantity, buyPrice, buyDate) VALUES (1, 1, 10, 195.50, '2025-07-01')");
-        db.execSQL("INSERT INTO portfolioStock (portfolioID, stockID, quantity, buyPrice, buyDate) VALUES (1, 2, 5, 2700.00, '2025-07-02')");
-        db.execSQL("INSERT INTO portfolioStock (portfolioID, stockID, quantity, buyPrice, buyDate) VALUES (2, 3, 3, 3400.00, '2025-07-03')");
 
         // Chapter_Stock join table
         db.execSQL(

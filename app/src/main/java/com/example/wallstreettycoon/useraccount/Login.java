@@ -1,7 +1,5 @@
 package com.example.wallstreettycoon.useraccount;
 
-import static java.security.AccessController.getContext;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
