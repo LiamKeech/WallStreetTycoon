@@ -66,13 +66,13 @@ public class CreateAccount extends AppCompatActivity {
                         dbUtil.setUser(newUser);
 
                         //load account details:
-                        EditText nameDisplay = findViewById(R.id.edtNameManage);
+                        EditText nameDisplay = findViewById(R.id.edtNameCreate);
                         nameDisplay.setText(name);
-                        EditText surnameDisplay = findViewById(R.id.edtSurnameManage);
+                        EditText surnameDisplay = findViewById(R.id.edtSurnameCreate);
                         surnameDisplay.setText(surname);
-                        EditText usernameDisplay = findViewById(R.id.edtUserrnameManage);
+                        EditText usernameDisplay = findViewById(R.id.edtUsernameCreate);
                         usernameDisplay.setText(username);
-                        EditText passwDisplay = findViewById(R.id.editTextTextPassword);
+                        EditText passwDisplay = findViewById(R.id.edtPasswCreate);
                         passwDisplay.setText(password);
 
                         //take to list stocks/dashboard:
