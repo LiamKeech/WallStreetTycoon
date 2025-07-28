@@ -156,6 +156,20 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "FOREIGN KEY (chapterID) REFERENCES chapters(chapterID), " +
                         "FOREIGN KEY (stockID) REFERENCES stocks(stockID))"
         );
+
+        // Transactions table
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS transactions (" +
+                        "transactionID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "username TEXT, " +
+                        "stockSymbol TEXT, " +
+                        "type TEXT, " +
+                        "quantity INTEGER, " +
+                        "priceAtTrade REAL, " +
+                        "timestamp TEXT, " +
+                        "FOREIGN KEY (username) REFERENCES users(username), " +
+                        "FOREIGN KEY (stockSymbol) REFERENCES stocks(symbol))"
+        );
     }
 
     @Override
