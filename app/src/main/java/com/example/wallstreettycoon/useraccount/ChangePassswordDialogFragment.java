@@ -53,7 +53,6 @@ public class ChangePassswordDialogFragment extends DialogFragment {
         Button btnCancel = view.findViewById(R.id.btnCancelPasswChange);
         btnCancel.setOnClickListener(v -> dismiss());
 
-
         return view;
     }
 }
