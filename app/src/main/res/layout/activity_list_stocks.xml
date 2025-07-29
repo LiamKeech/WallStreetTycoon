@@ -43,7 +43,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RVstock"
         android:layout_width="519dp"
-        android:layout_height="292dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,7 +54,7 @@
         android:layout_width="60dp"
         android:layout_height="50dp"
         android:backgroundTint="@color/LightBlue"
-        android:text="M"
+        android:text="P"
         android:textColor="@color/white"
         android:textSize="17sp"
         app:cornerRadius="10dp"
