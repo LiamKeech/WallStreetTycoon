@@ -41,6 +41,7 @@ public class ManageUserAccount extends AppCompatActivity {
             return insets;
         });
 
+        //user test data:
         User admin = new User("admin", "admin", "admin", "admin1", 1000.0);
         Game.currentUser = admin;
 
@@ -94,12 +95,13 @@ public class ManageUserAccount extends AppCompatActivity {
             edtSurname.setText(surname);
             edtPassw.setText(password);
 
-            Intent backToDash = new Intent(ManageUserAccount.this, ListStocks.class);
-            startActivity(backToDash);
-
             //test
             User test = dbUtil.getUser(edtUser.getText().toString());
             Log.d(test.getUserUsername(), "");
+
+            Intent backToDash = new Intent(ManageUserAccount.this, ListStocks.class);
+            startActivity(backToDash);
+
         });
 
         btnCancel = findViewById(R.id.btnCancelManage);
