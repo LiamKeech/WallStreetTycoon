@@ -66,8 +66,9 @@ public class ListStocks extends AppCompatActivity {
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     stockRV.setLayoutManager(linearLayoutManager);
                     stockRV.setAdapter(stockAdapter);
-                    btnToggle.setText("P");
+
                 }
+                btnToggle.setText("P");
             }
         });
 
