@@ -69,7 +69,7 @@ public class ManageUserAccount extends AppCompatActivity {
 
             String name = edtName.getText().toString();
             String surname = edtSurname.getText().toString();
-            String password = edtPassw.getText().toString()
+            String password = edtPassw.getText().toString();
 
             if (!name.isEmpty() && !surname.isEmpty()) {
                 //update user details
