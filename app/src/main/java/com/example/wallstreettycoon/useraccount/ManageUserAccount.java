@@ -56,18 +56,41 @@ public class ManageUserAccount extends AppCompatActivity {
             txtChangePassw.setTypeface(null, Typeface.ITALIC);
             ChangePassswordDialogFragment changePassswordDialog = new ChangePassswordDialogFragment();
             changePassswordDialog.show(getSupportFragmentManager(), "ChangePasswordDialog");
-            Intent intent = getIntent();
-            String value = intent.getStringExtra("new");
-            edtPassw.setText(value);
         });
+
+        //new password value:
+        Intent intent = getIntent();
+        String value = intent.getStringExtra("new");
+        edtPassw.setText(value);
 
         btnUpdate = findViewById(R.id.btnUpdateManage);
         btnUpdate.setOnClickListener(v -> {
             DatabaseUtil dbUtil = new DatabaseUtil(context);
-            dbUtil.updateUser(edtUser.getText().toString(), edtName.getText().toString(),
-                    edtSurname.getText().toString(), edtPassw.getText().toString());
 
-            Toast.makeText(v.getContext(), "Account updated.", Toast.LENGTH_SHORT).show();
+            String name = edtName.getText().toString();
+            String surname = edtSurname.getText().toString();
+            String password = edtPassw.getText().toString()
+
+            if (!name.isEmpty() && !surname.isEmpty()) {
+                //update user details
+                dbUtil.updateUser(edtUser.getText().toString(), name, surname, password);
+                //notify user:
+                Toast.makeText(v.getContext(), "Account updated.", Toast.LENGTH_SHORT).show();
+            }
+            else if (name.isEmpty()) {
+                Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                edtName.setBackgroundResource(R.drawable.red_textbox_border);
+            }
+            else {
+                Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                edtSurname.setBackgroundResource(R.drawable.red_textbox_border);
+            }
+
+            //set fields to updated information:
+            edtName.setText(name);
+            edtSurname.setText(surname);
+            edtPassw.setText(password);
+
             Intent backToDash = new Intent(ManageUserAccount.this, ListStocks.class);
             startActivity(backToDash);
 
