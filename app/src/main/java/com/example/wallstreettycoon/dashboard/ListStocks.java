@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,11 +58,16 @@ public class ListStocks extends AppCompatActivity {
             }
             else if (btnToggle.getText().toString().equals("M")) { //Portfolio
                 List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
-                PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, portfolioStock);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                stockRV.setLayoutManager(linearLayoutManager);
-                stockRV.setAdapter(stockAdapter);
-                btnToggle.setText("P");
+                if (portfolioStock.isEmpty()) {
+                    Toast.makeText(v.getContext(), "No stocks in portfolio", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, portfolioStock);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                    stockRV.setLayoutManager(linearLayoutManager);
+                    stockRV.setAdapter(stockAdapter);
+                    btnToggle.setText("P");
+                }
             }
         });
 

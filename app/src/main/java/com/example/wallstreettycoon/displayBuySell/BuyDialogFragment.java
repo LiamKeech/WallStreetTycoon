@@ -83,10 +83,15 @@ public class BuyDialogFragment extends DialogFragment {
                 int quantity = Integer.parseInt(quantityStr);
 
                 DatabaseUtil dbUtil = new DatabaseUtil(requireContext());
-                dbUtil.buyStock(username, stockID, quantity, currentPriceValue);//FIXME
 
-                Toast.makeText(getContext(), "Bought " + quantityStr + " shares of " + symbolText, Toast.LENGTH_SHORT).show();
-                dismiss();
+                boolean success = dbUtil.buyStock(username, stockID, quantity, currentPriceValue);//FIXME
+
+                if (success) {
+                    Toast.makeText(getContext(), "Bought " + quantityStr + " shares of " + symbolText, Toast.LENGTH_SHORT).show();
+                    dismiss();
+                } else {
+                    Toast.makeText(getContext(), "Failed to buy: Insufficient funds", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

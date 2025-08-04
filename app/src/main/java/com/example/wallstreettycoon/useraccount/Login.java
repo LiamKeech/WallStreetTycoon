@@ -66,7 +66,7 @@ public class Login extends AppCompatActivity {
                         User user = dbUtil.getUser(username);
                         if (user.getUserPassword().equals(password)) { //valid credentials
                             Intent loginIntent = new Intent(Login.this, ListStocks.class);
-                            Game.currentUser = user; //set logged in user
+                            Game.currentUser = user; //keep user logged in
                             startActivity((loginIntent));
                         }
                     }

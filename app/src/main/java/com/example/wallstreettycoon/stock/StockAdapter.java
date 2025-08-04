@@ -17,11 +17,13 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
 
     private Context context;
     private List<Stock> stockArrayList;
+    private DatabaseUtil dbUtil;
 
     // Constructor
     public StockAdapter(Context context, List<Stock> stockModelArrayList) {
         this.context = context;
         this.stockArrayList = stockModelArrayList;
+        this.dbUtil = new DatabaseUtil(context);
     }
 
     @NonNull
@@ -39,8 +41,13 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         Stock stock = stockArrayList.get(position);
         holder.stockSym.setText(stock.getSymbol());
         holder.stockName.setText(stock.getStockName());
-        DatabaseUtil dbUtil = new DatabaseUtil(context);
-        holder.stockPrice.setText(String.format("%.2f",dbUtil.getCurrentStockPrice(stock.getStockID(), 1)));
+
+        try {
+            holder.stockPrice.setText(String.format("%.2f",dbUtil.getCurrentStockPrice(stock.getStockID(), 1)));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override

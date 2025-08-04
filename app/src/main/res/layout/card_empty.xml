@@ -23,39 +23,14 @@
         android:layout_height="102dp">
 
         <TextView
-            android:id="@+id/txtStockSymb"
-            android:layout_width="136dp"
-            android:layout_height="50dp"
+            android:id="@+id/txtEmptyPortfolio"
+            android:layout_width="305dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:drawablePadding="2dp"
-            android:textColor="@color/LightBlue"
+            android:text="No stocks in portfolio"
+            android:textColor="@color/black"
             android:textSize="30sp" />
-
-        <!-- Text View to display Course Name -->
-        <TextView
-            android:id="@+id/txtStockName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="10dp"
-            android:layout_toEndOf="@id/txtStockSymb"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-        <!-- Text VIew to display Course Rating -->
-        <!-- Image used in present in drawable folder -->
-        <TextView
-            android:id="@+id/txtStockPrice"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtStockName"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="20dp"
-            android:layout_toEndOf="@id/txtStockSymb"
-            android:drawablePadding="2dp"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

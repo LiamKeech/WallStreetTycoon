@@ -3,13 +3,13 @@ package com.example.wallstreettycoon.transaction;
 import java.math.BigDecimal;
 
 public class Transaction {
-    private long    transactionId;
-    private String  username;
-    private String  stockSymbol;
-    private String  type;          // buy or sell
-    private int     quantity;
+    private long transactionId;
+    private String username;
+    private String stockSymbol;
+    private String type;          // buy or sell
+    private int quantity;
     private BigDecimal priceAtTrade;
-    private long    timestamp;
+    private long timestamp;
 
     public Transaction(long transactionId, String username, String stockSymbol,
                        String type, int quantity, BigDecimal priceAtTrade, long timestamp) {

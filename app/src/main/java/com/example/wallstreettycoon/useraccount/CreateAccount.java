@@ -65,15 +65,8 @@ public class CreateAccount extends AppCompatActivity {
                         User newUser = new User(username, name, surname,  password, 1000.0);
                         dbUtil.setUser(newUser);
 
-                        //load account details:
-                        EditText nameDisplay = findViewById(R.id.edtNameCreate);
-                        nameDisplay.setText(name);
-                        EditText surnameDisplay = findViewById(R.id.edtSurnameCreate);
-                        surnameDisplay.setText(surname);
-                        EditText usernameDisplay = findViewById(R.id.edtUsernameCreate);
-                        usernameDisplay.setText(username);
-                        EditText passwDisplay = findViewById(R.id.edtPasswCreate);
-                        passwDisplay.setText(password);
+                        //inform user account made successfully:
+                        Toast.makeText(v.getContext(), "Account created successfully", Toast.LENGTH_SHORT).show();
 
                         //user taken back to Login:
                         Intent createdIntent = new Intent(CreateAccount.this, Login.class);
