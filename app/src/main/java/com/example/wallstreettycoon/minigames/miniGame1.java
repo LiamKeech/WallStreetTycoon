@@ -53,8 +53,8 @@ public class miniGame1 extends AppCompatActivity {
         container = findViewById(R.id.container);
         List<Stock> stockList = dbUtil.getStockList();
 
-        int delay = 10;
-        int increment = 10;
+        int delay = 1000;
+        int increment = 1000;
         for(Stock stock: stockList){ //TODO change to just technology stocks
             handler.postDelayed(() -> {
                 spawnFloatingButton(stock);
