@@ -26,12 +26,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DisplayStockActivity extends AppCompatActivity {
-    Game game = new Game();
+
     private LineChart chart;
     private DatabaseUtil dbUtil;
     private Stock currentStock;
     private String currentUsername;
     Context context = this;
+    Game game = new Game(context);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

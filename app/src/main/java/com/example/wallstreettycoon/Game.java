@@ -1,9 +1,11 @@
 package com.example.wallstreettycoon;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.wallstreettycoon.useraccount.User;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,15 +16,20 @@ public class Game implements java.io.Serializable {
 
     public static User currentUser;
     public static Timer timer;
-    public static Game gameInstance = new Game();
+    public static Game gameInstance;
     private static long timeStamp;
-    public Game(){
+    static Context context;
+    public Game(Context context){
+        this.context = context;
     }
     public static void startGame(){
         timer = new Timer();
     }
     public static void continueGame(){
-        timer.startTimer();
+        if(timer != null)
+            timer.startTimer();
+        else
+            startGame();
     }
 
     public static void saveGame(){
@@ -33,20 +40,28 @@ public class Game implements java.io.Serializable {
     }
 
     public static void saveToFile(String filename) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename))) {
+        try {
+            File file = new File(context.getFilesDir(), filename);
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(gameInstance);
-            Log.d("","Saved to file.");
+            oos.close();
+            Log.d("SaveFile", "Saved to file: " + file.getAbsolutePath());
         } catch (IOException e) {
+            Log.d("", "save to file did not work");
             e.printStackTrace();
         }
     }
     public static boolean loadFromFile(String username) {
         String filename = username + ".ser";
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename))) {
-            gameInstance = (Game) ois.readObject();
-            Log.d("", "Loaded from file");
+        try {
+            File file = new File(context.getFilesDir(), filename);
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+            gameInstance = (Game)ois.readObject();
+            ois.close();
+            Log.d("LoadFile", "Loaded from file: " + file.getAbsolutePath());
             return true;
         } catch (IOException | ClassNotFoundException e) {
+            Log.d("", "Load from file did not work");
             e.printStackTrace();
             return false;
         }

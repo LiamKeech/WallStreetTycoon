@@ -71,7 +71,7 @@ public class miniGame1 extends AppCompatActivity {
 
             endDialogFragment.show(getSupportFragmentManager(), "miniGame1End");
 
-        }, stockList.size() * (1000 + 100) + 2000);
+        }, stockList.size() * (1000 + 100) + 5000);
     }
 
     private void spawnFloatingButton(Stock stock) {

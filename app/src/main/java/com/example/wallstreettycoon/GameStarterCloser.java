@@ -1,6 +1,6 @@
-import android.app.Application;
+package com.example.wallstreettycoon;
 
-import com.example.wallstreettycoon.Game;
+import android.app.Application;
 
 public class GameStarterCloser extends Application {
     @Override
