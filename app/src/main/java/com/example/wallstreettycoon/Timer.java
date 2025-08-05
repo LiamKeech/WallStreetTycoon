@@ -2,18 +2,18 @@ package com.example.wallstreettycoon;
 
 public class Timer {
     public long startTime;
-    private long timeStamp;
+    private long elapsedTime = 0;
 
     public Timer(){
         startTimer();
     }
 
-    public long getTimeStamp(){
-        long elapsedTime = System.nanoTime() - startTime;
+    public long getElapsedTime(){
+        elapsedTime = System.nanoTime() - startTime;
         return elapsedTime;
     }
 
     public void startTimer(){
-        startTime = System.nanoTime();
+        startTime = System.nanoTime() + elapsedTime;
     }
 }
