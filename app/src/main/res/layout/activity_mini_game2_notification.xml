@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/homeButton"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".minigames.miniGame2.miniGame2Notification"
+    android:background="@color/LightGrey">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/FieldLogin"
+        android:layout_width="652dp"
+        android:layout_height="306dp"
+        android:background="@drawable/rounded_nav_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.659">
+
+        <Button
+            android:id="@+id/start_button"
+            android:layout_width="172dp"
+            android:layout_height="88dp"
+            android:backgroundTint="@color/Orange"
+            android:text="Start"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            app:cornerRadius="10sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lblInstructions"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/lblInstructions"
+            android:layout_width="310dp"
+            android:layout_height="255dp"
+            android:layout_margin="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="36dp"
+            android:background="@drawable/rounded_background"
+            android:backgroundTint="@color/LightBlue"
+            android:lineSpacingExtra="6dp"
+            android:padding="16dp"
+            android:text="You've just stumbled upon a forgotten crypto wallet—hidden deep within an old blockchain explorer and tied to a fortune in early-mined cryptocurrency. But there's a catch: it's locked behind a complex passphrase, and no reset button exists. To unlock it, you'll need to crack the code by solving cryptographic puzzles and decoding clues buried in transaction notes, old forum posts, and encrypted messages. Each correct solution reveals part of the passphrase. Piece it together, and the wallet—and its digital treasure—will be yours."
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="0.4" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/lblGameTitle"
+        android:layout_width="286dp"
+        android:layout_height="57dp"
+        android:background="@drawable/rounded_textview"
+        android:gravity="center"
+        android:text="The Crypto Rise"
+        android:textColor="@color/white"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.079" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

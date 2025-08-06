@@ -1,27 +1,19 @@
-package com.example.wallstreettycoon.minigames;
+package com.example.wallstreettycoon.minigames.miniGame1;
 
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.ColorRes;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
-import com.example.wallstreettycoon.dashboard.ListStocks;
-
-import org.w3c.dom.Text;
 
 public class miniGame1EndDialogFragment extends DialogFragment {
     Float profit;
@@ -74,7 +66,7 @@ public class miniGame1EndDialogFragment extends DialogFragment {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), miniGame1Starter.class); //will change to dashboard
+                Intent intent = new Intent(getActivity(), miniGame1Notification.class); //will change to dashboard
                 startActivity(intent);
             }
         });

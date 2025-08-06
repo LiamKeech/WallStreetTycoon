@@ -5,7 +5,7 @@
     android:id="@+id/homeButton"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".minigames.miniGame1Starter"
+    tools:context=".minigames.miniGame1.miniGame1Notification"
     android:background="@color/LightGrey">
 
     <androidx.constraintlayout.widget.ConstraintLayout

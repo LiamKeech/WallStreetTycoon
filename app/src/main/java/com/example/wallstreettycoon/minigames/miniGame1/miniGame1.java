@@ -1,4 +1,4 @@
-package com.example.wallstreettycoon.minigames;
+package com.example.wallstreettycoon.minigames.miniGame1;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -25,7 +25,6 @@ import android.widget.TextView;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
-import com.example.wallstreettycoon.displayBuySell.SellDialogFragment;
 import com.example.wallstreettycoon.stock.Stock;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -40,6 +39,9 @@ public class miniGame1 extends AppCompatActivity {
     Map<Stock, Float> stockBoughtPrice = new HashMap<>();
     Float profit = 0f;
     private Handler handler = new Handler(Looper.getMainLooper());
+
+    //TODO make end screen come at right time
+    //TODO make home button work
 
 
     @Override
