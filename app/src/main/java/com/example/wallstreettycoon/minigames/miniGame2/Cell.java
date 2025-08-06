@@ -8,4 +8,8 @@ public class Cell {
         this.letter = letter;
         found = false;
     }
+
+    public String getLetter(){
+        return letter;
+    }
 }

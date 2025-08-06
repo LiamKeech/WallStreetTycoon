@@ -5,13 +5,13 @@ public class Board {
     private String[] stockWords = {"BULL", "BEAR", "MARGIN", "SHORT", "LONG", "STOCK", "BOND", "FUND", "INDEX", "BROKER", "TICKER", "IPO", "OPTION", "DIVIDEND", "FUTURE", "TRADER", "EQUITY", "YIELD", "SWAP", "HEDGE"};
 
     private String[][] gridLetters = {
-            {"S", "E", "M", "G", "O", "D", "M"},
-            {"E", "E", "B", "U", "L", "O", "R"},
-            {"C", "H", "A", "H", "A", "P", "P"},
-            {"A", "C", "N", "K", "N", "G", "E"},
-            {"T", "L", "L", "R", "H", "A", "O"},
-            {"S", "S", "L", "O", "C", "I", "F"},
-            {"S", "L", "O", "C", "I", "F", "K"}
+            {"S", "E", "H", "G", "O", "D", "O", "M"},
+            {"E", "E", "B", "U", "L", "O", "R", "E"},
+            {"C", "H", "A", "H", "A", "P", "A", "P"},
+            {"A", "C", "N", "K", "N", "G", "E", "P"},
+            {"T", "K", "L", "R", "H", "A", "O", "C"},
+            {"S", "S", "L", "O", "C", "T", "E", "K"},
+
     };
 
     private Cell[][] board;
@@ -23,6 +23,18 @@ public class Board {
                 board[i][j] = new Cell(gridLetters[i][j]);
             }
         }
+    }
+
+    public String getLetter(int x, int y){
+        return board[x][y].getLetter();
+    }
+
+    public int getNumRows(){
+        return board.length;
+    }
+
+    public int getNumCols(){
+        return board[0].length;
     }
 
 }

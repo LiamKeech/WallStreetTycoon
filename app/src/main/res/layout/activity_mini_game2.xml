@@ -13,7 +13,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/linearLayout"
-            android:layout_width="270dp"
+            android:layout_width="277dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="25dp">
@@ -99,13 +99,16 @@
                 app:layout_constraintBottom_toTopOf="@+id/hintButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView3"/>
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <GridLayout
+            android:id="@+id/grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:rowCount="6"/>
+            android:padding="0dp"
+            android:useDefaultMargins="false"
+            />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
