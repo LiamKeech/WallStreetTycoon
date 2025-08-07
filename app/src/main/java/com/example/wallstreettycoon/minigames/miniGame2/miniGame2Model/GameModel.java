@@ -17,6 +17,7 @@ public class GameModel {
     private Board board;
     private String currentWord = "";
 
+    //TODO select and deselect cells as needed
     public GameModel(){
         this.board = new Board();
         wordsFound = new ArrayList<>();
