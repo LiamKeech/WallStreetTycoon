@@ -3,9 +3,12 @@ package com.example.wallstreettycoon.minigames.miniGame2;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,11 +20,15 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.wallstreettycoon.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.Board;
+import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameEvent;
+import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameModel;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameObserver;
 
 public class miniGame2 extends AppCompatActivity implements GameObserver {
+    private GameModel gameModel;
     private Board board;
     private GridLayout grid;
+    private LinearLayout wordListLL;
 
     private Context context;
     @Override
@@ -38,9 +45,14 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
         context = this;
 
         //link entities
-         grid = findViewById(R.id.grid);
+        grid = findViewById(R.id.grid);
+        wordListLL = findViewById(R.id.wordListLL);
 
         //end region
+
+        gameModel = new GameModel();
+        gameModel.setObserver(this);
+
         drawGrid();
     }
 
@@ -77,8 +89,11 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                         button.setMinimumWidth(0);
                         button.setMinimumHeight(0);
 
+                        int row = i;
+                        int col = j;
                         button.setOnClickListener(v -> {
                             button.setBackground(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_selected));
+                            gameModel.addLetterToCurrentWord(new int[]{row,col});
                         });
 
                         GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(i), GridLayout.spec(j));
@@ -97,7 +112,17 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     }
 
     @Override
-    public void onGameEvent() {
+    public void onGameEvent(GameEvent gameEvent) {
+        switch(gameEvent.getType()){
+            case WORD_FOUND:
+                //write word to the list of words
+                TextView tv = new TextView(context);
+                tv.setText((String)gameEvent.getCargo());
+                wordListLL.addView(new TextView(context));
 
+                //make cells different color
+                break;
+
+        }
     }
 }
