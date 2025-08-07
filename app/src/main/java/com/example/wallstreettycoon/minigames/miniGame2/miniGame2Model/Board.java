@@ -17,6 +17,7 @@ public class Board {
     private Cell[][] board;
 
     private Cell selectedCell;
+    private List<Cell> selectedCells;
 
     public Board(){
         board = new Cell[6][8];
@@ -25,6 +26,7 @@ public class Board {
                 board[i][j] = new Cell(gridLetters[i][j], new int[]{i,j});
             }
         }
+        selectedCells = new ArrayList<>();
     }
 
     public String getLetter(int[] coordinate){
@@ -50,11 +52,6 @@ public class Board {
         return false;
     }
 
-    public List<int[]> getSelectedCells(){
-        List<int[]> list = new ArrayList<>();
-
-    }
-
     public int getNumRows(){
         return board.length;
     }
@@ -65,5 +62,12 @@ public class Board {
 
     public Cell getCell(int[] coordinate) {
         return board[coordinate[0]][coordinate[1]];
+    }
+    public List<Cell> getSelectedCells() {
+        return selectedCells;
+    }
+
+    public void addSelectedCell(Cell cell){
+        selectedCells.add(cell);
     }
 }

@@ -26,6 +26,7 @@ public class GameModel {
     public void selectCell(int[] coordinate) {
         addLetterToCurrentWord(coordinate);
         board.getCell(coordinate).setSelected();
+        board.addSelectedCell(board.getCell(coordinate));
     }
 
     public void deselectCell(int[] coordinate){
@@ -64,5 +65,8 @@ public class GameModel {
         this.observer = obsever;
     }
 
+    public List<Cell> getSelectedCells(){
+        return board.getSelectedCells();
+    }
 
 }
