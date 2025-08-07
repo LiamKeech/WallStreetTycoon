@@ -1,5 +1,7 @@
 package com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model;
 
+import android.util.Log;
+
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2;
 
 import java.lang.reflect.Array;
@@ -13,7 +15,7 @@ public class GameModel {
 
     private List<String> wordsFound;
     private Board board;
-    private String currentWord;
+    private String currentWord = "";
 
     public GameModel(){
         this.board = new Board();
@@ -30,11 +32,11 @@ public class GameModel {
         return currentWord;
     }
 
-    public boolean checkIfWordCompleted(){
+    public void checkIfWordCompleted(){
         if (arrayContains(currentWord, moneyWords)) {
             observer.onGameEvent(new GameEvent(GameEventType.WORD_FOUND, currentWord));
+            currentWord = "";
         }
-        return false;
     }
 
     public boolean arrayContains(String x, String[] array){

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -119,6 +120,8 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 TextView tv = new TextView(context);
                 tv.setText((String)gameEvent.getCargo());
                 wordListLL.addView(new TextView(context));
+
+                Log.d("",(String)gameEvent.getCargo());
 
                 //make cells different color
                 break;
