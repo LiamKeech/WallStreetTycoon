@@ -77,6 +77,7 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
 
                 for (int i = 0; i < board.getNumRows(); i++) {
                     for (int j = 0; j < board.getNumCols(); j++) {
+
                         Button button = new Button(context);
                         button.setText(board.getLetter(new int[]{i,j}));
 
@@ -94,7 +95,7 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                         int col = j;
                         button.setOnClickListener(v -> {
                             button.setBackground(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_selected));
-                            gameModel.addLetterToCurrentWord(new int[]{row,col});
+                            gameModel.selectCell(new int[]{row,col});
                         });
 
                         GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(i), GridLayout.spec(j));
@@ -119,11 +120,12 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 //write word to the list of words
                 TextView tv = new TextView(context);
                 tv.setText((String)gameEvent.getCargo());
-                wordListLL.addView(new TextView(context));
+                wordListLL.addView(tv);
 
                 Log.d("",(String)gameEvent.getCargo());
 
                 //make cells different color
+
                 break;
 
         }

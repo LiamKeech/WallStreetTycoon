@@ -22,6 +22,16 @@ public class GameModel {
         wordsFound = new ArrayList<>();
     }
 
+    public void selectCell(int[] coordinate) {
+        addLetterToCurrentWord(coordinate);
+        board.getCell(coordinate).setSelected();
+    }
+
+    public void deselectCell(int[] coordinate){
+        removeLetterFromCurrentWord(coordinate);
+        board.getCell(coordinate).setDeselected();
+    }
+
     public String addLetterToCurrentWord(int[] coordinate){
         if(board.adjacentToSelectedLetter(coordinate)) {
             currentWord = currentWord + board.getLetter(coordinate);
@@ -30,6 +40,9 @@ public class GameModel {
         else
             currentWord = "";
         return currentWord;
+    }
+    public void removeLetterFromCurrentWord(int[] coordinate){
+        //should only remove if the coordinate is the last selected thing
     }
 
     public void checkIfWordCompleted(){
@@ -49,4 +62,6 @@ public class GameModel {
     public void setObserver(GameObserver obsever){
         this.observer = obsever;
     }
+
+
 }

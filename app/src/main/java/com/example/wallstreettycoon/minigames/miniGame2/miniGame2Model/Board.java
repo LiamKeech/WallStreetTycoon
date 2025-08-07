@@ -1,5 +1,8 @@
 package com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
     private String[][] gridLetters = {
             {"S", "E", "H", "G", "O", "D", "O", "M"},
@@ -47,6 +50,11 @@ public class Board {
         return false;
     }
 
+    public List<int[]> getSelectedCells(){
+        List<int[]> list = new ArrayList<>();
+
+    }
+
     public int getNumRows(){
         return board.length;
     }
@@ -55,4 +63,7 @@ public class Board {
         return board[0].length;
     }
 
+    public Cell getCell(int[] coordinate) {
+        return board[coordinate[0]][coordinate[1]];
+    }
 }
