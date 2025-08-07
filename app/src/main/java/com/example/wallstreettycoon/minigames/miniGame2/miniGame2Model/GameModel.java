@@ -15,7 +15,7 @@ public class GameModel {
     public String addLetterToCurrentWord(int[] coordinate){
         if(board.adjacentToSelectedLetter(coordinate))
             currentWord = currentWord + board.getLetter(coordinate);
-        if()
+
         else
             currentWord = "";
         return currentWord;
