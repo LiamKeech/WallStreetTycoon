@@ -29,10 +29,11 @@ public class Cell {
     public void setDeselected() {
         selected = false;
     }
-    public boolean getSelected(){
-        return selected;
-    }
 
     public boolean isFound(){return found;}
     public void setFound(){found = true;}
+
+    public boolean isSelected() {
+        return selected;
+    }
 }

@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameModel {
-    //TODO make current word just the selected words concatonated
+
     private GameObserver observer;
     private String[] moneyWords = {"DOUGH", "STACKS", "CHEESE", "PAPER", "MOOLAH", "BANKROLL", "POCKETCHANGE"};
     private String[] stockWords = {"BULL", "BEAR", "MARGIN", "SHORT", "LONG", "STOCK", "BOND", "FUND", "INDEX", "BROKER", "TICKER", "IPO", "OPTION", "DIVIDEND", "FUTURE", "TRADER", "EQUITY", "YIELD", "SWAP", "HEDGE"};
 
     private List<String> wordsFound;
     private Board board;
-    private String currentWord = "";
 
     public GameModel(){
         this.board = new Board();
@@ -24,39 +23,48 @@ public class GameModel {
     }
 
     public void selectCell(int[] coordinate) {
-        board.getCell(coordinate).setSelected();
-        board.addSelectedCell(board.getCell(coordinate));
-        addLetterToCurrentWord(coordinate);
-
-
+        if(board.getSelectedCells().isEmpty()){
+            //add
+            board.addSelectedCell(board.getCell(coordinate));
+            checkIfWordCompleted();
+        }
+        else{
+            if(board.adjacentToSelectedLetter(coordinate)){
+                //add
+                board.addSelectedCell(board.getCell(coordinate));
+                checkIfWordCompleted();
+            }
+            else{
+                board.clearSelectedCells();
+                //notify observer
+                observer.onGameEvent(new GameEvent(GameEventType.ILLEGAL_CLICK, "Illegal click"));
+                board.addSelectedCell(board.getCell(coordinate));
+            }
+        }
     }
 
     public void deselectCell(int[] coordinate){
-        removeLetterFromCurrentWord(coordinate);
-        board.getCell(coordinate).setDeselected();
-    }
-
-    public String addLetterToCurrentWord(int[] coordinate){
-        if(board.adjacentToSelectedLetter(coordinate)) {
-            currentWord = currentWord + board.getLetter(coordinate);
-            checkIfWordCompleted();
+        if(board.getSelectedCells().size() == 1)
+            removeLetterFromCurrentWord();
+        else{
+            while(!board.getSelectedCells().getLast().equals(board.getCell(coordinate))){
+                removeLetterFromCurrentWord();
+            }
         }
-        else
-            currentWord = "";
-        return currentWord;
-    }
-    public void removeLetterFromCurrentWord(int[] coordinate){
-        //should only remove if the coordinate is the last selected thing
 
+    }
+    public void removeLetterFromCurrentWord(){
+        //should only remove if the coordinate is the last selected thing
+        board.getSelectedCells().getLast().setDeselected();
+        board.getSelectedCells().remove(board.getSelectedCells().size() - 1);
     }
 
     public void checkIfWordCompleted(){
-        if (arrayContains(currentWord, moneyWords)) {
-            wordsFound.add(currentWord);
+        if (arrayContains(getCurrentWord(), moneyWords)) {
+            wordsFound.add(getCurrentWord());
             board.setSelectedCellsFound();
-            observer.onGameEvent(new GameEvent(GameEventType.WORD_FOUND, currentWord));
-
-            currentWord = "";
+            observer.onGameEvent(new GameEvent(GameEventType.WORD_FOUND, wordsFound));
+            board.clearSelectedCells();
         }
     }
 
@@ -76,5 +84,13 @@ public class GameModel {
     }
 
     public Board getBoard(){return board;}
+
+    public String getCurrentWord(){
+        String cw = "";
+        for(Cell cell: board.getSelectedCells()){
+            cw = cw + cell.getLetter();
+        }
+        return cw;
+    }
 
 }

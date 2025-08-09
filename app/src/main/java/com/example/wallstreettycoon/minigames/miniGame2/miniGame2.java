@@ -2,6 +2,7 @@ package com.example.wallstreettycoon.minigames.miniGame2;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -27,6 +28,7 @@ import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameModel
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameObserver;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.SquareButton;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class miniGame2 extends AppCompatActivity implements GameObserver {
@@ -35,6 +37,9 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     private GridLayout grid;
     private LinearLayout wordListLL;
     private Integer cellSize;
+
+    //TODO draw lines between cells when selected
+    //TODO check for game over
 
     private Context context;
     @Override
@@ -59,7 +64,9 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
         gameModel = new GameModel();
         gameModel.setObserver(this);
 
+        drawWordsList(new ArrayList<>());
         drawGrid();
+
     }
 
     public void drawGrid(){
@@ -76,7 +83,6 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 @Override
                 public void onGlobalLayout() {
                     grid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    int totalWidth = grid.getWidth();
                     int totalHeight = grid.getHeight();
                     cellSize = totalHeight / (rows + 1);
                     populateGrid(rows, cols);
@@ -94,25 +100,37 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 button.setText(board.getLetter(new int[]{i, j}));
                 button.setBackgroundColor(Color.TRANSPARENT);
                 button.setTextColor(Color.BLACK);
-                button.setTextSize(25);
+                button.setTextSize(23);
 
                 if(board.getCell(new int[]{i,j}).isFound()){
-                    button.setBackground(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_found));
+                    int inset = 25;
+                    InsetDrawable insetDrawable = new InsetDrawable(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_found), inset, inset, inset, inset);
+                    button.setBackground(insetDrawable);
                 }
-
+                if(board.getCell(new int[]{i,j}).isSelected()) {
+                    int inset = 25;
+                    InsetDrawable insetDrawable = new InsetDrawable(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_selected), inset, inset, inset, inset);
+                    button.setBackground(insetDrawable);
+                }
                 int row = i;
                 int col = j;
                 button.setOnClickListener(v -> {
-                    if(!board.getCell(new int[]{row, col}).getSelected()){
-                        button.setBackground(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_selected));
+                    if(!board.getCell(new int[]{row, col}).isSelected()){
                         gameModel.selectCell(new int[]{row, col});
+                        drawGrid();
                     }
                     else{
                         button.setBackground(null);
                         gameModel.deselectCell(new int[]{row,col});
+                        drawGrid();
                     }
 
+                    Log.d("", gameModel.getCurrentWord());
+
                 });
+
+//                int padding = 20;
+//                button.setPadding(padding, padding, padding, padding);
 
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.width = cellSize;
@@ -130,16 +148,31 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
         switch(gameEvent.getType()){
             case WORD_FOUND:
                 //write word to the list of words
-                TextView tv = new TextView(context);
-                tv.setText((String)gameEvent.getCargo());
-                wordListLL.addView(tv);
-
-                Log.d("",(String)gameEvent.getCargo());
-
-                //make selected cells different color
+                drawWordsList((ArrayList<String>) gameEvent.getCargo());
                 drawGrid();
                 break;
+            case ILLEGAL_CLICK:
+                drawGrid();
+                break;
+        }
+    }
 
+    public void drawWordsList(ArrayList<String> words){
+        wordListLL.removeAllViews();
+        int i = 1;
+        for(String word: words) {
+            TextView tv = new TextView(context, null, 0, R.style.text);
+            String text = i + ": " + word;
+            tv.setText(text);
+            wordListLL.addView(tv);
+            i++;
+        }
+        while(i <= 7){
+            TextView tv = new TextView(context, null, 0, R.style.text);
+            String text = i + ":______________";
+            tv.setText(text);
+            wordListLL.addView(tv);
+            i++;
         }
     }
 }

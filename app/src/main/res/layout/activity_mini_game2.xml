@@ -18,11 +18,9 @@
             android:orientation="vertical"
             android:paddingTop="25dp">
 
-
-
             <TextView
                 android:id="@+id/themeHeaderTV"
-                style="@style/subHeading"
+                style="@style/heading"
                 android:background="@drawable/rounded_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -38,28 +36,21 @@
                 tools:layout_editor_absoluteY="25dp" />
 
 
-            <Button
-                android:id="@+id/hintButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Hint"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.219"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:layout_conversion_absoluteHeight="48dp"
-                tools:layout_conversion_absoluteWidth="164dp" />
-
             <LinearLayout
+                android:id="@+id/wordListLL"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_margin="30dp"
+                android:gravity="center"
                 android:orientation="vertical"
-                android:id="@+id/wordListLL"
-                app:layout_constraintBottom_toTopOf="@+id/hintButton"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/themeHeaderTV" />
+                app:layout_constraintTop_toBottomOf="@+id/themeHeaderTV">
+
+
+            </LinearLayout>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

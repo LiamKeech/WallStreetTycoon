@@ -15,8 +15,6 @@ public class Board {
     };
 
     private Cell[][] board;
-
-    private Cell selectedCell;
     private List<Cell> selectedCells;
 
     public Board(){
@@ -36,10 +34,10 @@ public class Board {
     }
 
     public boolean adjacentToSelectedLetter(int[] coordinate){
-        if(selectedCell == null)
+        if(selectedCells.getLast() == null)
             return true;
 
-        int[] selectedCellCoordinate = selectedCell.getCoordinate();
+        int[] selectedCellCoordinate = selectedCells.getLast().getCoordinate();
         int row = coordinate[0];
         int col = coordinate[1];
         int sRow = selectedCellCoordinate[0];
@@ -68,6 +66,7 @@ public class Board {
     }
 
     public void addSelectedCell(Cell cell){
+        cell.setSelected();
         selectedCells.add(cell);
     }
 
@@ -75,5 +74,12 @@ public class Board {
         for(Cell cell: selectedCells){
             cell.setFound();
         }
+    }
+
+    public void clearSelectedCells(){
+        for(Cell cell: selectedCells){
+            cell.setDeselected();
+        }
+        selectedCells.clear();
     }
 }
