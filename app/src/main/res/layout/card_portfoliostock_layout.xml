@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        android:gravity="center_vertical">
+
+        <!-- Stock symbol (in a circle) -->
+        <TextView
+            android:id="@+id/lblStockSymbol_portfolioCard"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/minigame_2_btn_selected"
+            android:gravity="center"
+            android:text="A500"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <!-- Stock info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/lblStockName_portfolioCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AAPL"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <TextView
+                android:id="@+id/lblSharesOwned_portfolioCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="25 shares"
+                android:textColor="@color/black"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+        <!-- Price info -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end">
+
+            <!-- Price based on current time -->
+            <TextView
+                android:id="@+id/lblCurrentPrice_portfolioCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$125.50"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Price based on (current time - time bought) NB update colours dynamically -->
+            <TextView
+                android:id="@+id/lblPriceChange_portfolioCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+$2.35 (+1.9%)"
+                android:textColor="@color/Green"
+                android:textSize="12sp"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+        <!-- Total Value Section -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="end"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:id="@+id/lblTotalValue_portfolioCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Total Value"
+                android:textColor="@color/black"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/lblTotalValue_numeric_portfolioCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="$3,137.50"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginTop="2dp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
