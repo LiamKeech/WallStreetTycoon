@@ -1,5 +1,6 @@
 package com.example.wallstreettycoon.displayBuySell;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -46,6 +47,7 @@ public class BuyDialogFragment extends DialogFragment {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
+            @SuppressLint("ResourceAsColor")
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String input = s.toString().trim(); //remove spaces
@@ -69,7 +71,7 @@ public class BuyDialogFragment extends DialogFragment {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {            }
         });
 
 
@@ -88,6 +90,7 @@ public class BuyDialogFragment extends DialogFragment {
 
                 if (success) {
                     Toast.makeText(getContext(), "Bought " + quantityStr + " shares of " + symbolText, Toast.LENGTH_SHORT).show();
+                    //insertTransaction(username, stockID, "BUY", quantity, new BigDecimal(price));
                     dismiss();
                 } else {
                     Toast.makeText(getContext(), "Failed to buy: Insufficient funds", Toast.LENGTH_SHORT).show();

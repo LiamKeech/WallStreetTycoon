@@ -117,7 +117,8 @@ public class DatabaseUtil {
 
     public Double getCurrentStockPrice(Integer stockID, Integer timeStamp){
         //Stock stock = getStockList().get(stockID);
-        StockPriceFunction stockPriceFunction = getStockPriceFunctions().get(stockID);
+        //StockPriceFunction stockPriceFunction = getStockPriceFunctions().get(stockID);
+        StockPriceFunction stockPriceFunction = getStockPriceFunction(stockID);
 
         //I am rounding using BigDecimal for better precision
 
@@ -168,8 +169,6 @@ public class DatabaseUtil {
             Log.d("DB_LOG", "Inserted new stock: stockID=" + stockID + ", qty=" + quantity + " for user " + username);
             }
         cursor.close();
-
-        insertTransaction(username, stockID, "BUY", quantity, new BigDecimal(price));
         return true;
     }
 
@@ -215,8 +214,6 @@ public class DatabaseUtil {
             }
         }
         cursor.close();
-
-        insertTransaction(username, stockID, "SELL", quantityToSell, new BigDecimal(price));
         return true;
     }
 
@@ -332,42 +329,43 @@ public class DatabaseUtil {
 
      //Transaction
 
-    private void insertTransaction(String username, long stockID, String transactionType, int quantity, BigDecimal price) {
-        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+//    private void insertTransaction(String username, long stockID, String transactionType, int quantity, BigDecimal price) {
+//         try {
+//        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
+//        String sql = "INSERT INTO transaction_history (username, stockID, transactionType, quantity, price, transactionDate) VALUES (?, ?, ?, ?, ?, ?)";
+//        SQLiteStatement stmt = db.compileStatement(sql);
+//        stmt.bindString(1, username);
+//        stmt.bindLong(2, stockID);
+//        stmt.bindString(3, type);
+//        stmt.bindLong(4, quantity);
+//        stmt.bindDouble(5, price.doubleValue());
+//        stmt.bindString(6, timestamp);
+//        stmt.executeInsert();
+//        Log.d("DB_LOG", "Transaction recorded: " + type + " " + quantity + " shares of " + stockID);
+//    } catch (Exception e) {
+//        Log.e("DB_LOG", "Failed to insert transaction: " + e.getMessage());
+//    }
 
-        String sql = "INSERT INTO transaction_history (username, stockID, transactionType, quantity, price, transactionDate) VALUES (?, ?, ?, ?, ?, ?)";
-        SQLiteStatement stmt = db.compileStatement(sql);
-        stmt.bindString(1, username);
-        stmt.bindLong(2, stockID);
-        stmt.bindString(3, transactionType);
-        stmt.bindLong(4, quantity);
-        stmt.bindDouble(5, price.doubleValue());
-        stmt.bindString(6, timestamp);
-        stmt.executeInsert();
-
-        Log.d("DB_LOG", "Transaction recorded. Username=" + username + ", Stock=" + stockID + ", Type=" + transactionType);
-    }
-
-    public List<Transaction> getTransactionHistory(String username) {
-        List<Transaction> transactions = new ArrayList<>();
-
-        String query = "SELECT * FROM transaction_history WHERE username = ? ORDER BY transactionDate DESC";
-
-        Cursor cursor = db.rawQuery(query, new String[]{username});
-        while (cursor.moveToNext()) {
-            long transactionID = cursor.getLong(cursor.getColumnIndexOrThrow("transactionID"));
-            long stockID = cursor.getLong(cursor.getColumnIndexOrThrow("stockID"));
-            String type = cursor.getString(cursor.getColumnIndexOrThrow("transactionType"));
-            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
-            BigDecimal price = BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow("price")));
-            String transactionDate = cursor.getString(cursor.getColumnIndexOrThrow("transactionDate"));
-
-            Transaction tx = new Transaction(transactionID, username, stockID, type, quantity, price, transactionDate);
-            transactions.add(tx);
-        }
-
-        cursor.close();
-        Log.d("DB_LOG", "Retrieved " + transactions.size() + " transactions for user " + username);
-        return transactions;
-    }
+//    public List<Transaction> getTransactionHistory(String username) {
+//        List<Transaction> transactions = new ArrayList<>();
+//
+//        String query = "SELECT * FROM transaction_history WHERE username = ? ORDER BY transactionDate DESC";
+//
+//        Cursor cursor = db.rawQuery(query, new String[]{username});
+//        while (cursor.moveToNext()) {
+//            long transactionID = cursor.getLong(cursor.getColumnIndexOrThrow("transactionID"));
+//            long stockID = cursor.getLong(cursor.getColumnIndexOrThrow("stockID"));
+//            String type = cursor.getString(cursor.getColumnIndexOrThrow("transactionType"));
+//            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+//            BigDecimal price = BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow("price")));
+//            String transactionDate = cursor.getString(cursor.getColumnIndexOrThrow("transactionDate"));
+//
+//            Transaction tx = new Transaction(transactionID, username, stockID, type, quantity, price, transactionDate);
+//            transactions.add(tx);
+//        }
+//
+//        cursor.close();
+//        Log.d("DB_LOG", "Retrieved " + transactions.size() + " transactions for user " + username);
+//        return transactions;
+//    }
 }

@@ -87,6 +87,7 @@ public class SellDialogFragment extends DialogFragment {
 
                 if (success) {
                     Toast.makeText(getContext(), "Sold!", Toast.LENGTH_SHORT).show();
+                    //insertTransaction(username, stockID, "SELL", quantityToSell, new BigDecimal(price));
                     dismiss();
                 } else {
                     Toast.makeText(getContext(), "Failed to sell: Not enough shares", Toast.LENGTH_SHORT).show();
