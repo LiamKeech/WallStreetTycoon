@@ -70,4 +70,10 @@ public class Board {
     public void addSelectedCell(Cell cell){
         selectedCells.add(cell);
     }
+
+    public void setSelectedCellsFound(){
+        for(Cell cell: selectedCells){
+            cell.setFound();
+        }
+    }
 }

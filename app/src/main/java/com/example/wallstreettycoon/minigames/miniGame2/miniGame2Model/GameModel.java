@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameModel {
+    //TODO make current word just the selected words concatonated
     private GameObserver observer;
     private String[] moneyWords = {"DOUGH", "STACKS", "CHEESE", "PAPER", "MOOLAH", "BANKROLL", "POCKETCHANGE"};
     private String[] stockWords = {"BULL", "BEAR", "MARGIN", "SHORT", "LONG", "STOCK", "BOND", "FUND", "INDEX", "BROKER", "TICKER", "IPO", "OPTION", "DIVIDEND", "FUTURE", "TRADER", "EQUITY", "YIELD", "SWAP", "HEDGE"};
@@ -17,16 +18,17 @@ public class GameModel {
     private Board board;
     private String currentWord = "";
 
-    //TODO select and deselect cells as needed
     public GameModel(){
         this.board = new Board();
         wordsFound = new ArrayList<>();
     }
 
     public void selectCell(int[] coordinate) {
-        addLetterToCurrentWord(coordinate);
         board.getCell(coordinate).setSelected();
         board.addSelectedCell(board.getCell(coordinate));
+        addLetterToCurrentWord(coordinate);
+
+
     }
 
     public void deselectCell(int[] coordinate){
@@ -45,11 +47,15 @@ public class GameModel {
     }
     public void removeLetterFromCurrentWord(int[] coordinate){
         //should only remove if the coordinate is the last selected thing
+
     }
 
     public void checkIfWordCompleted(){
         if (arrayContains(currentWord, moneyWords)) {
+            wordsFound.add(currentWord);
+            board.setSelectedCellsFound();
             observer.onGameEvent(new GameEvent(GameEventType.WORD_FOUND, currentWord));
+
             currentWord = "";
         }
     }
@@ -68,5 +74,7 @@ public class GameModel {
     public List<Cell> getSelectedCells(){
         return board.getSelectedCells();
     }
+
+    public Board getBoard(){return board;}
 
 }

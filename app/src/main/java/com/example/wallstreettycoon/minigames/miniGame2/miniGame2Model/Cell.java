@@ -32,4 +32,7 @@ public class Cell {
     public boolean getSelected(){
         return selected;
     }
+
+    public boolean isFound(){return found;}
+    public void setFound(){found = true;}
 }

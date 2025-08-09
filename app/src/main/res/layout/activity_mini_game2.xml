@@ -67,8 +67,9 @@
             android:id="@+id/grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="0dp"
-            android:useDefaultMargins="false"
-            />
+            android:orientation="horizontal"
+            android:useDefaultMargins="true"
+            android:alignmentMode="alignMargins"
+            android:padding="4dp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

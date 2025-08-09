@@ -21,15 +21,20 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.wallstreettycoon.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.Board;
+import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.Cell;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameEvent;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameModel;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameObserver;
+import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.SquareButton;
+
+import java.util.List;
 
 public class miniGame2 extends AppCompatActivity implements GameObserver {
     private GameModel gameModel;
     private Board board;
     private GridLayout grid;
     private LinearLayout wordListLL;
+    private Integer cellSize;
 
     private Context context;
     @Override
@@ -58,59 +63,66 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     }
 
     public void drawGrid(){
-        board = new Board();
+        grid.removeAllViews();
+        board = gameModel.getBoard();
+        int rows = board.getNumRows();
+        int cols = board.getNumCols();
 
-        grid.setRowCount(board.getNumRows());
-        grid.setColumnCount(board.getNumCols());
+        grid.setRowCount(rows);
+        grid.setColumnCount(cols);
 
-        grid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                grid.getViewTreeObserver().removeOnGlobalLayoutListener(this); // remove listener to avoid multiple calls
-
-                int totalWidth = grid.getWidth();
-                int totalHeight = grid.getHeight();
-
-                int margin = 20;
-                int cellSize = Math.min(totalWidth / board.getNumCols(), totalHeight / board.getNumRows());
-                cellSize -= 2 * margin;
-
-                for (int i = 0; i < board.getNumRows(); i++) {
-                    for (int j = 0; j < board.getNumCols(); j++) {
-
-                        Button button = new Button(context);
-                        button.setText(board.getLetter(new int[]{i,j}));
-
-                        button.setBackgroundColor(Color.TRANSPARENT);
-                        button.setTextColor(Color.BLACK);
-                        button.setTextSize(20);
-
-                        button.setPadding(0, 0, 0, 0);
-                        button.setMinWidth(0);
-                        button.setMinHeight(0);
-                        button.setMinimumWidth(0);
-                        button.setMinimumHeight(0);
-
-                        int row = i;
-                        int col = j;
-                        button.setOnClickListener(v -> {
-                            button.setBackground(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_selected));
-                            gameModel.selectCell(new int[]{row,col});
-                        });
-
-                        GridLayout.LayoutParams params = new GridLayout.LayoutParams(GridLayout.spec(i), GridLayout.spec(j));
-                        params.width = cellSize;
-                        params.height = cellSize;
-                        params.setMargins(margin, margin, margin, margin);
-
-                        button.setLayoutParams(params);
-
-                        grid.addView(button);
-                    }
+        if (cellSize == null) {
+            grid.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    grid.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int totalWidth = grid.getWidth();
+                    int totalHeight = grid.getHeight();
+                    cellSize = totalHeight / (rows + 1);
+                    populateGrid(rows, cols);
                 }
-            }
-        });
+            });
+        }
+        else{
+            populateGrid(rows, cols);
+        }
+    }
+    public void populateGrid(int rows, int cols){
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                SquareButton button = new SquareButton(context);
+                button.setText(board.getLetter(new int[]{i, j}));
+                button.setBackgroundColor(Color.TRANSPARENT);
+                button.setTextColor(Color.BLACK);
+                button.setTextSize(25);
 
+                if(board.getCell(new int[]{i,j}).isFound()){
+                    button.setBackground(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_found));
+                }
+
+                int row = i;
+                int col = j;
+                button.setOnClickListener(v -> {
+                    if(!board.getCell(new int[]{row, col}).getSelected()){
+                        button.setBackground(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_selected));
+                        gameModel.selectCell(new int[]{row, col});
+                    }
+                    else{
+                        button.setBackground(null);
+                        gameModel.deselectCell(new int[]{row,col});
+                    }
+
+                });
+
+                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+                params.width = cellSize;
+                params.height = cellSize;
+                params.rowSpec = GridLayout.spec(i);
+                params.columnSpec = GridLayout.spec(j);
+
+                grid.addView(button, params);
+            }
+        }
     }
 
     @Override
@@ -124,8 +136,8 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
 
                 Log.d("",(String)gameEvent.getCargo());
 
-                //make cells different color
-
+                //make selected cells different color
+                drawGrid();
                 break;
 
         }
