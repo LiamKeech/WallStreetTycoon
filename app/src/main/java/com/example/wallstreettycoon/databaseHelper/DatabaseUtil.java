@@ -64,6 +64,19 @@ public class DatabaseUtil {
         return null;
     }
 
+    public String getStockSymbol (int stockID) {
+        Cursor cursor = db.rawQuery("SELECT symbol FROM stocks WHERE stockID = ?", new String[]{String.valueOf(stockID)});
+        String symbol = null;
+        if (cursor.moveToFirst()) {
+            do {
+                symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return symbol;
+    }
+
     //getter for stockPriceFunction
     public List<StockPriceFunction> getStockPriceFunctions(){
         List<StockPriceFunction> stockPriceHistories = new ArrayList<>();
@@ -117,15 +130,18 @@ public class DatabaseUtil {
     //buy stock
     public boolean buyStock(String username, int stockID, int quantity, double price) {
         int portfolioID = getPortfolioID(username);
-        double totalCost = quantity * price;
+        BigDecimal totalCost = BigDecimal.valueOf(quantity).multiply(BigDecimal.valueOf(price));
 
         // Calculate balance
         User user = getUser(username);
-        double newBalance = user.getUserBalance() - totalCost;
-        if (newBalance < 0) return false; // insufficient funds
+        BigDecimal newBalance = BigDecimal.valueOf(user.getUserBalance()).subtract(totalCost);
+        if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
+            Log.d("DB_LOG", "Insufficient funds for user: " + username);
+            return false; // Insufficient funds
+        }
 
         ////
-        updateBalance(newBalance, username);
+        updateBalance(newBalance.doubleValue(), username);
         Log.d("DB_LOG", "User " + username + " balance updated to: " + newBalance);
 
         // Check if stock already in portfolio
@@ -169,17 +185,20 @@ public class DatabaseUtil {
             int existingQty = cursor.getInt(0);
             if (quantityToSell > existingQty) {
                 cursor.close();
+                Log.d("DB_LOG", "Insufficient shares for stockID=" + stockID + " for user " + username);
                 return false; // insufficient shares
             }
 
-            int remainingQty = existingQty - quantityToSell;
-            double totalValue = quantityToSell * price;
-
-            // Calculate balance
+            BigDecimal totalValue = BigDecimal.valueOf(quantityToSell).multiply(BigDecimal.valueOf(price));
             User user = getUser(username);
-            updateBalance(user.getUserBalance() + totalValue, username);
-            Log.d("DB_LOG", "User " + username + " balance updated to: " + totalValue);
+            if (user == null) {
+                Log.e("DB_LOG", "User not found: " + username);
+                return false;
+            }
+            updateBalance(user.getUserBalance() + totalValue.doubleValue(), username);
+            Log.d("DB_LOG", "User " + username + " balance updated by: " + totalValue);
 
+            int remainingQty = existingQty - quantityToSell;
             if (remainingQty == 0) { //remove from table if all shares sold
                 SQLiteStatement stmt = db.compileStatement("DELETE FROM portfolioStock WHERE portfolioID = ? AND stockID = ?");
                 stmt.bindLong(1, portfolioID);
