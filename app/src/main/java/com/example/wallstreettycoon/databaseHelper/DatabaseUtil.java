@@ -64,6 +64,19 @@ public class DatabaseUtil {
         return null;
     }
 
+    public String getStockSymbol (int stockID) {
+        Cursor cursor = db.rawQuery("SELECT symbol FROM stocks WHERE stockID = ?", new String[]{String.valueOf(stockID)});
+        String symbol = null;
+        if (cursor.moveToFirst()) {
+            do {
+                symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return symbol;
+    }
+
     //getter for stockPriceFunction
     public List<StockPriceFunction> getStockPriceFunctions(){
         List<StockPriceFunction> stockPriceHistories = new ArrayList<>();
@@ -115,16 +128,20 @@ public class DatabaseUtil {
     }
 
     //buy stock
-    public boolean buyStock(String username, int stockID, int quantity, double pricePerUnit) {
+    public boolean buyStock(String username, int stockID, int quantity, double price) {
         int portfolioID = getPortfolioID(username);
-        double totalCost = quantity * pricePerUnit;
+        BigDecimal totalCost = BigDecimal.valueOf(quantity).multiply(BigDecimal.valueOf(price));
 
         // Calculate balance
         User user = getUser(username);
-        double newBalance = user.getUserBalance() - totalCost;
-        if (newBalance < 0) return false; // insufficient funds
+        BigDecimal newBalance = BigDecimal.valueOf(user.getUserBalance()).subtract(totalCost);
+        if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
+            Log.d("DB_LOG", "Insufficient funds for user: " + username);
+            return false; // Insufficient funds
+        }
 
-        updateBalance(newBalance, username);
+        ////
+        updateBalance(newBalance.doubleValue(), username);
         Log.d("DB_LOG", "User " + username + " balance updated to: " + newBalance);
 
         // Check if stock already in portfolio
@@ -135,33 +152,30 @@ public class DatabaseUtil {
             int updatedQty = existingQty + quantity;
 
             SQLiteStatement stmt = db.compileStatement("UPDATE portfolioStock SET quantity = ?, buyPrice = ?, buyDate = date('now') WHERE portfolioID = ? AND stockID = ?");
-
             stmt.bindLong(1, updatedQty);
-            stmt.bindDouble(2, pricePerUnit);
+            stmt.bindDouble(2, price);
             stmt.bindLong(3, portfolioID);
             stmt.bindLong(4, stockID);
-
             stmt.executeUpdateDelete(); //method is used for updates
             Log.d("DB_LOG", "Updated existing stock: stockID=" + stockID + ", newQty=" + updatedQty + " for user " + username);
         } else {
             SQLiteStatement stmt = db.compileStatement("INSERT INTO portfolioStock (portfolioID, stockID, quantity, buyPrice, buyDate) VALUES (?, ?, ?, ?, date('now'))");
-
             stmt.bindLong(1, portfolioID);
             stmt.bindLong(2, stockID);
             stmt.bindLong(3, quantity);
-            stmt.bindDouble(4, pricePerUnit);
-
+            stmt.bindDouble(4, price);
             stmt.executeInsert();
             Log.d("DB_LOG", "Inserted new stock: stockID=" + stockID + ", qty=" + quantity + " for user " + username);
-        }
-
+            }
         cursor.close();
+
+        insertTransaction(username, stockID, "BUY", quantity, new BigDecimal(price));
         return true;
     }
 
 
     //sell stock
-    public boolean sellStock(String username, int stockID, int quantityToSell, double pricePerUnit) {
+    public boolean sellStock(String username, int stockID, int quantityToSell, double price) {
         int portfolioID = getPortfolioID(username);
 
         // check how many shares user owns
@@ -169,42 +183,40 @@ public class DatabaseUtil {
 
         if (cursor.moveToFirst()) {
             int existingQty = cursor.getInt(0);
-
             if (quantityToSell > existingQty) {
                 cursor.close();
+                Log.d("DB_LOG", "Insufficient shares for stockID=" + stockID + " for user " + username);
                 return false; // insufficient shares
             }
 
-            int remainingQty = existingQty - quantityToSell;
-            double totalValue = quantityToSell * pricePerUnit;
-
-            // Calculate balance
+            BigDecimal totalValue = BigDecimal.valueOf(quantityToSell).multiply(BigDecimal.valueOf(price));
             User user = getUser(username);
-            updateBalance(user.getUserBalance() + totalValue, username);
-            Log.d("DB_LOG", "User " + username + " balance updated to: " + totalValue);
+            if (user == null) {
+                Log.e("DB_LOG", "User not found: " + username);
+                return false;
+            }
+            updateBalance(user.getUserBalance() + totalValue.doubleValue(), username);
+            Log.d("DB_LOG", "User " + username + " balance updated by: " + totalValue);
 
+            int remainingQty = existingQty - quantityToSell;
             if (remainingQty == 0) { //remove from table if all shares sold
                 SQLiteStatement stmt = db.compileStatement("DELETE FROM portfolioStock WHERE portfolioID = ? AND stockID = ?");
-
                 stmt.bindLong(1, portfolioID);
                 stmt.bindLong(2, stockID);
                 stmt.executeUpdateDelete();
-
                 Log.d("DB_LOG", "Stock fully sold: stockID=" + stockID + " removed from portfolio for user " + username);
             } else {
                 SQLiteStatement stmt = db.compileStatement("UPDATE portfolioStock SET quantity = ? WHERE portfolioID = ? AND stockID = ?"); //update quantity with shares
-
                 stmt.bindLong(1, remainingQty);
                 stmt.bindLong(2, portfolioID);
                 stmt.bindLong(3, stockID);
                 stmt.executeUpdateDelete();
-
                 Log.d("DB_LOG", "Stock partially sold: stockID=" + stockID + ", remainingQty=" + remainingQty + " for user " + username);
             }
         }
-
         cursor.close();
 
+        insertTransaction(username, stockID, "SELL", quantityToSell, new BigDecimal(price));
         return true;
     }
 
@@ -319,82 +331,43 @@ public class DatabaseUtil {
     }
 
      //Transaction
-     private void recordTransaction(String username, String stockSymbol, String type, int quantity, BigDecimal pricePerUnit) {
-         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-         String sql = "INSERT INTO transactions (username, stockSymbol, type, quantity, priceAtTrade, timestamp) VALUES (?, ?, ?, ?, ?, ?)";
+    private void insertTransaction(String username, long stockID, String transactionType, int quantity, BigDecimal price) {
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-         SQLiteStatement stmt = db.compileStatement(sql);
-         stmt.bindString(1, username);
-         stmt.bindString(2, stockSymbol);
-         stmt.bindString(3, type);
-         stmt.bindLong(4, quantity);
-         stmt.bindDouble(5, pricePerUnit.doubleValue());
-         stmt.bindString(6, timestamp);
-         stmt.executeInsert();
+        String sql = "INSERT INTO transaction_history (username, stockID, transactionType, quantity, price, transactionDate) VALUES (?, ?, ?, ?, ?, ?)";
+        SQLiteStatement stmt = db.compileStatement(sql);
+        stmt.bindString(1, username);
+        stmt.bindLong(2, stockID);
+        stmt.bindString(3, transactionType);
+        stmt.bindLong(4, quantity);
+        stmt.bindDouble(5, price.doubleValue());
+        stmt.bindString(6, timestamp);
+        stmt.executeInsert();
 
-         Log.d("DB_LOG", "Transaction recorded. Username=" + username + ", Stock=" + stockSymbol + ", Type=" + type);
-     }
+        Log.d("DB_LOG", "Transaction recorded. Username=" + username + ", Stock=" + stockID + ", Type=" + transactionType);
+    }
 
     public List<Transaction> getTransactionHistory(String username) {
-        List<Transaction> history = new ArrayList<>();
+        List<Transaction> transactions = new ArrayList<>();
 
-        String query = "SELECT transactionID, stockSymbol, type, quantity, priceAtTrade, timestamp FROM transactions WHERE username = ? ORDER BY timestamp DESC";
+        String query = "SELECT * FROM transaction_history WHERE username = ? ORDER BY transactionDate DESC";
 
         Cursor cursor = db.rawQuery(query, new String[]{username});
         while (cursor.moveToNext()) {
             long transactionID = cursor.getLong(cursor.getColumnIndexOrThrow("transactionID"));
-            String stockSymbol = cursor.getString(cursor.getColumnIndexOrThrow("stockSymbol"));
-            String type = cursor.getString(cursor.getColumnIndexOrThrow("type"));
+            long stockID = cursor.getLong(cursor.getColumnIndexOrThrow("stockID"));
+            String type = cursor.getString(cursor.getColumnIndexOrThrow("transactionType"));
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
-            BigDecimal priceAtTrade = BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow("priceAtTrade")));
-            String timestampStr = cursor.getString(cursor.getColumnIndexOrThrow("timestamp"));
-            long timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).parse(timestampStr, new java.text.ParsePosition(0)).getTime();
+            BigDecimal price = BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow("price")));
+            String transactionDate = cursor.getString(cursor.getColumnIndexOrThrow("transactionDate"));
 
-            Transaction tx = new Transaction(transactionID, username, stockSymbol, type, quantity, priceAtTrade, timestamp);
-            history.add(tx);
+            Transaction tx = new Transaction(transactionID, username, stockID, type, quantity, price, transactionDate);
+            transactions.add(tx);
         }
+
         cursor.close();
-        Log.d("DB_LOG", "Retrieved " + history.size() + " transactions for user " + username);
-        return history;
-    }
-
-
-    public void processTransaction(Transaction tx) {
-        int currentQty = getQuantity(tx.getUsername(), tx.getStockSymbol());
-        int changeInQty = tx.getType().equalsIgnoreCase("BUY")
-                ? tx.getQuantity()
-                : -tx.getQuantity();
-        int newQty = currentQty + changeInQty;
-
-        if (newQty <= 0) {
-            // remove if zero or negative
-            db.delete("portfolioStock", "username = ? AND stockSymbol = ?",
-                    new String[]{ tx.getUsername(), tx.getStockSymbol() });
-        } else {
-            if (currentQty == 0) { // update
-                SQLiteStatement ins = db.compileStatement("INSERT INTO portfolioStock (username, stockSymbol, quantity) VALUES (?, ?, ?);");
-                ins.bindString(1, tx.getUsername());
-                ins.bindString(2, tx.getStockSymbol());
-                ins.bindLong(3, newQty);
-                ins.executeInsert();
-            } else { // insert
-                SQLiteStatement upd = db.compileStatement("UPDATE portfolioStock SET quantity = ? WHERE username = ? AND stockSymbol = ?;");
-                upd.bindLong(1, newQty);
-                upd.bindString(2, tx.getUsername());
-                upd.bindString(3, tx.getStockSymbol());
-                upd.executeUpdateDelete();
-            }
-        }
-    }
-
-    private int getQuantity(String username, String symbol) {
-        Cursor c = db.rawQuery("SELECT quantity FROM portfolioStock WHERE username = ? AND stockSymbol = ?;", new String[]{ username, symbol });
-        int qty = 0;
-        if (c.moveToFirst()) {
-            qty = c.getInt(c.getColumnIndexOrThrow("quantity"));
-        }
-        c.close();
-        return qty;
+        Log.d("DB_LOG", "Retrieved " + transactions.size() + " transactions for user " + username);
+        return transactions;
     }
 }
