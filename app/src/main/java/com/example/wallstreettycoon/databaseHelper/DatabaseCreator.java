@@ -159,16 +159,16 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
         // Transactions table
         db.execSQL(
-                "CREATE TABLE IF NOT EXISTS transactions (" +
+                "CREATE TABLE IF NOT EXISTS transaction_history (" +
                         "transactionID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "username TEXT, " +
-                        "stockSymbol TEXT, " +
-                        "type TEXT, " +
-                        "quantity INTEGER, " +
-                        "priceAtTrade REAL, " +
-                        "timestamp TEXT, " +
-                        "FOREIGN KEY (username) REFERENCES users(username), " +
-                        "FOREIGN KEY (stockSymbol) REFERENCES stocks(symbol))"
+                        "username TEXT NOT NULL, " +
+                        "stockID INTEGER NOT NULL, " +
+                        "transactionType TEXT NOT NULL CHECK(transactionType IN ('BUY', 'SELL')), " +
+                        "quantity INTEGER NOT NULL, " +
+                        "price REAL NOT NULL, " +
+                        "transactionDate TEXT NOT NULL, " +
+                        "FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE, " +
+                        "FOREIGN KEY (stockID) REFERENCES stocks(stockID) ON DELETE CASCADE)"
         );
     }
 

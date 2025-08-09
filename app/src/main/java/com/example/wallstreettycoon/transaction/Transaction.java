@@ -3,31 +3,30 @@ package com.example.wallstreettycoon.transaction;
 import java.math.BigDecimal;
 
 public class Transaction {
-    private long transactionId;
+    private long transactionID;
     private String username;
-    private String stockSymbol;
-    private String type;          // buy or sell
+    private long stockID;
+    private String transactionType; //BUY or SELL
     private int quantity;
-    private BigDecimal priceAtTrade;
-    private long timestamp;
+    private BigDecimal price;
+    private String transactionDate;
 
-    public Transaction(long transactionId, String username, String stockSymbol,
-                       String type, int quantity, BigDecimal priceAtTrade, long timestamp) {
-        this.transactionId = transactionId;
+    public Transaction(long transactionID, String username, long stockID, String transactionType, int quantity, BigDecimal price, String transactionDate) {
+        this.transactionID = transactionID;
         this.username = username;
-        this.stockSymbol = stockSymbol;
-        this.type = type;
+        this.stockID = stockID;
+        this.transactionType = transactionType;
         this.quantity = quantity;
-        this.priceAtTrade = priceAtTrade;
-        this.timestamp = timestamp;
+        this.price = price;
+        this.transactionDate = transactionDate;
     }
 
-    public long getTransactionId() {
-        return transactionId;
+    public long getTransactionID() {
+        return transactionID;
     }
 
-    public void setTransactionId(long transactionId) {
-        this.transactionId = transactionId;
+    public void setTransactionID(long transactionID) {
+        this.transactionID = transactionID;
     }
 
     public String getUsername() {
@@ -38,20 +37,20 @@ public class Transaction {
         this.username = username;
     }
 
-    public String getStockSymbol() {
-        return stockSymbol;
+    public long getStockID() {
+        return stockID;
     }
 
-    public void setStockSymbol(String stockSymbol) {
-        this.stockSymbol = stockSymbol;
+    public void setStockID(long stockID) {
+        this.stockID = stockID;
     }
 
-    public String getType() {
-        return type;
+    public String getTransactionType() {
+        return transactionType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 
     public int getQuantity() {
@@ -62,19 +61,19 @@ public class Transaction {
         this.quantity = quantity;
     }
 
-    public BigDecimal getPriceAtTrade() {
-        return priceAtTrade;
+    public BigDecimal getPrice() {
+        return price;
     }
 
-    public void setPriceAtTrade(BigDecimal priceAtTrade) {
-        this.priceAtTrade = priceAtTrade;
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
-    public long getTimestamp() {
-        return timestamp;
+    public String getTransactionDate() {
+        return transactionDate;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    public void setTransactionDate(String transactionDate) {
+        this.transactionDate = transactionDate;
     }
 }
