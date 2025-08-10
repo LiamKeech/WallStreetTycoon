@@ -6,6 +6,7 @@ import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.GridLayout;
@@ -86,11 +87,13 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                     int totalHeight = grid.getHeight();
                     cellSize = totalHeight / (rows + 1);
                     populateGrid(rows, cols);
+                    drawConnections();
                 }
             });
         }
         else{
             populateGrid(rows, cols);
+            drawConnections();
         }
     }
     public void populateGrid(int rows, int cols){
@@ -129,9 +132,6 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
 
                 });
 
-//                int padding = 20;
-//                button.setPadding(padding, padding, padding, padding);
-
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
                 params.width = cellSize;
                 params.height = cellSize;
@@ -141,6 +141,21 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 grid.addView(button, params);
             }
         }
+    }
+
+    public void drawConnections(){
+        //draw the currently selected cells connections
+        ArrayList<Cell> selectedCells = (ArrayList<Cell>) gameModel.getSelectedCells();
+        for(int i = 0; i < selectedCells.size() - 1; i++){
+            Cell fromCell = selectedCells.get(i);
+            Cell toCell = selectedCells.get(i+1);
+
+            View fromButton = grid.getChildAt(fromCell.getCoordinate()[0] * fromCell.getCoordinate()[1]);
+            View toButton = grid.getChildAt(toCell.getCoordinate()[0] * toCell.getCoordinate()[1]);
+        }
+
+
+        //draw found words connections
     }
 
     @Override
