@@ -21,7 +21,7 @@ import java.util.List;
 
 public class ConnectionOverlay extends View {
     private Paint paint;
-    private List<Pair<View, View>> connections = new ArrayList<>();
+    private List<Pair<View, View>> connections = new ArrayList<>(); //all the pairs that need connecting
 
     public ConnectionOverlay(Context context, int color) {
         super(context);
@@ -33,7 +33,7 @@ public class ConnectionOverlay extends View {
 
     public void connect(View start, View end) {
         connections.add(new Pair<>(start, end));
-        invalidate(); // redraw
+        invalidate(); //redraw the connection
     }
 
     @Override
@@ -42,8 +42,6 @@ public class ConnectionOverlay extends View {
         for (Pair<View, View> pair : connections) {
             View v1 = pair.first;
             View v2 = pair.second;
-
-            if (v1.getVisibility() != VISIBLE || v2.getVisibility() != VISIBLE) continue;
 
             float x1 = v1.getX() + v1.getWidth() / 2f;
             float y1 = v1.getY() + v1.getHeight() / 2f;

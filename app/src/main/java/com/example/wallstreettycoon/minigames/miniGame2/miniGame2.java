@@ -42,6 +42,7 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     InsetDrawable insetDrawableButtonFound, insetDrawableButtonSelected;
 
     //TODO check for game over
+    //TODO add hint button
 
     private Context context;
     @Override
@@ -63,7 +64,7 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
         container = findViewById(R.id.gridContainer);
         //end region
 
-        int inset = 25;
+        int inset = 15;
         insetDrawableButtonFound = new InsetDrawable(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_found), inset, inset, inset, inset);
         insetDrawableButtonSelected = new InsetDrawable(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_selected), inset, inset, inset, inset);
 
