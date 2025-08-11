@@ -33,7 +33,7 @@ public class ListStocks extends AppCompatActivity {
     DatabaseUtil dbUtil;
 
     RecyclerView stockRV;
-    TextView lblEmpty;
+    TextView lblEmpty, lblResult;
     TextView viewBalance;
     String userBalance;
     Button btnToggle;
@@ -54,11 +54,10 @@ public class ListStocks extends AppCompatActivity {
 
         stockRV = findViewById(R.id.RVstock);
         lblEmpty = findViewById(R.id.lblEmpty);
+        lblResult = findViewById(R.id.lblResults);
         viewBalance = findViewById(R.id.viewBalance);
         userBalance = "$" + String.valueOf(dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance());
         viewBalance.setText(userBalance);
-
-
 
         btnToggle = findViewById(R.id.btnToggleList);
         btnToggle.setText("M");
@@ -93,7 +92,10 @@ public class ListStocks extends AppCompatActivity {
                         stockRV.setVisibility(View.GONE);
                     } else {
                         //display the filtered stock in the recyclerview:
-                        StockAdapter stockAdapter = new StockAdapter(this, filteredStock);
+                        //StockAdapter stockAdapter = new StockAdapter(this, filteredStock);
+                        lblResult.setText("Showing results for: " + filter);
+                        lblResult.setVisibility(View.VISIBLE);
+                        stockAdapter.updateList(filteredStock);
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                         stockRV.setLayoutManager(linearLayoutManager);
                         stockRV.setAdapter(stockAdapter);
@@ -143,10 +145,13 @@ public class ListStocks extends AppCompatActivity {
         }
         btnToggle.setText("P");
     }
+
+    List<Stock> allStockList = dbUtil.getStockList();
+    StockAdapter stockAdapter = new StockAdapter(this, allStockList);
     public void displayAllStocks(){
         lblEmpty.setVisibility(View.GONE);
-        List<Stock> allStockList = dbUtil.getStockList();
-        StockAdapter stockAdapter = new StockAdapter(this, allStockList);
+        //List<Stock> allStockList = dbUtil.getStockList();
+        //StockAdapter stockAdapter = new StockAdapter(this, allStockList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         stockRV.setLayoutManager(linearLayoutManager);
         stockRV.setAdapter(stockAdapter);

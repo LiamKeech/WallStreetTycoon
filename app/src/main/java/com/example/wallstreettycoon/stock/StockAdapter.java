@@ -28,6 +28,11 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         this.dbUtil = new DatabaseUtil(context);
     }
 
+    public void updateList(List<Stock> list)
+    {
+        this.stockArrayList = list;
+    }
+
     @NonNull
     @Override
     public StockAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
