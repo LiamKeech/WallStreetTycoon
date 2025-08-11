@@ -41,6 +41,7 @@ public class GameModel {
                 board.addSelectedCell(board.getCell(coordinate));
             }
         }
+
     }
 
     public void deselectCell(int[] coordinate){
@@ -65,6 +66,7 @@ public class GameModel {
             board.setSelectedCellsFound();
             observer.onGameEvent(new GameEvent(GameEventType.WORD_FOUND, getWordsFoundStrings()));
             board.clearSelectedCells();
+            checkWinCondition();
         }
     }
 
@@ -108,6 +110,12 @@ public class GameModel {
             cw = cw + cell.getLetter();
         }
         return cw;
+    }
+
+    public void checkWinCondition(){
+        if(wordsFound.size() == 7){
+            observer.onGameEvent(new GameEvent(GameEventType.GAME_OVER, getWordsFoundStrings()));
+        }
     }
 
 }

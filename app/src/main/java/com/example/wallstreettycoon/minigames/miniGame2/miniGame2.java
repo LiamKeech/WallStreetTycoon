@@ -1,6 +1,7 @@
 package com.example.wallstreettycoon.minigames.miniGame2;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.Board;
@@ -188,6 +190,11 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 break;
             case ILLEGAL_CLICK:
                 drawGrid();
+                break;
+            case GAME_OVER:
+                Intent intent = new Intent(this, miniGame2EndDialogFragment.class);
+                DialogFragment endDialogFragment = new miniGame2EndDialogFragment();
+                endDialogFragment.show(getSupportFragmentManager(), "miniGame1End");
                 break;
         }
     }

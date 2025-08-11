@@ -40,9 +40,6 @@ public class miniGame1 extends AppCompatActivity {
     Float profit = 0f;
     private Handler handler = new Handler(Looper.getMainLooper());
 
-    //TODO make end screen come at right time
-    //TODO make home button work
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
