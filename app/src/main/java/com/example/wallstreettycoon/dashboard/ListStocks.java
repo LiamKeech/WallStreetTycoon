@@ -1,7 +1,9 @@
 package com.example.wallstreettycoon.dashboard;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,6 +23,7 @@ import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.portfolio.PortfolioStockAdapter;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockAdapter;
+import com.example.wallstreettycoon.useraccount.ChangePassswordDialogFragment;
 
 import java.util.List;
 
@@ -42,6 +45,7 @@ public class ListStocks extends AppCompatActivity {
         DatabaseUtil dbUtil = new DatabaseUtil(context);
 
         RecyclerView stockRV = findViewById(R.id.RVstock);
+        TextView lblEmpty = findViewById(R.id.lblEmpty);
         TextView viewBalance = findViewById(R.id.viewBalance);
         String userBalance = "$" + String.valueOf(dbUtil.getUser("admin").getUserBalance());
         viewBalance.setText(userBalance);
@@ -59,9 +63,14 @@ public class ListStocks extends AppCompatActivity {
             else if (btnToggle.getText().toString().equals("M")) { //Portfolio
                 List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
                 if (portfolioStock.isEmpty()) {
-                    Toast.makeText(v.getContext(), "No stocks in portfolio", Toast.LENGTH_SHORT).show();
+                    lblEmpty.setText("No stocks in Portfolio");
+                    lblEmpty.setVisibility(View.VISIBLE);
+                    stockRV.setVisibility(View.GONE);
+                    //Toast.makeText(v.getContext(), "No stocks in portfolio", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    stockRV.setVisibility(View.VISIBLE);
+                    lblEmpty.setVisibility(View.GONE);
                     PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, portfolioStock);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     stockRV.setLayoutManager(linearLayoutManager);
@@ -71,19 +80,51 @@ public class ListStocks extends AppCompatActivity {
             }
         });
 
-        /*// Here, we have created new array list and added data to it
-        List<Stock> allStockList = dbUtil.getStockList();
-        List<Stock> portfolioStock = dbUtil.getPortfolio();
+        Button btnSearch = findViewById(R.id.btnSearchDashboard);
+        btnSearch.setOnClickListener(v -> {
+            FilterStocksDialogFragment searchDialog = new FilterStocksDialogFragment();
+            searchDialog.show(getSupportFragmentManager(), "SearchDialog");
+            Intent intent = getIntent();
+            String filter = intent.getStringExtra("filter");
+            String searchCriteria = intent.getStringExtra("search");
 
-        // we are initializing our adapter class and passing our arraylist to it.
-        StockAdapter courseAdapter = new StockAdapter(this, allStockList);
+            if (!filter.isEmpty())
+            {
+                if (btnToggle.getText().toString() == "M") {    //market stock filter
+                    List<Stock> filteredStock = dbUtil.getFilteredStock(filter);
+                    if (filteredStock.isEmpty())
+                    {
+                        lblEmpty.setText("No results");
+                        lblEmpty.setVisibility(View.VISIBLE);
+                        stockRV.setVisibility(View.GONE);
+                    } else {
+                        //display the filtered stock in the recyclerview:
+                        StockAdapter stockAdapter = new StockAdapter(this, filteredStock);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                        stockRV.setLayoutManager(linearLayoutManager);
+                        stockRV.setAdapter(stockAdapter);
+                    }
+                }
+            }
 
-        // below line is for setting a layout manager for our recycler view.
-        // here we are creating vertical list so we will provide orientation as vertical
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-
-        // in below two lines we are setting layoutmanager and adapter to our recycler view.
-        stockRV.setLayoutManager(linearLayoutManager);
-        stockRV.setAdapter(courseAdapter);*/
+            if (!searchCriteria.isEmpty())
+            {
+                if (btnToggle.getText().toString() == "M") {    //market stock search
+                    List<Stock> searchedStock = dbUtil.searchStocks(searchCriteria);
+                    if (searchedStock.isEmpty())
+                    {
+                        lblEmpty.setText("No results");
+                        lblEmpty.setVisibility(View.VISIBLE);
+                        stockRV.setVisibility(View.GONE);
+                    } else {
+                        //display the requested stock in the recyclerview:
+                        StockAdapter stockAdapter = new StockAdapter(this, searchedStock);
+                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                        stockRV.setLayoutManager(linearLayoutManager);
+                        stockRV.setAdapter(stockAdapter);
+                    }
+                }
+            }
+        });
     }
 }

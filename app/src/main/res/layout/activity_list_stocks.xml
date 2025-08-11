@@ -8,6 +8,17 @@
     android:background="@color/LightGrey"
     tools:context=".dashboard.ListStocks">
 
+    <TextView
+        android:id="@+id/lblEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.288" />
+
     <Button
         android:id="@+id/btnSearchDashboard"
         android:layout_width="125dp"
@@ -47,7 +58,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSearchDashboard" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSearchDashboard"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/btnToggleList"

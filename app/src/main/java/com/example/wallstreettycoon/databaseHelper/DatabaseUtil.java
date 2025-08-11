@@ -6,6 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
@@ -18,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,6 +57,54 @@ public class DatabaseUtil {
         cursor.close();
 
         return stockList;
+    }
+
+    public List<Stock> getFilteredStock(String filterCategory) {
+        List<Stock> filteredList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM stocks WHERE category = ?",
+                new String[]{filterCategory}
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
+                filteredList.add(stock);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return filteredList;
+    }
+
+    public List<Stock> searchStocks(String query)
+    {
+        List<Stock> results = new ArrayList<>();
+        Cursor cursor = db.rawQuery("SELECT * FROM stocks WHERE stockName LIKE ? COLLATE NOCASE", new String[]{"%"+query+"%"});
+
+        if(cursor.moveToFirst()) {
+            do {
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
+                results.add(stock);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return results;
     }
 
     public Stock getStock(Integer stockID){
