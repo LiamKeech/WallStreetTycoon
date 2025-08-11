@@ -16,7 +16,7 @@
         android:padding="16dp"
         android:gravity="center_vertical">
 
-        <!-- Stock symbol (in a circle) -->
+        <!-- Stock symbol (in a circle, thx Gareth) -->
         <TextView
             android:id="@+id/lblStockSymbol_portfolioCard"
             android:layout_width="48dp"
