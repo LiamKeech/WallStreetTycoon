@@ -286,6 +286,12 @@ public class DatabaseUtil {
         stmt.bindString(4, password);
         stmt.bindDouble(5, balance);
         stmt.executeInsert();
+
+        //create portfolio for user
+        String sql2 = "INSERT INTO portfolios (username) VALUES (?)";
+        SQLiteStatement stmt2 = db.compileStatement(sql2);
+        stmt2.bindString(1, username);
+        stmt2.executeInsert();
     }
 
     public User getUser(String username){

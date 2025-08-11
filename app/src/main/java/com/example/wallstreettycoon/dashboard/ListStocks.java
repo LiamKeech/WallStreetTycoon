@@ -3,6 +3,7 @@ package com.example.wallstreettycoon.dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -57,7 +58,13 @@ public class ListStocks extends AppCompatActivity {
         userBalance = "$" + String.valueOf(dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance());
         viewBalance.setText(userBalance);
 
+
+
         btnToggle = findViewById(R.id.btnToggleList);
+        btnToggle.setText("M");
+
+        displayAllStocks();
+
         btnToggle.setOnClickListener(v -> {
             if (btnToggle.getText().toString().equals("P")) { //Market
                 displayAllStocks();
@@ -116,6 +123,9 @@ public class ListStocks extends AppCompatActivity {
     }
     public void displayPortfolioStocks(){
         List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+        for(PortfolioStock stock : portfolioStock){
+            Log.d("", stock.getStockID().toString());
+        }
         if (portfolioStock.isEmpty()) {
             lblEmpty.setText("No stocks in Portfolio");
             lblEmpty.setVisibility(View.VISIBLE);

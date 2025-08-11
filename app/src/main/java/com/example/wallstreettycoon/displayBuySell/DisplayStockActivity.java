@@ -43,7 +43,7 @@ public class DisplayStockActivity extends AppCompatActivity {
 
         Intent intentFromList = getIntent();
         int stockID = intentFromList.getIntExtra("stock_id", -1); // Use -1 as default
-        currentUsername = intentFromList.getStringExtra("username");
+        currentUsername = Game.currentUser.getUserUsername();
 
         if (stockID == -1) {
             Log.e("DisplayStock", "No stock ID provided in intent");

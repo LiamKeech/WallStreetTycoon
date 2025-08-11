@@ -17,6 +17,7 @@ public class User { //Data model
         this.userLastName = userLastName;
         this.userFirstName = userFirstName;
         this.userBalance = userBalance;
+
     }
 
     public String getUserFirstName() {
