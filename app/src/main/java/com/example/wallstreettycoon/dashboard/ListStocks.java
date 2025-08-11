@@ -29,6 +29,13 @@ import java.util.List;
 
 public class ListStocks extends AppCompatActivity {
     Context context = this;
+    DatabaseUtil dbUtil;
+
+    RecyclerView stockRV;
+    TextView lblEmpty;
+    TextView viewBalance;
+    String userBalance;
+    Button btnToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,44 +49,21 @@ public class ListStocks extends AppCompatActivity {
             return insets;
         });
 
-        DatabaseUtil dbUtil = new DatabaseUtil(context);
+        dbUtil = new DatabaseUtil(context);
 
-        RecyclerView stockRV = findViewById(R.id.RVstock);
-        TextView lblEmpty = findViewById(R.id.lblEmpty);
-        TextView viewBalance = findViewById(R.id.viewBalance);
-        String userBalance = "$" + String.valueOf(dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance());
+        stockRV = findViewById(R.id.RVstock);
+        lblEmpty = findViewById(R.id.lblEmpty);
+        viewBalance = findViewById(R.id.viewBalance);
+        userBalance = "$" + String.valueOf(dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance());
         viewBalance.setText(userBalance);
 
-        Button btnToggle = findViewById(R.id.btnToggleList);
+        btnToggle = findViewById(R.id.btnToggleList);
         btnToggle.setOnClickListener(v -> {
             if (btnToggle.getText().toString().equals("P")) { //Market
-                lblEmpty.setVisibility(View.GONE);
-                List<Stock> allStockList = dbUtil.getStockList();
-                StockAdapter stockAdapter = new StockAdapter(this, allStockList);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                stockRV.setLayoutManager(linearLayoutManager);
-                stockRV.setAdapter(stockAdapter);
-                stockRV.setVisibility(View.VISIBLE);
-                btnToggle.setText("M");
+                displayAllStocks();
             }
             else if (btnToggle.getText().toString().equals("M")) { //Portfolio
-                List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
-                if (portfolioStock.isEmpty()) {
-                    lblEmpty.setText("No stocks in Portfolio");
-                    lblEmpty.setVisibility(View.VISIBLE);
-                    stockRV.setVisibility(View.GONE);
-                    //Toast.makeText(v.getContext(), "No stocks in portfolio", Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    stockRV.setVisibility(View.VISIBLE);
-                    lblEmpty.setVisibility(View.GONE);
-                    PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, portfolioStock);
-                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-                    stockRV.setLayoutManager(linearLayoutManager);
-                    stockRV.setAdapter(stockAdapter);
-
-                }
-                btnToggle.setText("P");
+                displayPortfolioStocks();
             }
         });
 
@@ -129,5 +113,34 @@ public class ListStocks extends AppCompatActivity {
                 }
             }
         });
+    }
+    public void displayPortfolioStocks(){
+        List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+        if (portfolioStock.isEmpty()) {
+            lblEmpty.setText("No stocks in Portfolio");
+            lblEmpty.setVisibility(View.VISIBLE);
+            stockRV.setVisibility(View.GONE);
+            //Toast.makeText(v.getContext(), "No stocks in portfolio", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            stockRV.setVisibility(View.VISIBLE);
+            lblEmpty.setVisibility(View.GONE);
+            PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, portfolioStock);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+            stockRV.setLayoutManager(linearLayoutManager);
+            stockRV.setAdapter(stockAdapter);
+
+        }
+        btnToggle.setText("P");
+    }
+    public void displayAllStocks(){
+        lblEmpty.setVisibility(View.GONE);
+        List<Stock> allStockList = dbUtil.getStockList();
+        StockAdapter stockAdapter = new StockAdapter(this, allStockList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        stockRV.setLayoutManager(linearLayoutManager);
+        stockRV.setAdapter(stockAdapter);
+        stockRV.setVisibility(View.VISIBLE);
+        btnToggle.setText("M");
     }
 }
