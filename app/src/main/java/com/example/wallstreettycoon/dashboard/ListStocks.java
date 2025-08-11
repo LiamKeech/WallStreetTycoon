@@ -53,11 +53,13 @@ public class ListStocks extends AppCompatActivity {
         Button btnToggle = findViewById(R.id.btnToggleList);
         btnToggle.setOnClickListener(v -> {
             if (btnToggle.getText().toString().equals("P")) { //Market
+                lblEmpty.setVisibility(View.GONE);
                 List<Stock> allStockList = dbUtil.getStockList();
                 StockAdapter stockAdapter = new StockAdapter(this, allStockList);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 stockRV.setLayoutManager(linearLayoutManager);
                 stockRV.setAdapter(stockAdapter);
+                stockRV.setVisibility(View.VISIBLE);
                 btnToggle.setText("M");
             }
             else if (btnToggle.getText().toString().equals("M")) { //Portfolio
@@ -75,8 +77,9 @@ public class ListStocks extends AppCompatActivity {
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     stockRV.setLayoutManager(linearLayoutManager);
                     stockRV.setAdapter(stockAdapter);
-                    btnToggle.setText("P");
+
                 }
+                btnToggle.setText("P");
             }
         });
 
@@ -88,7 +91,7 @@ public class ListStocks extends AppCompatActivity {
             String filter = intent.getStringExtra("filter");
             String searchCriteria = intent.getStringExtra("search");
 
-            if (!filter.isEmpty())
+            if (filter != null)
             {
                 if (btnToggle.getText().toString() == "M") {    //market stock filter
                     List<Stock> filteredStock = dbUtil.getFilteredStock(filter);
@@ -107,11 +110,11 @@ public class ListStocks extends AppCompatActivity {
                 }
             }
 
-            if (!searchCriteria.isEmpty())
+            if (searchCriteria != null)
             {
                 if (btnToggle.getText().toString() == "M") {    //market stock search
                     List<Stock> searchedStock = dbUtil.searchStocks(searchCriteria);
-                    if (searchedStock.isEmpty())
+                    if (searchedStock == null)
                     {
                         lblEmpty.setText("No results");
                         lblEmpty.setVisibility(View.VISIBLE);
