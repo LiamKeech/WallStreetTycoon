@@ -70,8 +70,8 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
         gameModel = new GameModel();
         gameModel.setObserver(this);
 
-        drawWordsList(new ArrayList<>());
         drawGrid();
+        initializeWordsList();
 
     }
 
@@ -192,15 +192,18 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     }
 
     public void drawWordsList(ArrayList<String> words){
-        wordListLL.removeAllViews();
+        //remove view with next number, replace with new view
+        int numberOfWordsFound = words.size();
+
+        wordListLL.removeViewAt(numberOfWordsFound - 1);
+        TextView tv = new TextView(context, null, 0, R.style.text);
+        String text = numberOfWordsFound + ": " + words.getLast();
+        tv.setText(text);
+        wordListLL.addView(tv, numberOfWordsFound - 1);
+    }
+
+    public void initializeWordsList(){
         int i = 1;
-        for(String word: words) {
-            TextView tv = new TextView(context, null, 0, R.style.text);
-            String text = i + ": " + word;
-            tv.setText(text);
-            wordListLL.addView(tv);
-            i++;
-        }
         while(i <= 7){
             TextView tv = new TextView(context, null, 0, R.style.text);
             String text = i + ":______________";
