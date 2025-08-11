@@ -39,8 +39,8 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     FrameLayout container;
     ConnectionOverlay connectionOverlaySelectedCells;
     ConnectionOverlay connectionOverlayWordsFound;
+    InsetDrawable insetDrawableButtonFound, insetDrawableButtonSelected;
 
-    //TODO draw lines between cells when selected
     //TODO check for game over
 
     private Context context;
@@ -60,12 +60,12 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
         //link entities
         grid = findViewById(R.id.grid);
         wordListLL = findViewById(R.id.wordListLL);
-
-
         container = findViewById(R.id.gridContainer);
-
-
         //end region
+
+        int inset = 25;
+        insetDrawableButtonFound = new InsetDrawable(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_found), inset, inset, inset, inset);
+        insetDrawableButtonSelected = new InsetDrawable(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_selected), inset, inset, inset, inset);
 
         gameModel = new GameModel();
         gameModel.setObserver(this);
@@ -116,14 +116,10 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 button.setTextSize(23);
 
                 if(board.getCell(new int[]{i,j}).isFound()){
-                    int inset = 25;
-                    InsetDrawable insetDrawable = new InsetDrawable(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_found), inset, inset, inset, inset);
-                    button.setBackground(insetDrawable);
+                    button.setBackground(insetDrawableButtonFound);
                 }
                 if(board.getCell(new int[]{i,j}).isSelected()) {
-                    int inset = 25;
-                    InsetDrawable insetDrawable = new InsetDrawable(ContextCompat.getDrawable(context, R.drawable.minigame_2_btn_selected), inset, inset, inset, inset);
-                    button.setBackground(insetDrawable);
+                    button.setBackground(insetDrawableButtonSelected);
                 }
                 int row = i;
                 int col = j;
@@ -170,8 +166,6 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     }
 
     public void drawConnection(List<Cell> list, ConnectionOverlay connectionOverlay){
-
-
         for(int i = 0; i < list.size() - 1; i++){
             Cell fromCell = list.get(i);
             Cell toCell = list.get(i+1);
@@ -181,7 +175,6 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
 
             connectionOverlay.connect(fromButton, toButton);
         }
-
     }
 
     @Override
