@@ -42,18 +42,25 @@ public class DisplayStockActivity extends AppCompatActivity {
         dbUtil = new DatabaseUtil(context);
 
         Intent intentFromList = getIntent();
-        //int stockID = intentFromList.getIntExtra("stockID", 1);
-        //currentUsername = intentFromList.getStringExtra("username");
+        int stockID = intentFromList.getIntExtra("stock_id", -1); // Use -1 as default
+        currentUsername = intentFromList.getStringExtra("username");
 
+        if (stockID == -1) {
+            Log.e("DisplayStock", "No stock ID provided in intent");
+            finish();
+            return;
+        }
 
-        int stockID = 1;
-        currentUsername = "admin";
+        if (currentUsername == null) {
+            Log.e("DisplayStock", "No username provided in intent");
+            currentUsername = "admin";
+        }
 
         Log.d("DisplayStock", "Intent received: stockID=" + stockID + ", username=" + currentUsername);
 
         currentStock = dbUtil.getStock(stockID);
         if (currentStock == null) {
-            finish(); //close if stock not found
+            finish(); // Close if stock not found
         }
 
         Log.d("DisplayStock", "Stock loaded: " + currentStock.getStockName());
