@@ -4,11 +4,9 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.InsetDrawable;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -20,10 +18,10 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.wallstreettycoon.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.Board;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.Cell;
+import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.ConnectionOverlay;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameEvent;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameModel;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.GameObserver;
@@ -38,6 +36,9 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     private GridLayout grid;
     private LinearLayout wordListLL;
     private Integer cellSize;
+    FrameLayout container;
+    ConnectionOverlay connectionOverlaySelectedCells;
+    ConnectionOverlay connectionOverlayWordsFound;
 
     //TODO draw lines between cells when selected
     //TODO check for game over
@@ -60,6 +61,10 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
         grid = findViewById(R.id.grid);
         wordListLL = findViewById(R.id.wordListLL);
 
+
+        container = findViewById(R.id.gridContainer);
+
+
         //end region
 
         gameModel = new GameModel();
@@ -72,6 +77,9 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
 
     public void drawGrid(){
         grid.removeAllViews();
+        container.removeView(connectionOverlaySelectedCells);
+        container.removeView(connectionOverlayWordsFound);
+
         board = gameModel.getBoard();
         int rows = board.getNumRows();
         int cols = board.getNumCols();
@@ -87,13 +95,15 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                     int totalHeight = grid.getHeight();
                     cellSize = totalHeight / (rows + 1);
                     populateGrid(rows, cols);
-                    drawConnections();
+
+                    container.bringChildToFront(grid);
                 }
             });
         }
         else{
             populateGrid(rows, cols);
-            drawConnections();
+
+            container.bringChildToFront(grid);
         }
     }
     public void populateGrid(int rows, int cols){
@@ -127,9 +137,6 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                         gameModel.deselectCell(new int[]{row,col});
                         drawGrid();
                     }
-
-                    Log.d("", gameModel.getCurrentWord());
-
                 });
 
                 GridLayout.LayoutParams params = new GridLayout.LayoutParams();
@@ -141,21 +148,40 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 grid.addView(button, params);
             }
         }
+
+        drawSelectedCellsConnections();
+        drawWordsFoundConnections();
+        container.addView(connectionOverlaySelectedCells);
+        container.addView(connectionOverlayWordsFound);
     }
 
-    public void drawConnections(){
-        //draw the currently selected cells connections
+    public void drawSelectedCellsConnections(){
+        connectionOverlaySelectedCells = new ConnectionOverlay(this, R.color.LightBlue);
         ArrayList<Cell> selectedCells = (ArrayList<Cell>) gameModel.getSelectedCells();
-        for(int i = 0; i < selectedCells.size() - 1; i++){
-            Cell fromCell = selectedCells.get(i);
-            Cell toCell = selectedCells.get(i+1);
+        drawConnection(selectedCells, connectionOverlaySelectedCells);
+    }
 
-            View fromButton = grid.getChildAt(fromCell.getCoordinate()[0] * fromCell.getCoordinate()[1]);
-            View toButton = grid.getChildAt(toCell.getCoordinate()[0] * toCell.getCoordinate()[1]);
+    public void drawWordsFoundConnections(){
+        connectionOverlayWordsFound = new ConnectionOverlay(this, R.color.Green);
+        List<List<Cell>> wordsFound = gameModel.getWordsFound();
+        for(List<Cell> list: wordsFound){
+            drawConnection(list, connectionOverlayWordsFound);
+        }
+    }
+
+    public void drawConnection(List<Cell> list, ConnectionOverlay connectionOverlay){
+
+
+        for(int i = 0; i < list.size() - 1; i++){
+            Cell fromCell = list.get(i);
+            Cell toCell = list.get(i+1);
+
+            View fromButton = grid.getChildAt(fromCell.getCoordinate()[0] * 8 + fromCell.getCoordinate()[1]);
+            View toButton = grid.getChildAt(toCell.getCoordinate()[0] * 8 + toCell.getCoordinate()[1]);
+
+            connectionOverlay.connect(fromButton, toButton);
         }
 
-
-        //draw found words connections
     }
 
     @Override

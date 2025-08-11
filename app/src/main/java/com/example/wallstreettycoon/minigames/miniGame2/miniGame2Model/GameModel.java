@@ -14,7 +14,7 @@ public class GameModel {
     private String[] moneyWords = {"DOUGH", "STACKS", "CHEESE", "PAPER", "MOOLAH", "BANKROLL", "POCKETCHANGE"};
     private String[] stockWords = {"BULL", "BEAR", "MARGIN", "SHORT", "LONG", "STOCK", "BOND", "FUND", "INDEX", "BROKER", "TICKER", "IPO", "OPTION", "DIVIDEND", "FUTURE", "TRADER", "EQUITY", "YIELD", "SWAP", "HEDGE"};
 
-    private List<String> wordsFound;
+    private List<List<Cell>> wordsFound;
     private Board board;
 
     public GameModel(){
@@ -61,11 +61,28 @@ public class GameModel {
 
     public void checkIfWordCompleted(){
         if (arrayContains(getCurrentWord(), moneyWords)) {
-            wordsFound.add(getCurrentWord());
+            wordsFound.add(new ArrayList<>(getSelectedCells()));
             board.setSelectedCellsFound();
-            observer.onGameEvent(new GameEvent(GameEventType.WORD_FOUND, wordsFound));
+            observer.onGameEvent(new GameEvent(GameEventType.WORD_FOUND, getWordsFoundStrings()));
             board.clearSelectedCells();
         }
+    }
+
+    public ArrayList<String> getWordsFoundStrings() {
+        ArrayList<String> wordsFoundStrings = new ArrayList<>();
+        for(List<Cell> list: wordsFound){
+            String word = "";
+
+            for(Cell cell: list){
+                word = word + cell.getLetter();
+            }
+            wordsFoundStrings.add(word);
+        }
+        return wordsFoundStrings;
+    }
+
+    public List<List<Cell>> getWordsFound() {
+        return wordsFound;
     }
 
     public boolean arrayContains(String x, String[] array){

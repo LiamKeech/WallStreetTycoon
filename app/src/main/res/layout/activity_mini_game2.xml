@@ -53,7 +53,10 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/gridContainer">
         <GridLayout
             android:id="@+id/grid"
             android:layout_width="match_parent"
@@ -62,5 +65,6 @@
             android:useDefaultMargins="true"
             android:alignmentMode="alignMargins"
             android:padding="4dp" />
+        </FrameLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
