@@ -47,7 +47,7 @@ public class ListStocks extends AppCompatActivity {
         RecyclerView stockRV = findViewById(R.id.RVstock);
         TextView lblEmpty = findViewById(R.id.lblEmpty);
         TextView viewBalance = findViewById(R.id.viewBalance);
-        String userBalance = "$" + String.valueOf(dbUtil.getUser("admin").getUserBalance());
+        String userBalance = "$" + String.valueOf(dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance());
         viewBalance.setText(userBalance);
 
         Button btnToggle = findViewById(R.id.btnToggleList);
