@@ -1,6 +1,7 @@
 package com.example.wallstreettycoon.stock;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.displayBuySell.DisplayStockActivity;
 
 import java.util.List;
 
@@ -48,6 +50,22 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
             e.printStackTrace();
         }
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get stock
+                int pos = holder.getAdapterPosition();
+                Stock clickedStock = stockArrayList.get(pos);
+
+                Intent intent = new Intent(context, DisplayStockActivity.class);
+
+                intent.putExtra("stock_id", clickedStock.getStockID());
+                intent.putExtra("stock_symbol", clickedStock.getSymbol());
+                intent.putExtra("stock_name", clickedStock.getStockName());
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
