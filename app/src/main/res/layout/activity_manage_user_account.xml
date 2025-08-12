@@ -7,36 +7,52 @@
     android:layout_height="match_parent"
     android:background="@color/LightGrey">
 
+<!--    <TextView-->
+<!--        android:id="@+id/stockNameHeader"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:background="@drawable/rounded_button_background"-->
+<!--        android:gravity="center"-->
+<!--        android:padding="12dp"-->
+<!--        android:text="Viewing TechCorp"-->
+<!--        android:textColor="#FFFFFF"-->
+<!--        android:textSize="18sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@id/backButton"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
     <TextView
         android:id="@+id/lblManageHeading"
         android:layout_width="264dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="2dp"
         android:background="@drawable/rounded_textview"
-        android:gravity="center_horizontal|center_vertical"
+        android:gravity="center"
+        android:padding="12dp"
         android:text="Update Account"
         android:textColor="@color/white"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/FieldManage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/FieldManage"
-        android:layout_width="511dp"
-        android:layout_height="310dp"
+        android:layout_width="507dp"
+        android:layout_height="291dp"
         android:background="@drawable/rounded_nav_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.756">
+        app:layout_constraintVertical_bias="0.841">
 
         <TextView
             android:id="@+id/lblNameManage"
