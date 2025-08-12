@@ -1,6 +1,7 @@
 package com.example.wallstreettycoon.portfolio;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.displayBuySell.DisplayStockActivity;
 import com.example.wallstreettycoon.stock.Stock;
 
 import java.math.BigDecimal;
@@ -41,7 +43,7 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
         // to set data to textview and imageview of each card layout
         PortfolioStock Pstock = PstockArrayList.get(position);
         DatabaseUtil dbUtil = new DatabaseUtil(context);
-        Stock stock = dbUtil.getStock(Integer.parseInt(Pstock.getStockID()));
+        Stock stock = dbUtil.getStock(Pstock.getStock().getStockID());
 
         //new version
         holder.lblStockSymbol.setText(stock.getSymbol());
@@ -66,6 +68,23 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
         double totalValueDouble = Pstock.getQuantity() * currentPrice;
         String totalValueStr = String.format("$%.2f", totalValueDouble);
         holder.lblTotalValue_numeric.setText(totalValueStr);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get stock
+                int pos = holder.getAdapterPosition();
+                PortfolioStock clickedStock = PstockArrayList.get(pos);
+
+                Intent intent = new Intent(context, DisplayStockActivity.class);
+
+                intent.putExtra("stock_id", clickedStock.getStock().getStockID());
+                intent.putExtra("stock_symbol", clickedStock.getStock().getSymbol());
+                intent.putExtra("stock_name", clickedStock.getStock().getStockName());
+
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

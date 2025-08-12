@@ -1,21 +1,23 @@
 package com.example.wallstreettycoon.portfolio;
 
-public class PortfolioStock { //Data Model
-    private int portfolioID;       // FK to Portfolio
-    private String stockID;    // FK to Stock
+import com.example.wallstreettycoon.stock.Stock;
+
+public class PortfolioStock {
+    private int portfolioID;  // FK to Portfolio
+    private Stock stock;
     private int quantity;
     private double buyPrice;
     private String buyDate;
 
-    public PortfolioStock(int portfolioID, String stockID, int quantity, double buyPrice, String buyDate) {
+    public PortfolioStock(int portfolioID, Stock stock, int quantity, double buyPrice, String buyDate) {
         this.portfolioID = portfolioID;
-        this.stockID = stockID;
+        this.stock = stock;
         this.quantity = quantity;
         this.buyPrice = buyPrice;
         this.buyDate = buyDate;
     }
 
-
+    // Getters and setters
     public int getPortfolioID() {
         return portfolioID;
     }
@@ -24,12 +26,12 @@ public class PortfolioStock { //Data Model
         this.portfolioID = portfolioID;
     }
 
-    public String getStockID() {
-        return stockID;
+    public Stock getStock() {
+        return stock;
     }
 
-    public void setStockID(String stockID) {
-        this.stockID = stockID;
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 
     public int getQuantity() {
@@ -54,5 +56,10 @@ public class PortfolioStock { //Data Model
 
     public void setBuyDate(String buyDate) {
         this.buyDate = buyDate;
+    }
+
+    @Override
+    public String toString() {
+        return quantity + " shares of " + stock.getStockName() + " bought at " + buyPrice;
     }
 }

@@ -32,7 +32,7 @@ public class SellDialogFragment extends DialogFragment {
         header.setText("Sell " + symbolText);
 
         // Set stock details
-        TextView symbol = view.findViewById(R.id.stockSymbolLabel);
+        TextView symbol = view.findViewById(R.id.stockID);
         symbol.setText(symbolText);
         TextView price = view.findViewById(R.id.currentPrice);
         price.setText(String.format("$%.2f", currentPriceValue));

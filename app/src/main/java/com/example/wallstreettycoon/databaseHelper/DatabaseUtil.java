@@ -354,7 +354,8 @@ public class DatabaseUtil {
     public List<PortfolioStock> getPortfolio(String username) {
         List<PortfolioStock> list = new ArrayList<>();
 
-        String query = "SELECT ps.portfolioID, ps.stockID, ps.quantity, ps.buyPrice, ps.buyDate " +
+        String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
+                "s.stockID, s.stockName, s.symbol, s.category, s.description " +
                 "FROM portfolioStock ps " +
                 "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
                 "JOIN stocks s ON ps.stockID = s.stockID " +
@@ -365,18 +366,20 @@ public class DatabaseUtil {
         while (cursor.moveToNext()) {
             int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
             int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
             double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
             String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
+            // First, create a Stock object
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
 
-            // PortfolioStock(int portfolioID, String stockID, int quantity, double buyPrice, String buyDate)
-            PortfolioStock ps = new PortfolioStock(
-                    portfolioID,
-                    String.valueOf(stockID),
-                    quantity,
-                    buyPrice, buyDate
-            );
+            // Create PortfolioStock
+            PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
 
             list.add(ps);
         }
@@ -384,7 +387,6 @@ public class DatabaseUtil {
         cursor.close();
         return list;
     }
-
      //Transaction
 
 //    private void insertTransaction(String username, long stockID, String transactionType, int quantity, BigDecimal price) {

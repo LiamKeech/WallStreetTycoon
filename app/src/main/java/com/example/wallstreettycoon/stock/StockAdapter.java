@@ -50,7 +50,7 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         holder.stockName.setText(stock.getStockName());
 
         try {
-            holder.stockPrice.setText(String.format("%.2f",dbUtil.getCurrentStockPrice(stock.getStockID(), 1)));
+            holder.stockPrice.setText("$" + String.format("%.2f",dbUtil.getCurrentStockPrice(stock.getStockID(), 1)));
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -87,9 +87,9 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            stockSym = itemView.findViewById(R.id.txtStockSymb);
-            stockName = itemView.findViewById(R.id.txtStockName);
-            stockPrice = itemView.findViewById(R.id.txtStockPrice);
+            stockSym = itemView.findViewById(R.id.lblStockSymbol);
+            stockName = itemView.findViewById(R.id.lblStockName);
+            stockPrice = itemView.findViewById(R.id.lblStockCurrentPrice);
         }
     }
 }

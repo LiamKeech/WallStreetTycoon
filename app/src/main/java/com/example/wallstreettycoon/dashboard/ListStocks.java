@@ -56,11 +56,11 @@ public class ListStocks extends AppCompatActivity {
         lblEmpty = findViewById(R.id.lblEmpty);
         lblResult = findViewById(R.id.lblResults);
         viewBalance = findViewById(R.id.viewBalance);
-        userBalance = "$" + String.valueOf(dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance());
+        userBalance = "$" + dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance();
         viewBalance.setText(userBalance);
 
         btnToggle = findViewById(R.id.btnToggleList);
-        btnToggle.setText("M");
+        //btnToggle.setText("M");
 
         displayAllStocks();
 
@@ -127,7 +127,7 @@ public class ListStocks extends AppCompatActivity {
     public void displayPortfolioStocks(){
         List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
         for(PortfolioStock stock : portfolioStock){
-            Log.d("", stock.getStockID().toString());
+            Log.d("", stock.getStock().getStockID().toString());
         }
         if (portfolioStock.isEmpty()) {
             lblEmpty.setText("No stocks in Portfolio");
