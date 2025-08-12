@@ -15,11 +15,7 @@
         <activity
             android:name=".minigames.miniGame2.miniGame2"
             android:exported="true">
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN" />-->
 
-<!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".minigames.miniGame2.miniGame2Notification"
@@ -29,11 +25,16 @@
         <activity
             android:name=".minigames.miniGame1.miniGame1Notification"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity
             android:name=".minigames.miniGame1.miniGame1"
-            android:exported="false" >
+            android:exported="true" >
 
         </activity>
         <activity

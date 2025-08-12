@@ -2,6 +2,7 @@ package com.example.wallstreettycoon.minigames.miniGame1;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -37,5 +38,7 @@ public class miniGame1Notification extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
     }
 }

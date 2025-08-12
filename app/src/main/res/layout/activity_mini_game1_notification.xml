@@ -10,9 +10,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/FieldLogin"
-        android:layout_width="652dp"
-        android:layout_height="306dp"
-        android:background="@drawable/rounded_nav_view"
+        android:layout_width="513dp"
+        android:layout_height="291dp"
+        android:background="@drawable/rounded_nav_view_light_blue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
@@ -22,7 +22,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/start_button"
-            style="@style/GreenButton"
+            style="@style/OrangeButton"
             android:layout_width="wrap_content"
 
             android:layout_height="wrap_content"
@@ -30,44 +30,43 @@
             android:text="Start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lblInstructions"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintHorizontal_bias="0.878"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.927" />
 
         <TextView
             android:id="@+id/lblInstructions"
-            android:layout_width="310dp"
-            android:layout_height="255dp"
+            android:layout_width="500dp"
+            android:layout_height="282dp"
             android:layout_margin="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="36dp"
             android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/LightBlue"
+            android:backgroundTint="@color/white"
             android:lineSpacingExtra="6dp"
             android:padding="16dp"
             android:text="The Dot-Com Boom is in full swing, and tech companies are exploding in value! To take advantage of this surge, you need to buy shares in promising tech companies when their prices are low, then sell them when the prices rise. Timing is everything—buy low, sell high, and watch your profits grow as you ride the wave of the digital revolution."
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.461"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.4" />
+            app:layout_constraintWidth_percent="0.4"
+            tools:layout_editor_absoluteY="4dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/lblGameTitle"
-        android:layout_width="286dp"
-        android:layout_height="57dp"
-        android:background="@drawable/rounded_textview"
+        style="@style/DarkBlueTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="The Dot-Com Boom"
-        android:textColor="@color/white"
-        android:textSize="30sp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.079" />
+        app:layout_constraintVertical_bias="0.049" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

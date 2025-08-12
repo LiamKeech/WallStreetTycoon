@@ -5,7 +5,7 @@
     <!--  shadow  -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/GreenShadow"/>
+            <solid android:color="@color/DarkBlueShadow"/>
             <corners android:radius="12dp" />
             <padding
                 android:left="2dp"
@@ -20,7 +20,7 @@
     <!--  top highlight  -->
     <item android:top="0dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/GreenHighlight"/>
+            <solid android:color="@color/DarkBlueHighlight"/>
             <corners android:radius="12dp" />
         </shape>
     </item>
@@ -28,20 +28,20 @@
     <!--  main green  -->
     <item android:top="2dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/Green"/>
+            <solid android:color="@color/DarkBlue"/>
             <corners android:radius="12dp" />
             <padding
-                android:bottom="30dp"
+                android:bottom="25dp"
                 android:left="4dp"
                 android:right="4dp"
-                 />
+                />
         </shape>
     </item>
 
     <!--  upper half highlight  -->
     <item android:top="5dp">
         <shape android:shape="rectangle">
-            <solid android:color="@color/GreenHighlight"/>
+            <solid android:color="@color/DarkBlueHighlight"/>
             <corners android:radius="12dp" />
 
         </shape>

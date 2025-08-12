@@ -2,14 +2,22 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
     <color name="DarkBlue">#2321D6</color>
+    <color name="DarkBlueHighlight">#2A26FF</color>
+    <color name="DarkBlueShadow">#151381</color>
+
+
     <color name="LightBlue">#489FF5</color>
 
     <color name="Green">#48C73C</color>
-    <color name="LightGreen">#5BDE52</color>
-    <color name="DarkGreen">#276B21</color>
+    <color name="GreenHighlight">#5BDE52</color>
+    <color name="GreenShadow">#276B21</color>
 
     <color name="Orange">#FF6417</color>
+    <color name="OrangeHighlight">#FF8431</color>
+    <color name="OrangeShadow">#993300</color>
+
     <color name="Red">#E80A00</color>
     <color name="LightGrey">#E1E1E1</color>
 </resources>
