@@ -97,7 +97,7 @@ public class ManageUserAccount extends AppCompatActivity {
 
             //test
             User test = dbUtil.getUser(edtUser.getText().toString());
-            Log.d(test.getUserUsername(), "");
+            Log.d(test.getUserUsername(), "Name update to " + surname);
 
             Intent backToDash = new Intent(ManageUserAccount.this, ListStocks.class);
             startActivity(backToDash);
