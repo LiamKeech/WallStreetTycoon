@@ -7,8 +7,10 @@
     <color name="DarkBlueHighlight">#2A26FF</color>
     <color name="DarkBlueShadow">#151381</color>
 
-
     <color name="LightBlue">#489FF5</color>
+    <color name="LightBlueShadow">#255381</color>
+    <color name="LightBlueHighlight">#91C9FF</color>
+
 
     <color name="Green">#48C73C</color>
     <color name="GreenHighlight">#5BDE52</color>
