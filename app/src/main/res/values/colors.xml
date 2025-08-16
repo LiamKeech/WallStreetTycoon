@@ -19,5 +19,8 @@
     <color name="OrangeShadow">#993300</color>
 
     <color name="Red">#E80A00</color>
+    <color name="RedHighlight">#FF3424</color>
+    <color name="RedShadow">#740600</color>
+
     <color name="LightGrey">#E1E1E1</color>
 </resources>
