@@ -33,8 +33,7 @@
             <padding
                 android:bottom="30dp"
                 android:left="4dp"
-                android:right="4dp"
-                 />
+                android:right="4dp" />
         </shape>
     </item>
 
@@ -43,7 +42,6 @@
         <shape android:shape="rectangle">
             <solid android:color="@color/GreenHighlight"/>
             <corners android:radius="12dp" />
-
         </shape>
     </item>
 
