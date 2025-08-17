@@ -269,6 +269,18 @@ public class DatabaseUtil {
         return true;
     }
 
+    public double getOwnedQuantity(int portfolioID, int stockID) {
+        double qty = 0;
+        Cursor cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?", new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
+
+        if (cursor.moveToFirst()) {
+            qty = cursor.getDouble(cursor.getColumnIndexOrThrow("quantity"));
+        }
+        cursor.close();
+
+        return qty;
+    }
+
     // User related methods
 
     public void setUser(User user){
