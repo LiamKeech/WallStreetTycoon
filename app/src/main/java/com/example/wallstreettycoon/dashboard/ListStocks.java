@@ -36,6 +36,7 @@ public class ListStocks extends AppCompatActivity {
     TextView lblEmpty, lblResult, lblHeadingDisplayed;
     TextView viewBalance;
     String userBalance;
+    String viewType;
     Button btnToggleP, btnToggleM;
 
     @Override
@@ -70,6 +71,7 @@ public class ListStocks extends AppCompatActivity {
         btnToggleP.setOnClickListener(v -> {
             displayPortfolioStocks();
             lblHeadingDisplayed.setText("Portfolio");
+            viewType = "P";
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
             btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
         });
@@ -77,6 +79,7 @@ public class ListStocks extends AppCompatActivity {
         btnToggleM.setOnClickListener(v -> {
             displayAllStocks();
             lblHeadingDisplayed.setText("Market");
+            viewType = "M";
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
             btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
         });
@@ -91,8 +94,17 @@ public class ListStocks extends AppCompatActivity {
         //get info from search:
         Intent intent = getIntent();
         String filter = intent.getStringExtra("filter");
+
+        if (viewType == "M") {
+            //display filtered market
+
+        } else {
+            //display filtered portfolio
+
+        }
+
         displayFilteredStock(filter);
-        Log.d("filter: ", filter);
+        Log.d("filter: ", "filter");//FIXME filter message
         String searchCriteria = intent.getStringExtra("search");
 
     }
