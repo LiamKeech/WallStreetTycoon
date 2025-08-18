@@ -65,6 +65,7 @@ public class ListStocks extends AppCompatActivity {
 
         //need to display portfolio for old user and market for new user:
         //displayAllStocks();
+        displayPortfolioStocks();
 
         btnToggleP.setOnClickListener(v -> {
             displayPortfolioStocks();
@@ -87,12 +88,12 @@ public class ListStocks extends AppCompatActivity {
             searchDialog.show(getSupportFragmentManager(), "FilterStockDialog");
         });
 
+        //get info from search:
         Intent intent = getIntent();
         String filter = intent.getStringExtra("filter");
-        Log.d(filter, "");
-        String searchCriteria = intent.getStringExtra("search");
-
         displayFilteredStock(filter);
+        Log.d("filter: ", filter);
+        String searchCriteria = intent.getStringExtra("search");
 
     }
     public void displayPortfolioStocks(){

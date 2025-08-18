@@ -18,6 +18,8 @@ import com.example.wallstreettycoon.R;
 
 public class FilterStocksDialogFragment extends DialogFragment {
 
+    String selectedFilter, searchCriteria;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -30,20 +32,19 @@ public class FilterStocksDialogFragment extends DialogFragment {
             RadioGroup radioGroup = view.findViewById(R.id.rdgFilter);
             int selectedId = radioGroup.getCheckedRadioButtonId();
 
-            String selectedFilter = null;
             if (selectedId != -1) {//item has been selected:
                 RadioButton selectedRadioButton = view.findViewById(selectedId);
                 selectedFilter = selectedRadioButton.getText().toString();
             }
 
-            String searchCriteria = null;
             SearchView searchView = view.findViewById(R.id.searchText);
             searchCriteria = searchView.getQuery().toString();
 
             //carry over filter category and entered criteria
             Intent intent = new Intent(getActivity(), ListStocks.class);
             intent.putExtra("filter", selectedFilter);
-            intent.putExtra("search", searchCriteria);
+            startActivity(intent);
+            //intent.putExtra("search", searchCriteria);
 
             //close when search button selected:
             dismiss();
