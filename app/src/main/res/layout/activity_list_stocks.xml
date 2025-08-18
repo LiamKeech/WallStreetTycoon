@@ -15,9 +15,10 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.499"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.173" />
+        app:layout_constraintVertical_bias="0.224" />
 
     <TextView
         android:id="@+id/lblEmpty"
@@ -64,29 +65,50 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RVstock"
-        android:layout_width="519dp"
+        android:layout_width="525dp"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSearchDashboard"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/lblListDisplayed" />
 
     <Button
         android:id="@+id/btnToggleList"
         android:layout_width="60dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:backgroundTint="@color/LightBlue"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         android:text="P"
         android:textColor="@color/white"
         android:textSize="17sp"
-        app:cornerRadius="10dp"
+        app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btnSearchDashboard"
-        app:layout_constraintHorizontal_bias="0.67"
+        app:layout_constraintHorizontal_bias="0.572"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.016" />
+        app:layout_constraintVertical_bias="0.021" />
+
+    <Button
+        android:id="@+id/btnToggleList2"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:backgroundTint="@color/Grey"
+        android:gravity="center"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:text="M"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnSearchDashboard"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/btnToggleList"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.021" />
 
     <ImageButton
         android:id="@+id/imageButton"
@@ -100,5 +122,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.022"
         app:srcCompat="@drawable/menu" />
+
+    <TextView
+        android:id="@+id/lblListDisplayed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Portfolio"
+        android:textColor="@color/LightBlue"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/RVstock"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnSearchDashboard"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
