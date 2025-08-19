@@ -21,6 +21,8 @@ import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -160,37 +162,109 @@ public class DisplayStockActivity extends AppCompatActivity {
         });
     }
 
+    // https://github.com/PhilJay/MPAndroidChart
     private void updateChart(String range) {
         int timeRange;
+        String chartTitle;
         switch (range) {
             case "1D":
                 timeRange = 1;
+                chartTitle = currentStock.getSymbol() + " - 1 Day";
                 break;
             case "1W":
                 timeRange = 7;
+                chartTitle = currentStock.getSymbol() + " - 1 Week";
                 break;
             case "1M":
             default:
                 timeRange = 30;
+                chartTitle = currentStock.getSymbol() + " - 1 Month";
                 break;
         }
 
+        // Chart title
+        chart.getDescription().setText(chartTitle);
+        chart.getDescription().setEnabled(true);
+        chart.getDescription().setTextSize(16f);
+        chart.getDescription().setTextColor(getColor(R.color.black));
+
+        // Load price history
         List<Entry> entries = getPriceHistory(currentStock.getStockID(), timeRange);
         Log.d("DisplayStock", "Generated " + entries.size() + " entries for chart");
 
-        LineDataSet dataSet = new LineDataSet(entries, "Price History");
-        dataSet.setColor(android.graphics.Color.BLUE);
-        dataSet.setDrawValues(false);
-        dataSet.setLineWidth(2f);
-        dataSet.setDrawCircles(false);
+        // Add styling to line chart
+        LineDataSet dataSet = new LineDataSet(entries, "Price");
 
+        // Line styling
+        dataSet.setColor(getColor(R.color.LightBlue));
+        dataSet.setLineWidth(3f);
+        dataSet.setDrawCircles(true); // draws out data points
+        dataSet.setCircleColor(getColor(R.color.LightBlue));
+        dataSet.setCircleRadius(4f);
+        dataSet.setCircleHoleRadius(2f);
+        dataSet.setCircleHoleColor(getColor(R.color.white));
+
+        // Fill the area under line
+        dataSet.setDrawFilled(true);
+        dataSet.setFillColor(getColor(R.color.LightBlue));
+        dataSet.setFillAlpha(50);
+
+        // Highlights a value on touch
+        dataSet.setHighLightColor(getColor(R.color.Orange));
+        dataSet.setHighlightLineWidth(2f);
+        dataSet.setDrawHighlightIndicators(true);
+        dataSet.setDrawValues(false);
+
+        // Line chart data
         LineData lineData = new LineData(dataSet);
         chart.setData(lineData);
-        chart.getDescription().setEnabled(false);
+
+        // X-axis
+        XAxis xAxis = chart.getXAxis();
+        xAxis.setEnabled(true);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(true);
+        xAxis.setGridColor(getColor(R.color.Grey));
+        xAxis.setTextColor(android.graphics.Color.DKGRAY); //getColor(R.color.black)
+        xAxis.setTextSize(10f);
+
+        // X-axis labels based on time range
+        if (timeRange <= 7) { // More than 1 week
+            xAxis.setGranularity(1f);
+            xAxis.setLabelCount(Math.min(timeRange + 1, 8));
+        } else {
+            // show fewer labels
+            xAxis.setGranularity(5f);
+            xAxis.setLabelCount(7);
+        }
+
+        // Y-axis
+        YAxis yAxis = chart.getAxisLeft();
+        yAxis.setEnabled(true);
+        yAxis.setDrawGridLines(true);
+        yAxis.setGridColor(getColor(R.color.Grey));
+        yAxis.setTextColor(android.graphics.Color.DKGRAY); //getColor(R.color.black)
+        yAxis.setTextSize(10f);
+        yAxis.setAxisMinimum(0f);
+
         chart.getAxisRight().setEnabled(false);
-        chart.getXAxis().setEnabled(true);
         chart.getLegend().setEnabled(false);
-        chart.getAxisLeft().setAxisMinimum(0f);
+
+        // Touch interactions
+        chart.setTouchEnabled(true);
+        chart.setDragEnabled(true);
+        chart.setScaleEnabled(true);
+        chart.setPinchZoom(true);
+        chart.setDoubleTapToZoomEnabled(true);
+
+        // Highlight values on touch
+        chart.setHighlightPerTapEnabled(true);
+        chart.setHighlightPerDragEnabled(false);
+
+        // Draws out the graph each time
+        chart.animateX(1000);
+
+        // Refresh chart
         chart.invalidate();
     }
 
