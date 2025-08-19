@@ -228,6 +228,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         xAxis.setTextColor(android.graphics.Color.DKGRAY); //getColor(R.color.black)
         xAxis.setTextSize(10f);
 
+
         // X-axis labels based on time range
         if (timeRange <= 7) { // More than 1 week
             xAxis.setGranularity(1f);
