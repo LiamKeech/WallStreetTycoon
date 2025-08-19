@@ -176,6 +176,7 @@ public class ListStocks extends AppCompatActivity {
                 StockAdapter stockAdapter = new StockAdapter(this, filteredStock);
                 lblResult.setText("Showing results for: " + filter);
                 lblResult.setVisibility(View.VISIBLE);
+                btnClear.setVisibility(View.VISIBLE);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 stockRV.setLayoutManager(linearLayoutManager);
                 stockRV.setAdapter(stockAdapter);
@@ -197,6 +198,7 @@ public class ListStocks extends AppCompatActivity {
                 PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredStock);
                 lblResult.setText("Showing results for: " + filter);
                 lblResult.setVisibility(View.VISIBLE);
+                btnClear.setVisibility(View.VISIBLE);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 stockRV.setLayoutManager(linearLayoutManager);
                 stockRV.setAdapter(stockAdapter);
