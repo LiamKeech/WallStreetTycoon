@@ -102,7 +102,7 @@ public class ListStocks extends AppCompatActivity {
         Intent intent = getIntent();
         String filter = intent.getStringExtra("filter");
 
-        if (viewType == "M") {
+        /*if (viewType == "M") {
             //display filtered market
             displayFilteredMarket(filter);
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
@@ -113,9 +113,9 @@ public class ListStocks extends AppCompatActivity {
             displayFilteredPortfolio(filter);
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
             btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-        }
+        }*/
 
-        //displayFilteredLists(filter, viewType);
+        displayFilteredLists(filter, viewType);
 
         Log.d("filter: ", "filter");//FIXME filter message
         String searchCriteria = intent.getStringExtra("search");
@@ -176,6 +176,7 @@ public class ListStocks extends AppCompatActivity {
                 StockAdapter stockAdapter = new StockAdapter(this, filteredStock);
                 lblResult.setText("Showing results for: " + filter);
                 lblResult.setVisibility(View.VISIBLE);
+                btnClear.setVisibility(View.VISIBLE);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 stockRV.setLayoutManager(linearLayoutManager);
                 stockRV.setAdapter(stockAdapter);
@@ -197,6 +198,7 @@ public class ListStocks extends AppCompatActivity {
                 PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredStock);
                 lblResult.setText("Showing results for: " + filter);
                 lblResult.setVisibility(View.VISIBLE);
+                btnClear.setVisibility(View.VISIBLE);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 stockRV.setLayoutManager(linearLayoutManager);
                 stockRV.setAdapter(stockAdapter);
