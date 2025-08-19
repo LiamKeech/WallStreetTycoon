@@ -2,6 +2,7 @@ package com.example.wallstreettycoon.dashboard;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +35,7 @@ public class ListStocks extends AppCompatActivity {
 
     RecyclerView stockRV;
     TextView lblEmpty, lblResult, lblHeadingDisplayed;
+    TextView btnClear;
     TextView viewBalance;
     String userBalance;
     String viewType;
@@ -68,22 +70,23 @@ public class ListStocks extends AppCompatActivity {
         //displayAllStocks();
         displayPortfolioStocks();
 
-        btnToggleP.setOnClickListener(v -> {
+        btnToggleP.setOnClickListener(v -> {    //display list of portfolio stocks, make P blue, set viewtype to P
             displayPortfolioStocks();
             lblHeadingDisplayed.setText("Portfolio");
             viewType = "P";
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
             btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+            //Also clears all searches and filters by displaying original list
         });
 
-        btnToggleM.setOnClickListener(v -> {
+        btnToggleM.setOnClickListener(v -> {    //display list of all stocks, make M blue, set viewtype to M
             displayAllStocks();
             lblHeadingDisplayed.setText("Market");
             viewType = "M";
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
             btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+            //Also clears all searches and filters by displaying original list
         });
-
 
         Button btnSearch = findViewById(R.id.btnSearchDashboard);
         btnSearch.setOnClickListener(v -> {
@@ -97,18 +100,34 @@ public class ListStocks extends AppCompatActivity {
 
         if (viewType == "M") {
             //display filtered market
+            displayFilteredMarket(filter);
+            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
 
         } else {
             //display filtered portfolio
-
+            displayFilteredPortfolio(filter);
+            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
         }
 
-        displayFilteredStock(filter);
+        //displayFilteredLists(filter, viewType);
+
         Log.d("filter: ", "filter");//FIXME filter message
         String searchCriteria = intent.getStringExtra("search");
 
+        btnClear = findViewById(R.id.btnClearSearch);
+        btnClear.setOnClickListener(v -> {  //clear filter by displaying OG lists
+            btnClear.setTypeface(null, Typeface.ITALIC);
+            if (viewType == "M") {
+                displayAllStocks();
+            } else { //"P"
+                displayPortfolioStocks();
+            }
+        });
+
     }
-    public void displayPortfolioStocks(){
+    public void displayPortfolioStocks(){   //gets portfolio list, checks if empty, put it in recyclerview
         List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
         /*for(PortfolioStock stock : portfolioStock){
             Log.d("", stock.getStockID().toString());
@@ -117,7 +136,6 @@ public class ListStocks extends AppCompatActivity {
             lblEmpty.setText("No stocks in Portfolio");
             lblEmpty.setVisibility(View.VISIBLE);
             stockRV.setVisibility(View.GONE);
-            //Toast.makeText(v.getContext(), "No stocks in portfolio", Toast.LENGTH_SHORT).show();
         }
         else {
             stockRV.setVisibility(View.VISIBLE);
@@ -126,11 +144,10 @@ public class ListStocks extends AppCompatActivity {
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             stockRV.setLayoutManager(linearLayoutManager);
             stockRV.setAdapter(stockAdapter);
-
         }
     }
 
-    public void displayAllStocks(){
+    public void displayAllStocks(){ //gets list of all stocks, put in recyclerview
         lblEmpty.setVisibility(View.GONE);
         List<Stock> allStockList = dbUtil.getStockList();
         StockAdapter stockAdapter = new StockAdapter(this, allStockList);
@@ -140,11 +157,10 @@ public class ListStocks extends AppCompatActivity {
         stockRV.setVisibility(View.VISIBLE);
     }
 
-    public void displayFilteredStock(String filter){
+    public void displayFilteredMarket(String filter){     //take in filter and current screen (P/M)
         if (filter != null)
         {
-            //if (btnToggle.getText().toString() == "M") {    //market stock filter
-            List<Stock> filteredStock = dbUtil.getFilteredStock(filter);
+            List<Stock> filteredStock = dbUtil.getFilteredStockM(filter);
             if (filteredStock.isEmpty())
             {
                 lblEmpty.setText("No results");
@@ -155,13 +171,67 @@ public class ListStocks extends AppCompatActivity {
                 StockAdapter stockAdapter = new StockAdapter(this, filteredStock);
                 lblResult.setText("Showing results for: " + filter);
                 lblResult.setVisibility(View.VISIBLE);
-                //stockAdapter.updateList(filteredStock);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                 stockRV.setLayoutManager(linearLayoutManager);
                 stockRV.setAdapter(stockAdapter);
             }
-            //}
         }
+    }
+
+    public void displayFilteredPortfolio(String filter) {
+        if (filter != null)
+        {
+            List<PortfolioStock> filteredStock = dbUtil.getFilteredStockP(filter);
+            if (filteredStock.isEmpty())
+            {
+                lblEmpty.setText("No results");
+                lblEmpty.setVisibility(View.VISIBLE);
+                stockRV.setVisibility(View.GONE);
+            } else {
+                //display the filtered stock in the recyclerview:
+                PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredStock);
+                lblResult.setText("Showing results for: " + filter);
+                lblResult.setVisibility(View.VISIBLE);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                stockRV.setLayoutManager(linearLayoutManager);
+                stockRV.setAdapter(stockAdapter);
+            }
+        }
+
+    }
+
+    public void displayFilteredLists(String filter, String viewToggle) {
+        if (filter != null) {
+            List<Stock> filteredMarket = dbUtil.getFilteredStockM(filter);
+            List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredStockP(filter);
+            if (filteredMarket.isEmpty() || filteredPortfolio.isEmpty())
+            {
+                lblEmpty.setText("No results");
+                lblEmpty.setVisibility(View.VISIBLE);
+                stockRV.setVisibility(View.GONE);
+            } else {
+                if (viewToggle == "M") {
+                    StockAdapter stockAdapter = new StockAdapter(this, filteredMarket);
+                    lblResult.setText("Showing results for: " + filter);
+                    lblResult.setVisibility(View.VISIBLE);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                    stockRV.setLayoutManager(linearLayoutManager);
+                    stockRV.setAdapter(stockAdapter);
+                    btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+                    btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+                } else { //"P"
+                    PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredPortfolio);
+                    lblResult.setText("Showing results for: " + filter);
+                    lblResult.setVisibility(View.VISIBLE);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                    stockRV.setLayoutManager(linearLayoutManager);
+                    stockRV.setAdapter(stockAdapter);
+                    btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+                    btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+                }
+            }
+        }
+
     }
 
     /*public void displaySearchedStock() {
