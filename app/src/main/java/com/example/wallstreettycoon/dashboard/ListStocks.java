@@ -66,9 +66,17 @@ public class ListStocks extends AppCompatActivity {
         btnToggleP = findViewById(R.id.btnToggleList);
         btnToggleM = findViewById(R.id.btnToggleList2);
 
-        //need to display portfolio for old user and market for new user:
-        //displayAllStocks();
-        displayPortfolioStocks();
+        // Displays portfolio if user owns stock, else show market stocks (for new user too)
+        List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+        if (portfolioStockCheck.isEmpty()) {
+            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+            displayAllStocks();
+        } else {
+            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+            displayPortfolioStocks();
+        }
 
         btnToggleP.setOnClickListener(v -> {    //display list of portfolio stocks, make P blue, set viewtype to P
             displayPortfolioStocks();
@@ -102,18 +110,18 @@ public class ListStocks extends AppCompatActivity {
         Intent intent = getIntent();
         String filter = intent.getStringExtra("filter");
 
-        /*if (viewType == "M") {
-            //display filtered market
-            displayFilteredMarket(filter);
-            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-
-        } else {
-            //display filtered portfolio
-            displayFilteredPortfolio(filter);
-            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-        }*/
+//        if (viewType == "M") {
+//            //display filtered market
+//            displayFilteredMarket(filter);
+//            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+//            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+//
+//        } else {
+//            //display filtered portfolio
+//            displayFilteredPortfolio(filter);
+//            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+//            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+//        }
 
         displayFilteredLists(filter, viewType);
 
