@@ -18,7 +18,11 @@ import com.example.wallstreettycoon.R;
 
 public class FilterStocksDialogFragment extends DialogFragment {
 
-    String selectedFilter, searchCriteria;
+    String selectedFilter, searchCriteria, viewToggle;
+
+    public void setView(String viewToggle) {
+        this.viewToggle = viewToggle;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,6 +47,7 @@ public class FilterStocksDialogFragment extends DialogFragment {
             //carry over filter category and entered criteria
             Intent intent = new Intent(getActivity(), ListStocks.class);
             intent.putExtra("filter", selectedFilter);
+            intent.putExtra("view", viewToggle);
             startActivity(intent);
             //intent.putExtra("search", searchCriteria);
 

@@ -103,12 +103,14 @@ public class ListStocks extends AppCompatActivity {
         Button btnSearch = findViewById(R.id.btnSearchDashboard);
         btnSearch.setOnClickListener(v -> {
             FilterStocksDialogFragment searchDialog = new FilterStocksDialogFragment();
+            searchDialog.setView(viewType);
             searchDialog.show(getSupportFragmentManager(), "FilterStockDialog");
         });
 
         //get info from search:
         Intent intent = getIntent();
         String filter = intent.getStringExtra("filter");
+        viewType = intent.getStringExtra("view");
 
 //        if (viewType == "M") {
 //            //display filtered market
