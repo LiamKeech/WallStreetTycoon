@@ -77,6 +77,8 @@ public class ListStocks extends AppCompatActivity {
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
             btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
             //Also clears all searches and filters by displaying original list
+            lblResult.setVisibility(View.GONE);
+            btnClear.setVisibility(View.GONE);
         });
 
         btnToggleM.setOnClickListener(v -> {    //display list of all stocks, make M blue, set viewtype to M
@@ -86,6 +88,8 @@ public class ListStocks extends AppCompatActivity {
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
             btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
             //Also clears all searches and filters by displaying original list
+            lblResult.setVisibility(View.GONE);
+            btnClear.setVisibility(View.GONE);
         });
 
         Button btnSearch = findViewById(R.id.btnSearchDashboard);
@@ -119,6 +123,7 @@ public class ListStocks extends AppCompatActivity {
         btnClear = findViewById(R.id.btnClearSearch);
         btnClear.setOnClickListener(v -> {  //clear filter by displaying OG lists
             btnClear.setTypeface(null, Typeface.ITALIC);
+            lblResult.setVisibility(View.GONE);
             if (viewType == "M") {
                 displayAllStocks();
             } else { //"P"
