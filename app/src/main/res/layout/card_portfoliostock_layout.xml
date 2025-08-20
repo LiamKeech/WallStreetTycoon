@@ -3,11 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="8dp"
+    app:cardMaxElevation="10dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:text="AAPL"
                 android:textColor="@color/black"
-                android:textSize="16sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:maxLines="1"
                 android:ellipsize="end" />
@@ -53,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:text="25 shares"
                 android:textColor="@color/black"
-                android:textSize="12sp"
+                android:textSize="16sp"
                 android:layout_marginTop="2dp" />
 
         </LinearLayout>
@@ -101,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:text="Total Value"
                 android:textColor="@color/black"
-                android:textSize="10sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/lblTotalValue_numeric_portfolioCard"

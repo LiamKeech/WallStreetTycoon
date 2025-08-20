@@ -9,20 +9,6 @@
     tools:context=".dashboard.ListStocks">
 
     <TextView
-        android:id="@+id/lblResults"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textSize="15sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.354"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblListDisplayed"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
         android:id="@+id/lblEmpty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -73,7 +59,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblListDisplayed" />
+        app:layout_constraintTop_toBottomOf="@+id/resultContainer" />
 
     <Button
         android:id="@+id/btnToggleList"
@@ -141,15 +127,39 @@
         app:layout_constraintTop_toBottomOf="@+id/btnSearchDashboard"
         app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/btnClearSearch"
+    <LinearLayout
+        android:id="@+id/resultContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Clear"
-        android:textColor="@color/LightBlue"
-        android:textSize="15sp"
-        android:visibility="gone"
-        tools:layout_editor_absoluteX="594dp"
-        tools:layout_editor_absoluteY="84dp" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="4dp"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/lblListDisplayed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/lblResults"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:includeFontPadding="false"
+            android:text="Showing results for: XYZ"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:layout_marginEnd="6dp"/>
+
+        <ImageButton
+            android:id="@+id/btnClearSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/LightGrey"
+            android:scaleType="centerInside"
+            android:padding="4dp"
+            android:src="@drawable/ic_clear"
+            android:visibility="gone"/>
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
