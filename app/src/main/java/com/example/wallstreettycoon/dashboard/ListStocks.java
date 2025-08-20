@@ -82,11 +82,11 @@ public class ListStocks extends AppCompatActivity {
             displayPortfolioStocks();
         }*/
 
-        if (viewType == "M") {
+        if (viewType != null && viewType.equals("M")) {
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
             btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
             displayAllStocks();
-        } else {
+        } else if (viewType != null && viewType.equals("P")){
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
             btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
             displayPortfolioStocks();
@@ -122,6 +122,9 @@ public class ListStocks extends AppCompatActivity {
         });
 
         String filter = intent.getStringExtra("filter");
+        if (filter != null) {
+            displayFilteredLists(filter, viewType);
+        }
 
 
 //        if (viewType == "M") {
@@ -137,7 +140,7 @@ public class ListStocks extends AppCompatActivity {
 //            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
 //        }
 
-        displayFilteredLists(filter, viewType);
+
 
         Log.d("filter: ", "filter");//FIXME filter message
         String searchCriteria = intent.getStringExtra("search");
@@ -146,10 +149,13 @@ public class ListStocks extends AppCompatActivity {
         btnClear.setOnClickListener(v -> {  //clear filter by displaying OG lists
             btnClear.setTypeface(null, Typeface.ITALIC);
             lblResult.setVisibility(View.GONE);
-            if (viewType == "M") {
+            btnClear.setVisibility(View.GONE);
+            if (viewType != null && viewType.equals("M")) {
                 displayAllStocks();
-            } else { //"P"
+                lblHeadingDisplayed.setText("Market");
+            } else if (viewType != null && viewType.equals("P")) { //"P"
                 displayPortfolioStocks();
+                lblHeadingDisplayed.setText("Portfolio");
             }
         });
 
@@ -229,39 +235,146 @@ public class ListStocks extends AppCompatActivity {
 
     }
 
+//    public void displayFilteredLists(String filter, String viewToggle) {
+//        if (filter != null) {
+//            List<Stock> filteredMarket = dbUtil.getFilteredStockM(filter);
+//            List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredStockP(filter);
+//            if (filteredMarket.isEmpty() || filteredPortfolio.isEmpty())
+//            {
+//                lblEmpty.setText("No results");
+//                lblEmpty.setVisibility(View.VISIBLE);
+//                stockRV.setVisibility(View.GONE);
+//            } else {
+//                if (viewType != null && viewType.equals("M")) {
+//                    StockAdapter stockAdapter = new StockAdapter(this, filteredMarket);
+//                    lblResult.setText("Showing results for: " + filter);
+//                    lblResult.setVisibility(View.VISIBLE);
+//                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+//                    stockRV.setLayoutManager(linearLayoutManager);
+//                    stockRV.setAdapter(stockAdapter);
+//                    btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+//                    btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+//                } else if (viewType != null && viewType.equals("P")) { //"P"
+//                    PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredPortfolio);
+//                    lblResult.setText("Showing results for: " + filter);
+//                    lblResult.setVisibility(View.VISIBLE);
+//                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+//                    stockRV.setLayoutManager(linearLayoutManager);
+//                    stockRV.setAdapter(stockAdapter);
+//                    btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+//                    btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+//                }
+//            }
+//        }
+
     public void displayFilteredLists(String filter, String viewToggle) {
         if (filter != null) {
-            List<Stock> filteredMarket = dbUtil.getFilteredStockM(filter);
-            List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredStockP(filter);
-            if (filteredMarket.isEmpty() || filteredPortfolio.isEmpty())
-            {
-                lblEmpty.setText("No results");
-                lblEmpty.setVisibility(View.VISIBLE);
-                stockRV.setVisibility(View.GONE);
-            } else {
-                if (viewToggle == "M") {
+            if ("M".equals(viewToggle)) {
+                List<Stock> filteredMarket = dbUtil.getFilteredStockM(filter);
+                if (filteredMarket.isEmpty()) {
+                    // Show no results message
+                    if (lblEmpty != null) {
+                        lblEmpty.setText("No results");
+                        lblEmpty.setVisibility(View.VISIBLE);
+                    }
+                    if (stockRV != null) {
+                        stockRV.setVisibility(View.GONE);
+                    }
+                    // Hide result label and clear button when no results
+                    if (lblResult != null) {
+                        lblResult.setVisibility(View.GONE);
+                    }
+                    if (btnClear != null) {
+                        btnClear.setVisibility(View.GONE);
+                    }
+                } else {
+                    // Hide empty message and show results
+                    if (lblEmpty != null) {
+                        lblEmpty.setVisibility(View.GONE);
+                    }
+                    if (stockRV != null) {
+                        stockRV.setVisibility(View.VISIBLE);
+                    }
+                    if (lblResult != null) {
+                        lblResult.setText("Showing results for: " + filter);
+                        lblResult.setVisibility(View.VISIBLE);
+                    }
+                    if (btnClear != null) {
+                        btnClear.setVisibility(View.VISIBLE);
+                    }
+
+                    // Create and set up the adapter BEFORE using it
                     StockAdapter stockAdapter = new StockAdapter(this, filteredMarket);
-                    lblResult.setText("Showing results for: " + filter);
-                    lblResult.setVisibility(View.VISIBLE);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     stockRV.setLayoutManager(linearLayoutManager);
                     stockRV.setAdapter(stockAdapter);
-                    btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-                    btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-                } else { //"P"
+
+                    // Ensure correct button states and heading
+                    if (btnToggleP != null) {
+                        btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+                    }
+                    if (btnToggleM != null) {
+                        btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+                    }
+                    if (lblHeadingDisplayed != null) {
+                        lblHeadingDisplayed.setText("Market");
+                    }
+                }
+            } else { // "P" - Portfolio view
+                List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredStockP(filter);
+                if (filteredPortfolio.isEmpty()) {
+                    // Show no results message
+                    if (lblEmpty != null) {
+                        lblEmpty.setText("No results");
+                        lblEmpty.setVisibility(View.VISIBLE);
+                    }
+                    if (stockRV != null) {
+                        stockRV.setVisibility(View.GONE);
+                    }
+                    // Hide result label and clear button when no results
+                    if (lblResult != null) {
+                        lblResult.setVisibility(View.GONE);
+                    }
+                    if (btnClear != null) {
+                        btnClear.setVisibility(View.GONE);
+                    }
+                } else {
+                    // Hide empty message and show results
+                    if (lblEmpty != null) {
+                        lblEmpty.setVisibility(View.GONE);
+                    }
+                    if (stockRV != null) {
+                        stockRV.setVisibility(View.VISIBLE);
+                    }
+                    if (lblResult != null) {
+                        lblResult.setText("Showing results for: " + filter);
+                        lblResult.setVisibility(View.VISIBLE);
+                    }
+                    if (btnClear != null) {
+                        btnClear.setVisibility(View.VISIBLE);
+                    }
+
+                    // Create and set up the adapter
                     PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredPortfolio);
-                    lblResult.setText("Showing results for: " + filter);
-                    lblResult.setVisibility(View.VISIBLE);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     stockRV.setLayoutManager(linearLayoutManager);
                     stockRV.setAdapter(stockAdapter);
-                    btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-                    btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+
+                    // Ensure correct button states and heading
+                    if (btnToggleP != null) {
+                        btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+                    }
+                    if (btnToggleM != null) {
+                        btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+                    }
+                    if (lblHeadingDisplayed != null) {
+                        lblHeadingDisplayed.setText("Portfolio");
+                    }
                 }
             }
         }
-
     }
+
 
     /*public void displaySearchedStock() {
         if (searchCriteria != null)
