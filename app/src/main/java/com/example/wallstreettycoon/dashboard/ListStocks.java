@@ -66,7 +66,7 @@ public class ListStocks extends AppCompatActivity {
         btnToggleP = findViewById(R.id.btnToggleList);
         btnToggleM = findViewById(R.id.btnToggleList2);
 
-        //get intent:
+        //get intent: (from login and or search button)
         Intent intent = getIntent();
         viewType = intent.getStringExtra("view");
 
