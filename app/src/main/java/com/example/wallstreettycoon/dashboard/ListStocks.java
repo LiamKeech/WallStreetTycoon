@@ -66,9 +66,23 @@ public class ListStocks extends AppCompatActivity {
         btnToggleP = findViewById(R.id.btnToggleList);
         btnToggleM = findViewById(R.id.btnToggleList2);
 
+        //get intent:
+        Intent intent = getIntent();
+        viewType = intent.getStringExtra("view");
+
         // Displays portfolio if user owns stock, else show market stocks (for new user too)
-        List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
-        if (portfolioStockCheck.isEmpty()) {
+        //List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+        /*if (portfolioStockCheck.isEmpty()) {
+            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+            displayAllStocks();
+        } else {
+            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+            displayPortfolioStocks();
+        }*/
+
+        if (viewType == "M") {
             btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
             btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
             displayAllStocks();
@@ -107,10 +121,8 @@ public class ListStocks extends AppCompatActivity {
             searchDialog.show(getSupportFragmentManager(), "FilterStockDialog");
         });
 
-        //get info from search:
-        Intent intent = getIntent();
         String filter = intent.getStringExtra("filter");
-        viewType = intent.getStringExtra("view");
+
 
 //        if (viewType == "M") {
 //            //display filtered market
