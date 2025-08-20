@@ -19,13 +19,12 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            style="@style/subHeading"
             android:id="@+id/lblUsernameLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Username"
-            android:textColor="@color/LightBlue"
-            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/edtUsernameLogin"
             app:layout_constraintHorizontal_bias="0.65"
@@ -35,12 +34,11 @@
 
         <TextView
             android:id="@+id/lblPasswLogin"
+            style="@style/subHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:text="Password"
-            android:textColor="@color/LightBlue"
-            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/edtPasswLogin"
             app:layout_constraintHorizontal_bias="0.65"
@@ -48,15 +46,12 @@
             app:layout_constraintTop_toBottomOf="@+id/lblUsernameLogin"
             app:layout_constraintVertical_bias="0.0" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonMedium"
             android:id="@+id/btnLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/Orange"
             android:text="Login"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:cornerRadius="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -125,15 +120,13 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        style="@style/DarkBlueTextView"
         android:id="@+id/lblLoginHeading"
-        android:layout_width="264dp"
-        android:layout_height="56dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="6dp"
-        android:background="@drawable/rounded_textview"
         android:gravity="center_horizontal|center_vertical"
         android:text="Login"
-        android:textColor="@color/white"
-        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/FieldLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -144,11 +137,11 @@
         android:id="@+id/imgLogo2"
         android:layout_width="100dp"
         android:layout_height="95dp"
+        android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lblLoginHeading"
         app:layout_constraintHorizontal_bias="0.04"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02"
-        app:srcCompat="@drawable/balance_removebg_preview" />
+        app:layout_constraintVertical_bias="0.02" />
 </androidx.constraintlayout.widget.ConstraintLayout>

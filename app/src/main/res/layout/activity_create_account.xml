@@ -9,15 +9,13 @@
     tools:context=".useraccount.CreateAccount">
 
     <TextView
+        style="@style/DarkBlueTextView"
         android:id="@+id/lblCreateHeading"
-        android:layout_width="264dp"
-        android:layout_height="56dp"
-        android:layout_marginBottom="6dp"
-        android:background="@drawable/rounded_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:gravity="center_horizontal|center_vertical"
         android:text="Create Account"
-        android:textColor="@color/white"
-        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/FieldCreate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +24,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/FieldCreate"
-        android:layout_width="511dp"
-        android:layout_height="310dp"
+        android:layout_width="580dp"
+        android:layout_height="280dp"
         android:background="@drawable/rounded_nav_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,87 +38,88 @@
             android:id="@+id/lblNameCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="Name"
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/edtNameCreate"
-            app:layout_constraintHorizontal_bias="0.65"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.059" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/lblSurnameCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="Surname"
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/edtSurnameCreate"
-            app:layout_constraintHorizontal_bias="0.573"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblNameCreate"
+            app:layout_constraintTop_toBottomOf="@+id/edtNameCreate"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/lblUsernameCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="16dp"
             android:text="Username"
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/edtUsernameCreate"
-            app:layout_constraintHorizontal_bias="0.526"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.626"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblSurnameCreate"
-            app:layout_constraintVertical_bias="0.006" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/lblPasswCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="16dp"
             android:text="Password"
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/edtPasswCreate"
-            app:layout_constraintHorizontal_bias="0.535"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.615"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblUsernameCreate"
+            app:layout_constraintTop_toBottomOf="@+id/edtUsernameCreate"
             app:layout_constraintVertical_bias="0.0" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonMedium"
             android:id="@+id/btnCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:backgroundTint="@color/Orange"
             android:text="Create"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:cornerRadius="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnCancelCreate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonMedium"
             android:id="@+id/btnCancelCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:backgroundTint="@color/Orange"
             android:text="Cancel"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:cornerRadius="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnCreate"
@@ -131,32 +130,34 @@
             android:id="@+id/edtNameCreate"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/textbox_border"
             android:ems="10"
             android:inputType="text"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.04000002" />
+            app:layout_constraintTop_toBottomOf="@+id/lblNameCreate"
+            app:layout_constraintVertical_bias="0.0" />
 
         <EditText
             android:id="@+id/edtSurnameCreate"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="176dp"
             android:background="@drawable/textbox_border"
             android:ems="10"
             android:inputType="text"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.601"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtNameCreate"
+            app:layout_constraintTop_toBottomOf="@+id/lblSurnameCreate"
             app:layout_constraintVertical_bias="0.0" />
 
         <EditText
@@ -164,16 +165,16 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="100dp"
+            android:layout_marginEnd="100dp"
             android:background="@drawable/textbox_border"
             android:ems="10"
             android:inputType="text"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.604"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtSurnameCreate"
+            app:layout_constraintTop_toBottomOf="@+id/lblUsernameCreate"
             app:layout_constraintVertical_bias="0.0" />
 
         <EditText
@@ -181,16 +182,16 @@
             android:layout_width="178dp"
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="84dp"
+            android:layout_marginEnd="100dp"
             android:background="@drawable/textbox_border"
             android:ems="10"
             android:inputType="textPassword"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.609"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtUsernameCreate"
+            app:layout_constraintTop_toBottomOf="@+id/lblPasswCreate"
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -199,12 +200,12 @@
         android:id="@+id/imgLogo3"
         android:layout_width="100dp"
         android:layout_height="95dp"
+        android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lblCreateHeading"
         app:layout_constraintHorizontal_bias="0.04"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02"
-        app:srcCompat="@drawable/balance_removebg_preview" />
+        app:layout_constraintVertical_bias="0.02" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

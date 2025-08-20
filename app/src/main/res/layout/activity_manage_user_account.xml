@@ -7,46 +7,26 @@
     android:layout_height="match_parent"
     android:background="@color/LightGrey">
 
-<!--    <TextView-->
-<!--        android:id="@+id/stockNameHeader"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="8dp"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:background="@drawable/rounded_button_background"-->
-<!--        android:gravity="center"-->
-<!--        android:padding="12dp"-->
-<!--        android:text="Viewing TechCorp"-->
-<!--        android:textColor="#FFFFFF"-->
-<!--        android:textSize="18sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@id/backButton"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
     <TextView
+        style="@style/DarkBlueTextView"
         android:id="@+id/lblManageHeading"
-        android:layout_width="264dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="2dp"
-        android:background="@drawable/rounded_textview"
+        android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:padding="12dp"
         android:text="Update Account"
-        android:textColor="@color/white"
-        android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/FieldManage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/FieldManage"
-        android:layout_width="507dp"
-        android:layout_height="291dp"
+        android:layout_width="580dp"
+        android:layout_height="280dp"
         android:background="@drawable/rounded_nav_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,90 +35,86 @@
         app:layout_constraintVertical_bias="0.841">
 
         <TextView
+            style="@style/subHeading"
             android:id="@+id/lblNameManage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="Name"
-            android:textColor="@color/LightBlue"
-            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/edtNameManage"
-            app:layout_constraintHorizontal_bias="0.653"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.059" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/lblSurnameManage"
+            style="@style/subHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="140dp"
             android:text="Surname"
-            android:textColor="@color/LightBlue"
-            android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/edtSurnameManage"
-            app:layout_constraintHorizontal_bias="0.578"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblNameManage"
+            app:layout_constraintTop_toBottomOf="@+id/edtNameManage"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/lblUsernameManage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="16dp"
             android:text="Username"
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/edtUsernameManage"
-            app:layout_constraintHorizontal_bias="0.536"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.623"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblSurnameManage"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/lblPasswManage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="16dp"
             android:text="Password"
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/editTextTextPassword"
-            app:layout_constraintHorizontal_bias="0.554"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.615"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblUsernameManage"
+            app:layout_constraintTop_toBottomOf="@+id/edtUsernameManage"
             app:layout_constraintVertical_bias="0.0" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonMedium"
             android:id="@+id/btnUpdateManage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:backgroundTint="@color/Orange"
             android:text="Update"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:cornerRadius="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnCancelManage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonMedium"
             android:id="@+id/btnCancelManage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="3dp"
-            android:backgroundTint="@color/Orange"
             android:text="Cancel"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:cornerRadius="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnUpdateManage"
@@ -149,21 +125,7 @@
             android:id="@+id/edtNameManage"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:background="@drawable/textbox_border"
-            android:ems="10"
-            android:inputType="text"
-            android:textSize="15sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.04000002" />
-
-        <EditText
-            android:id="@+id/edtSurnameManage"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/textbox_border"
             android:ems="10"
@@ -171,9 +133,26 @@
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtNameManage"
+            app:layout_constraintTop_toBottomOf="@+id/lblNameManage"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <EditText
+            android:id="@+id/edtSurnameManage"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/textbox_border"
+            android:ems="10"
+            android:inputType="text"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblSurnameManage"
             app:layout_constraintVertical_bias="0.0" />
 
         <EditText
@@ -181,6 +160,7 @@
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="100dp"
             android:background="@drawable/textbox_border"
             android:ems="10"
             android:enabled="false"
@@ -188,9 +168,9 @@
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.6"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtSurnameManage"
+            app:layout_constraintTop_toBottomOf="@+id/lblUsernameManage"
             app:layout_constraintVertical_bias="0.0" />
 
         <EditText
@@ -198,6 +178,7 @@
             android:layout_width="178dp"
             android:layout_height="48dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="100dp"
             android:background="@drawable/textbox_border"
             android:ems="10"
             android:enabled="false"
@@ -205,9 +186,9 @@
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.60"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edtUsernameManage"
+            app:layout_constraintTop_toBottomOf="@+id/lblPasswManage"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
@@ -216,6 +197,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:text="Change password"
+            android:textColor="@color/LightBlue"
             android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -229,12 +211,12 @@
         android:id="@+id/imgLogo"
         android:layout_width="100dp"
         android:layout_height="95dp"
+        android:src="@drawable/logo"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/lblManageHeading"
         app:layout_constraintHorizontal_bias="0.04"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02"
-        app:srcCompat="@drawable/balance_removebg_preview" />
+        app:layout_constraintVertical_bias="0.02" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
