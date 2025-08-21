@@ -124,10 +124,10 @@ public class DatabaseUtil {
         return filteredList;
     }
 
-    public List<Stock> searchStocks(String query)
+    public List<Stock> searchStocksM(String searchCriteria)
     {
         List<Stock> results = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM stocks WHERE stockName LIKE ? COLLATE NOCASE", new String[]{"%"+query+"%"});
+        Cursor cursor = db.rawQuery("SELECT * FROM stocks WHERE stockName LIKE ? COLLATE NOCASE", new String[]{"%"+searchCriteria+"%"});
 
         if(cursor.moveToFirst()) {
             do {
@@ -143,6 +143,44 @@ public class DatabaseUtil {
             } while (cursor.moveToNext());
         }
         cursor.close();
+        return results;
+    }
+
+    public List<PortfolioStock> searchStocksP(String searchCriteria)
+    {
+        List<PortfolioStock> results = new ArrayList<>();
+        String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
+                "s.stockID, s.stockName, s.symbol, s.category, s.description " +
+                "FROM portfolioStock ps " +
+                "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
+                "JOIN stocks s ON ps.stockID = s.stockID " +
+                "WHERE s.stockName LIKE ? COLLATE NOCASE";
+
+        Cursor cursor = db.rawQuery(query, new String[]{"%"+searchCriteria+"%"});
+
+        while (cursor.moveToNext()) {
+            int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+            int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+
+            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+            double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
+            String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
+
+            // First, create a Stock object
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
+
+            // Create PortfolioStock
+            PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
+
+            results.add(ps);
+        }
+
+        cursor.close();
+
         return results;
     }
 

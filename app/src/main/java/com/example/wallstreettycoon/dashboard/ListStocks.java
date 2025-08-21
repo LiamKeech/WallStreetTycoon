@@ -117,12 +117,10 @@ public class ListStocks extends AppCompatActivity {
             searchDialog.show(getSupportFragmentManager(), "FilterStockDialog");
         });
 
-
-
         //get intent: (from login and or search button)
         Intent intent = getIntent();
         viewType = intent.getStringExtra("view");
-        String searchCriteria = intent.getStringExtra("search");
+
 
         if (viewType != null && viewType.equals("M")) {
             lblHeadingDisplayed.setText("Market");
@@ -136,34 +134,20 @@ public class ListStocks extends AppCompatActivity {
             displayPortfolioStocks();
         }
 
+        //just filter chosen:
         String filter = intent.getStringExtra("filter");
         if (filter != null) {
             displayFilteredLists(filter, viewType);
         }
-        // Displays portfolio if user owns stock, else show market stocks (for new user too)
-        //List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
-        /*if (portfolioStockCheck.isEmpty()) {
-            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-            displayAllStocks();
-        } else {
-            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-            displayPortfolioStocks();
-        }*/
-        //        if (viewType == "M") {
-//            //display filtered market
-//            displayFilteredMarket(filter);
-//            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-//            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-//
-//        } else {
-//            //display filtered portfolio
-//            displayFilteredPortfolio(filter);
-//            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-//            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-//        }
+
+        //just criteria entered:
+        String searchCriteria = intent.getStringExtra("search");
+        if (searchCriteria != null) {
+            displaySearchedStock(searchCriteria, viewType);
+        }
+
     }
+
     public void displayPortfolioStocks(){   //gets portfolio list, checks if empty, put it in recyclerview
         List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
         /*for(PortfolioStock stock : portfolioStock){
@@ -240,41 +224,10 @@ public class ListStocks extends AppCompatActivity {
 
     }
 
-//    public void displayFilteredLists(String filter, String viewToggle) {
-//        if (filter != null) {
-//            List<Stock> filteredMarket = dbUtil.getFilteredStockM(filter);
-//            List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredStockP(filter);
-//            if (filteredMarket.isEmpty() || filteredPortfolio.isEmpty())
-//            {
-//                lblEmpty.setText("No results");
-//                lblEmpty.setVisibility(View.VISIBLE);
-//                stockRV.setVisibility(View.GONE);
-//            } else {
-//                if (viewType != null && viewType.equals("M")) {
-//                    StockAdapter stockAdapter = new StockAdapter(this, filteredMarket);
-//                    lblResult.setText("Showing results for: " + filter);
-//                    lblResult.setVisibility(View.VISIBLE);
-//                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-//                    stockRV.setLayoutManager(linearLayoutManager);
-//                    stockRV.setAdapter(stockAdapter);
-//                    btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-//                    btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-//                } else if (viewType != null && viewType.equals("P")) { //"P"
-//                    PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredPortfolio);
-//                    lblResult.setText("Showing results for: " + filter);
-//                    lblResult.setVisibility(View.VISIBLE);
-//                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-//                    stockRV.setLayoutManager(linearLayoutManager);
-//                    stockRV.setAdapter(stockAdapter);
-//                    btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-//                    btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-//                }
-//            }
-//        }
-
+    //method to filter lists without criteria entered
     public void displayFilteredLists(String filter, String viewToggle) {
         if (filter != null) {
-            if ("M".equals(viewToggle)) {
+            if ("M".equals(viewToggle)) { //markety screen
                 List<Stock> filteredMarket = dbUtil.getFilteredStockM(filter);
                 if (filteredMarket.isEmpty()) {
                     // Show no results message
@@ -392,31 +345,131 @@ public class ListStocks extends AppCompatActivity {
         }
     }
 
-
-    /*public void displaySearchedStock() {
-        if (searchCriteria != null)
+    //method to search through a list fro criteria without filter selected
+    public void displaySearchedStock(String search, String viewToggle) {
+        if (search != null)
         {
-            if (btnToggle.getText().toString() == "M") {    //market stock search
-                List<Stock> searchedStock = dbUtil.searchStocks(searchCriteria);
-                if (searchedStock == null)
-                {
-                    lblEmpty.setText("No results");
-                    lblEmpty.setVisibility(View.VISIBLE);
-                    stockRV.setVisibility(View.GONE);
+            if ("M".equals(viewToggle)) {   //market screen
+                List<Stock> searchedMarket = dbUtil.searchStocksM(search);
+                if (searchedMarket.isEmpty()) {
+                    // Show no results message
+                    if (lblEmpty != null) {
+                        lblEmpty.setText("No results");
+                        lblEmpty.setVisibility(View.VISIBLE);
+                    }
+                    if (stockRV != null) {
+                        stockRV.setVisibility(View.GONE);
+                    }
+                    // Hide result label and clear button when no results
+                    if (lblResult != null) {
+                        lblResult.setVisibility(View.GONE);
+                    }
+                    if (btnClear != null) {
+                        btnClear.setVisibility(View.GONE);
+                    }
+                    if (resultContainer != null) {
+                        resultContainer.setVisibility(View.INVISIBLE);
+                    }
                 } else {
-                    //display the requested stock in the recyclerview:
-                    StockAdapter stockAdapter = new StockAdapter(this, searchedStock);
+                    // Hide empty message and show results
+                    if (lblEmpty != null) {
+                        lblEmpty.setVisibility(View.GONE);
+                    }
+                    if (stockRV != null) {
+                        stockRV.setVisibility(View.VISIBLE);
+                    }
+                    if (lblResult != null) {
+                        lblResult.setText("Showing results for: " + search);
+                        lblResult.setVisibility(View.VISIBLE);
+                    }
+                    if (btnClear != null) {
+                        btnClear.setVisibility(View.VISIBLE);
+                    }
+                    if (resultContainer != null) {
+                        resultContainer.setVisibility(View.VISIBLE);
+                    }
+
+                    // Create and set up the adapter BEFORE using it
+                    StockAdapter stockAdapter = new StockAdapter(this, searchedMarket);
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     stockRV.setLayoutManager(linearLayoutManager);
                     stockRV.setAdapter(stockAdapter);
+
+                    // Ensure correct button states and heading
+                    if (btnToggleP != null) {
+                        btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+                    }
+                    if (btnToggleM != null) {
+                        btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+                    }
+                    if (lblHeadingDisplayed != null) {
+                        lblHeadingDisplayed.setText("Market");
+                    }
+                }
+            } else { // "P" - Portfolio view
+                List<PortfolioStock> searchedPortfolio = dbUtil.searchStocksP(search);
+                if (searchedPortfolio.isEmpty()) {
+                    // Show no results message
+                    if (lblEmpty != null) {
+                        lblEmpty.setText("No results");
+                        lblEmpty.setVisibility(View.VISIBLE);
+                    }
+                    if (stockRV != null) {
+                        stockRV.setVisibility(View.GONE);
+                    }
+                    // Hide result label and clear button when no results
+                    if (lblResult != null) {
+                        lblResult.setVisibility(View.GONE);
+                    }
+                    if (btnClear != null) {
+                        btnClear.setVisibility(View.GONE);
+                    }
+                    if (resultContainer != null) {
+                        resultContainer.setVisibility(View.INVISIBLE);
+                    }
+                } else {
+                    // Hide empty message and show results
+                    if (lblEmpty != null) {
+                        lblEmpty.setVisibility(View.GONE);
+                    }
+                    if (stockRV != null) {
+                        stockRV.setVisibility(View.VISIBLE);
+                    }
+                    if (lblResult != null) {
+                        lblResult.setText("Showing results for: " + search);
+                        lblResult.setVisibility(View.VISIBLE);
+                    }
+                    if (btnClear != null) {
+                        btnClear.setVisibility(View.VISIBLE);
+                    }
+                    if (resultContainer != null) {
+                        resultContainer.setVisibility(View.VISIBLE);
+                    }
+
+                    // Create and set up the adapter
+                    PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, searchedPortfolio);
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+                    stockRV.setLayoutManager(linearLayoutManager);
+                    stockRV.setAdapter(stockAdapter);
+
+                    // Ensure correct button states and heading
+                    if (btnToggleP != null) {
+                        btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+                    }
+                    if (btnToggleM != null) {
+                        btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+                    }
+                    if (lblHeadingDisplayed != null) {
+                        lblHeadingDisplayed.setText("Portfolio");
+                    }
                 }
             }
-        });
-    }
-    public void displayPortfolioStocks(){
-        List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
-        for(PortfolioStock stock : portfolioStock){
-            Log.d("", stock.getStock().getStockID().toString());
+
         }
-    }*/
+    }
+
+    //method to filter a list and search through it:
+    public void fullSearch() {
+
+    }
 }

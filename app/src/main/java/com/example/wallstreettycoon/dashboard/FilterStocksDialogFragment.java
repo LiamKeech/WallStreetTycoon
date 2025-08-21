@@ -46,10 +46,11 @@ public class FilterStocksDialogFragment extends DialogFragment {
 
             //carry over filter category and entered criteria
             Intent intent = new Intent(getActivity(), ListStocks.class);
-            intent.putExtra("filter", selectedFilter);
+            intent.putExtra("filter", selectedFilter);  //selected filter
+            intent.putExtra("search", searchCriteria);  //entered criteria
             intent.putExtra("view", viewToggle);
             startActivity(intent);
-            //intent.putExtra("search", searchCriteria);
+
 
             //close when search button selected:
             dismiss();
