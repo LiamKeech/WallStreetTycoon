@@ -20,12 +20,14 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
     private Context context;
     private List<Stock> stockArrayList;
     private DatabaseUtil dbUtil;
+    private String viewType;
 
     // Constructor
-    public StockAdapter(Context context, List<Stock> stockModelArrayList) {
+    public StockAdapter(Context context, List<Stock> stockModelArrayList, String viewType) {
         this.context = context;
         this.stockArrayList = stockModelArrayList;
         this.dbUtil = new DatabaseUtil(context);
+        this.viewType = viewType;
     }
 
     public void updateList(List<Stock> list)
@@ -63,10 +65,10 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
                 Stock clickedStock = stockArrayList.get(pos);
 
                 Intent intent = new Intent(context, DisplayStockActivity.class);
-
                 intent.putExtra("stock_id", clickedStock.getStockID());
                 intent.putExtra("stock_symbol", clickedStock.getSymbol());
                 intent.putExtra("stock_name", clickedStock.getStockName());
+                intent.putExtra("view", viewType);
 
                 context.startActivity(intent);
             }

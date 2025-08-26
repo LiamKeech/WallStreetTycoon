@@ -33,6 +33,7 @@ public class DisplayStockActivity extends AppCompatActivity {
     private DatabaseUtil dbUtil;
     private Stock currentStock;
     private String currentUsername;
+    private String viewType;
     Context context = this;
     Game game = new Game(context);
 
@@ -45,6 +46,7 @@ public class DisplayStockActivity extends AppCompatActivity {
 
         Intent intentFromList = getIntent();
         int stockID = intentFromList.getIntExtra("stock_id", -1); // Use -1 as default
+        viewType = intentFromList.getStringExtra("view");
         currentUsername = Game.currentUser.getUserUsername();
 
         if (stockID == -1) {
@@ -87,6 +89,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         backButton.setOnClickListener(v -> {
             Intent intent = new Intent(DisplayStockActivity.this, ListStocks.class);
             intent.putExtra("username", currentUsername);
+            intent.putExtra("view", viewType);
             startActivity(intent);
         });
 

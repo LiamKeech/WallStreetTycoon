@@ -161,7 +161,8 @@ public class ListStocks extends AppCompatActivity {
         else {
             stockRV.setVisibility(View.VISIBLE);
             lblEmpty.setVisibility(View.GONE);
-            PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, portfolioStock);
+
+            PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, portfolioStock, "P");
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             stockRV.setLayoutManager(linearLayoutManager);
             stockRV.setAdapter(stockAdapter);
@@ -171,7 +172,8 @@ public class ListStocks extends AppCompatActivity {
     public void displayAllStocks(){ //gets list of all stocks, put in recyclerview
         lblEmpty.setVisibility(View.GONE);
         List<Stock> allStockList = dbUtil.getStockList();
-        StockAdapter stockAdapter = new StockAdapter(this, allStockList);
+
+        StockAdapter stockAdapter = new StockAdapter(this, allStockList, "M");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         stockRV.setLayoutManager(linearLayoutManager);
         stockRV.setAdapter(stockAdapter);
@@ -189,7 +191,7 @@ public class ListStocks extends AppCompatActivity {
                 stockRV.setVisibility(View.GONE);
             } else {
                 //display the filtered stock in the recyclerview:
-                StockAdapter stockAdapter = new StockAdapter(this, filteredStock);
+                StockAdapter stockAdapter = new StockAdapter(this, filteredStock, "P");
                 lblResult.setText("Showing results for: " + filter);
                 resultContainer.setVisibility(View.VISIBLE);
                 lblResult.setVisibility(View.VISIBLE);
@@ -212,7 +214,7 @@ public class ListStocks extends AppCompatActivity {
                 stockRV.setVisibility(View.GONE);
             } else {
                 //display the filtered stock in the recyclerview:
-                PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredStock);
+                PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredStock, "M");
                 lblResult.setText("Showing results for: " + filter);
                 lblResult.setVisibility(View.VISIBLE);
                 btnClear.setVisibility(View.VISIBLE);
@@ -268,7 +270,7 @@ public class ListStocks extends AppCompatActivity {
                     }
 
                     // Create and set up the adapter BEFORE using it
-                    StockAdapter stockAdapter = new StockAdapter(this, filteredMarket);
+                    StockAdapter stockAdapter = new StockAdapter(this, filteredMarket, "M");
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     stockRV.setLayoutManager(linearLayoutManager);
                     stockRV.setAdapter(stockAdapter);
@@ -325,7 +327,7 @@ public class ListStocks extends AppCompatActivity {
                     }
 
                     // Create and set up the adapter
-                    PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredPortfolio);
+                    PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, filteredPortfolio, "P");
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     stockRV.setLayoutManager(linearLayoutManager);
                     stockRV.setAdapter(stockAdapter);
@@ -390,7 +392,7 @@ public class ListStocks extends AppCompatActivity {
                     }
 
                     // Create and set up the adapter BEFORE using it
-                    StockAdapter stockAdapter = new StockAdapter(this, searchedMarket);
+                    StockAdapter stockAdapter = new StockAdapter(this, searchedMarket, "M");
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     stockRV.setLayoutManager(linearLayoutManager);
                     stockRV.setAdapter(stockAdapter);
@@ -447,7 +449,7 @@ public class ListStocks extends AppCompatActivity {
                     }
 
                     // Create and set up the adapter
-                    PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, searchedPortfolio);
+                    PortfolioStockAdapter stockAdapter = new PortfolioStockAdapter(this, searchedPortfolio, "P");
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
                     stockRV.setLayoutManager(linearLayoutManager);
                     stockRV.setAdapter(stockAdapter);
