@@ -152,6 +152,19 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
+<!--    <TextView-->
+<!--        android:id="@+id/yAxisLabel"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Price"-->
+<!--        android:textSize="12sp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_marginEnd="4dp"-->
+<!--        android:rotation="270"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/timeRangeButtons"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/stockChart"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/stockNameHeader" />-->
+
     <!-- Chart -->
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/stockChart"
@@ -165,6 +178,19 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp" />
+
+<!--    <TextView-->
+<!--        android:id="@+id/xAxisLabel"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Time"-->
+<!--        android:textSize="12sp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:layout_marginBottom="4dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/timeRangeButtons"-->
+<!--        app:layout_constraintStart_toEndOf="@id/stockDetailsCard"-->
+<!--        app:layout_constraintEnd_toEndOf="@id/stockChart"-->
+<!--        app:layout_constraintHorizontal_bias="0.5" />-->
 
     <!-- Time Range Buttons -->
     <LinearLayout

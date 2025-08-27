@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,7 @@ public class ChangePassswordDialogFragment extends DialogFragment {
         });
 
         //cancel button: close dialog
-        Button btnCancel = view.findViewById(R.id.btnCancelPasswChange);
+        ImageButton btnCancel = view.findViewById(R.id.btnCancelPasswChange);
         btnCancel.setOnClickListener(v -> dismiss());
 
         return view;

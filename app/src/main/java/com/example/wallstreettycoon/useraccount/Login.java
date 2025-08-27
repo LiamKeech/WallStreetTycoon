@@ -20,6 +20,9 @@ import com.example.wallstreettycoon.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.portfolio.PortfolioStock;
+
+import java.util.List;
 
 public class Login extends AppCompatActivity {
     Context context = this;
@@ -74,6 +77,14 @@ public class Login extends AppCompatActivity {
                             else{
                                game.continueGame();
                             }
+                            List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+                            String viewType;
+                            if (portfolioStockCheck.isEmpty()) {
+                                viewType = "M";
+                            } else {
+                                viewType = "P";
+                            }
+                            loginIntent.putExtra("view", viewType);
                             startActivity((loginIntent));
                         }
                     }

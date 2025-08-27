@@ -22,11 +22,13 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
 
     private Context context;
     private List<PortfolioStock> PstockArrayList;
+    private String viewType;
 
     // Constructor
-    public PortfolioStockAdapter(Context context, List<PortfolioStock> stockModelArrayList) {
+    public PortfolioStockAdapter(Context context, List<PortfolioStock> stockModelArrayList, String viewType) {
         this.context = context;
         this.PstockArrayList = stockModelArrayList;
+        this.viewType = viewType;
     }
 
     @NonNull
@@ -77,10 +79,10 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
                 PortfolioStock clickedStock = PstockArrayList.get(pos);
 
                 Intent intent = new Intent(context, DisplayStockActivity.class);
-
                 intent.putExtra("stock_id", clickedStock.getStock().getStockID());
                 intent.putExtra("stock_symbol", clickedStock.getStock().getSymbol());
                 intent.putExtra("stock_name", clickedStock.getStock().getStockName());
+                intent.putExtra("view", viewType);
 
                 context.startActivity(intent);
             }
