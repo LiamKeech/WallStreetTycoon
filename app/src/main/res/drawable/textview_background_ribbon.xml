@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background ribbon -->
+    <item>
+        <vector
+            android:width="200dp"
+            android:height="50dp"
+            android:viewportWidth="200"
+            android:viewportHeight="50">
+
+            <path
+                android:fillColor="@color/DarkBlue"
+                android:pathData="M30,0 L32,8 L0,8 L10,24 L0,40 L45,40 L44,33 L156,33 L155,40 L200,40 L190,24 L200,8 L168,8 L 170,0 Z"/>
+        </vector>
+    </item>
+    <item>
+        <vector
+            android:width="200dp"
+            android:height="50dp"
+            android:viewportWidth="200"
+            android:viewportHeight="50">
+
+            <path
+                android:fillColor="@color/DarkBlueShadow"
+                android:pathData="M44,33 L44,30 L156,30 L156,33  Z"/>
+        </vector>
+    </item>
+
+</layer-list>
