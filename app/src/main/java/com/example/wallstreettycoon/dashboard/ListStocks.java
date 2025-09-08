@@ -35,6 +35,7 @@ import com.example.wallstreettycoon.portfolio.PortfolioStockAdapter;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockAdapter;
 import com.example.wallstreettycoon.useraccount.ChangePassswordDialogFragment;
+import com.example.wallstreettycoon.useraccount.ManageUserAccount;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
@@ -181,7 +182,9 @@ public class ListStocks extends AppCompatActivity {
                 }
 
                 if (item.getItemId() == R.id.nav_settings) {
-
+                    //go to manage user account
+                    Intent manage = new Intent(context, ManageUserAccount.class);
+                    startActivity(manage);
                 }
 
                 drawerLayout.closeDrawers();
