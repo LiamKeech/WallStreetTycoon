@@ -41,9 +41,7 @@ public class ManageUserAccount extends AppCompatActivity {
             return insets;
         });
 
-        /*//user test data:
-        User admin = new User("admin", "admin", "admin", "admin1", 1000.0);
-        Game.currentUser = admin;*/
+        //to test:set current user to a user
 
         //set initial values to the logged in user: (from current user)
         EditText edtUser = findViewById(R.id.edtUsernameManage);

@@ -181,8 +181,7 @@ public class ListStocks extends AppCompatActivity {
 
                 }
 
-                if (item.getItemId() == R.id.nav_settings) {
-                    //go to manage user account
+                if (item.getItemId() == R.id.nav_settings) { //go to manage user account
                     Intent manage = new Intent(context, ManageUserAccount.class);
                     startActivity(manage);
                 }
