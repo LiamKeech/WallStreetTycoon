@@ -26,6 +26,7 @@ import java.util.List;
 
 public class Login extends AppCompatActivity {
     Context context = this;
+    DatabaseUtil dbUtil;
     Button btnLoginAccount;
     TextView txtCreateAccount;
 
@@ -39,6 +40,8 @@ public class Login extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        dbUtil = new DatabaseUtil(context);
 
         txtCreateAccount = findViewById(R.id.txtCreate);
         txtCreateAccount.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +67,6 @@ public class Login extends AppCompatActivity {
 
                 if (!username.isEmpty() && !password.isEmpty())
                 {
-                    DatabaseUtil dbUtil = new DatabaseUtil(context);
                     if (dbUtil.userExists(username)) {
                         User user = dbUtil.getUser(username);
                         if (user.getUserPassword().equals(password)) { //valid credentials

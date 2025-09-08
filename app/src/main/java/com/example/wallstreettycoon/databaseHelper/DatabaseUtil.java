@@ -184,6 +184,69 @@ public class DatabaseUtil {
         return results;
     }
 
+    public List<Stock> combinedSearchM(String filterCategory, String searchCriteria) {
+        List<Stock> result = new ArrayList<>();   //Market - query stocks table
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM stocks WHERE category = ? AND stockName LIKE ? COLLATE NOCASE",
+                new String[]{filterCategory, "%"+searchCriteria+"%"});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
+                result.add(stock);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+
+        return result;
+    }
+
+    public List<PortfolioStock> combinedSearchP(String filterCategory, String searchCriteria) {
+        List<PortfolioStock> result = new ArrayList<>();  //Portfolio - query portfolios and stock table
+
+        String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
+                "s.stockID, s.stockName, s.symbol, s.category, s.description " +
+                "FROM portfolioStock ps " +
+                "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
+                "JOIN stocks s ON ps.stockID = s.stockID " +
+                "WHERE s.category = ? AND s.stockName LIKE ? COLLATE NOCASE";
+
+        Cursor cursor = db.rawQuery(query, new String[]{filterCategory, "%"+searchCriteria+"%"});
+
+        while (cursor.moveToNext()) {
+            int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+            int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+
+            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+            double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
+            String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
+
+            // First, create a Stock object
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
+
+            // Create PortfolioStock
+            PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
+
+            result.add(ps);
+        }
+
+        cursor.close();
+
+        return result;
+    }
+
     public Stock getStock(Integer stockID){
         for(Stock stock : getStockList()){
             if(stock.getStockID().equals(stockID)){
