@@ -20,15 +20,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.659">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonLarge"
             android:id="@+id/start_button"
             android:layout_width="172dp"
             android:layout_height="88dp"
-            android:backgroundTint="@color/Orange"
             android:text="Start"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:cornerRadius="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/lblInstructions"
@@ -46,7 +43,7 @@
             android:lineSpacingExtra="6dp"
             android:padding="16dp"
             android:text="Your company’s once-soaring AI empire is in freefall—its share price plummeting as investors flee in panic. But the cause isn’t Wall Street—it’s your AI itself. A fatal flaw has crept into its core algorithms, corrupting decisions and poisoning trust. There’s no bailout, no lifeline. To survive, you’ll need to dive deep into its neural wiring, hunt down rogue weights, debug erratic models, and restore its learning logic. Each fix stabilizes the system, halts the crash, and revives investor faith. Repair it in time, and your fortune—and your company—will be saved. Fail, and you’ll lose everything."
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,14 +53,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        style="@style/DarkBlueTextView"
         android:id="@+id/lblGameTitle"
-        android:layout_width="286dp"
-        android:layout_height="57dp"
-        android:background="@drawable/rounded_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="The AI Boom"
-        android:textColor="@color/white"
-        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

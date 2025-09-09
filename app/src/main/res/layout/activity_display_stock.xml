@@ -24,17 +24,16 @@
 
     <TextView
         android:id="@+id/stockNameHeader"
-        android:layout_width="0dp"
+        style="@style/DarkBlueTextView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/rounded_button_background"
         android:gravity="center"
-        android:padding="12dp"
         android:text="Viewing TechCorp"
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/backButton"
         app:layout_constraintTop_toTopOf="parent" />
@@ -63,11 +62,10 @@
 
             <!-- Stock Symbol -->
             <TextView
+                style="@style/subHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Stock Symbol:"
-                android:textColor="@color/LightBlue"
-                android:textStyle="bold" />
+                android:text="Stock Symbol:"/>
 
             <TextView
                 android:id="@+id/stockSymbolValue"
@@ -79,12 +77,11 @@
 
             <!-- Current Price -->
             <TextView
+                style="@style/subHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Current Price:"
-                android:textColor="@color/LightBlue"
-                android:textStyle="bold" />
+                android:text="Current Price:"/>
 
             <TextView
                 android:id="@+id/currentPriceValue"
@@ -96,12 +93,11 @@
 
             <!-- Description with Border -->
             <TextView
+                style="@style/subHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Description:"
-                android:textColor="@color/LightBlue"
-                android:textStyle="bold" />
+                android:text="Description:" />
 
             <EditText
                 android:id="@+id/stockDescription"
@@ -128,22 +124,22 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
+                    style="@style/GreenButtonMedium"
                     android:id="@+id/btnBuy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
-                    android:backgroundTint="@color/Green"
                     android:padding="12dp"
                     android:text="BUY"
                     android:textColor="#FFFFFF"
                     app:cornerRadius="8dp" />
 
-                <Button
+                <androidx.appcompat.widget.AppCompatButton
+                    style="@style/RedButtonMedium"
                     android:id="@+id/btnSell"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/Red"
                     android:padding="12dp"
                     android:text="SELL"
                     android:textColor="#FFFFFF"

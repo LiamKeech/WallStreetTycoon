@@ -20,15 +20,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.659">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonLarge"
             android:id="@+id/start_button"
             android:layout_width="172dp"
             android:layout_height="88dp"
-            android:backgroundTint="@color/Orange"
             android:text="Start"
-            android:textColor="@color/white"
-            android:textSize="17sp"
-            app:cornerRadius="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/lblInstructions"
@@ -46,7 +43,7 @@
             android:lineSpacingExtra="6dp"
             android:padding="16dp"
             android:text="You've just stumbled upon a forgotten crypto wallet—hidden deep within an old blockchain explorer and tied to a fortune in early-mined cryptocurrency. But there's a catch: it's locked behind a complex passphrase, and no reset button exists. To unlock it, you'll need to crack the code by solving cryptographic puzzles and decoding clues buried in transaction notes, old forum posts, and encrypted messages. Each correct solution reveals part of the passphrase. Piece it together, and the wallet—and its digital treasure—will be yours."
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,14 +53,12 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        style="@style/DarkBlueTextView"
         android:id="@+id/lblGameTitle"
-        android:layout_width="286dp"
-        android:layout_height="57dp"
-        android:background="@drawable/rounded_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="The Crypto Rise"
-        android:textColor="@color/white"
-        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

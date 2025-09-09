@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:gravity="center_horizontal|center_vertical"
+        android:gravity="center"
         android:text="Create Account"
         app:layout_constraintBottom_toTopOf="@+id/FieldCreate"
         app:layout_constraintEnd_toEndOf="parent"
@@ -35,6 +35,7 @@
         app:layout_constraintVertical_bias="0.756">
 
         <TextView
+            style="@style/subHeading"
             android:id="@+id/lblNameCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +44,6 @@
             android:text="Name"
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -52,6 +52,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
+            style="@style/subHeading"
             android:id="@+id/lblSurnameCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -60,7 +61,6 @@
             android:text="Surname"
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -69,6 +69,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
+            style="@style/subHeading"
             android:id="@+id/lblUsernameCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,7 +77,6 @@
             android:text="Username"
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.626"
@@ -85,6 +85,7 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
+            style="@style/subHeading"
             android:id="@+id/lblPasswCreate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -92,7 +93,6 @@
             android:text="Password"
             android:textColor="@color/LightBlue"
             android:textSize="20sp"
-            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.615"

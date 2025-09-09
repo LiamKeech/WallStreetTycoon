@@ -22,15 +22,12 @@
 
         <!-- Stock symbol -->
         <TextView
+            style="@style/cardSym"
             android:id="@+id/lblStockSymbol"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:background="@drawable/minigame_2_btn_selected"
             android:gravity="center"
-            android:text="AAPL"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:textStyle="bold" />
+            android:text="AAPL" />
 
         <!-- Stock info -->
         <LinearLayout
@@ -41,13 +38,12 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/cardHeading"
                 android:id="@+id/lblStockName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Apple inc."
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 android:maxLines="1"
                 android:ellipsize="end" />
 

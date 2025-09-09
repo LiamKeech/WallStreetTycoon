@@ -9,28 +9,24 @@
 
     <!-- Header -->
     <TextView
+        style="@style/DarkBlueTextView"
         android:id="@+id/dialogHeader"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/DarkBlue"
         android:gravity="center"
-        android:padding="12dp"
         android:text="Buy AAA"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Stock Symbol (Label and Value side by side) -->
     <TextView
+        style="@style/subHeading"
         android:id="@+id/stockSymbolLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Stock Symbol:"
-        android:textColor="@color/LightBlue"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialogHeader" />
     <TextView
@@ -46,13 +42,12 @@
 
     <!-- Current Price (Label and Value side by side) -->
     <TextView
+        style="@style/subHeading"
         android:id="@+id/currentPriceLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Current Price:"
-        android:textColor="@color/LightBlue"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/stockID" />
     <TextView
@@ -68,13 +63,12 @@
 
     <!-- Quantity Input (Label and EditText side by side) -->
     <TextView
+        style="@style/subHeading"
         android:id="@+id/quantityLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Quantity:"
-        android:textColor="@color/LightBlue"
-        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/currentPrice" />
     <EditText
@@ -91,26 +85,24 @@
         android:layout_marginTop="16dp" />
 
     <TextView
+        style="@style/cardHeading"
         android:id="@+id/sharesRemaining"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Shares Remaining: 0.00"
-        android:textColor="@color/black"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/quantityInput" />
 
     <!-- Total Cost -->
     <TextView
+        style="@style/cardHeading"
         android:id="@+id/totalProceeds"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Total Proceeds: $0.00"
-        android:textColor="@color/black"
-        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sharesRemaining" />
@@ -126,23 +118,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/GreenButtonMedium"
             android:id="@+id/btnConfirm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/Green"
             android:padding="12dp"
-            android:text="Confirm"
-            android:textColor="@color/white" />
+            android:text="Confirm"/>
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonMedium"
             android:id="@+id/btnCancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/Orange"
             android:padding="12dp"
-            android:text="Cancel"
-            android:textColor="@color/white" />
+            android:text="Cancel"/>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

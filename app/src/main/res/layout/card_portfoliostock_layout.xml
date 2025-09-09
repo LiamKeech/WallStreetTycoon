@@ -41,13 +41,12 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/cardHeading"
                 android:id="@+id/lblStockName_portfolioCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="AAPL"
                 android:textColor="@color/black"
-                android:textSize="20sp"
-                android:textStyle="bold"
                 android:maxLines="1"
                 android:ellipsize="end" />
 

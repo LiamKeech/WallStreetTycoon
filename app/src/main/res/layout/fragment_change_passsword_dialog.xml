@@ -9,14 +9,12 @@
 
 
     <TextView
+        style="@style/DarkBlueTextView"
         android:id="@+id/ChPaswwdialogHeader"
-        android:layout_width="263dp"
-        android:layout_height="56dp"
-        android:background="@drawable/rounded_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Change Password"
-        android:textColor="@color/white"
-        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,13 +22,12 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
+        style="@style/subHeading"
         android:id="@+id/txtNewPassw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="63dp"
         android:text="New password"
-        android:textColor="@color/LightBlue"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/edtNewPassw"
         app:layout_constraintHorizontal_bias="1.0"
@@ -39,13 +36,12 @@
         app:layout_constraintVertical_bias="0.344" />
 
     <TextView
+        style="@style/subHeading"
         android:id="@+id/txtConfirmPassw"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="64dp"
         android:text="Confirm password"
-        android:textColor="@color/LightBlue"
-        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/edtConfirmPassw"
         app:layout_constraintHorizontal_bias="1.0"
@@ -82,17 +78,14 @@
         app:layout_constraintTop_toBottomOf="@+id/edtNewPassw"
         app:layout_constraintVertical_bias="0.245" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
+        style="@style/OrangeButtonMedium"
         android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="236dp"
         android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/Orange"
         android:text="Save"
-        android:textColor="@color/white"
-        android:textSize="17sp"
-        app:cornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
