@@ -173,7 +173,7 @@ public class GameProfile extends AppCompatActivity {
 
         for (PortfolioStock ps : portfolio) {
             String category = ps.getStock().getCategory();
-            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID(), 100);
+            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID(), 1);
             double value = currentPrice * ps.getQuantity();
 
             categoryValues.put(category, categoryValues.getOrDefault(category, 0.0) + value);
@@ -211,7 +211,7 @@ public class GameProfile extends AppCompatActivity {
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
         pieChart.setDrawHoleEnabled(true);
-        pieChart.setHoleColor(Color.BLUE);
+        pieChart.setHoleColor(Color.WHITE);
         pieChart.setHoleRadius(25f);
         pieChart.setTransparentCircleRadius(30f);
         pieChart.setDrawCenterText(false);
@@ -238,6 +238,7 @@ public class GameProfile extends AppCompatActivity {
     private void loadTransactionHistory() {
         // For now, show empty state
         transactionsList.clear();
+        transactionsList.addAll(dbUtil.getTransactionHistory(currentUsername));
 
         if (transactionsList.isEmpty()) {
             rvTransactions.setVisibility(View.GONE);
@@ -245,7 +246,7 @@ public class GameProfile extends AppCompatActivity {
         } else {
             rvTransactions.setVisibility(View.VISIBLE);
             tvEmptyTransactions.setVisibility(View.GONE);
-            transactionsAdapter.updateData(transactionsList);
+            transactionsAdapter.notifyDataSetChanged();
         }
     }
 

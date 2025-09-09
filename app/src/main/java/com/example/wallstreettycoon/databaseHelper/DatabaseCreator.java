@@ -15,7 +15,7 @@ import java.util.List;
 
 public class DatabaseCreator extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "localdata.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     public DatabaseCreator(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -157,26 +157,39 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "FOREIGN KEY (stockID) REFERENCES stocks(stockID))"
         );
 
-        // Transactions table
+        // Transaction history table
 
         ///database version issue by creating new tables
-//        db.execSQL(
-//                "CREATE TABLE IF NOT EXISTS transaction_history (" +
-//                        "transactionID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-//                        "username TEXT NOT NULL, " +
-//                        "stockID INTEGER NOT NULL, " +
-//                        "transactionType TEXT NOT NULL CHECK(transactionType IN ('BUY', 'SELL')), " +
-//                        "quantity INTEGER NOT NULL, " +
-//                        "price REAL NOT NULL, " +
-//                        "transactionDate TEXT NOT NULL, " +
-//                        "FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE, " +
-//                        "FOREIGN KEY (stockID) REFERENCES stocks(stockID) ON DELETE CASCADE)"
-//        );
+        db.execSQL(
+                "CREATE TABLE IF NOT EXISTS transaction_history (" +
+                        "transactionID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "username TEXT NOT NULL, " +
+                        "stockID INTEGER NOT NULL, " +
+                        "transactionType TEXT NOT NULL CHECK(transactionType IN ('BUY', 'SELL')), " +
+                        "quantity INTEGER NOT NULL, " +
+                        "price REAL NOT NULL, " +
+                        "transactionDate TEXT NOT NULL, " +
+                        "FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE, " +
+                        "FOREIGN KEY (stockID) REFERENCES stocks(stockID) ON DELETE CASCADE)"
+        );
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (oldVersion < 2) {
+            db.execSQL(
+                    "CREATE TABLE IF NOT EXISTS transaction_history (" +
+                            "transactionID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                            "username TEXT NOT NULL, " +
+                            "stockID INTEGER NOT NULL, " +
+                            "transactionType TEXT NOT NULL CHECK(transactionType IN ('BUY', 'SELL')), " +
+                            "quantity INTEGER NOT NULL, " +
+                            "price REAL NOT NULL, " +
+                            "transactionDate TEXT NOT NULL, " +
+                            "FOREIGN KEY (username) REFERENCES users(username) ON DELETE CASCADE, " +
+                            "FOREIGN KEY (stockID) REFERENCES stocks(stockID) ON DELETE CASCADE)"
+            );
+        }
     }
 
 

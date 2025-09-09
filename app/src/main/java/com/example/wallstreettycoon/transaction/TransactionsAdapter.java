@@ -21,8 +21,9 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         this.transactions = transactions;
     }
 
-    public void updateData(List<Transaction> newData) {
-        this.transactions = newData;
+    public void updateData(List<Transaction> newTransactions) {
+        this.transactions.clear();
+        this.transactions.addAll(newTransactions);
         notifyDataSetChanged();
     }
 
