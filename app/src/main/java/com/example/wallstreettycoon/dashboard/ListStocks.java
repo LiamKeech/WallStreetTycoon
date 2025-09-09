@@ -32,6 +32,7 @@ import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.portfolio.PortfolioStockAdapter;
+import com.example.wallstreettycoon.profile.GameProfile;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockAdapter;
 import com.example.wallstreettycoon.useraccount.ChangePassswordDialogFragment;
@@ -178,7 +179,10 @@ public class ListStocks extends AppCompatActivity {
                 }
 
                 if (item.getItemId() == R.id.nav_profile) {
-
+                    Intent profile = new Intent(context, GameProfile.class);
+                    profile.putExtra("username", Game.currentUser.getUserUsername());
+                    profile.putExtra("viewType", viewType);
+                    startActivity(profile);
                 }
 
                 if (item.getItemId() == R.id.nav_settings) { //go to manage user account

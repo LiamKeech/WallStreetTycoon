@@ -1,17 +1,18 @@
 package com.example.wallstreettycoon.transaction;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 public class Transaction {
     private long transactionID;
     private String username;
     private long stockID;
-    private String transactionType; //BUY or SELL
+    private String transactionType; // BUY or SELL
     private int quantity;
     private BigDecimal price;
-    private String transactionDate;
+    private Date transactionDate;
 
-    public Transaction(long transactionID, String username, long stockID, String transactionType, int quantity, BigDecimal price, String transactionDate) {
+    public Transaction(long transactionID, String username, long stockID, String transactionType, int quantity, BigDecimal price, Date transactionDate) {
         this.transactionID = transactionID;
         this.username = username;
         this.stockID = stockID;
@@ -21,6 +22,7 @@ public class Transaction {
         this.transactionDate = transactionDate;
     }
 
+    // Getters and setters
     public long getTransactionID() {
         return transactionID;
     }
@@ -69,11 +71,11 @@ public class Transaction {
         this.price = price;
     }
 
-    public String getTransactionDate() {
+    public Date getTransactionDate() {
         return transactionDate;
     }
 
-    public void setTransactionDate(String transactionDate) {
+    public void setTransactionDate(Date transactionDate) {
         this.transactionDate = transactionDate;
     }
 }
