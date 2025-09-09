@@ -1,0 +1,131 @@
+		//CHAPTER CATOEGORIES
+
+//Technology stocks
+
+Cranberry Inc.,CRNB,Technology,Leading tech company known for overpriced blenders with Bluetooth.
+MicroHard Corp.,MHCD,Technology,Known for crashing software updates at the worst possible times.
+Pear Systems,PEAR,Technology,Makes phones that look suspiciously like other fruit-branded devices.
+Googolplex Ltd.,GPLX,Technology,Search engine so advanced it tells you what you want before you think it.
+Orange Inc.,ORNG,Technology,Known for selling chargers separately at double the price.
+BananaSoft Corp.,BNNF,Technology,Creators of productivity software that peels slowly under pressure.
+Instasham Ltd.,ISAM,Technology,Photo-sharing app where nothing is real and everything is filtered.
+Chirpify Inc.,CHRP,Technology,Microblogging platform where everyone yells in 280 characters or less.
+LemonTech Inc.,LMTC,Technology,Hardware firm famous for gadgets that break a week after warranty.
+Overpriced Cloud Systems,OCSD,Technology,Enterprise cloud storage that costs more than actual clouds.
+Redditron LLC.,RDTN,Technology,Forum-based platform where opinions get upvoted into arguments.
+FruitByte Inc.,FRBT,Technology,Known for selling “innovative” phones with missing headphone jacks.
+Pineapple OS Ltd.,PNOS,Technology,Revolutionary operating system that works only on Tuesdays.
+NetScam Corp.,NSCM,Technology,Internet service provider famous for charging hidden fees nobody understands.
+Zynerd Corp.,ZYND,Technology,AI company creating chatbots that give vague answers about themselves.
+
+//Investment banks
+
+Goldbark Sachs,GDBK,Finance,Global investment bank known for charging fees on fees.
+Morgue & Stanley,MRGS,Finance,Investment bank famous for burying portfolios.
+Lehman Brothers 2.0,LB20,Finance,Risk management firm that swears it won’t collapse again.
+Scamford & Poors,SCMP,Finance,Ratings agency that gives AAA to literally anything.
+JP Murgan,JPMG,Finance,Major bank known for losing billions and calling it a rounding error.
+Bear Stunned,BRST,Finance,Hedge fund shocked every time the market moves.
+CitronBank,CTRB,Finance,Investment firm famous for short-selling its own clients.
+Hindenburg Capital,HDBC,Finance,Hedge fund specializing in explosive losses.
+Ponzi Partners,PNZI,Finance,Wealth management company where old investors pay the new.
+Diamond Hands Capital,DMHC,Finance,Hedge fund that only buys meme stocks and never sells.
+
+//Crypto coins
+
+DogeCash,DGCS,Cryptocurrency,Meme-inspired coin that runs entirely on hype.
+InstaCoin,INST,Cryptocurrency,Social media token that gains value from likes and shares.
+Bitcorn,BTCN,Cryptocurrency,Coin mined only on farms with actual cornfields.
+HodlToken,HODL,Cryptocurrency,Designed for people who never sell no matter what.
+ShadyCoin,SHDY,Cryptocurrency,Mysterious token with no whitepaper and no problem taking your money.
+MoonBuck,MNBK,Cryptocurrency,Guaranteed to go “to the moon” every week according to its Discord.
+PumpNDump,PUMP,Cryptocurrency,Volatile coin whose roadmap is just a rocket emoji.
+Elonium,ELNM,Cryptocurrency,Value fluctuates based on one billionaire’s tweets.
+ZeroCoin,ZRCN,Cryptocurrency,Currency worth exactly nothing but trades at high volume.
+BananaChain,BNNA,Cryptocurrency,Fruit-backed blockchain promising potassium-powered smart contracts.
+
+//Tourism and travel
+
+SkyHigh Airways,SKHA,Transportation,Budget airline famous for charging extra for seatbelts and oxygen.
+EconoJet,EJTN,Transportation,Low-cost airline where the planes land “most of the time.”
+CloudNine Travel,CLDN,Hospitality & Travel,Luxury travel agency that promises paradise but books motels.
+WingIt Airlines,WGIT,Transportation,Known for overbooking every flight and then raffling off seats.
+Paradise Lost Cruises,PRLC,Hospitality & Travel,Cruise line where the buffet outlasts the plumbing.
+JetLag Express,JTLG,Transportation,Airline that guarantees maximum layovers in random cities.
+YOLO Vacations,YLVC,Hospitality & Travel,Tour operator specializing in “all-inclusive regret” packages.
+Air404,ARFO,Transportation,Flights frequently canceled with “error not found” messages.
+BudgetBalloon,BGBL,Hospitality & Travel,Hot-air balloon service marketed as an affordable airline alternative.
+Neverland Tours,NVLT,Hospitality & Travel,Travel agency that always advertises destinations you can’t actually visit.
+
+//Entertainment
+
+TickTock Corp.,TTCK,Technology,Short video platform designed to eat your entire afternoon.
+FaceLook Inc.,FLIK,Technology,Social media giant specializing in stalking your high school crush.
+SlapChat Inc.,SLPC,Technology,Messaging app where messages disappear faster than your dignity.
+VirtuReal Inc.,VRRL,Technology,VR headset company making reality more disappointing by comparison.
+
+//Ai companies
+
+ThinkrAI,TKAI,Technology,AI startup that generates inspirational quotes that almost make sense.
+NeuralNoodle,NRND,Technology,Machine learning firm specializing in spaghetti-like neural nets.
+DeepFriedMind,DFMD,Technology,AI company known for overcooked algorithms with crunchy results.
+PseudoSense,PSSE,Technology,Artificial intelligence platform that pretends to understand feelings.
+CogniScam,CGSM,Technology,AI consultancy promising AGI by next Tuesday.
+ParrotAI,PRTA,Technology,Startup building AI that only repeats what you say but louder.
+AutoGPTed,AGPT,Technology,Automation tool that hallucinates tasks more than it completes them.
+WokeBot Labs,WKBT,Technology,AI company making bots that argue with you about ethics.
+RoboLobster,RBLB,Technology,AI-powered robotic crustaceans for “food and defense applications.”
+PredictaBull,PRBL,Technology,Analytics firm whose AI always predicts stock prices going up.
+ClosedAI,CLAI,Technology,Secretive AI company that never releases products but raises billions in funding.
+
+
+		//GENERAL CATEGORIES
+
+//Automotive
+
+Teslo,TESL,Automotive,Electric car company known for ambitious timelines and flamboyant CEOs.
+Fauxd,FAUD,Automotive,Premium German-style automaker famous for overpriced SUVs.
+Chevvie,CHVV,Automotive,American car brand producing pickup trucks with personality and rust.
+Hondel,HNDE,Automotive,Japanese automaker known for reliable cars and confusing model names.
+Benzano,BNZO,Automotive,Luxury automaker producing sedans and SUVs for the elite and pretentious.
+
+//Healthcare
+
+PillCo,PLLC,Healthcare,Pharmaceutical company known for creating medications with confusing side effects.
+Healix,HLIX,Healthcare,Healthcare tech startup promising AI-powered diagnoses that are “mostly accurate.”
+MediScam,MDMS,Healthcare,Clinic chain famous for upselling treatments you don’t need.
+BioGenie,BGNI,Healthcare,Biotech firm developing “miracle cures” funded by hype, not science.
+Wellth,WLTH,Healthcare,Wellness company selling overpriced vitamins and inspirational yoga classes.
+
+//Energy
+
+Solarix,SOLX,Energy,Renewable energy company promising solar panels that power your home and ego.
+Windigo,WNDO,Energy,Wind farm operator known for turbines that spin in mysterious directions.
+Eishkom,ESKM,Energy,Electricity provider famous for loadshedding.
+HydroHype,HDHP,Energy,Hydroelectric startup claiming rivers flow faster under their management.
+GreenFlicker,GRFL,Energy,Renewable energy firm selling subscriptions to “eco-friendly electricity.”
+
+//Consumer goods
+
+Snacksy,SNKS,Consumer Goods,Company producing snacks that are more addictive than nutritious.
+GloWear,GLOW,Consumer Goods,Fashion brand selling clothes that glow under certain lighting conditions.
+BubbleBrew,BBRW,Consumer Goods,Beverage company famous for overpriced sparkling drinks.
+ShinyStuff,SHNF,Consumer Goods,Household goods brand specializing in things that look clean but aren’t.
+ZapTech,ZPTH,Consumer Goods,Gadgets manufacturer selling quirky tech toys nobody really needs.
+
+//Real estate
+
+Brickstone Capital,BRSC,Real Estate,Real estate investment fund focusing on high-rise apartments and overpriced condos.
+Skyline Holdings,SKLH,Real Estate,Property management company specializing in luxury office buildings and rooftops.
+MetroNest,MTRN,Real Estate,Urban development firm turning old warehouses into boutique apartments.
+GoldenKey REIT,GKRT,Real Estate,Real estate investment trust offering shares in commercial and residential properties.
+HavenHill Properties,HVHP,Real Estate,Real estate company buying suburban homes and pretending they’re mansions.
+
+//aerospace and defense
+
+Falcon Dynamics,FLDN,Defense,Aerospace and defense contractor specializing in high-tech fighter jets and missiles.
+IronClad Systems,IRCL,Defense,Military technology company building armored vehicles and robotic soldiers.
+AeroStrike,AEST,Defense,Defense firm known for drones, stealth aircraft, and overcomplicated acronyms.
+TitanWorks,TTNW,Defense,Manufacturer of advanced weapons systems and “totally classified” projects.
+SkyForge Industries,SKFI,Defense,Developer of satellites, space weapons, and secret government contracts.
+
