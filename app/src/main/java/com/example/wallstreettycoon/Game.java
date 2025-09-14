@@ -15,6 +15,7 @@ import java.io.ObjectOutputStream;
 public class Game implements java.io.Serializable {
 
     public static User currentUser;
+    public static int currentChapter = 1;
     public static Timer timer;
     public static Game gameInstance;
     private static long timeStamp;

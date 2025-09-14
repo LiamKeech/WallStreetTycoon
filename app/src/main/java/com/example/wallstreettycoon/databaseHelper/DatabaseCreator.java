@@ -157,6 +157,17 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "FOREIGN KEY (stockID) REFERENCES stocks(stockID))"
         );
 
+        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'AAPL')");
+        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'GOOGL')");
+        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'MSFT')");
+        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'META')");
+        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'NFLX')");
+        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'AMZN')");
+        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('2', 'TSLA')");
+        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('2', 'KO')");
+        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('2', 'NVDA')");
+        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('2', 'JNJ')");
+
         // Transaction history table
 
         ///database version issue by creating new tables

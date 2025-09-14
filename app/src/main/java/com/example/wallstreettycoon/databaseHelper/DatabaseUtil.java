@@ -9,6 +9,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.wallstreettycoon.Game;
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
@@ -59,12 +60,42 @@ public class DatabaseUtil {
         return stockList;
     }
 
+    public List<Stock> getChapterStock() {
+        List<Stock> list = new ArrayList<>();
+
+        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
+                "FROM chapter_stock cs " +
+                "JOIN stocks s ON cs.stockID = s.stockID " +
+                "WHERE cs.chapterID = ?";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter)});
+
+        while (cursor.moveToNext()) {
+            int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+
+            //create a Stock object
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
+            list.add(stock);
+        }
+
+        cursor.close();
+        return list;
+    }
+
     public List<Stock> getFilteredStockM(String filterCategory) {
         List<Stock> filteredList = new ArrayList<>();   //Market - query stocks table
 
-        Cursor cursor = db.rawQuery(
-                "SELECT * FROM stocks WHERE category = ?",
-                new String[]{filterCategory}
+        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
+                "FROM chapter_stock cs " +
+                "JOIN stocks s ON cs.stockID = s.stockID " +
+                "WHERE cs.chapterID = ? AND s.category = ?";
+
+        Cursor cursor = db.rawQuery(query,
+                new String[]{String.valueOf(Game.currentChapter), filterCategory}
         );
 
         if (cursor.moveToFirst()) {
@@ -127,7 +158,14 @@ public class DatabaseUtil {
     public List<Stock> searchStocksM(String searchCriteria)
     {
         List<Stock> results = new ArrayList<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM stocks WHERE stockName LIKE ? COLLATE NOCASE", new String[]{"%"+searchCriteria+"%"});
+        //Cursor cursor = db.rawQuery("SELECT * FROM stocks WHERE stockName LIKE ? COLLATE NOCASE", new String[]{"%"+searchCriteria+"%"});
+
+        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
+                "FROM chapter_stock cs " +
+                "JOIN stocks s ON cs.stockID = s.stockID " +
+                "WHERE cs.chapterID = ? AND s.stockname LIKE ? COLLATE NOCASE";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), "%"+searchCriteria+"%"});
 
         if(cursor.moveToFirst()) {
             do {
@@ -187,9 +225,16 @@ public class DatabaseUtil {
     public List<Stock> combinedSearchM(String filterCategory, String searchCriteria) {
         List<Stock> result = new ArrayList<>();   //Market - query stocks table
 
-        Cursor cursor = db.rawQuery(
+        /*Cursor cursor = db.rawQuery(
                 "SELECT * FROM stocks WHERE category = ? AND stockName LIKE ? COLLATE NOCASE",
-                new String[]{filterCategory, "%"+searchCriteria+"%"});
+                new String[]{filterCategory, "%"+searchCriteria+"%"});*/
+
+        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
+                "FROM chapter_stock cs " +
+                "JOIN stocks s ON cs.stockID = s.stockID " +
+                "WHERE cs.chapterID = ? AND s.category = ? AND s.stockname LIKE ? COLLATE NOCASE";
+
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), filterCategory, "%"+searchCriteria+"%"});
 
         if (cursor.moveToFirst()) {
             do {
