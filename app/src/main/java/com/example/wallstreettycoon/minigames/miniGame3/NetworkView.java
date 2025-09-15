@@ -11,17 +11,26 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Connection;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Network;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Node;
+import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.NodeColour;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class NetworkView extends View {
     private Network network;
     private Paint nodePaint, wirePaint;
     private Node startNode;
+    private float nodeRadius = 50;
+    private float dragX, dragY;
+
+    private Map<Node, Float[]> nodePositions = new HashMap<>();
 
     public NetworkView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,6 +49,32 @@ public class NetworkView extends View {
 
     @Override
     protected void onDraw(Canvas canvas){
+        setNodePositions();
+        for (Node node: nodePositions.keySet()) {
+            if(node.getColour() == NodeColour.BLUE)
+                nodePaint.setColor(getResources().getColor(R.color.LightBlue));
+            else
+                nodePaint.setColor(getResources().getColor(R.color.Orange));
+
+            Float[] pos = nodePositions.get(node);
+            float x = pos[0];
+            float y = pos[1];
+            canvas.drawCircle(x, y, nodeRadius, nodePaint);
+        }
+
+        if (startNode != null) {
+            Float[] pos = nodePositions.get(startNode);
+            canvas.drawLine(pos[0], pos[1], dragX, dragY, wirePaint);
+        }
+
+        for (Connection connection: network.getConnections()){
+            Float[] startPos = nodePositions.get(connection.getStartNode());
+            Float[] endPos = nodePositions.get(connection.getEndNode());
+            canvas.drawLine(startPos[0], startPos[1], endPos[0], endPos[1], wirePaint);
+        }
+    }
+
+    public void setNodePositions(){
         int colIndex = 0; // track which column we're on
         for (List<Node> col: network.getCols()) {
             int[] verticalPositions = getVerticalPositions(col.size(), getHeight());
@@ -47,17 +82,13 @@ public class NetworkView extends View {
             for (int rowIndex = 0; rowIndex < col.size(); rowIndex++) {
                 Node node = col.get(rowIndex);
 
-                // X depends on column index
                 float x = colIndex * 900 + 700;  // adjust spacing as needed
-                // Y depends on row index
                 float y = verticalPositions[rowIndex];
 
-                canvas.drawCircle(x, y, 50, nodePaint);
+                nodePositions.put(node, new Float[]{x, y});
             }
-
             colIndex++;
         }
-
     }
 
     public int[] getVerticalPositions(int count, int screenHeight) {
@@ -77,10 +108,53 @@ public class NetworkView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        // Detect start node, move, and snap to end node
-        // Only call network.connectNodes(start, end) to update model
+        float x = event.getX();
+        float y = event.getY();
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                // Check if user touched a node
+                startNode = findNodeAtPosition(x, y);
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                // Optional: draw temporary wire from startNode to finger
+                if (startNode != null) {
+                    dragX = x;
+                    dragY = y;
+                    invalidate();
+                }
+                break;
+
+            case MotionEvent.ACTION_UP:
+                if (startNode != null) {
+                    Node endNode = findNodeAtPosition(x, y);
+                    if (endNode != null && endNode != startNode
+                            && startNode.getColour() == endNode.getColour()) {
+                        // Valid connection: update model
+                        network.connectNodes(startNode, endNode);
+                    }
+                    startNode = null; // reset drag
+                    invalidate(); // redraw the view
+                }
+                break;
+        }
+
         return true;
     }
+
+    private Node findNodeAtPosition(float touchX, float touchY) {
+        for (Map.Entry<Node, Float[]> entry : nodePositions.entrySet()) {
+            Float[] pos = entry.getValue();
+            float dx = touchX - pos[0];
+            float dy = touchY - pos[1];
+            if (dx * dx + dy * dy <= nodeRadius * nodeRadius) {
+                return entry.getKey();
+            }
+        }
+        return null;
+    }
+
 
 
 }

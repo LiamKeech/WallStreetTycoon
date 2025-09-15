@@ -46,4 +46,6 @@ public class Network {
     public List<List<Node>> getCols(){
         return network;
     }
+
+    public List<Connection> getConnections(){return connections;}
 }
