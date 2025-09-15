@@ -28,14 +28,8 @@ public class miniGame3 extends AppCompatActivity {
         });
 
         Network network = new Network();
-        int[] input = {1, 0};  // Example input pair
+        NetworkView networkView = findViewById(R.id.networkView);
+        networkView.setNetwork(network);
 
-        double[] output = network.forward(input);
-
-        System.out.println("Output:");
-        for (double val : output) {
-            Log.d("Output", String.valueOf(val));
-            System.out.printf("%.3f ", val);
-        }
     }
 }
