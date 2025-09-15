@@ -106,7 +106,13 @@ public class NetworkView extends View {
 
     public void moveToNextCol(){
         curCol++;
-        setNodePositions();
+        if(curCol == network.getCols().size() - 1) {
+            //win condition
+            Toast toast = Toast.makeText(getContext(), "You win!", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        else
+            setNodePositions();
     }
 
     public int[] getVerticalPositions(int count, int screenHeight) {
