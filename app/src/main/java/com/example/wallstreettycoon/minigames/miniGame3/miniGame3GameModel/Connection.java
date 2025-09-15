@@ -14,6 +14,6 @@ public class Connection {
         this.end = end;
     }
 
-    public Node getStartNode(){return start;}
-    public Node getEndNode(){return end;}
+    public Node getStart(){return start;}
+    public Node getEnd(){return end;}
 }

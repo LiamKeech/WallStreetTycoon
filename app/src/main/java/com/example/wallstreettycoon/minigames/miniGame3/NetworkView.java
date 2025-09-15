@@ -30,6 +30,8 @@ public class NetworkView extends View {
     private float nodeRadius = 50;
     private float dragX, dragY;
 
+    private int curCol = 0;
+
     private Map<Node, Float[]> nodePositions = new HashMap<>();
 
     public NetworkView(Context context, AttributeSet attrs) {
@@ -73,10 +75,10 @@ public class NetworkView extends View {
         }
 
         for (Connection connection: network.getConnections()){
-            Float[] startPos = nodePositions.get(connection.getStartNode());
-            Float[] endPos = nodePositions.get(connection.getEndNode());
+            Float[] startPos = nodePositions.get(connection.getStart());
+            Float[] endPos = nodePositions.get(connection.getEnd());
 
-            if(connection.getStartNode().getColour() == NodeColour.BLUE)
+            if(connection.getStart().getColour() == NodeColour.BLUE)
                 wirePaint.setColor(getResources().getColor(R.color.LightBlue));
             else
                 wirePaint.setColor(getResources().getColor(R.color.Orange));
@@ -93,7 +95,7 @@ public class NetworkView extends View {
             for (int rowIndex = 0; rowIndex < col.size(); rowIndex++) {
                 Node node = col.get(rowIndex);
 
-                float x = colIndex * 900 + 700;  // adjust spacing as needed
+                float x = colIndex * 900 + 400 - curCol * 900;  // adjust spacing as needed
                 float y = verticalPositions[rowIndex];
 
                 nodePositions.put(node, new Float[]{x, y});
@@ -102,10 +104,15 @@ public class NetworkView extends View {
         }
     }
 
+    public void moveToNextCol(){
+        curCol++;
+        setNodePositions();
+    }
+
     public int[] getVerticalPositions(int count, int screenHeight) {
         int[] positions = new int[count];
 
-        int spacing = screenHeight/4 ; // constant distance between nodes
+        int spacing = screenHeight/5 ; // constant distance between nodes
         int blockHeight = (count - 1) * spacing;
         int startY = (screenHeight / 2) - (blockHeight / 2);
 
@@ -143,7 +150,9 @@ public class NetworkView extends View {
                     if (endNode != null && endNode != startNode
                             && startNode.getColour() == endNode.getColour()) {
                         //valid connection
-                        network.connectNodes(startNode, endNode);
+                        if(network.connectNodes(startNode, endNode)){
+                            moveToNextCol();
+                        }
                     }
                     startNode = null; //reset drag
                     invalidate(); //redraw the view

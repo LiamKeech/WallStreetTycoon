@@ -8,11 +8,15 @@
     tools:context=".minigames.miniGame3.miniGame3">
 
     <com.example.wallstreettycoon.minigames.miniGame3.NetworkView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/networkView"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@color/LightGrey"
+
+        android:layout_marginStart="200dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
     </com.example.wallstreettycoon.minigames.miniGame3.NetworkView>

@@ -9,7 +9,7 @@ public class Node {
     int col, row;
     boolean connected;
 
-    NodeColour colour;
+    private NodeColour colour;
 
     public Node(int col, int row, NodeColour colour) {
         this.col = col;
