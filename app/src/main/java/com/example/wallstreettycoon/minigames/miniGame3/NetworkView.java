@@ -40,7 +40,8 @@ public class NetworkView extends View {
     private void init(){
         nodePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         wirePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        wirePaint.setStrokeWidth(8);
+        wirePaint.setStrokeWidth(25);
+
     }
 
     public void setNetwork(Network network){
@@ -64,12 +65,22 @@ public class NetworkView extends View {
 
         if (startNode != null) {
             Float[] pos = nodePositions.get(startNode);
+            if(startNode.getColour() == NodeColour.BLUE)
+                wirePaint.setColor(getResources().getColor(R.color.LightBlue));
+            else
+                wirePaint.setColor(getResources().getColor(R.color.Orange));
             canvas.drawLine(pos[0], pos[1], dragX, dragY, wirePaint);
         }
 
         for (Connection connection: network.getConnections()){
             Float[] startPos = nodePositions.get(connection.getStartNode());
             Float[] endPos = nodePositions.get(connection.getEndNode());
+
+            if(connection.getStartNode().getColour() == NodeColour.BLUE)
+                wirePaint.setColor(getResources().getColor(R.color.LightBlue));
+            else
+                wirePaint.setColor(getResources().getColor(R.color.Orange));
+
             canvas.drawLine(startPos[0], startPos[1], endPos[0], endPos[1], wirePaint);
         }
     }
@@ -113,12 +124,12 @@ public class NetworkView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                // Check if user touched a node
+                //check if user touched a node
                 startNode = findNodeAtPosition(x, y);
                 break;
 
             case MotionEvent.ACTION_MOVE:
-                // Optional: draw temporary wire from startNode to finger
+                // draw temporary wire from startNode to finger in ondraw
                 if (startNode != null) {
                     dragX = x;
                     dragY = y;
@@ -131,11 +142,11 @@ public class NetworkView extends View {
                     Node endNode = findNodeAtPosition(x, y);
                     if (endNode != null && endNode != startNode
                             && startNode.getColour() == endNode.getColour()) {
-                        // Valid connection: update model
+                        //valid connection
                         network.connectNodes(startNode, endNode);
                     }
-                    startNode = null; // reset drag
-                    invalidate(); // redraw the view
+                    startNode = null; //reset drag
+                    invalidate(); //redraw the view
                 }
                 break;
         }
@@ -154,7 +165,5 @@ public class NetworkView extends View {
         }
         return null;
     }
-
-
 
 }
