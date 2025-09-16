@@ -18,17 +18,27 @@ import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Timer
 public class TimerView extends View {
     Timer timer;
     String time = "";
+
+    private Runnable updater;
     public TimerView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     public void setTimer(Timer timer){
         this.timer=timer;
+        updateTimer();
     }
 
     public void updateTimer(){
-        time = String.valueOf(timer.getTime());
-        invalidate();
+        updater = new Runnable() {
+            @Override
+            public void run(){
+                time = String.valueOf(timer.getTime());
+                invalidate();
+                postDelayed(this, 10);
+            }
+        };
+        post(updater);
     }
 
     @Override
