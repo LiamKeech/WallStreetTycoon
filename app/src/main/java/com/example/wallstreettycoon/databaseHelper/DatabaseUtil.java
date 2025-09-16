@@ -64,8 +64,8 @@ public class DatabaseUtil {
         List<Stock> list = new ArrayList<>();
 
         String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
-                "FROM stocks s " +
-                "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
+                "FROM chapter_stock cs " +
+                "JOIN stocks s ON cs.stockID = s.stockID " +
                 "WHERE cs.chapterID = ?";
 
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter)});

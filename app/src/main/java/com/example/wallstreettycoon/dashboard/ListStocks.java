@@ -236,8 +236,8 @@ public class ListStocks extends AppCompatActivity {
 
     public void displayAllStocks(){ //gets list of all stocks, put in recyclerview
         lblEmpty.setVisibility(View.GONE);
-        List<Stock> allStockList = dbUtil.getStockList();
-        //List<Stock> allStockList = dbUtil.getChapterStock();
+        //List<Stock> allStockList = dbUtil.getStockList();
+        List<Stock> allStockList = dbUtil.getChapterStock();
 
         StockAdapter stockAdapter = new StockAdapter(this, allStockList, "M");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
