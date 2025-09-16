@@ -158,6 +158,7 @@ public class NetworkView extends View {
                         //valid connection
                         if(network.connectNodes(startNode, endNode)){
                             moveToNextCol();
+                            //add time to timer
                         }
                     }
                     startNode = null; //reset drag

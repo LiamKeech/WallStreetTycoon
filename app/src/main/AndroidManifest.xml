@@ -19,11 +19,7 @@
         <activity
             android:name=".minigames.miniGame3.miniGame3"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".minigames.miniGame2.miniGame2"
@@ -49,7 +45,11 @@
         <activity
             android:name=".useraccount.Login"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".useraccount.ManageUserAccount"
