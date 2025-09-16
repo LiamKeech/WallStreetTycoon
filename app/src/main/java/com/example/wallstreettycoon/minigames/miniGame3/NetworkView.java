@@ -95,7 +95,7 @@ public class NetworkView extends View {
             for (int rowIndex = 0; rowIndex < col.size(); rowIndex++) {
                 Node node = col.get(rowIndex);
 
-                float x = colIndex * 900 + 400 - curCol * 900;  // adjust spacing as needed
+                float x = colIndex * 900 + 400 - curCol * 900;  // adjust spacing
                 float y = verticalPositions[rowIndex];
 
                 nodePositions.put(node, new Float[]{x, y});

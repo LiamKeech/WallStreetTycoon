@@ -11,6 +11,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Model;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Network;
 
 public class miniGame3 extends AppCompatActivity {
@@ -27,9 +28,13 @@ public class miniGame3 extends AppCompatActivity {
             return insets;
         });
 
-        Network network = new Network();
+        Model model = new Model();
+
         NetworkView networkView = findViewById(R.id.networkView);
-        networkView.setNetwork(network);
+        networkView.setNetwork(model.getNetwork());
+
+        TimerView timerView = findViewById(R.id.timerView);
+        timerView.setTimer(model.getTimer());
 
     }
 }
