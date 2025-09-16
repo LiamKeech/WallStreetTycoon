@@ -132,13 +132,13 @@
             app:layout_constraintVertical_bias="0.022"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
-            <ImageView
+            <!--<ImageView
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:scaleType="centerInside"
                 android:src="@drawable/menu"
-                tools:layout_editor_absoluteX="16dp" />
+                tools:layout_editor_absoluteX="16dp" />-->
 
         </androidx.appcompat.widget.Toolbar>
 
