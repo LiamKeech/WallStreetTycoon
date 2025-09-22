@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Connection;
+import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Model;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Network;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Node;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.NodeColour;
@@ -24,13 +25,12 @@ import java.util.List;
 import java.util.Map;
 
 public class NetworkView extends View {
-    private Network network;
+    //private Network network;
+    private Model model;
     private Paint nodePaint, wirePaint;
     private Node startNode;
     private float nodeRadius = 50;
     private float dragX, dragY;
-
-    private int curCol = 0;
 
     private Map<Node, Float[]> nodePositions = new HashMap<>();
 
@@ -46,8 +46,8 @@ public class NetworkView extends View {
 
     }
 
-    public void setNetwork(Network network){
-        this.network = network;
+    public void setModel(Model model){
+        this.model= model;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class NetworkView extends View {
             canvas.drawLine(pos[0], pos[1], dragX, dragY, wirePaint);
         }
 
-        for (Connection connection: network.getConnections()){
+        for (Connection connection: model.network.getConnections()){
             Float[] startPos = nodePositions.get(connection.getStart());
             Float[] endPos = nodePositions.get(connection.getEnd());
 
@@ -89,13 +89,13 @@ public class NetworkView extends View {
 
     public void setNodePositions(){
         int colIndex = 0; // track which column we're on
-        for (List<Node> col: network.getCols()) {
+        for (List<Node> col: model.network.getCols()) {
             int[] verticalPositions = getVerticalPositions(col.size(), getHeight());
 
             for (int rowIndex = 0; rowIndex < col.size(); rowIndex++) {
                 Node node = col.get(rowIndex);
 
-                float x = colIndex * 900 + 400 - curCol * 900;  // adjust spacing
+                float x = colIndex * 900 + 400 - model.network.getCurColInView() * 900;  // adjust spacing
                 float y = verticalPositions[rowIndex];
 
                 nodePositions.put(node, new Float[]{x, y});
@@ -105,8 +105,9 @@ public class NetworkView extends View {
     }
 
     public void moveToNextCol(){
-        curCol++;
-        if(curCol == network.getCols().size() - 1) {
+        model.network.incrCurColInView();
+        model.timer.addTime(10000);
+        if(model.network.getCurColInView() == model.network.getCols().size() - 1) {
             //win condition
             Toast toast = Toast.makeText(getContext(), "You win!", Toast.LENGTH_SHORT);
             toast.show();
@@ -156,7 +157,7 @@ public class NetworkView extends View {
                     if (endNode != null && endNode != startNode
                             && startNode.getColour() == endNode.getColour()) {
                         //valid connection
-                        if(network.connectNodes(startNode, endNode)){
+                        if(model.network.connectNodes(startNode, endNode)){
                             moveToNextCol();
                             //add time to timer
                         }

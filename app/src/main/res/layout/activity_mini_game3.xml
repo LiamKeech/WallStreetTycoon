@@ -14,6 +14,7 @@
         app:layout_constraintEnd_toStartOf="@+id/networkView"
         app:layout_constraintStart_toStartOf="parent" />
 
+
     <com.example.wallstreettycoon.minigames.miniGame3.NetworkView
         android:id="@+id/networkView"
         android:layout_width="0dp"
