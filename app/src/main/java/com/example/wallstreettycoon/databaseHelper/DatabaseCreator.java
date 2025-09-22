@@ -1,5 +1,6 @@
 package com.example.wallstreettycoon.databaseHelper;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +12,9 @@ import com.example.wallstreettycoon.stock.StockPriceFunction;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DatabaseCreator extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "localdata.db";
@@ -101,6 +104,13 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "description TEXT)"
         );
 
+        db.execSQL("INSERT INTO chapters (chapterName, description) VALUES ('Chapter 1: The Dot-Com Boom', 'stocks in technology')");
+        db.execSQL("INSERT INTO chapters (chapterName, description) VALUES ('Chapter 2: The Housing Bubble', 'stocks in investments')");
+        db.execSQL("INSERT INTO chapters (chapterName, description) VALUES ('Chapter 3: The Crypto Surge', 'stocks in crypto')");
+        db.execSQL("INSERT INTO chapters (chapterName, description) VALUES ('Chapter 4: The Corona Crash:', 'stocks in travel and entertainment')");
+        db.execSQL("INSERT INTO chapters (chapterName, description) VALUES ('Chapter 5: The AI Revolution', 'stocks in ai platforms')");
+
+
         //TODO populate chapter table
 
         // MarketEvent table
@@ -157,16 +167,31 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "FOREIGN KEY (stockID) REFERENCES stocks(stockID))"
         );
 
-        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'AAPL')");
-        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'GOOGL')");
-        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'MSFT')");
-        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'META')");
-        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'NFLX')");
-        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('1', 'AMZN')");
-        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('2', 'TSLA')");
-        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('2', 'KO')");
-        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('2', 'NVDA')");
-        db.execSQL("INSERT INTO chapter_stock (chapterID, stockID) VALUES ('2', 'JNJ')");
+        Map<Integer, List<String>> chapterStocks = new HashMap<>();
+        chapterStocks.put(1, Arrays.asList("AAPL", "GOOGL", "MSFT", "META", "NFLX", "AMZN")); // Chapter 1: Tech + Random
+        chapterStocks.put(2, Arrays.asList("AMZN", "TSLA", "KO", "NVDA", "JNJ"));  // Chapter 2: Investments + Random
+        /*chapterStocks.put(3, Arrays.asList("MSFT", "META"));  // Chapter 3: Crypto + Random
+        chapterStocks.put(4, Arrays.asList("NFLX", "KO"));    // Chapter 4: Travel + Entertainment
+        chapterStocks.put(5, Arrays.asList("NVDA", "JNJ"));   // Chapter 5: AI*/
+
+        for (Map.Entry<Integer, List<String>> entry : chapterStocks.entrySet()) {
+            int chapterID = entry.getKey();
+            List<String> symbols = entry.getValue();
+
+            for (String symbol : symbols) {
+                Cursor cursor = db.rawQuery("SELECT stockID FROM stocks WHERE symbol = ?", new String[]{symbol});
+                if (cursor.moveToFirst()) {
+                    int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+
+                    ContentValues values = new ContentValues();
+                    values.put("chapterID", chapterID);
+                    values.put("stockID", stockID);
+
+                    db.insert("chapter_stock", null, values);
+                }
+                cursor.close();
+            }
+        }
 
         // Transaction history table
 
