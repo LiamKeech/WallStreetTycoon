@@ -345,6 +345,19 @@ public class DatabaseUtil {
         return symbol;
     }
 
+    public String getStockName(int stockID) {
+        Cursor cursor = db.rawQuery("SELECT stockName FROM stocks WHERE stockID = ?", new String[]{String.valueOf(stockID)});
+        String name = null;
+        if (cursor.moveToFirst()) {
+            name = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+        }
+
+        cursor.close();
+        if (name != null) {
+            return name;
+        } else return "unknown stock";
+    }
+
     //getter for stockPriceFunction
     public List<StockPriceFunction> getStockPriceFunctions(){
         List<StockPriceFunction> stockPriceHistories = new ArrayList<>();
@@ -409,9 +422,12 @@ public class DatabaseUtil {
             return false; // Insufficient funds
         }
 
-        ////
+        // Update balance
         updateBalance(newBalance.doubleValue(), username);
         Log.d("DB_LOG", "User " + username + " balance updated to: " + newBalance);
+
+        // Record transaction before updating portfolio
+        insertTransaction(username, stockID, "BUY", quantity, BigDecimal.valueOf(price));
 
         // Check if stock already in portfolio
         Cursor cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?", new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
@@ -464,6 +480,9 @@ public class DatabaseUtil {
             }
             updateBalance(user.getUserBalance() + totalValue.doubleValue(), username);
             Log.d("DB_LOG", "User " + username + " balance updated by: " + totalValue);
+
+            // Record the transaction
+            insertTransaction(username, stockID, "SELL", quantityToSell, BigDecimal.valueOf(price));
 
             int remainingQty = existingQty - quantityToSell;
             if (remainingQty == 0) { //remove from table if all shares sold

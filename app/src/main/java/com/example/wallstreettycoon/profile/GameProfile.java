@@ -3,7 +3,6 @@ package com.example.wallstreettycoon.profile;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -20,64 +19,60 @@ import com.example.wallstreettycoon.transaction.Transaction;
 import com.example.wallstreettycoon.transaction.TransactionsAdapter;
 import com.example.wallstreettycoon.useraccount.User;
 import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GameProfile extends AppCompatActivity {
 
-    private TextView tvUsername, tvTotalValue, tvProfitLoss, tvProfitLossPercent, tvEmptyHoldings, tvEmptyTransactions;
-    private PieChart pieChart;
-    private RecyclerView rvTransactions;
-    private ImageButton backButton;
-
     private DatabaseUtil dbUtil;
-    private String currentUsername;
+    private String username;
     private TransactionsAdapter transactionsAdapter;
-    private List<Transaction> transactionsList;
 
+    private TextView tvUsername, tvTotalPortfolioValue, tvProfitLoss, tvProfitLossPercentage, tvEmptyHoldings, tvEmptyTransactions;
+    private PieChart pieChart;
+    private RecyclerView recyclerTransactions;
+    private ImageButton backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_profile);
 
-        // Get username from intent
-        currentUsername = getIntent().getStringExtra("username");
-
-        // Init db and UI
         dbUtil = new DatabaseUtil(this);
-        InitialiseUI();
-        setupEventListeners();
+
+        // Get username
+        username = getIntent().getStringExtra("username");
+        if (username == null) {
+            username = Game.currentUser.getUserUsername();
+        }
+
+        initialiseViews();
         loadProfileData();
+        setupEventListeners();
     }
 
-    private void InitialiseUI() {
-        backButton = findViewById(R.id.backButton);
+    private void initialiseViews() {
         tvUsername = findViewById(R.id.usernameprofile);
-        tvTotalValue = findViewById(R.id.total_portfolio_value);
+        tvTotalPortfolioValue = findViewById(R.id.total_portfolio_value);
         tvProfitLoss = findViewById(R.id.profit_loss);
-        tvProfitLossPercent = findViewById(R.id.profit_loss_percentage);
+        tvProfitLossPercentage = findViewById(R.id.profit_loss_percentage);
         pieChart = findViewById(R.id.pie_chart_holdings);
+        recyclerTransactions = findViewById(R.id.recycler_transactions);
         tvEmptyHoldings = findViewById(R.id.empty_holdings_text);
-        rvTransactions = findViewById(R.id.recycler_transactions);
-        rvTransactions.setLayoutManager(new LinearLayoutManager(this));
         tvEmptyTransactions = findViewById(R.id.empty_transactions_text);
+        backButton = findViewById(R.id.backButton);
 
-        // Empty transaction list and adapter
-        transactionsList = new ArrayList<>();
-        transactionsAdapter = new TransactionsAdapter(transactionsList);
-        rvTransactions.setAdapter(transactionsAdapter);
-
-        // Set username
-        tvUsername.setText(currentUsername + " Profile");
+        recyclerTransactions.setLayoutManager(new LinearLayoutManager(this));
+        transactionsAdapter = new TransactionsAdapter(new ArrayList<>(), this);
+        recyclerTransactions.setAdapter(transactionsAdapter);
     }
 
     private void setupEventListeners() {
@@ -86,7 +81,7 @@ public class GameProfile extends AppCompatActivity {
 
             Intent intent = new Intent(this, com.example.wallstreettycoon.dashboard.ListStocks.class);
             intent.putExtra("view", viewType);
-            intent.putExtra("username", currentUsername);
+            intent.putExtra("username", username);
 
             startActivity(intent);
             finish();
@@ -94,71 +89,69 @@ public class GameProfile extends AppCompatActivity {
     }
 
     private void loadProfileData() {
-        try {
-            loadPortfolioSummary();
-            loadPieChart();
-            loadTransactionHistory();
-        } catch (Exception e) {
-            Log.e("GameProfile", "Error loading profile data", e);
-        }
+        tvUsername.setText(username + "'s Portfolio");
+
+        // Load user data
+        User user = dbUtil.getUser(username);
+
+        // Load portfolio holdings
+        List<PortfolioStock> holdings = dbUtil.getPortfolio(username);
+
+        // Load transaction history
+        List<Transaction> transactions = dbUtil.getTransactionHistory(username);
+
+        // Update UI with data
+        loadPortfolioSummary(user, holdings);
+        loadPieChart(holdings);
+        loadTransactionHistory(transactions);
     }
 
-    private void loadPortfolioSummary() {
-        User user = dbUtil.getUser(currentUsername);
-        List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(currentUsername);
-
-        if (user == null) {
-            tvTotalValue.setText("$0.00");
-            tvProfitLoss.setText("$0.00");
-            tvProfitLossPercent.setText("(0.0%)");
-            return;
-        }
-
-        double cashBalance = user.getUserBalance();
-        double totalInvestmentValue = 0.0;
-        double totalCost = 0.0;
+    private void loadPortfolioSummary(User user, List<PortfolioStock> holdings) {
+        BigDecimal totalInvested = BigDecimal.ZERO;
+        BigDecimal currentValue = BigDecimal.ZERO;
 
         // Calculate current portfolio value using current stock prices
-        for (PortfolioStock ps : portfolioStocks) {
-            // Get current price
-            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID(), 1);
-            double positionValue = currentPrice * ps.getQuantity();
-            totalInvestmentValue += positionValue;
+        for (PortfolioStock ps : holdings) {
+            BigDecimal invested = BigDecimal.valueOf(ps.getBuyPrice())
+                    .multiply(BigDecimal.valueOf(ps.getQuantity()));
+            totalInvested = totalInvested.add(invested);
 
-            // Calculate cost
-            double positionCost = ps.getBuyPrice() * ps.getQuantity();
-            totalCost += positionCost;
+            //FIXME Calculate cost
+            double currentPrice = ps.getBuyPrice(); //dbUtil.getCurrentStockPrice(ps.getStock().getStockID(), Game.currentTimeStamp);
+            BigDecimal currentStockValue = BigDecimal.valueOf(currentPrice)
+                    .multiply(BigDecimal.valueOf(ps.getQuantity()));
+            currentValue = currentValue.add(currentStockValue);
         }
 
-        double totalPortfolioValue = cashBalance + totalInvestmentValue;
-        double profitLoss = totalInvestmentValue - totalCost;
+        BigDecimal cashBalance = BigDecimal.valueOf(user.getUserBalance());
+        BigDecimal totalPortfolioValue = currentValue.add(cashBalance);
 
-        double profitLossPercent;
-        if (totalCost > 0) {
-            profitLossPercent = (profitLoss / totalCost) * 100;
-        } else {
-            profitLossPercent = 0.0;
+        // Calculate profit/loss
+        BigDecimal profitLoss = currentValue.subtract(totalInvested);
+        BigDecimal profitLossPercentage = BigDecimal.ZERO;
+        if (totalInvested.compareTo(BigDecimal.ZERO) > 0) {
+            profitLossPercentage = profitLoss.divide(totalInvested, 4, RoundingMode.HALF_UP)
+                    .multiply(BigDecimal.valueOf(100));
         }
 
         //Update UI
-        tvTotalValue.setText(String.format("$%.2f", totalPortfolioValue));
-        if (profitLoss >= 0) {
-            tvProfitLoss.setText(String.format("+$%.2f", profitLoss));
-            tvProfitLoss.setTextColor(getResources().getColor(R.color.Green));
-            tvProfitLossPercent.setText(String.format("(+%.1f%%)", profitLossPercent));
-            tvProfitLossPercent.setTextColor(getResources().getColor(R.color.Green));
+        tvTotalPortfolioValue.setText(String.format("$%,.2f", totalPortfolioValue.doubleValue()));
+
+        if (profitLoss.compareTo(BigDecimal.ZERO) >= 0) {
+            tvProfitLoss.setText(String.format("+$%,.2f", profitLoss.doubleValue()));
+            tvProfitLoss.setTextColor(getColor(R.color.Green));
+            tvProfitLossPercentage.setText(String.format("(+%.2f%%)", profitLossPercentage.doubleValue()));
+            tvProfitLossPercentage.setTextColor(getColor(R.color.Green));
         } else {
-            tvProfitLoss.setText(String.format("-$%.2f", Math.abs(profitLoss)));
-            tvProfitLoss.setTextColor(getResources().getColor(R.color.Red));
-            tvProfitLossPercent.setText(String.format("(%.1f%%)", profitLossPercent));
-            tvProfitLossPercent.setTextColor(getResources().getColor(R.color.Red));
+            tvProfitLoss.setText(String.format("-$%,.2f", Math.abs(profitLoss.doubleValue())));
+            tvProfitLoss.setTextColor(getColor(R.color.Red));
+            tvProfitLossPercentage.setText(String.format("(%.2f%%)", profitLossPercentage.doubleValue()));
+            tvProfitLossPercentage.setTextColor(getColor(R.color.Red));
         }
     }
 
-    private void loadPieChart() { // https://github.com/PhilJay/MPAndroidChart
-        List<PortfolioStock> portfolio = dbUtil.getPortfolio(currentUsername);
-
-        if (portfolio.isEmpty()) {
+    private void loadPieChart(List<PortfolioStock> holdings) { // https://github.com/PhilJay/MPAndroidChart
+        if (holdings.isEmpty()) {
             pieChart.setVisibility(View.GONE);
             tvEmptyHoldings.setVisibility(View.VISIBLE);
             return;
@@ -167,42 +160,35 @@ public class GameProfile extends AppCompatActivity {
         pieChart.setVisibility(View.VISIBLE);
         tvEmptyHoldings.setVisibility(View.GONE);
 
-
-        // Create a hash map of category/stock pairs to categorise pie chart holdings
-        Map<String, Double> categoryValues = new HashMap<>();
-
-        for (PortfolioStock ps : portfolio) {
-            String category = ps.getStock().getCategory();
-            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID(), 1);
-            double value = currentPrice * ps.getQuantity();
-
-            categoryValues.put(category, categoryValues.getOrDefault(category, 0.0) + value);
-
-            Log.d("PieChart", "Category: " + category + ", Value: $" + value);
-        }
-
-        // Create pie chart entries
         List<PieEntry> entries = new ArrayList<>();
-        for (Map.Entry<String, Double> entry : categoryValues.entrySet()) {
-            float value = entry.getValue().floatValue();
-            String category = entry.getKey();
-            entries.add(new PieEntry(value, category));
-            Log.d("PieChart", "Adding entry: " + category + " = $" + value);
-        }
+        List<Integer> colors = new ArrayList<>();
 
-        if (entries.isEmpty()) {
-            pieChart.setVisibility(View.GONE);
-            tvEmptyHoldings.setVisibility(View.VISIBLE);
-            return;
+        // Predefined colors for the chart
+        int[] chartColors = new int[]{
+                Color.parseColor("#FF6384"),
+                Color.parseColor("#36A2EB"),
+                Color.parseColor("#FFCE56"),
+                Color.parseColor("#4BC0C0"),
+                Color.parseColor("#9966FF"),
+                Color.parseColor("#FF9F40"),
+                Color.parseColor("#FF6384"),
+                Color.parseColor("#C9CBCF")
+        };
+
+        int colorIndex = 0;
+        for (PortfolioStock ps : holdings) {
+            float value = ps.getQuantity() * (float) ps.getBuyPrice();
+            entries.add(new PieEntry(value, ps.getStock().getSymbol()));
+            colors.add(chartColors[colorIndex % chartColors.length]);
+            colorIndex++;
         }
 
         // Dataset
-        PieDataSet dataSet = new PieDataSet(entries, "");
-        dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
+        PieDataSet dataSet = new PieDataSet(entries, "Holdings");
+        dataSet.setColors(colors);
         dataSet.setValueTextSize(10f);
-        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setValueTextColor(Color.WHITE);
         dataSet.setValueFormatter(new PercentFormatter(pieChart));
-        dataSet.setSliceSpace(2f);
 
         PieData pieData = new PieData(dataSet);
 
@@ -212,41 +198,30 @@ public class GameProfile extends AppCompatActivity {
         pieChart.getDescription().setEnabled(false);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.WHITE);
-        pieChart.setHoleRadius(25f);
-        pieChart.setTransparentCircleRadius(30f);
-        pieChart.setDrawCenterText(false);
-        pieChart.setRotationAngle(0);
+        pieChart.setTransparentCircleRadius(61f);
+        pieChart.setHoleRadius(58f);
         pieChart.setRotationEnabled(true);
         pieChart.setHighlightPerTapEnabled(true);
-        pieChart.setDrawEntryLabels(false);
 
         // Create legend (category, %)
-        pieChart.getLegend().setEnabled(true);
-        pieChart.getLegend().setTextSize(12f);
-        pieChart.getLegend().setWordWrapEnabled(true);
-        pieChart.getLegend().setHorizontalAlignment(com.github.mikephil.charting.components.Legend.LegendHorizontalAlignment.CENTER);
-        pieChart.getLegend().setVerticalAlignment(com.github.mikephil.charting.components.Legend.LegendVerticalAlignment.BOTTOM);
-        pieChart.getLegend().setOrientation(com.github.mikephil.charting.components.Legend.LegendOrientation.HORIZONTAL);
+        Legend legend = pieChart.getLegend();
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
+        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setDrawInside(false);
+        legend.setTextSize(8f);
 
-
-        pieChart.animateY(1000);
-
-        // Refresh
         pieChart.invalidate();
     }
 
-    private void loadTransactionHistory() {
-        // For now, show empty state
-        transactionsList.clear();
-        transactionsList.addAll(dbUtil.getTransactionHistory(currentUsername));
-
-        if (transactionsList.isEmpty()) {
-            rvTransactions.setVisibility(View.GONE);
+    private void loadTransactionHistory(List<Transaction> transactions) {
+        if (transactions.isEmpty()) {
+            recyclerTransactions.setVisibility(View.GONE);
             tvEmptyTransactions.setVisibility(View.VISIBLE);
         } else {
-            rvTransactions.setVisibility(View.VISIBLE);
+            recyclerTransactions.setVisibility(View.VISIBLE);
             tvEmptyTransactions.setVisibility(View.GONE);
-            transactionsAdapter.notifyDataSetChanged();
+            transactionsAdapter.updateData(transactions);
         }
     }
 

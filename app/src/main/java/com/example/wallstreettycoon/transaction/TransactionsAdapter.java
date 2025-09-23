@@ -1,5 +1,6 @@
 package com.example.wallstreettycoon.transaction;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,22 +9,26 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapter.ViewHolder> {
 
     private List<Transaction> transactions;
+    private DatabaseUtil dbUtil;
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yy", Locale.getDefault());
 
-    public TransactionsAdapter(List<Transaction> transactions) {
+    public TransactionsAdapter(List<Transaction> transactions, Context context) {
         this.transactions = transactions;
+        this.dbUtil = new DatabaseUtil(context);
     }
 
     public void updateData(List<Transaction> newTransactions) {
-        this.transactions.clear();
-        this.transactions.addAll(newTransactions);
+        this.transactions = newTransactions;
         notifyDataSetChanged();
     }
 
@@ -37,18 +42,19 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     public void onBindViewHolder(ViewHolder holder, int position) {
         Transaction transaction = transactions.get(position);
 
-        holder.tvStock.setText(String.valueOf(transaction.getStockID()));
+        String stockSymbol = dbUtil.getStockSymbol((int) transaction.getStockID());
+        holder.tvStock.setText(stockSymbol != null ? stockSymbol : "N/A");
+
         holder.tvType.setText(transaction.getTransactionType());
-        holder.tvQty.setText(String.format("%.0f", (double) transaction.getQuantity()));
-        holder.tvPrice.setText(String.format("$%.2f", transaction.getPrice().doubleValue()));
-
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
-
-        try {
-            holder.tvDate.setText(sdf.format(Objects.requireNonNull(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(transaction.getTransactionDate().toString()))));
-        } catch (Exception e) {
-            holder.tvDate.setText("N/A");
+        if ("BUY".equals(transaction.getTransactionType())) {
+            holder.tvType.setTextColor(holder.itemView.getContext().getColor(R.color.Green));
+        } else {
+            holder.tvType.setTextColor(holder.itemView.getContext().getColor(R.color.Red));
         }
+
+        holder.tvQty.setText(String.valueOf(transaction.getQuantity()));
+        holder.tvPrice.setText(String.format("$%.2f", transaction.getPrice().doubleValue()));
+        holder.tvDate.setText(dateFormat.format(transaction.getTransactionDate()));
     }
 
     @Override
