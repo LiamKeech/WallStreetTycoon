@@ -15,6 +15,8 @@ import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameObserver;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
 import com.github.mikephil.charting.charts.LineChart;
@@ -27,7 +29,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-public class DisplayStockActivity extends AppCompatActivity {
+public class DisplayStockActivity extends AppCompatActivity implements GameObserver {
 
     private LineChart chart;
     private DatabaseUtil dbUtil;
@@ -42,6 +44,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_stock);
 
+        Game.gameInstance.addObserver(this);
         dbUtil = new DatabaseUtil(context);
 
         Intent intentFromList = getIntent();
@@ -281,5 +284,10 @@ public class DisplayStockActivity extends AppCompatActivity {
         }
 
         return entries;
+    }
+
+    @Override
+    public void onGameEvent(GameEvent event) {
+        //TODO update the chart, update the current price redrawing it might just work
     }
 }
