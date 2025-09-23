@@ -21,6 +21,7 @@ import com.example.wallstreettycoon.R;
 
 public class miniGame2EndDialogFragment extends DialogFragment {
     Button homeButton;
+    Button retryButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class miniGame2EndDialogFragment extends DialogFragment {
         getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         homeButton = view.findViewById(R.id.home_button);
+        retryButton = view.findViewById(R.id.retryButton);
 
         return view;
     }
@@ -55,6 +57,13 @@ public class miniGame2EndDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), miniGame2Notification.class); //will change to dashboard
+                startActivity(intent);
+            }
+        });
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), miniGame2.class);
                 startActivity(intent);
             }
         });

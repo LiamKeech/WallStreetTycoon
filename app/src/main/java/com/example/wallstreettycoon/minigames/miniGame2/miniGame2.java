@@ -43,8 +43,6 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     ConnectionOverlay connectionOverlayWordsFound;
     InsetDrawable insetDrawableButtonFound, insetDrawableButtonSelected;
 
-    //TODO check for game over
-    //TODO add hint button
 
     private Context context;
     @Override

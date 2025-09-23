@@ -45,8 +45,6 @@ public class miniGame3 extends AppCompatActivity implements GameObserver {
         //gameover open dialog fragment
         switch(gameEvent.getType()){
             case GAME_OVER:
-                Log.d("GAME EVENT", gameEvent.getMessage());
-                //Intent intent = new Intent(this, miniGame3EndDialogFragment.class);
                 DialogFragment endDialogFragment = new miniGame3EndDialogFragment();
                 endDialogFragment.show(getSupportFragmentManager(), "miniGame3End");
                 break;

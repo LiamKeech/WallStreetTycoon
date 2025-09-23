@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Map;
 
 public class NetworkView extends View {
-    //private Network network;
     private Model model;
     private Paint nodePaint, wirePaint;
     private Node startNode;
