@@ -167,31 +167,6 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "FOREIGN KEY (stockID) REFERENCES stocks(stockID))"
         );
 
-        Map<Integer, List<String>> chapterStocks = new HashMap<>();
-        chapterStocks.put(1, Arrays.asList("AAPL", "GOOGL", "MSFT", "META", "NFLX", "AMZN")); // Chapter 1: Tech + Random
-        chapterStocks.put(2, Arrays.asList("AMZN", "TSLA", "KO", "NVDA", "JNJ"));  // Chapter 2: Investments + Random
-        /*chapterStocks.put(3, Arrays.asList("MSFT", "META"));  // Chapter 3: Crypto + Random
-        chapterStocks.put(4, Arrays.asList("NFLX", "KO"));    // Chapter 4: Travel + Entertainment
-        chapterStocks.put(5, Arrays.asList("NVDA", "JNJ"));   // Chapter 5: AI*/
-
-        for (Map.Entry<Integer, List<String>> entry : chapterStocks.entrySet()) {
-            int chapterID = entry.getKey();
-            List<String> symbols = entry.getValue();
-
-            for (String symbol : symbols) {
-                Cursor cursor = db.rawQuery("SELECT stockID FROM stocks WHERE symbol = ?", new String[]{symbol});
-                if (cursor.moveToFirst()) {
-                    int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-
-                    ContentValues values = new ContentValues();
-                    values.put("chapterID", chapterID);
-                    values.put("stockID", stockID);
-
-                    db.insert("chapter_stock", null, values);
-                }
-                cursor.close();
-            }
-        }
 
         // Transaction history table
 
