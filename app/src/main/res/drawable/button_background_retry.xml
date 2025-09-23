@@ -1,49 +1,38 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- res/drawable/green_button.xml -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--  shadow  -->
+    <!-- Shadow -->
     <item>
-        <shape android:shape="oval">
-            <solid android:color="@color/GreenShadow"/>
-            <corners android:radius="20dp" />
-            <padding
-                android:left="2dp"
-                android:right="2dp"
-                android:top="2dp"
-                android:bottom="5dp"/>
-
-            <stroke android:width="2dp" android:color="@color/black" />
-        </shape>
+            <shape android:shape="oval">
+                <solid android:color="@color/GreenShadow"/>
+                <stroke android:width="2dp" android:color="@color/black"/>
+            </shape>
     </item>
 
-    <!--  top highlight  -->
-    <item android:top="0dp">
-        <shape android:shape="oval">
-            <solid android:color="@color/GreenHighlight"/>
-            <corners android:radius="20dp" />
-        </shape>
+    <!-- Highlight -->
+    <item>
+        <inset android:insetLeft="2dp" android:insetTop="2dp"
+            android:insetRight="6dp" android:insetBottom="6dp">
+            <shape android:shape="oval">
+                <solid android:color="@color/GreenHighlight"/>
+            </shape>
+        </inset>
     </item>
 
-    <!--  main green  -->
-    <item android:top="1dp">
-        <shape android:shape="oval">
-            <solid android:color="@color/Green"/>
-            <corners android:radius="17dp" />
-            <padding
-                android:bottom="13dp"
-                android:left="4dp"
-                android:right="4dp" />
-        </shape>
+    <!-- Main circle -->
+    <item>
+        <inset android:insetLeft="4dp" android:insetTop="4dp"
+            android:insetRight="0dp" android:insetBottom="0dp">
+            <shape android:shape="oval">
+                <solid android:color="@color/Green"/>
+            </shape>
+        </inset>
     </item>
 
-    <!--  upper half highlight  -->
-    <item android:top="3dp">
-        <shape android:shape="oval">
-            <solid android:color="@color/GreenHighlight"/>
-            <corners android:radius="10dp" />
-        </shape>
-    </item>
 
+    <item
+        android:drawable="@drawable/refresh_24_black"
+        android:gravity="center"/>
+    <item
+        android:drawable="@drawable/refresh_24"
+        android:gravity="center"/>
 </layer-list>
-
