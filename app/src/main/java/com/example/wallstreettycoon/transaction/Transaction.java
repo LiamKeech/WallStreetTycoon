@@ -3,7 +3,7 @@ package com.example.wallstreettycoon.transaction;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class Transaction {
+public class Transaction { //Data Model
     private long transactionID;
     private String username;
     private long stockID;

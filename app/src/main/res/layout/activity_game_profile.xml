@@ -84,11 +84,11 @@
                 android:gravity="end">
 
                 <TextView
+                    style="@style/subHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Profit/Loss"
-                    android:textSize="14sp"
-                    android:textColor="@color/LightBlue" />
+                    android:textSize="20sp"/> />
 
                 <TextView
                     android:id="@+id/profit_loss"
