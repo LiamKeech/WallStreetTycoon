@@ -8,13 +8,15 @@ package com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel;
 public class Timer {
     private long remainingTime; // in milliseconds
     private long endTime;       //system time when the timer should end
+    private long maxTime;
     private boolean running;
     private Runnable onFinish;
-
     private Thread workerThread;
 
-    public Timer(long durationMillis, Runnable onFinish) {
-        this.remainingTime = durationMillis;
+
+    public Timer(long maxTime, Runnable onFinish) {
+        this.maxTime = maxTime;
+        this.remainingTime = maxTime;
         this.onFinish = onFinish;
         this.running = false;
     }
@@ -42,7 +44,6 @@ public class Timer {
         workerThread.start();
     }
 
-    // Stop/pause the timer
     public synchronized void stop() {
         if (running) {
             remainingTime = getTime(); // store leftover time
@@ -50,15 +51,16 @@ public class Timer {
         }
     }
 
-    // Add extra time (milliseconds)
     public synchronized void addTime(long millis) {
-        remainingTime = getTime() + millis;
+        if(getTime() + millis > maxTime)
+            remainingTime = maxTime;
+        else
+            remainingTime = getTime() + millis;
         if (running) {
             endTime = System.currentTimeMillis() + remainingTime;
         }
     }
 
-    // Reset to a new duration
     public synchronized void reset(long durationMillis) {
         running = false;
         remainingTime = durationMillis;

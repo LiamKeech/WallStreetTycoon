@@ -18,6 +18,8 @@ public class Network {
     private int[] numNodesInEachCol = {3, 4, 5, 4, 2};
 
     private int[] seed = {1, 0, 1, 1, 0, 1, 0, 0, 1};
+
+    private int curColInView = 0;
     List<List<Node>> network = new ArrayList<>();
 
     List<Connection> connections = new ArrayList<>();
@@ -78,5 +80,11 @@ public class Network {
             }
         }
         return true;
+    }
+
+    public int getCurColInView(){return curColInView;}
+    public void incrCurColInView(){
+        curColInView++;
+
     }
 }

@@ -1,25 +1,22 @@
-/**
- * Author: Gareth Munnings
- * Created on 2025/08/11
- */
-package com.example.wallstreettycoon.minigames.miniGame2;
+package com.example.wallstreettycoon.minigames.miniGame3;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+
+import androidx.fragment.app.DialogFragment;
+
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.TextView;
-
-import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Notification;
 
-public class miniGame2EndDialogFragment extends DialogFragment {
+public class miniGame3EndDialogFragment extends DialogFragment {
+
     Button homeButton;
     Button retryButton;
 
@@ -56,17 +53,15 @@ public class miniGame2EndDialogFragment extends DialogFragment {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), miniGame2Notification.class); //will change to dashboard
+                Intent intent = new Intent(getActivity(), miniGame3Notification.class); //will change to dashboard
                 startActivity(intent);
             }
         });
-        retryButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), miniGame2.class);
-                startActivity(intent);
-            }
+        retryButton.setOnClickListener(v -> {
+
+            Intent intent = new Intent(getActivity(), miniGame3.class);
+            startActivity(intent);
+
         });
     }
 }
-

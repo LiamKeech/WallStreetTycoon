@@ -2,19 +2,20 @@ package com.example.wallstreettycoon.minigames.miniGame3;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.GameEvent;
+import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.GameObserver;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Model;
-import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Network;
 
-public class miniGame3 extends AppCompatActivity {
+public class miniGame3 extends AppCompatActivity implements GameObserver {
 
 
     @Override
@@ -29,12 +30,25 @@ public class miniGame3 extends AppCompatActivity {
         });
 
         Model model = new Model();
+        model.setGameOvserver(this);
 
         NetworkView networkView = findViewById(R.id.networkView);
-        networkView.setNetwork(model.getNetwork());
+        networkView.setModel(model);
 
         TimerView timerView = findViewById(R.id.timerView);
         timerView.setTimer(model.getTimer());
+
+    }
+
+    @Override
+    public void onGameEvent(GameEvent gameEvent) {
+        //gameover open dialog fragment
+        switch(gameEvent.getType()){
+            case GAME_OVER:
+                DialogFragment endDialogFragment = new miniGame3EndDialogFragment();
+                endDialogFragment.show(getSupportFragmentManager(), "miniGame3End");
+                break;
+        }
 
     }
 }

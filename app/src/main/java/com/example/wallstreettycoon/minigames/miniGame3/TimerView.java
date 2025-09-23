@@ -8,11 +8,14 @@ package com.example.wallstreettycoon.minigames.miniGame3;
 import android.content.AttributionSource;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Timer;
 
 public class TimerView extends View {
@@ -44,8 +47,21 @@ public class TimerView extends View {
     @Override
     public void onDraw(Canvas canvas){
 
-        Paint paint = new TextPaint();
-        paint.setTextSize(50);
-        canvas.drawText(time, 100, 100, paint);
+        Paint paint = new Paint();
+        paint.setColor(getResources().getColor(R. color. Green));
+        paint.setStrokeWidth(20);
+
+        Rect rect = new Rect(100,  1000 - (int) timer.getTime()/20 , 400, 1000);
+
+        // fill
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(getResources().getColor(R. color. Green));
+        canvas.drawRect(rect, paint);
+
+        // outline
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(8);
+        paint.setColor(getResources().getColor(R. color. GreenShadow));
+        canvas.drawRect(rect, paint);
     }
 }
