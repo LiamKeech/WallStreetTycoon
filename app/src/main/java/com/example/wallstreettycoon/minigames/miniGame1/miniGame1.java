@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 
 import java.util.HashMap;
 import java.util.List;
@@ -226,10 +227,28 @@ public class miniGame1 extends AppCompatActivity {
 
         profit -= boughtPrice;
 
-        TextView stockView = new TextView(this);
+        Context styledContext = new ContextThemeWrapper(this, R.style.LightBlueTextView);
+        TextView stockView = new TextView(styledContext);
+        int paddingHorizontal = (int) (20 * styledContext.getResources().getDisplayMetrics().density + 0.5f);
+        int paddingVertical   = (int) (10 * styledContext.getResources().getDisplayMetrics().density + 0.5f);
+
+        stockView.setPadding(paddingHorizontal, paddingVertical,
+                paddingHorizontal, paddingVertical);
+        stockView.setGravity(Gravity.CENTER);
+
         stockView.setText(String.format("%s: $%.2f", stock.getSymbol(), boughtPrice));
-        stockView.setTextColor(Color.BLACK);
-        stockView.setTextSize(14);
+        stockView.setTextSize(15);
+
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        params.setMargins(0, 0, 0, 3);
+        params.gravity = Gravity.CENTER;
+        stockView.setLayoutParams(params);
+
         buyListLayout.addView(stockView);
         stockTextViews.put(stock, stockView);
 

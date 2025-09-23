@@ -20,31 +20,38 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#e1e1e1">
+        android:background="@drawable/rounded_background"
+        >
 
         <!-- stocks held list -->
-        <LinearLayout
-            android:id="@+id/buy_list_layout"
+        <ScrollView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:background="#e1e1e1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
-
-            <TextView
-                android:id="@+id/buy_list_heading"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/buy_list_layout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#2321D6"
-                android:padding="18dp"
-                android:text="Your stocks:"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:id="@+id/buy_list_heading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/DarkBlueTextView"
+                    android:textSize="25sp"
+                    android:layout_gravity="center"
+                    android:text="Your stocks:"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    />
+
+            </LinearLayout>
+        </ScrollView>
+
 
         <!-- profit label -->
         <TextView
@@ -52,12 +59,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="#48C73C"
+            style="@style/GreenButtonMedium"
             android:padding="16dp"
             android:text="Profit: $0.00"
-            android:textColor="#000000"
-            android:textSize="16sp"
-            android:textStyle="bold"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
