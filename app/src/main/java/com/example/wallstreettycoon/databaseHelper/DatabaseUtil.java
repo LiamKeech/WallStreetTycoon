@@ -1,5 +1,6 @@
 package com.example.wallstreettycoon.databaseHelper;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -22,9 +23,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class DatabaseUtil {
     public static DatabaseCreator dbCreator;
@@ -60,7 +63,39 @@ public class DatabaseUtil {
         return stockList;
     }
 
+    public void setUpChapterStock()
+    {
+        Map<Integer, List<String>> chapterStocks = new HashMap<>();
+        chapterStocks.put(1, Arrays.asList("AAPL", "GOOGL", "MSFT", "META", "NFLX", "AMZN")); // Chapter 1: Tech + Random
+        chapterStocks.put(2, Arrays.asList("AMZN", "TSLA", "KO", "NVDA", "JNJ"));  // Chapter 2: Investments + Random
+        /*chapterStocks.put(3, Arrays.asList("MSFT", "META"));  // Chapter 3: Crypto + Random
+        chapterStocks.put(4, Arrays.asList("NFLX", "KO"));    // Chapter 4: Travel + Entertainment
+        chapterStocks.put(5, Arrays.asList("NVDA", "JNJ"));   // Chapter 5: AI*/
+
+        for (Map.Entry<Integer, List<String>> entry : chapterStocks.entrySet()) {
+            int chapterID = entry.getKey();
+            List<String> symbols = entry.getValue();
+
+            for (String symbol : symbols) {
+                Cursor cursor = db.rawQuery("SELECT stockID FROM stocks WHERE symbol = ?", new String[]{symbol});
+                if (cursor.moveToFirst()) {
+                    int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+
+                    ContentValues values = new ContentValues();
+                    values.put("chapterID", chapterID);
+                    values.put("stockID", stockID);
+
+                    db.insert("chapter_stock", null, values);
+                }
+                cursor.close();
+            }
+        }
+    }
+
     public List<Stock> getChapterStock() {
+
+        setUpChapterStock();
+
         List<Stock> list = new ArrayList<>();
 
         String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
@@ -90,13 +125,11 @@ public class DatabaseUtil {
         List<Stock> filteredList = new ArrayList<>();   //Market - query stocks table
 
         String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
-                "FROM chapter_stock cs " +
-                "JOIN stocks s ON cs.stockID = s.stockID " +
+                "FROM stocks s " +
+                "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
                 "WHERE cs.chapterID = ? AND s.category = ?";
 
-        Cursor cursor = db.rawQuery(query,
-                new String[]{String.valueOf(Game.currentChapter), filterCategory}
-        );
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), filterCategory});
 
         if (cursor.moveToFirst()) {
             do {
@@ -161,8 +194,8 @@ public class DatabaseUtil {
         //Cursor cursor = db.rawQuery("SELECT * FROM stocks WHERE stockName LIKE ? COLLATE NOCASE", new String[]{"%"+searchCriteria+"%"});
 
         String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
-                "FROM chapter_stock cs " +
-                "JOIN stocks s ON cs.stockID = s.stockID " +
+                "FROM stocks s " +
+                "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
                 "WHERE cs.chapterID = ? AND s.stockname LIKE ? COLLATE NOCASE";
 
         Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), "%"+searchCriteria+"%"});
@@ -174,9 +207,8 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
                 results.add(stock);
             } while (cursor.moveToNext());
         }
@@ -243,9 +275,8 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
                 result.add(stock);
             } while (cursor.moveToNext());
         }
