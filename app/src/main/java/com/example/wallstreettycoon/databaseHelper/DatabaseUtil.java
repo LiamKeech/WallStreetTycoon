@@ -7,10 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import com.example.wallstreettycoon.Game;
+import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
@@ -24,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -396,9 +392,9 @@ public class DatabaseUtil {
         return null;
     }
 
-    public Double getCurrentStockPrice(Integer stockID, Integer timeStamp){
-        //Stock stock = getStockList().get(stockID);
-        //StockPriceFunction stockPriceFunction = getStockPriceFunctions().get(stockID);
+    public Double getCurrentStockPrice(Integer stockID){
+        Integer timeStamp = Game.gameInstance.getCurrentTimeStamp();
+
         StockPriceFunction stockPriceFunction = getStockPriceFunction(stockID);
 
         //I am rounding using BigDecimal for better precision

@@ -1,4 +1,4 @@
-package com.example.wallstreettycoon;
+package com.example.wallstreettycoon.model;
 
 import android.app.Application;
 
