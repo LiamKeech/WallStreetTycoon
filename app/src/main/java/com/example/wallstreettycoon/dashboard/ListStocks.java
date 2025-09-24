@@ -2,16 +2,13 @@ package com.example.wallstreettycoon.dashboard;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -27,21 +24,22 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.wallstreettycoon.Game;
+import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameObserver;
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.portfolio.PortfolioStockAdapter;
 import com.example.wallstreettycoon.profile.GameProfile;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockAdapter;
-import com.example.wallstreettycoon.useraccount.ChangePassswordDialogFragment;
 import com.example.wallstreettycoon.useraccount.ManageUserAccount;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
 
-public class ListStocks extends AppCompatActivity {
+public class ListStocks extends AppCompatActivity implements GameObserver {
     Context context = this;
     DatabaseUtil dbUtil;
 
@@ -68,6 +66,8 @@ public class ListStocks extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        Game.gameInstance.addObserver(this);
 
         dbUtil = new DatabaseUtil(context);
 
@@ -655,5 +655,10 @@ public class ListStocks extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public void onGameEvent(GameEvent event) {
+       displayAllStocks();
     }
 }

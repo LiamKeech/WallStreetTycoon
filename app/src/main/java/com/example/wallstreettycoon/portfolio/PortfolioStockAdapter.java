@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.displayBuySell.DisplayStockActivity;
+import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.stock.Stock;
 
 import java.math.BigDecimal;
@@ -52,7 +53,7 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
         holder.lblStockName.setText(stock.getStockName());
         holder.lblSharesOwned.setText(Pstock.getQuantity() + " shares");
 
-        double currentPrice = dbUtil.getCurrentStockPrice(stock.getStockID(), 1); // Example timestamp
+        double currentPrice = dbUtil.getCurrentStockPrice(stock.getStockID());
         String currentPriceStr = String.format("$%.2f", currentPrice);
         holder.lblCurrentPrice.setText(currentPriceStr);
 

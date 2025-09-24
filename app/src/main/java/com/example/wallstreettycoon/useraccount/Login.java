@@ -16,7 +16,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.wallstreettycoon.Game;
+import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
@@ -72,14 +72,15 @@ public class Login extends AppCompatActivity {
                         if (user.getUserPassword().equals(password)) { //valid credentials
                             Intent loginIntent = new Intent(Login.this, ListStocks.class);
                             Game game = new Game(context);
-                            if(!game.loadFromFile(username)) {
-                                game.currentUser = user;
-                                game.startGame();
+                            if(!Game.gameInstance.loadFromFile(username)) {
+
+                                Game.gameInstance.currentUser = user;
+                                Game.startGame();
                             }
                             else{
-                               game.continueGame();
+                               Game.gameInstance.continueGame();
                             }
-                            List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+                            List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.gameInstance.currentUser.getUserUsername());
                             String viewType;
                             if (portfolioStockCheck.isEmpty()) {
                                 viewType = "M";

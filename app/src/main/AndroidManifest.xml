@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
-        android:name=".GameStarterCloser"
+        android:name=".model.GameStarterCloser"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -24,11 +24,7 @@
         <activity
             android:name=".minigames.miniGame3.miniGame3Notification"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".minigames.miniGame2.miniGame2"
@@ -40,7 +36,9 @@
         </activity>
         <activity
             android:name=".minigames.miniGame1.miniGame1Notification"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".minigames.miniGame1.miniGame1"
             android:exported="true"></activity>
@@ -56,7 +54,11 @@
         <activity
             android:name=".useraccount.Login"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".useraccount.ManageUserAccount"

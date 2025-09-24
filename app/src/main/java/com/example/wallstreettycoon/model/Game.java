@@ -1,7 +1,9 @@
-package com.example.wallstreettycoon;
+package com.example.wallstreettycoon.model;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
+import android.view.View;
 
 import com.example.wallstreettycoon.useraccount.User;
 
@@ -11,19 +13,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-public class Game implements java.io.Serializable {
+public class Game implements GameObserver, java.io.Serializable {
 
     public static User currentUser;
     public static int currentChapter = 1;
     public static Timer timer;
     public static Game gameInstance;
     private static long timeStamp;
-    static Context context;
+    private static Context context;
+
+    private static List<GameObserver> observers;
     public Game(Context context){
         this.context = context;
     }
     public static void startGame(){
+        gameInstance = new Game(context);
+        observers = new ArrayList<>();
         timer = new Timer();
     }
     public static void continueGame(){
@@ -68,4 +76,28 @@ public class Game implements java.io.Serializable {
         }
     }
 
+    public int getCurrentTimeStamp(){
+        return (int)timeStamp;
+    }
+
+
+    @Override
+    public void onGameEvent(GameEvent event) {
+        switch(event.getType()){
+            case UPDATE_STOCK_PRICE:
+                timeStamp = timer.getElapsedTime();
+                notifyObservers(event);
+                break;
+        }
+    }
+
+    public void addObserver(GameObserver observer){
+        observers.add(observer);
+    }
+
+    private void notifyObservers(GameEvent e){
+        for(GameObserver observer : observers){
+            observer.onGameEvent(e);
+        }
+    }
 }

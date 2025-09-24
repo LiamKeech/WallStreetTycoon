@@ -11,10 +11,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.wallstreettycoon.Game;
+import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameObserver;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
 import com.github.mikephil.charting.charts.LineChart;
@@ -27,7 +29,7 @@ import java.util.ArrayList;
 
 import java.util.List;
 
-public class DisplayStockActivity extends AppCompatActivity {
+public class DisplayStockActivity extends AppCompatActivity implements GameObserver {
 
     private LineChart chart;
     private DatabaseUtil dbUtil;
@@ -42,6 +44,7 @@ public class DisplayStockActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_stock);
 
+        Game.gameInstance.addObserver(this);
         dbUtil = new DatabaseUtil(context);
 
         Intent intentFromList = getIntent();
@@ -100,9 +103,7 @@ public class DisplayStockActivity extends AppCompatActivity {
             stockSymbol.setText(currentStock.getSymbol());
         }
 
-        int currentTime = 1; //FIXME
-
-        double currentPriceValue = dbUtil.getCurrentStockPrice(currentStock.getStockID(), currentTime);
+        double currentPriceValue = dbUtil.getCurrentStockPrice(currentStock.getStockID());
         if (currentPrice != null) {
             currentPrice.setText(String.format("$%.2f", currentPriceValue));
         }
@@ -144,7 +145,7 @@ public class DisplayStockActivity extends AppCompatActivity {
             Bundle args = new Bundle(); //to communicate with a dialog fragment
             args.putInt("stockID", currentStock.getStockID());
             args.putString("stockSymbol", currentStock.getSymbol());
-            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID(), 1));
+            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID()));
             args.putString("username", currentUsername);
 
             buyDialog.setArguments(args);
@@ -157,7 +158,7 @@ public class DisplayStockActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             args.putInt("stockID", currentStock.getStockID());
             args.putString("stockSymbol", currentStock.getSymbol());
-            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID(), 1));
+            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID()));
             args.putString("username", currentUsername);
 
             sellDialog.setArguments(args);
@@ -283,5 +284,10 @@ public class DisplayStockActivity extends AppCompatActivity {
         }
 
         return entries;
+    }
+
+    @Override
+    public void onGameEvent(GameEvent event) {
+        //TODO update the chart, update the current price redrawing it might just work
     }
 }
