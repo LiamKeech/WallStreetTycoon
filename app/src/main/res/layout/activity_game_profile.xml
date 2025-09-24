@@ -194,77 +194,76 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:paddingVertical="4dp"
-                    android:background="#F5F5F5">
+                    android:padding="8dp"
+                    android:background="@color/LightGrey">
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="2"
-                        android:text="Stock ID"
-                        android:textStyle="bold"
-                        android:textSize="12sp"
-                        android:paddingStart="4dp" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Stock"
+                        android:textStyle="bold"
+                        android:textColor="@android:color/black"
+                        android:gravity="center"
+                        android:padding="4dp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:text="Type"
                         android:textStyle="bold"
-                        android:textSize="12sp"
-                        android:gravity="center" />
+                        android:textColor="@android:color/black"
+                        android:gravity="center"
+                        android:padding="4dp" />
 
                     <TextView
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:layout_height="wrap_content"
                         android:text="Qty"
                         android:textStyle="bold"
-                        android:textSize="12sp"
-                        android:gravity="center" />
+                        android:textColor="@android:color/black"
+                        android:gravity="center"
+                        android:padding="4dp" />
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1.5"
                         android:text="Price"
                         android:textStyle="bold"
-                        android:textSize="12sp"
-                        android:gravity="end"
-                        android:paddingEnd="4dp" />
+                        android:textColor="@android:color/black"
+                        android:gravity="center"
+                        android:padding="4dp" />
 
                     <TextView
                         android:layout_width="0dp"
+                        android:layout_weight="1.5"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2"
                         android:text="Date"
                         android:textStyle="bold"
-                        android:textSize="12sp"
-                        android:gravity="end"
-                        android:paddingEnd="4dp" />
+                        android:textColor="@android:color/black"
+                        android:gravity="center"
+                        android:padding="4dp" />
                 </LinearLayout>
 
                 <!-- Transactions -->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_transactions"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="4dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    android:layout_height="wrap_content"
+                    android:visibility="gone" />
 
                 <!-- Empty view -->
                 <TextView
                     android:id="@+id/empty_transactions_text"
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:text="No transactions yet"
+                    android:layout_height="wrap_content"
+                    android:text="No transactions yet."
                     android:gravity="center"
-                    android:textSize="16sp"
-                    android:textColor="#666666"
-                    android:visibility="gone" />
+                    android:visibility="visible"
+                    android:textColor="@color/LightGrey" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

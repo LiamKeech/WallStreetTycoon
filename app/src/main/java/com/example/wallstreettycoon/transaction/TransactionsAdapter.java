@@ -1,11 +1,14 @@
 package com.example.wallstreettycoon.transaction;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallstreettycoon.R;
@@ -38,6 +41,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         return new ViewHolder(view);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Transaction transaction = transactions.get(position);
@@ -48,13 +52,21 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         holder.tvType.setText(transaction.getTransactionType());
         if ("BUY".equals(transaction.getTransactionType())) {
             holder.tvType.setTextColor(holder.itemView.getContext().getColor(R.color.Green));
+            holder.itemView.setBackgroundColor(Color.parseColor("#E8F5E9"));
         } else {
             holder.tvType.setTextColor(holder.itemView.getContext().getColor(R.color.Red));
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFEBEE"));
         }
 
         holder.tvQty.setText(String.valueOf(transaction.getQuantity()));
         holder.tvPrice.setText(String.format("$%.2f", transaction.getPrice().doubleValue()));
         holder.tvDate.setText(dateFormat.format(transaction.getTransactionDate()));
+//
+//        if (position % 2 == 0) {
+//            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LightGrey));
+//        } else {
+//            holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.itemView.getContext(), R.color.LightBlueHighlight));
+//        }
     }
 
     @Override
