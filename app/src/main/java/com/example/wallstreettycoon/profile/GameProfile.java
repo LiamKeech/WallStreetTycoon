@@ -8,6 +8,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -73,6 +74,7 @@ public class GameProfile extends AppCompatActivity {
         recyclerTransactions.setLayoutManager(new LinearLayoutManager(this));
         transactionsAdapter = new TransactionsAdapter(new ArrayList<>(), this);
         recyclerTransactions.setAdapter(transactionsAdapter);
+        recyclerTransactions.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
     private void setupEventListeners() {
@@ -154,6 +156,8 @@ public class GameProfile extends AppCompatActivity {
         if (holdings.isEmpty()) {
             pieChart.setVisibility(View.GONE);
             tvEmptyHoldings.setVisibility(View.VISIBLE);
+            tvEmptyHoldings.setText("No holdings yet. Start investing!");
+            tvEmptyHoldings.setTextColor(getColor(R.color.LightGrey));
             return;
         }
 
@@ -165,14 +169,14 @@ public class GameProfile extends AppCompatActivity {
 
         // Predefined colors for the chart
         int[] chartColors = new int[]{
-                Color.parseColor("#FF6384"),
-                Color.parseColor("#36A2EB"),
-                Color.parseColor("#FFCE56"),
-                Color.parseColor("#4BC0C0"),
-                Color.parseColor("#9966FF"),
-                Color.parseColor("#FF9F40"),
-                Color.parseColor("#FF6384"),
-                Color.parseColor("#C9CBCF")
+                Color.parseColor("#4CAF50"), // Green
+                Color.parseColor("#2196F3"), // Blue
+                Color.parseColor("#FFC107"), // Yellow
+                Color.parseColor("#FF5722"), // Orange
+                Color.parseColor("#9C27B0"), // Purple
+                Color.parseColor("#E91E63"), // Pink
+                Color.parseColor("#607D8B"), // Gray-blue
+                Color.parseColor("#CDDC39")  // Lime
         };
 
         int colorIndex = 0;
@@ -186,30 +190,39 @@ public class GameProfile extends AppCompatActivity {
         // Dataset
         PieDataSet dataSet = new PieDataSet(entries, "Holdings");
         dataSet.setColors(colors);
-        dataSet.setValueTextSize(10f);
-        dataSet.setValueTextColor(Color.WHITE);
+        dataSet.setValueTextSize(12f);
+        dataSet.setValueTextColor(Color.BLACK);
         dataSet.setValueFormatter(new PercentFormatter(pieChart));
 
         PieData pieData = new PieData(dataSet);
+        pieData.setValueTextColor(Color.BLACK);
 
         // General pie chart config code
         pieChart.setData(pieData);
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
+        pieChart.setEntryLabelColor(Color.BLACK);
+        pieChart.setEntryLabelTextSize(12f);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.WHITE);
-        pieChart.setTransparentCircleRadius(61f);
-        pieChart.setHoleRadius(58f);
-        pieChart.setRotationEnabled(true);
+        pieChart.setTransparentCircleColor(Color.parseColor("#20000000"));
+        pieChart.setTransparentCircleRadius(62f);
+        pieChart.setHoleRadius(60f);
+        pieChart.setRotationEnabled(false);
         pieChart.setHighlightPerTapEnabled(true);
+        pieChart.animateY(1000);
 
         // Create legend (category, %)
         Legend legend = pieChart.getLegend();
-        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
-        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
-        legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        legend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
+        legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+        legend.setOrientation(Legend.LegendOrientation.VERTICAL);
         legend.setDrawInside(false);
-        legend.setTextSize(8f);
+        legend.setXEntrySpace(7f);
+        legend.setYEntrySpace(0f);
+        legend.setYOffset(0f);
+        legend.setTextSize(10f);
+        legend.setForm(Legend.LegendForm.CIRCLE);
 
         pieChart.invalidate();
     }

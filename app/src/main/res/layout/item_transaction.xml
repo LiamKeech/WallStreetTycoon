@@ -5,58 +5,52 @@
     android:orientation="horizontal"
     android:paddingVertical="8dp"
     android:paddingHorizontal="4dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:divider="@drawable/divider_horizontal"
+    android:showDividers="middle">
 
     <TextView
         android:id="@+id/tv_stock"
         android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="AAPL"
-        android:textSize="12sp"
-        android:paddingStart="4dp"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:padding="4dp"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/tv_type"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="BUY"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:textStyle="bold" />
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/tv_qty"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="10"
-        android:textSize="12sp"
-        android:gravity="center"
-        android:textColor="@android:color/black" />
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:padding="4dp"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/tv_price"
         android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:layout_weight="1.5"
-        android:text="$150.25"
-        android:textSize="12sp"
-        android:gravity="end"
-        android:paddingEnd="4dp"
-        android:textColor="@android:color/black" />
+        android:textColor="@android:color/black"
+        android:padding="4dp"
+        android:gravity="center" />
 
     <TextView
         android:id="@+id/tv_date"
         android:layout_width="0dp"
+        android:layout_weight="1.5"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="09/23/25"
-        android:textSize="12sp"
-        android:gravity="end"
-        android:paddingEnd="4dp"
-        android:textColor="@android:color/darker_gray" />
-
+        android:textColor="@android:color/black"
+        android:padding="4dp"
+        android:gravity="center" />
 </LinearLayout>
