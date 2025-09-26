@@ -33,6 +33,6 @@ public class Timer {
 
     public void updateTimestamp(){
         Log.d("TIMER UPDATED", String.valueOf(getElapsedTime()));
-        Game.gameInstance.onGameEvent(new GameEvent(GameEventType.UPDATE_STOCK_PRICE, "Price updated", (int)getElapsedTime()));
+        Game.getInstance().onGameEvent(new GameEvent(GameEventType.UPDATE_STOCK_PRICE, "Price updated", (int)getElapsedTime()));
     }
 }

@@ -3,6 +3,7 @@ package com.example.wallstreettycoon.dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -67,7 +68,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
             return insets;
         });
 
-        Game.gameInstance.addObserver(this);
+        Game.getInstance().addObserver(this);
 
         dbUtil = new DatabaseUtil(context);
 
@@ -234,10 +235,11 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
         }
     }
 
-    public void displayAllStocks(){ //gets list of all stocks, put in recyclerview
+    public void displayAllStocks(){//gets list of all stocks, put in recyclerview
+        Log.d("DASHBOARD", "Displaying stocks");
         lblEmpty.setVisibility(View.GONE);
-        //List<Stock> allStockList = dbUtil.getStockList();
-        List<Stock> allStockList = dbUtil.getChapterStock();
+        List<Stock> allStockList = dbUtil.getStockList();
+        //List<Stock> allStockList = dbUtil.getChapterStock();
 
         StockAdapter stockAdapter = new StockAdapter(this, allStockList, "M");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -659,6 +661,10 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
 
     @Override
     public void onGameEvent(GameEvent event) {
+        //if m
        displayAllStocks();
+
+       //if p
+        //displayPortfolioStocks();
     }
 }

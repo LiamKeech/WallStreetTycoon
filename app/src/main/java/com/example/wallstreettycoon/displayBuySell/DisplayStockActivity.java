@@ -37,14 +37,14 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
     private String currentUsername;
     private String viewType;
     Context context = this;
-    Game game = new Game(context);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_stock);
 
-        Game.gameInstance.addObserver(this);
+        Game.getInstance().addObserver(this);
         dbUtil = new DatabaseUtil(context);
 
         Intent intentFromList = getIntent();

@@ -8,13 +8,12 @@ public class Stock { //Data Model
     private String description;
 
     //Constructor with all parameters
-    public Stock(int stockID, String stockName, String symbol, String category, String description, Double stockPrice){
+    public Stock(int stockID, String stockName, String symbol, String category, String description){
         this.stockID = stockID;
         this.stockName = stockName;
         this.symbol = symbol;
         this.category = category;
         this.description = description;
-        //this.stockPrice =  stockPrice;
     }
 
     //Constuctor with only stockID (creates null stock if needed)

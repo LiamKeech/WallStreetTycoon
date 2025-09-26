@@ -18,9 +18,10 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.model.Game;
 
 public class CreateAccount extends AppCompatActivity {
-    Context context = this;
+    Context context;
     Button btnCreateAccount;
     Button btnCancelCreate;
 
@@ -35,6 +36,7 @@ public class CreateAccount extends AppCompatActivity {
             return insets;
         });
 
+        context = this;
         //create account:
         btnCreateAccount = findViewById(R.id.btnCreate);
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
@@ -47,13 +49,13 @@ public class CreateAccount extends AppCompatActivity {
                 EditText passwordInput = findViewById(R.id.edtPasswCreate);
 
                 String name = nameInput.getText().toString();
-                Log.d(name, "");
+                Log.d("CREATE ACCOUNT", name);
                 String surname = surnameInput.getText().toString();
-                Log.d(surname, "");
+                Log.d("CREATE ACCOUNT", surname);
                 String username = usernameInput.getText().toString();
-                Log.d(username, "");
+                Log.d("CREATE ACCOUNT", username);
                 String password = passwordInput.getText().toString();
-                Log.d(password, "");
+                Log.d("CREATE ACCOUNT", password);
 
                 if (!name.isEmpty() && !surname.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
 

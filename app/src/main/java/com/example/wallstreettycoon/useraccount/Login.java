@@ -71,16 +71,10 @@ public class Login extends AppCompatActivity {
                         User user = dbUtil.getUser(username);
                         if (user.getUserPassword().equals(password)) { //valid credentials
                             Intent loginIntent = new Intent(Login.this, ListStocks.class);
-                            Game game = new Game(context);
-                            if(!Game.gameInstance.loadFromFile(username)) {
 
-                                Game.gameInstance.currentUser = user;
-                                Game.startGame();
-                            }
-                            else{
-                               Game.gameInstance.continueGame();
-                            }
-                            List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.gameInstance.currentUser.getUserUsername());
+                            Game.startGame(getApplicationContext(), user);
+
+                            List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.getInstance().currentUser.getUserUsername());
                             String viewType;
                             if (portfolioStockCheck.isEmpty()) {
                                 viewType = "M";

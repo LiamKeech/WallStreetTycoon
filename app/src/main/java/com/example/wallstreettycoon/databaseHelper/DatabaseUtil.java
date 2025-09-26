@@ -49,7 +49,7 @@ public class DatabaseUtil {
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
                 Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description);
                 stockList.add(stock);
             } while (cursor.moveToNext());
         }
@@ -109,7 +109,7 @@ public class DatabaseUtil {
             String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
 
             //create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
+            Stock stock = new Stock(stockID, stockName, symbol, category, description);
             list.add(stock);
         }
 
@@ -136,7 +136,7 @@ public class DatabaseUtil {
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
                 Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, stockPrice);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description);
                 filteredList.add(stock);
             } while (cursor.moveToNext());
         }
@@ -171,7 +171,7 @@ public class DatabaseUtil {
             String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
             // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
+            Stock stock = new Stock(stockID, stockName, symbol, category, description);
 
             // Create PortfolioStock
             PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
@@ -204,7 +204,7 @@ public class DatabaseUtil {
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
 
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description);
                 results.add(stock);
             } while (cursor.moveToNext());
         }
@@ -237,7 +237,7 @@ public class DatabaseUtil {
             String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
             // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
+            Stock stock = new Stock(stockID, stockName, symbol, category, description);
 
             // Create PortfolioStock
             PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
@@ -272,7 +272,7 @@ public class DatabaseUtil {
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
 
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description);
                 result.add(stock);
             } while (cursor.moveToNext());
         }
@@ -306,7 +306,7 @@ public class DatabaseUtil {
             String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
             // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
+            Stock stock = new Stock(stockID, stockName, symbol, category, description);
 
             // Create PortfolioStock
             PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
@@ -393,7 +393,7 @@ public class DatabaseUtil {
     }
 
     public Double getCurrentStockPrice(Integer stockID){
-        Integer timeStamp = Game.gameInstance.getCurrentTimeStamp();
+        Integer timeStamp = Game.getInstance().getCurrentTimeStamp();
 
         StockPriceFunction stockPriceFunction = getStockPriceFunction(stockID);
 
@@ -619,7 +619,7 @@ public class DatabaseUtil {
             String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
             // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, null);
+            Stock stock = new Stock(stockID, stockName, symbol, category, description);
 
             // Create PortfolioStock
             PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);

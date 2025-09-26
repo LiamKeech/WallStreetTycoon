@@ -1,10 +1,9 @@
 package com.example.wallstreettycoon.model;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
-import android.view.View;
 
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.useraccount.User;
 
 import java.io.File;
@@ -21,38 +20,65 @@ public class Game implements GameObserver, java.io.Serializable {
     public static User currentUser;
     public static int currentChapter = 1;
     public static Timer timer;
-    public static Game gameInstance;
     private static long timeStamp;
-    private static Context context;
-
+    private static Game INSTANCE;
+    private static Context appContext;
     private static List<GameObserver> observers;
-    public Game(Context context){
-        this.context = context;
+
+    private static DatabaseUtil dbUtil;
+
+    private Game(){
+
     }
-    public static void startGame(){
-        gameInstance = new Game(context);
+
+    public static void initContext(Context context){
+        appContext = context.getApplicationContext();
+        if(INSTANCE == null) {
+            INSTANCE = new Game();
+            dbUtil = new DatabaseUtil(context);
+        }
+    }
+
+    public static Game getInstance(){
+        if(INSTANCE == null){
+            Log.d("CONTEXT ERR", "Call initContext first");
+        }
+        return INSTANCE;
+    }
+
+    //The first time the game is ever started, ie first ever login
+    public static void startGame(Context context, User user){
+        initContext(context);
         observers = new ArrayList<>();
         timer = new Timer();
-    }
-    public static void continueGame(){
-        if(timer != null)
-            timer.startTimer();
-        else
-            startGame();
+        currentUser = user;
+        saveGame();
     }
 
-    public static void saveGame(){
+    //Every other time the game is started
+//    public static void continueGame(Context context){
+//        if(timer != null)
+//            timer.startTimer();
+//        else
+//            startGame(context);
+//    }
+
+    public static void pauseGame(){
+        saveGame();
+    }
+
+    private static void saveGame(){
         //update elapsed time
         timeStamp = timer.getElapsedTime();
-        //serialize and store in db
+        //serialize and store in files
         saveToFile(currentUser.getUserUsername() + ".ser");
     }
 
     public static void saveToFile(String filename) {
         try {
-            File file = new File(context.getFilesDir(), filename);
+            File file = new File(appContext.getFilesDir(), filename);
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
-            oos.writeObject(gameInstance);
+            oos.writeObject(INSTANCE);
             oos.close();
             Log.d("SaveFile", "Saved to file: " + file.getAbsolutePath());
         } catch (IOException e) {
@@ -63,15 +89,15 @@ public class Game implements GameObserver, java.io.Serializable {
     public static boolean loadFromFile(String username) {
         String filename = username + ".ser";
         try {
-            File file = new File(context.getFilesDir(), filename);
+            File file = new File(appContext.getFilesDir(), filename);
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-            gameInstance = (Game)ois.readObject();
+            INSTANCE = (Game)ois.readObject();
             ois.close();
             Log.d("LoadFile", "Loaded from file: " + file.getAbsolutePath());
             return true;
         } catch (IOException | ClassNotFoundException e) {
             Log.d("", "Load from file did not work");
-            e.printStackTrace();
+
             return false;
         }
     }

@@ -8,14 +8,14 @@ public class GameStarterCloser extends Application {
         super.onTrimMemory(level);
 
         if (level == TRIM_MEMORY_UI_HIDDEN) {
-            Game.saveToFile(Game.currentUser.getUserUsername() + ".ser");
+            Game.pauseGame();
         }
     }
     @Override
     public void onTerminate(){
         super.onTerminate();
-        if (Game.gameInstance != null) {
-            Game.saveGame();
+        if (Game.getInstance() != null) {
+            Game.pauseGame();
         }
     }
 }

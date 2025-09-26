@@ -1,4 +1,4 @@
-		//CHAPTER CATOEGORIES
+//CHAPTER CATOEGORIES
 
 //Technology stocks
 
