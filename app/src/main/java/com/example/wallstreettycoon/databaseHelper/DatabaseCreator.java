@@ -13,6 +13,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
 public class DatabaseCreator extends SQLiteOpenHelper {
@@ -20,9 +21,12 @@ public class DatabaseCreator extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
     private final Context context;
 
+    private final Random rand;
+
     public DatabaseCreator(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
+        rand = new Random();
     }
 
     @Override
@@ -57,7 +61,6 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
         List<Stock> stockList = readCommaDelimitedStocks(R.raw.stocks);
         for(Stock s: stockList){
-            Log.d("STOCK", s.getStockName());
             db.execSQL("INSERT INTO stocks (stockName, symbol, category, description) VALUES ('" + s.getStockName() + "', '" + s.getSymbol() + "', '" + s.getCategory() + "', '" + s.getDescription() + "')");
         }
         // StockPriceFunction table
@@ -73,8 +76,15 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
         for(int i = 1; i < stockList.size(); i++){
             int stockID = i;
-            db.execSQL("INSERT INTO stockPriceFunction (amplitudes, frequencies, stockID) VALUES " +
-                    "('8.2,6.5,4.9,3.3,2.8,2.1,1.7,1.3,1.0,0.8', '0.6,1.1,1.9,2.5,3.2,4.0,5.7,6.8,8.3,9.7', " + stockID + ")");
+           double[] frequencyArray = generateFrequencies(10);
+           double[] amplitudeArray = generateAmplitudes(10);
+           String frequencyString = arrayToCommaString(frequencyArray);
+           String amplitudeString = arrayToCommaString(amplitudeArray);
+
+            db.execSQL("INSERT INTO stockPriceFunction (amplitudes, frequencies, stockID) VALUES (" +
+                    "'" + amplitudeString + "', " +
+                    "'" + frequencyString + "', " +
+                    stockID + ")");
         }
 
 //        db.execSQL("INSERT INTO stockPriceFunction (amplitudes, frequencies, stockID) VALUES " +
@@ -240,13 +250,14 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
                 // split by comma and trim
                 String[] tokens = line.split(",");
-                for (int i = 0; i < tokens.length; i++) {
-                    tokens[i] = tokens[i].trim();
-                    if(tokens.length > 0) {
-                        Stock stock = new Stock(stockID, tokens[0], tokens[1], tokens[2], tokens[3]);
-                        result.add(stock);
-                        stockID++;
+                if (tokens.length >= 4) {
+                    for (int i = 0; i < tokens.length; i++) {
+                        tokens[i] = tokens[i].trim();
                     }
+                    Stock stock = new Stock(stockID, tokens[0], tokens[1], tokens[2], tokens[3]);
+                    result.add(stock);
+                    Log.d("STOCK", stock.getStockName());
+                    stockID++;
                 }
             }
         }
@@ -256,7 +267,40 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         return result;
     }
 
+    public static double[] generateAmplitudes(int size) {
+        Random rand = new Random();
+        double[] amps = new double[size];
 
+        double value = 8 + rand.nextDouble() * 2;
+        for (int i = 0; i < size; i++) {
+            value -= rand.nextDouble() * 1.5;
+            if (value < 0.5) value = 0.5;
+            amps[i] = Math.round(value * 10.0) / 10.0;
+        }
+        return amps;
+    }
 
+    public static double[] generateFrequencies(int size) {
+        Random rand = new Random();
+        double[] freqs = new double[size];
+
+        double value = 0.5 + rand.nextDouble();
+        for (int i = 0; i < size; i++) {
+            value += 0.5 + rand.nextDouble();
+            freqs[i] = Math.round(value * 10.0) / 10.0;
+        }
+        return freqs;
+    }
+
+    public static String arrayToCommaString(double[] arr) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(arr[i]);
+            if (i < arr.length - 1) {
+                sb.append(",");
+            }
+        }
+        return sb.toString();
+    }
 
 }
