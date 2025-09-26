@@ -9,7 +9,7 @@
     android:background="@color/LightGrey">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/FieldLogin"
+        android:id="@+id/constraintLayout"
         android:layout_width="652dp"
         android:layout_height="306dp"
         android:background="@drawable/rounded_nav_view"
@@ -21,34 +21,44 @@
         app:layout_constraintVertical_bias="0.659">
 
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/OrangeButtonLarge"
             android:id="@+id/start_button"
+            style="@style/OrangeButtonLarge"
             android:layout_width="172dp"
             android:layout_height="88dp"
             android:text="Start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/lblInstructions"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/lblInstructions"
-            android:layout_width="310dp"
+            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintStart_toEndOf="@+id/scrollView2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.816" />
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="400dp"
             android:layout_height="255dp"
+
             android:layout_margin="16dp"
             android:layout_marginStart="16dp"
+
             android:layout_marginBottom="36dp"
-            android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/LightBlue"
-            android:lineSpacingExtra="6dp"
-            android:padding="16dp"
-            android:text="You've just stumbled upon a forgotten crypto wallet—hidden deep within an old blockchain explorer and tied to a fortune in early-mined cryptocurrency. But there's a catch: it's locked behind a complex passphrase, and no reset button exists. To unlock it, you'll need to crack the code by solving cryptographic puzzles and decoding clues buried in transaction notes, old forum posts, and encrypted messages. Each correct solution reveals part of the passphrase. Piece it together, and the wallet—and its digital treasure—will be yours."
-            android:textColor="@color/black"
-            android:textSize="16sp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="0.4" />
+            app:layout_constraintWidth_percent="0.4">
+
+            <TextView
+                android:id="@+id/lblInstructions"
+                style="@style/LightBlueTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="You've just stumbled upon a forgotten crypto wallet—hidden deep within an old blockchain explorer and tied to a fortune in early-mined cryptocurrency. But there's a catch: it's locked behind a complex passphrase, and no reset button exists. To unlock it, you'll need to crack the code by solving cryptographic puzzles and decoding clues buried in transaction notes, old forum posts, and encrypted messages. Each correct solution reveals part of the passphrase. Piece it together, and the wallet—and its digital treasure—will be yours." />
+        </ScrollView>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

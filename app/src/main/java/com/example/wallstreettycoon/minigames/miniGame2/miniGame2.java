@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -113,6 +114,7 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 SquareButton button = new SquareButton(context);
                 button.setText(board.getLetter(new int[]{i, j}));
                 button.setBackgroundColor(Color.TRANSPARENT);
+                button.setTypeface(ResourcesCompat.getFont(this, R.font.jua));
                 button.setTextColor(Color.BLACK);
                 button.setTextSize(23);
 
@@ -202,7 +204,9 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
         int numberOfWordsFound = words.size();
 
         wordListLL.removeViewAt(numberOfWordsFound - 1);
-        TextView tv = new TextView(context, null, 0, R.style.text);
+        TextView tv = new TextView(context, null, 0, R.style.LightBlueTextView);
+        tv.setTextSize(18);
+        tv.setPadding(30,20,30,20);
         String text = numberOfWordsFound + ": " + words.getLast();
         tv.setText(text);
         wordListLL.addView(tv, numberOfWordsFound - 1);
@@ -211,7 +215,9 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     public void initializeWordsList(){
         int i = 1;
         while(i <= 7){
-            TextView tv = new TextView(context, null, 0, R.style.text);
+            TextView tv = new TextView(context, null, 0, R.style.LightBlueTextView);
+            tv.setTextSize(18);
+            tv.setPadding(30,20,30,20);
             String text = i + ":______________";
             tv.setText(text);
             wordListLL.addView(tv);

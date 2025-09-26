@@ -9,59 +9,71 @@
     android:background="@color/LightGrey">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/FieldLogin"
-        android:layout_width="513dp"
-        android:layout_height="291dp"
-
-        android:layout_marginTop="10dp"
+        android:id="@+id/constraintLayout"
+        android:layout_width="652dp"
+        android:layout_height="306dp"
+        android:background="@drawable/rounded_nav_view"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblGameTitle"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.659">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/start_button"
             style="@style/OrangeButtonLarge"
-            android:layout_width="wrap_content"
-
-            android:layout_height="wrap_content"
-
+            android:layout_width="172dp"
+            android:layout_height="88dp"
             android:text="Start"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.878"
+
+            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintStart_toEndOf="@+id/scrollView2"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.816" />
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="400dp"
+            android:layout_height="255dp"
+
+            android:layout_margin="16dp"
+            android:layout_marginStart="16dp"
+
+            android:layout_marginBottom="36dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.927" />
+            app:layout_constraintWidth_percent="0.4">
 
-        <TextView
-            android:id="@+id/lblInstructions"
-            style="@style/LightBlueTextView"
-            android:layout_width="500dp"
-            android:layout_height="282dp"
-            android:text="The Dot-Com Boom is in full swing, and tech companies are exploding in value! To take advantage of this surge, you need to buy shares in promising tech companies when their prices are low, then sell them when the prices rise. Timing is everything—buy low, sell high, and watch your profits grow as you ride the wave of the digital revolution."
+            <TextView
+                android:id="@+id/lblInstructions"
+                style="@style/LightBlueTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:text="The Dot-Com Boom is in full swing, and tech companies are exploding in value! To take advantage of this surge, you need to buy shares in promising tech companies when their prices are low, then sell them when the prices rise. Timing is everything—buy low, sell high, and watch your profits grow as you ride the wave of the digital revolution." />
+        </ScrollView>
 
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/lblGameTitle"
         style="@style/DarkBlueTextView"
+        android:id="@+id/lblGameTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="The Dot-Com Boom"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.044" />
+        app:layout_constraintVertical_bias="0.079" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
