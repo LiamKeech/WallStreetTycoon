@@ -12,12 +12,13 @@
         android:id="@+id/FieldLogin"
         android:layout_width="513dp"
         android:layout_height="291dp"
-        android:background="@drawable/rounded_nav_view_light_blue"
+
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblGameTitle"
         app:layout_constraintVertical_bias="0.659">
 
         <androidx.appcompat.widget.AppCompatButton
@@ -37,21 +38,15 @@
 
         <TextView
             android:id="@+id/lblInstructions"
+            style="@style/LightBlueTextView"
             android:layout_width="500dp"
             android:layout_height="282dp"
-            android:layout_margin="16dp"
-            android:background="@drawable/rounded_background"
-            android:backgroundTint="@color/white"
-            android:lineSpacingExtra="6dp"
-            android:padding="16dp"
             android:text="The Dot-Com Boom is in full swing, and tech companies are exploding in value! To take advantage of this surge, you need to buy shares in promising tech companies when their prices are low, then sell them when the prices rise. Timing is everything—buy low, sell high, and watch your profits grow as you ride the wave of the digital revolution."
-            android:textColor="@color/black"
-            android:textSize="16sp"
+
+
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.461"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintWidth_percent="0.4"
-            tools:layout_editor_absoluteY="4dp" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -67,6 +62,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.049" />
+        app:layout_constraintVertical_bias="0.044" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

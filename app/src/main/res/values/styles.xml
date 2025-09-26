@@ -285,7 +285,7 @@
 
         <item name="android:fontFamily">@font/jua</item>
 
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">22sp</item>
         <item name="android:shadowColor">@color/black</item>
         <item name="android:shadowDx">5</item>
         <item name="android:shadowDy">5</item>
@@ -326,6 +326,29 @@
     </style>
     <style name="TableContentRowSell">
         <item name="android:background">#FFEBEE</item>
+    </style>
+
+    <style name="minigame1ButtonGreen" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/minigame_1_btn_green</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+
+        <item name="android:fontFamily">@font/jua</item>
+
+        <item name="android:textSize">15sp</item>
+        <item name="android:shadowColor">@color/black</item>
+        <item name="android:shadowDx">5</item>
+        <item name="android:shadowDy">5</item>
+        <item name="android:shadowRadius">5</item>
+
+
+        <item name="android:minHeight">40dp</item>
+        <item name="android:minWidth">70dp</item>
+
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
     </style>
 
 </resources>

@@ -16,6 +16,7 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
+import androidx.core.content.res.ResourcesCompat;
 
 import java.util.HashMap;
 import java.util.List;
@@ -51,11 +52,11 @@ public class miniGame1 extends AppCompatActivity {
         DatabaseUtil dbUtil = new DatabaseUtil(context);
 
         container = findViewById(R.id.container);
-        List<Stock> stockList = dbUtil.getStockList();
+        List<Stock> stockList = dbUtil.getStockListByCategory("Technology");
 
         int delay = 1000;
         int increment = 1000;
-        for(Stock stock: stockList){ //TODO change to just technology stocks
+        for(Stock stock: stockList){
             handler.postDelayed(() -> {
                 spawnFloatingButton(stock);
             }, delay);
@@ -91,10 +92,8 @@ public class miniGame1 extends AppCompatActivity {
         int btnTextSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics());
 
         //make buttons circles
-        GradientDrawable shape = new GradientDrawable();
-        shape.setShape(GradientDrawable.OVAL);
-        shape.setColor(Color.parseColor("#48C73C")); // green
-        button.setBackground(shape);
+        button.setBackground(getResources().getDrawable(R.drawable.minigame_1_btn_green, null));
+        button.setTypeface(ResourcesCompat.getFont(this, R.font.jua));
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(btnWidthPx, btnHeightPx);
 
         button.setTextColor(Color.WHITE);
@@ -120,10 +119,10 @@ public class miniGame1 extends AppCompatActivity {
 
         button.setOnClickListener(v -> {
             if(!held.get()) {
-                addStockToHeldStocksList(held, shape, currentPrice, stock);
+                addStockToHeldStocksList(held, button, currentPrice, stock);
             }
             else{
-                removeStockFromHeldStocksList(held, shape, currentPrice, stock);
+                removeStockFromHeldStocksList(held, button, currentPrice, stock);
             }
         });
     }
@@ -213,14 +212,14 @@ public class miniGame1 extends AppCompatActivity {
                 .start();
 
         button.postDelayed(() -> {
-            removeStockFromHeldStocksList(held, (GradientDrawable) button.getBackground(), currentPrice, stock);
+            removeStockFromHeldStocksList(held, button, currentPrice, stock);
 
             container.removeView(button);
         }, 3000);
     }
-    public void addStockToHeldStocksList(AtomicBoolean held, GradientDrawable shape, AtomicReference<Float> currentPrice, Stock stock){
+    public void addStockToHeldStocksList(AtomicBoolean held, Button button, AtomicReference<Float> currentPrice, Stock stock){
         held.set(true);
-        shape.setColor(Color.parseColor("#FF6417")); // orange
+        button.setBackground(getResources().getDrawable(R.drawable.minigame_1_btn_orange, null));
 
         Float boughtPrice = currentPrice.get();
         stockBoughtPrice.put(stock, boughtPrice);
@@ -254,10 +253,10 @@ public class miniGame1 extends AppCompatActivity {
 
         profitLabel.setText(String.format("Profit: $%.2f", profit));
     }
-    public void removeStockFromHeldStocksList(AtomicBoolean held, GradientDrawable shape, AtomicReference<Float> currentPrice, Stock stock){
+    public void removeStockFromHeldStocksList(AtomicBoolean held, Button button, AtomicReference<Float> currentPrice, Stock stock){
         if(held.get()) {
             held.set(false);
-            shape.setColor(Color.parseColor("#48C73C")); // green
+            button.setBackground(getResources().getDrawable(R.drawable.minigame_1_btn_green, null));
 
             Float sellPrice = currentPrice.get();
             profit += sellPrice;

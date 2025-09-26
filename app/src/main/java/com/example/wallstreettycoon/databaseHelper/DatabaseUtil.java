@@ -47,7 +47,6 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
                 Stock stock = new Stock(stockID, stockName, symbol, category, description);
                 stockList.add(stock);
@@ -58,6 +57,32 @@ public class DatabaseUtil {
 
         return stockList;
     }
+
+    public List<Stock> getStockListByCategory(String category) {
+        List<Stock> stockList = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM stocks WHERE category = ?",
+                new String[]{ category }
+        );
+
+        if (cursor.moveToFirst()) {
+            do {
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String stockCategory = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+
+                Stock stock = new Stock(stockID, stockName, symbol, stockCategory, description);
+                stockList.add(stock);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        return stockList;
+    }
+
 
     public void setUpChapterStock()
     {
@@ -134,7 +159,7 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double stockPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+
 
                 Stock stock = new Stock(stockID, stockName, symbol, category, description);
                 filteredList.add(stock);

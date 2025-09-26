@@ -34,12 +34,17 @@ public class miniGame1EndDialogFragment extends DialogFragment {
         profitLabel = view.findViewById(R.id.profit_end_textview);
         if(profit > 0.0){
             profitLabel.setText(String.format("+ $%.2f", profit));
-            profitLabel.setTextAppearance(R.style.GreenButtonMedium);
+            profitLabel.setTextAppearance(R.style.GreenButtonLarge);
             profitLabel.setBackgroundResource(R.drawable.button_background_green_medium);
+        }
+        else if(profit == 0.0){
+            profitLabel.setText(String.format("$0.00"));
+            profitLabel.setTextAppearance(R.style.OrangeButtonLarge);
+            profitLabel.setBackgroundResource(R.drawable.button_background_orange_medium);
         }
         else{
             profitLabel.setText(String.format("- $%.2f", profit));
-            profitLabel.setTextAppearance(R.style.RedButtonMedium);
+            profitLabel.setTextAppearance(R.style.RedButtonLarge);
             profitLabel.setBackgroundResource(R.drawable.button_background_red_medium);
         }
 
@@ -61,7 +66,7 @@ public class miniGame1EndDialogFragment extends DialogFragment {
             int screenWidth = displayMetrics.widthPixels;
 
             // Set dialog width to 90% of screen width, height wrap content
-            int dialogWidth = (int) (screenWidth * 0.50);
+            int dialogWidth = (int) (screenWidth * 0.85);
             window.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
             window.setDimAmount(0.5f); // Optional: dim background
         }
