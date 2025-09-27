@@ -3,6 +3,8 @@ package com.example.wallstreettycoon.profile;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -15,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameEventType;
+import com.example.wallstreettycoon.model.GameObserver;
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.transaction.Transaction;
 import com.example.wallstreettycoon.transaction.TransactionsAdapter;
@@ -31,7 +36,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameProfile extends AppCompatActivity {
+public class GameProfile extends AppCompatActivity implements GameObserver {
 
     private DatabaseUtil dbUtil;
     private String username;
@@ -42,11 +47,14 @@ public class GameProfile extends AppCompatActivity {
     private RecyclerView recyclerTransactions;
     private ImageButton backButton;
 
+    private Handler uiHandler = new Handler(Looper.getMainLooper());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_profile);
 
+        Game.getInstance().addObserver(this);
         dbUtil = new DatabaseUtil(this);
 
         // Get username
@@ -118,8 +126,7 @@ public class GameProfile extends AppCompatActivity {
                     .multiply(BigDecimal.valueOf(ps.getQuantity()));
             totalInvested = totalInvested.add(invested);
 
-            //FIXME Calculate cost
-            double currentPrice = ps.getBuyPrice(); //dbUtil.getCurrentStockPrice(ps.getStock().getStockID(), Game.currentTimeStamp);
+            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID());
             BigDecimal currentStockValue = BigDecimal.valueOf(currentPrice)
                     .multiply(BigDecimal.valueOf(ps.getQuantity()));
             currentValue = currentValue.add(currentStockValue);
@@ -130,25 +137,26 @@ public class GameProfile extends AppCompatActivity {
 
         // Calculate profit/loss
         BigDecimal profitLoss = currentValue.subtract(totalInvested);
-        BigDecimal profitLossPercentage = BigDecimal.ZERO;
+        double profitLossPercentage = 0.0;
         if (totalInvested.compareTo(BigDecimal.ZERO) > 0) {
             profitLossPercentage = profitLoss.divide(totalInvested, 4, RoundingMode.HALF_UP)
-                    .multiply(BigDecimal.valueOf(100));
+                    .multiply(BigDecimal.valueOf(100))
+                    .doubleValue();
         }
 
         //Update UI
         tvTotalPortfolioValue.setText(String.format("$%,.2f", totalPortfolioValue.doubleValue()));
 
         if (profitLoss.compareTo(BigDecimal.ZERO) >= 0) {
-            tvProfitLoss.setText(String.format("+$%,.2f", profitLoss.doubleValue()));
-            tvProfitLoss.setTextColor(getColor(R.color.Green));
-            tvProfitLossPercentage.setText(String.format("(+%.2f%%)", profitLossPercentage.doubleValue()));
-            tvProfitLossPercentage.setTextColor(getColor(R.color.Green));
+            tvProfitLoss.setText(String.format("+$%.2f", profitLoss.doubleValue()));
+            tvProfitLoss.setTextColor(getResources().getColor(R.color.Green));
+            tvProfitLossPercentage.setText(String.format("+%.2f%%", profitLossPercentage));
+            tvProfitLossPercentage.setTextColor(getResources().getColor(R.color.Green));
         } else {
-            tvProfitLoss.setText(String.format("-$%,.2f", Math.abs(profitLoss.doubleValue())));
-            tvProfitLoss.setTextColor(getColor(R.color.Red));
-            tvProfitLossPercentage.setText(String.format("(%.2f%%)", profitLossPercentage.doubleValue()));
-            tvProfitLossPercentage.setTextColor(getColor(R.color.Red));
+            tvProfitLoss.setText(String.format("$%.2f", profitLoss.doubleValue()));
+            tvProfitLoss.setTextColor(getResources().getColor(R.color.Red));
+            tvProfitLossPercentage.setText(String.format("%.2f%%", profitLossPercentage));
+            tvProfitLossPercentage.setTextColor(getResources().getColor(R.color.Red));
         }
     }
 
@@ -167,26 +175,20 @@ public class GameProfile extends AppCompatActivity {
         List<PieEntry> entries = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
 
-        // Predefined colors for the chart
-        int[] chartColors = new int[]{
-                Color.parseColor("#4CAF50"), // Green
-                Color.parseColor("#2196F3"), // Blue
-                Color.parseColor("#FFC107"), // Yellow
-                Color.parseColor("#FF5722"), // Orange
-                Color.parseColor("#9C27B0"), // Purple
-                Color.parseColor("#E91E63"), // Pink
-                Color.parseColor("#607D8B"), // Gray-blue
-                Color.parseColor("#CDDC39")  // Lime
-        };
-
-        int colorIndex = 0;
-        for (PortfolioStock ps : holdings) {
-            float value = ps.getQuantity() * (float) ps.getBuyPrice();
-            entries.add(new PieEntry(value, ps.getStock().getSymbol()));
-            colors.add(chartColors[colorIndex % chartColors.length]);
-            colorIndex++;
+        double totalValue = 0.0;
+        for (PortfolioStock ps : holdings) { //Calculate total portfolio value
+            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID());
+            totalValue += ps.getQuantity() * currentPrice;
         }
 
+        for (PortfolioStock ps : holdings) { //Create pie entries with current values
+            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID());
+            double stockValue = ps.getQuantity() * currentPrice;
+            float percentage = (float) ((stockValue / totalValue) * 100);
+
+            entries.add(new PieEntry(percentage, ps.getStock().getSymbol()));
+            colors.add(generateColorForStock(ps.getStock().getStockID()));
+        }
         // Dataset
         PieDataSet dataSet = new PieDataSet(entries, "Holdings");
         dataSet.setColors(colors);
@@ -238,11 +240,31 @@ public class GameProfile extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Refresh data
-        loadProfileData();
+    private int generateColorForStock(int stockId) {
+        int[] chartColors = new int[]{
+                Color.parseColor("#4CAF50"), // Green
+                Color.parseColor("#2196F3"), // Blue
+                Color.parseColor("#FFC107"), // Yellow
+                Color.parseColor("#FF5722"), // Orange
+                Color.parseColor("#9C27B0"), // Purple
+                Color.parseColor("#E91E63"), // Pink
+                Color.parseColor("#607D8B"), // Gray-blue
+                Color.parseColor("#CDDC39")  // Lime
+        };
+        return chartColors[stockId % chartColors.length];
     }
 
+    public void onGameEvent(GameEvent event) {
+        // Update portfolio values when stock prices update
+        if (event.getType() == GameEventType.UPDATE_STOCK_PRICE) {
+            uiHandler.post(() -> {
+                loadProfileData();
+            });
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }
