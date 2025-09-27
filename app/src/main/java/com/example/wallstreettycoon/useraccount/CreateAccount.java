@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -48,6 +51,7 @@ public class CreateAccount extends AppCompatActivity {
                 EditText usernameInput = findViewById(R.id.edtUsernameCreate);
                 EditText passwordInput = findViewById(R.id.edtPasswCreate);
 
+
                 String name = nameInput.getText().toString();
                 Log.d("CREATE ACCOUNT", name);
                 String surname = surnameInput.getText().toString();
@@ -78,26 +82,10 @@ public class CreateAccount extends AppCompatActivity {
                         User test = dbUtil.getUser(username);
                         Log.d(test.getUserUsername(), "");
                     }
-                    else {
-                        Toast.makeText(v.getContext(), "Username already exists.", Toast.LENGTH_SHORT).show();
-                        usernameInput.setBackgroundResource(R.drawable.red_textbox_border);
-                    }
+                    else { usernameToast(); }
                 }
-                else if (name.isEmpty()) {
-                    Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                    nameInput.setBackgroundResource(R.drawable.red_textbox_border);
-                }
-                else if (surname.isEmpty()) {
-                    Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                    surnameInput.setBackgroundResource(R.drawable.red_textbox_border);
-                }
-                else if (username.isEmpty()) {
-                    Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                    usernameInput.setBackgroundResource(R.drawable.red_textbox_border);
-                }
-                else if (password.isEmpty()) {
-                    Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                    passwordInput.setBackgroundResource(R.drawable.red_textbox_border);
+                else {  //either of the fields empty
+                    fieldsToast();
                 }
             }
         });
@@ -111,5 +99,35 @@ public class CreateAccount extends AppCompatActivity {
                 startActivity(cancelIntent);
             }
         });
+    }
+
+    public void usernameToast()
+    {
+        LayoutInflater inflator = getLayoutInflater();
+        View layout = inflator.inflate(R.layout.custom_toast, null);
+        TextView txtToast = layout.findViewById(R.id.txtToast);
+        ImageView imgToast = layout.findViewById(R.id.imgToast);
+
+        imgToast.setImageResource(android.R.drawable.ic_menu_info_details);
+        txtToast.setText("Username already exists.");
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    public void fieldsToast()
+    {
+        LayoutInflater inflator = getLayoutInflater();
+        View layout = inflator.inflate(R.layout.custom_toast, null);
+        TextView txtToast = layout.findViewById(R.id.txtToast);
+        ImageView imgToast = layout.findViewById(R.id.imgToast);
+
+        imgToast.setImageResource(android.R.drawable.ic_menu_info_details);
+        txtToast.setText("Please fill in all fields");
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 }

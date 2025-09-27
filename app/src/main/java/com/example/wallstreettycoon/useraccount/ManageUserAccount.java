@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -49,7 +54,7 @@ public class ManageUserAccount extends AppCompatActivity {
         EditText edtSurname = findViewById(R.id.edtSurnameManage);
         edtSurname.setText(Game.currentUser.getUserLastName());
         EditText edtPassw = findViewById(R.id.editTextTextPassword);
-        edtPassw.setText(Game.currentUser.getUserPassword());
+        //edtPassw.setText(Game.currentUser.getUserPassword());
 
         txtChangePassw = findViewById(R.id.lblChangePassw);
         txtChangePassw.setOnClickListener(v -> {
@@ -61,7 +66,8 @@ public class ManageUserAccount extends AppCompatActivity {
         //new password value:
         Intent intent = getIntent();
         String value = intent.getStringExtra("new");
-        edtPassw.setText(value);
+        if (value == null) { edtPassw.setText(Game.currentUser.getUserPassword());}
+        else { edtPassw.setText(value);}
 
         btnUpdate = findViewById(R.id.btnUpdateManage);
         btnUpdate.setOnClickListener(v -> {
@@ -75,16 +81,20 @@ public class ManageUserAccount extends AppCompatActivity {
                 //update user details
                 dbUtil.updateUser(edtUser.getText().toString(), name, surname, password);
                 //notify user:
-                Toast.makeText(v.getContext(), "Account updated.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(v.getContext(), "Account updated.", Toast.LENGTH_SHORT).show();
+                updateToast();
+                Intent backToDash = new Intent(ManageUserAccount.this, ListStocks.class);
+                startActivity(backToDash);
             }
-            else if (name.isEmpty()) {
+            else { fieldsToast(); }
+            /*else if (name.isEmpty()) {
                 Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 edtName.setBackgroundResource(R.drawable.red_textbox_border);
             }
             else {
                 Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
                 edtSurname.setBackgroundResource(R.drawable.red_textbox_border);
-            }
+            }*/
 
             //set fields to updated information:
             edtName.setText(name);
@@ -95,9 +105,6 @@ public class ManageUserAccount extends AppCompatActivity {
             User test = dbUtil.getUser(edtUser.getText().toString());
             Log.d(test.getUserUsername(), "Name update to " + surname);
 
-            Intent backToDash = new Intent(ManageUserAccount.this, ListStocks.class);
-            startActivity(backToDash);
-
         });
 
         btnCancel = findViewById(R.id.btnCancelManage);
@@ -106,5 +113,37 @@ public class ManageUserAccount extends AppCompatActivity {
             startActivity(backToDash);
         });
 
+    }
+
+    public void updateToast()
+    {
+        LayoutInflater inflator = getLayoutInflater();
+        View layout = inflator.inflate(R.layout.custom_toast, null);
+        TextView txtToast = layout.findViewById(R.id.txtToast);
+        ImageView imgToast = layout.findViewById(R.id.imgToast);
+        LinearLayout toastLayout = layout.findViewById(R.id.toastLayout);
+
+        toastLayout.setBackgroundColor(ContextCompat.getColor(this, R.color.Green));
+        imgToast.setImageResource(android.R.drawable.stat_notify_sync);
+        txtToast.setText("Account updated!");
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+    }
+
+    public void fieldsToast()
+    {
+        LayoutInflater inflator = getLayoutInflater();
+        View layout = inflator.inflate(R.layout.custom_toast, null);
+        TextView txtToast = layout.findViewById(R.id.txtToast);
+        ImageView imgToast = layout.findViewById(R.id.imgToast);
+
+        imgToast.setImageResource(android.R.drawable.ic_menu_info_details);
+        txtToast.setText("Please fill in all fields");
+        Toast toast = new Toast(getApplicationContext());
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
     }
 }
