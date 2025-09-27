@@ -3,6 +3,8 @@ package com.example.wallstreettycoon.displayBuySell;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,6 +18,7 @@ import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameEventType;
 import com.example.wallstreettycoon.model.GameObserver;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
@@ -37,6 +40,10 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
     private String currentUsername;
     private String viewType;
     Context context = this;
+
+    private String currentTimeRange = "1M";
+    private TextView currentPriceTextView;
+    private Handler uiHandler = new Handler(Looper.getMainLooper());
 
 
     @Override
@@ -85,7 +92,7 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
 
         TextView stockName = findViewById(R.id.stockNameHeader);
         TextView stockSymbol = findViewById(R.id.stockSymbolValue);
-        TextView currentPrice = findViewById(R.id.currentPriceValue);
+        currentPriceTextView = findViewById(R.id.currentPriceValue);
         EditText description = findViewById(R.id.stockDescription);
         ImageButton backButton = findViewById(R.id.backButton);
 
@@ -103,10 +110,11 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
             stockSymbol.setText(currentStock.getSymbol());
         }
 
-        double currentPriceValue = dbUtil.getCurrentStockPrice(currentStock.getStockID());
-        if (currentPrice != null) {
-            currentPrice.setText(String.format("$%.2f", currentPriceValue));
-        }
+        updatePriceDisplay();
+//        double currentPriceValue = dbUtil.getCurrentStockPrice(currentStock.getStockID());
+//        if (currentPrice != null) {
+//            currentPrice.setText(String.format("$%.2f", currentPriceValue));
+//        }
 
         if (description != null) {
             description.setText(currentStock.getDescription());
@@ -119,6 +127,7 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         btn1M.setBackgroundTintList(getColorStateList(R.color.LightBlue)); // Default selected
 
         btn1D.setOnClickListener(v -> {
+            currentTimeRange = "1D";
             updateChart("1D");
             btn1D.setBackgroundTintList(getColorStateList(R.color.LightBlue));
             btn1W.setBackgroundTintList(getColorStateList(R.color.Orange));
@@ -126,6 +135,7 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         });
 
         btn1W.setOnClickListener(v -> {
+            currentTimeRange = "1W";
             updateChart("1W");
             btn1D.setBackgroundTintList(getColorStateList(R.color.Orange));
             btn1W.setBackgroundTintList(getColorStateList(R.color.LightBlue));
@@ -133,6 +143,7 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         });
 
         btn1M.setOnClickListener(v -> {
+            currentTimeRange = "1M";
             updateChart("1M");
             btn1D.setBackgroundTintList(getColorStateList(R.color.Orange));
             btn1W.setBackgroundTintList(getColorStateList(R.color.Orange));
@@ -166,6 +177,13 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         });
     }
 
+    private void updatePriceDisplay() {
+        if (currentPriceTextView != null) {
+            double currentPriceValue = dbUtil.getCurrentStockPrice(currentStock.getStockID());
+            currentPriceTextView.setText(String.format("$%.2f", currentPriceValue));
+        }
+    }
+
     // https://github.com/PhilJay/MPAndroidChart
     private void updateChart(String range) {
         int timeRange;
@@ -193,7 +211,8 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         chart.getDescription().setTextColor(getColor(R.color.black));
 
         // Load price history
-        List<Entry> entries = getPriceHistory(currentStock.getStockID(), timeRange);
+        List<Entry> entries = getPriceHistoryRealTime(currentStock.getStockID(), timeRange);
+
         Log.d("DisplayStock", "Generated " + entries.size() + " entries for chart");
 
         // Add styling to line chart
@@ -273,21 +292,61 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         chart.invalidate();
     }
 
-    public List<Entry> getPriceHistory(int stockID, int daysBack) {
+    public List<Entry> getPriceHistoryRealTime(int stockID, int daysBack) {
         List<Entry> entries = new ArrayList<>();
         StockPriceFunction func = dbUtil.getStockPriceFunction(stockID);
         if (func == null) return entries;
 
-        for (int t = 0; t <= daysBack; t++) {
-            double price = func.getCurrentPrice(t);
-            entries.add(new Entry(t, (float) price));
+        int currentTimestamp = Game.getInstance().getCurrentTimeStamp();
+
+        // Generate historical points leading up to current time
+        for (int i = 0; i < daysBack; i++) {
+            int timestamp = currentTimestamp - (daysBack - i - 1);
+            if (timestamp >= 0) {
+                double price = func.getCurrentPrice(timestamp);
+                entries.add(new Entry(i, (float) price));
+            }
         }
+
+        // Add the current price as the last point
+        double currentPrice = func.getCurrentPrice(currentTimestamp);
+        entries.add(new Entry(daysBack, (float) currentPrice));
 
         return entries;
     }
 
     @Override
     public void onGameEvent(GameEvent event) {
-        //TODO update the chart, update the current price redrawing it might just work
+        // Update the chart and current price when stock prices update
+        if (event.getType() == GameEventType.UPDATE_STOCK_PRICE) {
+            // Run on UI thread
+            uiHandler.post(() -> {
+                Log.d("DisplayStock", "Updating chart due to price update event");
+
+                // Update the current price display
+                updatePriceDisplay();
+
+                // Refresh the chart with current time range
+                updateChart(currentTimeRange);
+            });
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
+
+//    public List<Entry> getPriceHistory(int stockID, int daysBack) {
+//        List<Entry> entries = new ArrayList<>();
+//        StockPriceFunction func = dbUtil.getStockPriceFunction(stockID);
+//        if (func == null) return entries;
+//
+//        for (int t = 0; t <= daysBack; t++) {
+//            double price = func.getCurrentPrice(t);
+//            entries.add(new Entry(t, (float) price));
+//        }
+//
+//        return entries;
+//    }
