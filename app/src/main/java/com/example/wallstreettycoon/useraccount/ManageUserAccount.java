@@ -54,7 +54,7 @@ public class ManageUserAccount extends AppCompatActivity {
         EditText edtSurname = findViewById(R.id.edtSurnameManage);
         edtSurname.setText(Game.currentUser.getUserLastName());
         EditText edtPassw = findViewById(R.id.editTextTextPassword);
-        //edtPassw.setText(Game.currentUser.getUserPassword());
+        edtPassw.setText(Game.currentUser.getUserPassword());
 
         txtChangePassw = findViewById(R.id.lblChangePassw);
         txtChangePassw.setOnClickListener(v -> {
@@ -81,20 +81,11 @@ public class ManageUserAccount extends AppCompatActivity {
                 //update user details
                 dbUtil.updateUser(edtUser.getText().toString(), name, surname, password);
                 //notify user:
-                //Toast.makeText(v.getContext(), "Account updated.", Toast.LENGTH_SHORT).show();
                 updateToast();
                 Intent backToDash = new Intent(ManageUserAccount.this, ListStocks.class);
                 startActivity(backToDash);
             }
             else { fieldsToast(); }
-            /*else if (name.isEmpty()) {
-                Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                edtName.setBackgroundResource(R.drawable.red_textbox_border);
-            }
-            else {
-                Toast.makeText(v.getContext(), "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                edtSurname.setBackgroundResource(R.drawable.red_textbox_border);
-            }*/
 
             //set fields to updated information:
             edtName.setText(name);
@@ -109,8 +100,10 @@ public class ManageUserAccount extends AppCompatActivity {
 
         btnCancel = findViewById(R.id.btnCancelManage);
         btnCancel.setOnClickListener(v -> { //return to dashboard
-            Intent backToDash = new Intent(ManageUserAccount.this, ListStocks.class);
-            startActivity(backToDash);
+            String viewType = getIntent().getStringExtra("viewType");
+            Intent cancelIntent = new Intent(this, ListStocks.class);
+            cancelIntent.putExtra("view", viewType);
+            startActivity(cancelIntent);
         });
 
     }

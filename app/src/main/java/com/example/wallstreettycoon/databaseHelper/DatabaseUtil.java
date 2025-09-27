@@ -87,11 +87,11 @@ public class DatabaseUtil {
     public void setUpChapterStock()
     {
         Map<Integer, List<String>> chapterStocks = new HashMap<>();
-        chapterStocks.put(1, Arrays.asList("AAPL", "GOOGL", "MSFT", "META", "NFLX", "AMZN")); // Chapter 1: Tech + Random
-        chapterStocks.put(2, Arrays.asList("AMZN", "TSLA", "KO", "NVDA", "JNJ"));  // Chapter 2: Investments + Random
-        /*chapterStocks.put(3, Arrays.asList("MSFT", "META"));  // Chapter 3: Crypto + Random
-        chapterStocks.put(4, Arrays.asList("NFLX", "KO"));    // Chapter 4: Travel + Entertainment
-        chapterStocks.put(5, Arrays.asList("NVDA", "JNJ"));   // Chapter 5: AI*/
+        chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR","GPLX","ORNG","BNNF","ISAM","CHRP","LMTC","OCSD","RDTN","FRBT","PNOS","NSCM","ZYND","FAUD","PLLC","ESKM","SNKS")); // Chapter 1: Tech + Random
+        chapterStocks.put(2, Arrays.asList("GDBK", "MRGS","LB20","SCMP","JPMG","BRST","CTRB","HDBC","PNZI","DMHC","FAUD","BNZO","HLIX","IRCL","SKLH"));  // Chapter 2: Investments + Random
+        chapterStocks.put(3, Arrays.asList("DGCS", "INST", "BTCN", "HODL","SHDY","MNBK","PUMP","ELNM","ZRCN","BNNA","BGNI","HDHP","GLOW","HVHP","FAUD"));  // Chapter 3: Crypto + Random
+        chapterStocks.put(4, Arrays.asList("SKHA", "EJTN","CLDN","WGIT","PRLC","JTLG","YLVC","ARFO","BGBL","NVLT","TTCK","FLIK","SLPC","VRRL","FAUD","MDMS","WNDO","GKRT","SKFI"));    // Chapter 4: Travel + Entertainment
+        chapterStocks.put(5, Arrays.asList("TKAI","NRND","DFMD","PSSE","CGSM","PRTA","AGPT","WKBT","RBLB","PRBL","CLAI","FAUD","VRRL"));   // Chapter 5: AI
 
         for (Map.Entry<Integer, List<String>> entry : chapterStocks.entrySet()) {
             int chapterID = entry.getKey();
