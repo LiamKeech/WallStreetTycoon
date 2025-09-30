@@ -1,20 +1,34 @@
 package com.example.wallstreettycoon.stock;
 
+import com.example.wallstreettycoon.model.Game;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Stock { //Data Model
     private int stockID;
     private String stockName;
     private String symbol;
     private String category;
     private String description;
+    private Double currentPrice;
+    private List<Double> priceHistory;
+
 
     //Constructor with all parameters
-    public Stock(int stockID, String stockName, String symbol, String category, String description){
+    public Stock(int stockID, String stockName, String symbol, String category, String description, Double initialPrice){
         this.stockID = stockID;
         this.stockName = stockName;
         this.symbol = symbol;
         this.category = category;
         this.description = description;
+        this.currentPrice = initialPrice;
+
+        priceHistory = new ArrayList<>();
     }
+
+
+
 
     //Constuctor with only stockID (creates null stock if needed)
     public Stock(int stockID){
@@ -72,4 +86,18 @@ public class Stock { //Data Model
     {
         return stockName;
     }
+
+    public Double getCurrentPrice(){
+        return currentPrice;
+    }
+
+    public List<Double> getPriceHistory(){
+        return priceHistory;
+    }
+
+    public void updatePriceHistory(){
+        priceHistory.add(currentPrice);
+    }
+
+
 }

@@ -1,18 +1,23 @@
 package com.example.wallstreettycoon.stock;
 
-public class StockPriceFunction {
+import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameObserver;
+
+public class StockPriceFunction implements GameObserver {
     Integer stockPriceHistoryID;
     Double[] amplitudes;
     Double[] frequencies;
     Integer stockID;
     Double offset; // based on amplitudes
     Double minPrice = 0.0; // minimum stock price
+    Double marketFactor;
 
     public StockPriceFunction(Integer stockPriceHistoryID, Double[] amplitudes, Double[] frequencies, Integer fk){
         this.stockPriceHistoryID = stockPriceHistoryID;
         this.amplitudes = amplitudes;
         this.frequencies = frequencies;
         this.stockID = fk;
+        this.marketFactor = 0.0;
 
         Double sumAmplitudes = 0.0;
         for (Double amp : amplitudes) {
@@ -24,22 +29,27 @@ public class StockPriceFunction {
 
     public Integer getStockID() { return stockID; }
 
-    public Double getCurrentPrice(Integer timeStamp){
-        Double price = 0.0;
+    public Double getCurrentPriceChange(Integer timeStamp){
+        Double fourierSeries = 0.0;
 
         for(int i = 0; i < amplitudes.length; i++){
-            price += amplitudes[i] * Math.sin(frequencies[i] * timeStamp.doubleValue());
-        }
-        /// At t = 0 the price is zero for all stocks as sin(0) = 0, so I add offset price for every stock at t = 0
-
-        // Add offset to base the price
-        price = price + offset;
-
-        // Ensure price never goes below minimum & prevents negative prices
-        if (price < minPrice) {
-            price = minPrice;
+            fourierSeries += amplitudes[i] * Math.sin(frequencies[i] * timeStamp.doubleValue());
         }
 
-        return price;
+        Double priceChange = marketFactor * timeStamp + fourierSeries;
+
+        return priceChange;
+    }
+
+    @Override
+    public void onGameEvent(GameEvent event) {
+        //set current market factor
+        switch (event.getType()) {
+            case NOTIFICATION:
+                marketFactor = (Double) event.getCargo();
+                break;
+            default:
+                break;
+        }
     }
 }
