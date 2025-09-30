@@ -145,6 +145,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "eventID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "chapterID INTEGER, " +
                         "minigameID INTEGER, " +
+                        "eventTitle TEXT, " +
                         "eventInfo TEXT, " +
                         "chapterPresent INTEGER, " +
                         "FOREIGN KEY (chapterID) REFERENCES chapters(chapterID), " +
@@ -152,6 +153,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         );
 
         //TODO populate market event table
+
 
         // Minigame table
         db.execSQL(

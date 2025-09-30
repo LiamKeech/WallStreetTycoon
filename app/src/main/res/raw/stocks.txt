@@ -60,17 +60,17 @@ SlapChat Inc.,SLPC,Technology,Messaging app where messages disappear faster than
 VirtuReal Inc.,VRRL,Technology,VR headset company making reality more disappointing by comparison.,61.50
 
 //Ai companies
-ThinkrAI,TKAI,Technology,AI startup that generates inspirational quotes that almost make sense.,42.20
-NeuralNoodle,NRND,Technology,Machine learning firm specializing in spaghetti-like neural nets.,38.45
-DeepFriedMind,DFMD,Technology,AI company known for overcooked algorithms with crunchy results.,27.80
-PseudoSense,PSSE,Technology,Artificial intelligence platform that pretends to understand feelings.,34.65
-CogniScam,CGSM,Technology,AI consultancy promising AGI by next Tuesday.,48.95
-ParrotAI,PRTA,Technology,Startup building AI that only repeats what you say but louder.,29.55
-AutoGPTed,AGPT,Technology,Automation tool that hallucinates tasks more than it completes them.,32.70
-WokeBot Labs,WKBT,Technology,AI company making bots that argue with you about ethics.,41.35
-RoboLobster,RBLB,Technology,AI-powered robotic crustaceans for “food and defense applications.”,56.10
-PredictaBull,PRBL,Technology,Analytics firm whose AI always predicts stock prices going up.,39.20
-ClosedAI,CLAI,Technology,Secretive AI company that never releases products but raises billions in funding.,58.85
+ThinkrAI,TKAI,AI,AI startup that generates inspirational quotes that almost make sense.,42.20
+NeuralNoodle,NRND,AI,Machine learning firm specializing in spaghetti-like neural nets.,38.45
+DeepFriedMind,DFMD,AI,AI company known for overcooked algorithms with crunchy results.,27.80
+PseudoSense,PSSE,AI,Artificial intelligence platform that pretends to understand feelings.,34.65
+CogniScam,CGSM,AI,AI consultancy promising AGI by next Tuesday.,48.95
+ParrotAI,PRTA,AI,Startup building AI that only repeats what you say but louder.,29.55
+AutoGPTed,AGPT,AI,Automation tool that hallucinates tasks more than it completes them.,32.70
+WokeBot Labs,WKBT,AI,AI company making bots that argue with you about ethics.,41.35
+RoboLobster,RBLB,AI,AI-powered robotic crustaceans for “food and defense applications.”,56.10
+PredictaBull,PRBL,AI,Analytics firm whose AI always predicts stock prices going up.,39.20
+ClosedAI,CLAI,AI,Secretive AI company that never releases products but raises billions in funding.,58.85
 
 
         //GENERAL CATEGORIES
