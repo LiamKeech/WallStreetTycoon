@@ -21,6 +21,7 @@ public class SellDialogFragment extends DialogFragment {
     private Button confirmButton;
     private double ownedShares;
     private double currentPriceValue;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sell_dialog, container, false);
@@ -29,7 +30,7 @@ public class SellDialogFragment extends DialogFragment {
         Bundle args = getArguments();
         int stockID = args.getInt("stockID");
         String symbolText = args.getString("stockSymbol");
-        double currentPriceValue = args.getDouble("currentPrice");
+        currentPriceValue = args.getDouble("currentPrice");
         String username = args.getString("username");
 
         // Set dialog title
@@ -56,14 +57,12 @@ public class SellDialogFragment extends DialogFragment {
         DatabaseUtil dbUtil = new DatabaseUtil(requireContext());
         int portfolioID = dbUtil.getPortfolioID(username);
         ownedShares = dbUtil.getOwnedQuantity(portfolioID, stockID);
-
-        // Display how many shares the user owns
-        remainingShares.setText(String.format("Shares Remaining: %.2f", ownedShares));
+        remainingShares.setText(String.format("%.2f", ownedShares));
 
         // If no shares owned, disable confirm or show message
         if (ownedShares <= 0) {
             confirmButton.setEnabled(false);
-            totalCost.setText("No shares available to sell");
+            totalCost.setText("No shares available");
         }
 
         quantityInput.addTextChangedListener(new TextWatcher() {
@@ -78,30 +77,37 @@ public class SellDialogFragment extends DialogFragment {
                         int quantity = Integer.parseInt(input);
 
                         if (quantity <= 0) {
-                            totalCost.setText("Enter a positive amount");
+                            totalCost.setText("Enter positive amount");
                             confirmButton.setEnabled(false);
+                            remainingShares.setText(String.format("%.2f", ownedShares));
                         } else if (quantity > ownedShares) {
                             totalCost.setText("Not enough shares");
                             confirmButton.setEnabled(false);
+                            remainingShares.setText(String.format("%.2f", ownedShares));
                         } else {
                             double total = quantity * currentPriceValue;
-                            totalCost.setText(String.format("Total Proceeds: $%.2f", total));
+                            totalCost.setText(String.format("$%.2f", total));
                             confirmButton.setEnabled(true);
+
+                            // Dynamically update remaining shares
+                            double remaining = ownedShares - quantity;
+                            remainingShares.setText(String.format("%.2f", remaining));
                         }
                     } catch (NumberFormatException e) {
                         totalCost.setText("Invalid input");
                         confirmButton.setEnabled(false);
+                        remainingShares.setText(String.format("%.2f", ownedShares));
                     }
                 } else {
-                    totalCost.setText("Total Proceeds: $0.00");
+                    totalCost.setText("$0.00");
                     confirmButton.setEnabled(false);
+                    remainingShares.setText(String.format("%.2f", ownedShares));
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {}
         });
-
 
         // Button actions
         Button confirmButton = view.findViewById(R.id.btnConfirm);
@@ -114,8 +120,7 @@ public class SellDialogFragment extends DialogFragment {
                 boolean success = dbUtil.sellStock(username, stockID, quantity, currentPriceValue);
 
                 if (success) {
-                    Toast.makeText(getContext(), "Sold!", Toast.LENGTH_SHORT).show();
-                    //insertTransaction(username, stockID, "SELL", quantity, new BigDecimal(currentPriceValue));
+                    Toast.makeText(getContext(), "Sold " + quantityStr + " shares of " + symbolText, Toast.LENGTH_SHORT).show();
                     dismiss();
                 } else {
                     Toast.makeText(getContext(), "Failed to sell: Not enough shares", Toast.LENGTH_SHORT).show();

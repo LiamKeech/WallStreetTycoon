@@ -7,7 +7,6 @@
     android:padding="16dp"
     android:background="#FFFFFF">
 
-    <!-- Header -->
     <TextView
         style="@style/DarkBlueTextView"
         android:id="@+id/dialogHeader"
@@ -19,97 +18,128 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Stock Symbol (Label and Value side by side) -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/labelGuideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.35" />
+
     <TextView
         style="@style/subHeading"
         android:id="@+id/stockSymbolLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Stock Symbol:"
+        app:layout_constraintEnd_toStartOf="@id/labelGuideline"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dialogHeader" />
+
     <TextView
         android:id="@+id/stockID"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="AAA"
+        android:fontFamily="@font/jua"
         android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/dialogHeader"
-        app:layout_constraintStart_toEndOf="@id/stockSymbolLabel"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp" />
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="@id/stockSymbolLabel"
+        app:layout_constraintBottom_toBottomOf="@id/stockSymbolLabel"
+        app:layout_constraintStart_toStartOf="@id/labelGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp" />
 
-    <!-- Current Price (Label and Value side by side) -->
     <TextView
         style="@style/subHeading"
         android:id="@+id/currentPriceLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Current Price:"
+        app:layout_constraintEnd_toStartOf="@id/labelGuideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/stockID" />
+        app:layout_constraintTop_toBottomOf="@id/stockSymbolLabel" />
+
     <TextView
         android:id="@+id/currentPrice"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="$50.00"
+        android:fontFamily="@font/jua"
         android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/stockID"
-        app:layout_constraintStart_toEndOf="@id/currentPriceLabel"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp" />
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="@id/currentPriceLabel"
+        app:layout_constraintBottom_toBottomOf="@id/currentPriceLabel"
+        app:layout_constraintStart_toStartOf="@id/labelGuideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp" />
 
-    <!-- Quantity Input (Label and EditText side by side) -->
     <TextView
         style="@style/subHeading"
         android:id="@+id/quantityLabel"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Quantity:"
+        app:layout_constraintEnd_toStartOf="@id/labelGuideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/currentPrice" />
+        app:layout_constraintTop_toBottomOf="@id/currentPriceLabel"
+        app:layout_constraintBaseline_toBaselineOf="@id/quantityInput" />
+
     <EditText
         android:id="@+id/quantityInput"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Enter shares"
+        android:fontFamily="@font/jua"
+        android:textSize="18sp"
         android:inputType="number"
         android:padding="8dp"
         app:layout_constraintTop_toBottomOf="@id/currentPrice"
-        app:layout_constraintStart_toEndOf="@id/quantityLabel"
+        app:layout_constraintStart_toStartOf="@id/labelGuideline"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp" />
 
-    <!-- Total Cost -->
     <TextView
-        style="@style/cardHeading"
-        android:id="@+id/totalProceeds"
-        android:layout_width="0dp"
+        style="@style/subHeading"
+        android:id="@+id/totalCostLabel"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Total Cost: $0.00"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="24dp"
+        android:text="Total Cost"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/quantityInput" />
 
-    <!-- Buttons -->
+    <TextView
+        android:id="@+id/totalProceeds"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="$0.00"
+        android:fontFamily="@font/jua"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/totalCostLabel" />
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/totalProceeds"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/totalProceeds">
 
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/GreenButtonMedium"
             android:id="@+id/btnConfirm"
+            style="@style/GreenButtonMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -117,8 +147,8 @@
             android:text="Confirm" />
 
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/OrangeButtonMedium"
             android:id="@+id/btnCancel"
+            style="@style/OrangeButtonMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"

@@ -41,7 +41,6 @@ public class BuyDialogFragment extends DialogFragment {
         // Quantity and total cost logic
         EditText quantityInput = view.findViewById(R.id.quantityInput);
         TextView totalCost = view.findViewById(R.id.totalProceeds);
-        //double currentPrice = 50.00;
 
         quantityInput.addTextChangedListener(new TextWatcher() {
             @Override
@@ -57,7 +56,7 @@ public class BuyDialogFragment extends DialogFragment {
 
                         if (quantity > 0) {
                             double total = quantity * currentPriceValue; //calculate the total cost if input is valid and positive
-                            totalCost.setText(String.format("Total Cost: $%.2f", total));
+                            totalCost.setText(String.format("$%.2f", total));
                         } else {
                             totalCost.setText("Enter a positive amount");
                         }
@@ -66,14 +65,13 @@ public class BuyDialogFragment extends DialogFragment {
                         totalCost.setText("Invalid input");
                     }
                 } else {
-                    totalCost.setText("Total Cost: $0.00"); //default
+                    totalCost.setText("$0.00"); //default
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {            }
         });
-
 
         // Button actions
         Button confirmButton = view.findViewById(R.id.btnConfirm);
@@ -86,11 +84,10 @@ public class BuyDialogFragment extends DialogFragment {
 
                 DatabaseUtil dbUtil = new DatabaseUtil(requireContext());
 
-                boolean success = dbUtil.buyStock(username, stockID, quantity, currentPriceValue);//FIXME
+                boolean success = dbUtil.buyStock(username, stockID, quantity, currentPriceValue);
 
                 if (success) {
                     Toast.makeText(getContext(), "Bought " + quantityStr + " shares of " + symbolText, Toast.LENGTH_SHORT).show();
-                    //insertTransaction(username, stockID, "BUY", quantity, new BigDecimal(price));
                     dismiss();
                 } else {
                     Toast.makeText(getContext(), "Failed to buy: Insufficient funds", Toast.LENGTH_SHORT).show();

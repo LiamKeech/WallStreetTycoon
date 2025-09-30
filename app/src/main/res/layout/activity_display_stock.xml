@@ -52,7 +52,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="4dp">
+        android:layout_marginBottom="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -60,7 +60,7 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Stock Symbol -->
+            <!-- Stock Symbol Section -->
             <TextView
                 style="@style/subHeading"
                 android:layout_width="wrap_content"
@@ -73,9 +73,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="AAA"
-                android:textColor="#000000" />
+                android:fontFamily="@font/jua"
+                android:textColor="#000000"
+                android:textSize="18sp" />
 
-            <!-- Current Price -->
+            <!-- Current Price Section -->
             <TextView
                 style="@style/subHeading"
                 android:layout_width="wrap_content"
@@ -89,9 +91,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:text="$50.00"
-                android:textColor="#000000" />
+                android:fontFamily="@font/jua"
+                android:textColor="#000000"
+                android:textSize="18sp" />
 
-            <!-- Description with Border -->
+            <!-- Description Section -->
             <TextView
                 style="@style/subHeading"
                 android:layout_width="wrap_content"
@@ -107,6 +111,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/edittext_border"
                 android:enabled="false"
+                android:fontFamily="@font/jua"
                 android:gravity="top"
                 android:inputType="textMultiLine"
                 android:maxLines="5"
@@ -114,13 +119,21 @@
                 android:padding="8dp"
                 android:scrollbars="vertical"
                 android:text="Stock A relates to market X."
+                android:textColor="#000000"
+                android:textSize="16dp"
                 android:verticalScrollbarPosition="right" />
 
+            <!-- Spacer to push buttons to bottom -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1" />
+
+            <!-- Buy/Sell Buttons Container -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
-                android:layout_marginBottom="0dp"
+                android:layout_marginTop="16dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -131,9 +144,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:padding="12dp"
-                    android:text="BUY"
-                    android:textColor="#FFFFFF"
-                    app:cornerRadius="8dp" />
+                    android:text="BUY" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     style="@style/RedButtonMedium"
@@ -141,25 +152,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="12dp"
-                    android:text="SELL"
-                    android:textColor="#FFFFFF"
-                    app:cornerRadius="8dp" />
+                    android:text="SELL" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
-
-<!--    <TextView-->
-<!--        android:id="@+id/yAxisLabel"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Price"-->
-<!--        android:textSize="12sp"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_marginEnd="4dp"-->
-<!--        android:rotation="270"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/timeRangeButtons"-->
-<!--        app:layout_constraintEnd_toStartOf="@id/stockChart"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/stockNameHeader" />-->
 
     <!-- Chart -->
     <com.github.mikephil.charting.charts.LineChart
@@ -173,63 +169,44 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="4dp" />
+        android:layout_marginBottom="8dp" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/xAxisLabel"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Time"-->
-<!--        android:textSize="12sp"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:layout_marginBottom="4dp"-->
-<!--        app:layout_constraintBottom_toTopOf="@id/timeRangeButtons"-->
-<!--        app:layout_constraintStart_toEndOf="@id/stockDetailsCard"-->
-<!--        app:layout_constraintEnd_toEndOf="@id/stockChart"-->
-<!--        app:layout_constraintHorizontal_bias="0.5" />-->
-
-    <!-- Time Range Buttons -->
+    <!-- Time Range Buttons - Centered below chart -->
     <LinearLayout
         android:id="@+id/timeRangeButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.204"
         app:layout_constraintStart_toEndOf="@id/stockDetailsCard"
-        app:layout_constraintTop_toBottomOf="@+id/stockNameHeader"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonSmall"
             android:id="@+id/btn1D"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="@color/Orange"
+            android:layout_marginEnd="8dp"
             android:padding="8dp"
-            android:text="1D"
-            android:textColor="@color/white" />
+            android:text="1D" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonSmall"
             android:id="@+id/btn1W"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="@color/Orange"
+            android:layout_marginEnd="8dp"
             android:padding="8dp"
-            android:text="1W"
-            android:textColor="@color/white" />
+            android:text="1W" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/OrangeButtonSmall"
             android:id="@+id/btn1M"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/LightBlue"
             android:padding="8dp"
-            android:text="1M"
-            android:textColor="@color/white" />
+            android:text="1M" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

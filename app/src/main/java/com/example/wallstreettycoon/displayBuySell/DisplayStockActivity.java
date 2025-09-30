@@ -1,5 +1,6 @@
 package com.example.wallstreettycoon.displayBuySell;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -111,10 +112,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         }
 
         updatePriceDisplay();
-//        double currentPriceValue = dbUtil.getCurrentStockPrice(currentStock.getStockID());
-//        if (currentPrice != null) {
-//            currentPrice.setText(String.format("$%.2f", currentPriceValue));
-//        }
 
         if (description != null) {
             description.setText(currentStock.getDescription());
@@ -124,30 +121,33 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         Button btn1W = findViewById(R.id.btn1W);
         Button btn1M = findViewById(R.id.btn1M);
 
-        btn1M.setBackgroundTintList(getColorStateList(R.color.LightBlue)); // Default selected
+        btn1M.setSelected(true);
+        updateButtonState(btn1M, true);
+        updateButtonState(btn1D, false);
+        updateButtonState(btn1W, false);
 
         btn1D.setOnClickListener(v -> {
             currentTimeRange = "1D";
             updateChart("1D");
-            btn1D.setBackgroundTintList(getColorStateList(R.color.LightBlue));
-            btn1W.setBackgroundTintList(getColorStateList(R.color.Orange));
-            btn1M.setBackgroundTintList(getColorStateList(R.color.Orange));
+            updateButtonState(btn1D, true);
+            updateButtonState(btn1W, false);
+            updateButtonState(btn1M, false);
         });
 
         btn1W.setOnClickListener(v -> {
             currentTimeRange = "1W";
             updateChart("1W");
-            btn1D.setBackgroundTintList(getColorStateList(R.color.Orange));
-            btn1W.setBackgroundTintList(getColorStateList(R.color.LightBlue));
-            btn1M.setBackgroundTintList(getColorStateList(R.color.Orange));
+            updateButtonState(btn1D, false);
+            updateButtonState(btn1W, true);
+            updateButtonState(btn1M, false);
         });
 
         btn1M.setOnClickListener(v -> {
             currentTimeRange = "1M";
             updateChart("1M");
-            btn1D.setBackgroundTintList(getColorStateList(R.color.Orange));
-            btn1W.setBackgroundTintList(getColorStateList(R.color.Orange));
-            btn1M.setBackgroundTintList(getColorStateList(R.color.LightBlue));
+            updateButtonState(btn1D, false);
+            updateButtonState(btn1W, false);
+            updateButtonState(btn1M, true);
         });
 
         findViewById(R.id.btnBuy).setOnClickListener(v -> {
@@ -175,6 +175,14 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
             sellDialog.setArguments(args);
             sellDialog.show(getSupportFragmentManager(), "SellDialog");
         });
+    }
+
+    private void updateButtonState(Button button, boolean isSelected) {
+        if (isSelected) {
+            button.setBackground(getDrawable(R.drawable.button_background_lightblue_small));
+        } else {
+            button.setBackground(getDrawable(R.drawable.button_background_orange_small));
+        }
     }
 
     private void updatePriceDisplay() {
