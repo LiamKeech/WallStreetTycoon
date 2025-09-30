@@ -3,16 +3,17 @@ package com.example.wallstreettycoon.displayBuySell;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.R;
@@ -29,6 +30,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.components.Description;
 import java.util.ArrayList;
 
 import java.util.List;
@@ -45,12 +47,15 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
     private String currentTimeRange = "1M";
     private TextView currentPriceTextView;
     private Handler uiHandler = new Handler(Looper.getMainLooper());
+    private Typeface juaTypeface;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_stock);
+
+        juaTypeface = ResourcesCompat.getFont(this, R.font.jua);
 
         Game.getInstance().addObserver(this);
         dbUtil = new DatabaseUtil(context);
@@ -94,7 +99,7 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         TextView stockName = findViewById(R.id.stockNameHeader);
         TextView stockSymbol = findViewById(R.id.stockSymbolValue);
         currentPriceTextView = findViewById(R.id.currentPriceValue);
-        EditText description = findViewById(R.id.stockDescription);
+        TextView description = findViewById(R.id.stockDescription);
         ImageButton backButton = findViewById(R.id.backButton);
 
         backButton.setOnClickListener(v -> {
@@ -180,8 +185,13 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
     private void updateButtonState(Button button, boolean isSelected) {
         if (isSelected) {
             button.setBackground(getDrawable(R.drawable.button_background_lightblue_small));
+            // Manually reapply padding from your style
+            int padding = (int) (8 * getResources().getDisplayMetrics().density);
+            button.setPadding(padding * 2, padding, padding * 2, padding);
         } else {
             button.setBackground(getDrawable(R.drawable.button_background_orange_small));
+            int padding = (int) (8 * getResources().getDisplayMetrics().density);
+            button.setPadding(padding * 2, padding, padding * 2, padding);
         }
     }
 
@@ -212,11 +222,14 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
                 break;
         }
 
-        // Chart title
-        chart.getDescription().setText(chartTitle);
-        chart.getDescription().setEnabled(true);
-        chart.getDescription().setTextSize(16f);
-        chart.getDescription().setTextColor(getColor(R.color.black));
+        Description description = chart.getDescription();
+        description.setText(chartTitle);
+        description.setEnabled(true);
+        description.setTextSize(16f);
+        description.setTextColor(getColor(R.color.black));
+        if (juaTypeface != null) {
+            description.setTypeface(juaTypeface);
+        }
 
         // Load price history
         List<Entry> entries = getPriceHistoryRealTime(currentStock.getStockID(), timeRange);
@@ -250,15 +263,17 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         LineData lineData = new LineData(dataSet);
         chart.setData(lineData);
 
-        // X-axis
+        // X-axis with jua font
         XAxis xAxis = chart.getXAxis();
         xAxis.setEnabled(true);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(true);
         xAxis.setGridColor(getColor(R.color.Grey));
-        xAxis.setTextColor(android.graphics.Color.DKGRAY); //getColor(R.color.black)
+        xAxis.setTextColor(android.graphics.Color.DKGRAY);
         xAxis.setTextSize(10f);
-
+        if (juaTypeface != null) {
+            xAxis.setTypeface(juaTypeface);
+        }
 
         // X-axis labels based on time range
         if (timeRange <= 7) { // More than 1 week
@@ -270,14 +285,17 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
             xAxis.setLabelCount(7);
         }
 
-        // Y-axis
+        // Y-axis with jua font
         YAxis yAxis = chart.getAxisLeft();
         yAxis.setEnabled(true);
         yAxis.setDrawGridLines(true);
         yAxis.setGridColor(getColor(R.color.Grey));
-        yAxis.setTextColor(android.graphics.Color.DKGRAY); //getColor(R.color.black)
+        yAxis.setTextColor(android.graphics.Color.DKGRAY);
         yAxis.setTextSize(10f);
         yAxis.setAxisMinimum(0f);
+        if (juaTypeface != null) {
+            yAxis.setTypeface(juaTypeface);
+        }
 
         chart.getAxisRight().setEnabled(false);
         chart.getLegend().setEnabled(false);
@@ -345,16 +363,3 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         super.onDestroy();
     }
 }
-
-//    public List<Entry> getPriceHistory(int stockID, int daysBack) {
-//        List<Entry> entries = new ArrayList<>();
-//        StockPriceFunction func = dbUtil.getStockPriceFunction(stockID);
-//        if (func == null) return entries;
-//
-//        for (int t = 0; t <= daysBack; t++) {
-//            double price = func.getCurrentPrice(t);
-//            entries.add(new Entry(t, (float) price));
-//        }
-//
-//        return entries;
-//    }

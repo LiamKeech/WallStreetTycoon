@@ -8,8 +8,6 @@ public class StockPriceFunction implements GameObserver {
     Double[] amplitudes;
     Double[] frequencies;
     Integer stockID;
-    Double offset; // based on amplitudes
-    Double minPrice = 0.0; // minimum stock price
     Double marketFactor;
 
     public StockPriceFunction(Integer stockPriceHistoryID, Double[] amplitudes, Double[] frequencies, Integer fk){
@@ -18,13 +16,6 @@ public class StockPriceFunction implements GameObserver {
         this.frequencies = frequencies;
         this.stockID = fk;
         this.marketFactor = 0.0;
-
-        Double sumAmplitudes = 0.0;
-        for (Double amp : amplitudes) {
-            sumAmplitudes += Math.abs(amp);
-        }
-
-        this.offset = sumAmplitudes;
     }
 
     public Integer getStockID() { return stockID; }
