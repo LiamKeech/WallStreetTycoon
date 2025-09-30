@@ -47,8 +47,9 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-                Stock stock = new Stock(stockID, stockName, symbol, category, description);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
                 stockList.add(stock);
             } while (cursor.moveToNext());
         }
@@ -73,8 +74,9 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String stockCategory = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-                Stock stock = new Stock(stockID, stockName, symbol, stockCategory, description);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
                 stockList.add(stock);
             } while (cursor.moveToNext());
         }
@@ -119,7 +121,7 @@ public class DatabaseUtil {
 
         List<Stock> list = new ArrayList<>();
 
-        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
+        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
                 "FROM stocks s " +
                 "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
                 "WHERE cs.chapterID = ?";
@@ -132,9 +134,9 @@ public class DatabaseUtil {
             String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
             String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
             String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+            Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-            //create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description);
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
             list.add(stock);
         }
 
@@ -145,7 +147,7 @@ public class DatabaseUtil {
     public List<Stock> getFilteredStockM(String filterCategory) {
         List<Stock> filteredList = new ArrayList<>();   //Market - query stocks table
 
-        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
+        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
                 "FROM stocks s " +
                 "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
                 "WHERE cs.chapterID = ? AND s.category = ?";
@@ -159,9 +161,9 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-
-                Stock stock = new Stock(stockID, stockName, symbol, category, description);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
                 filteredList.add(stock);
             } while (cursor.moveToNext());
         }
@@ -175,7 +177,7 @@ public class DatabaseUtil {
         List<PortfolioStock> filteredList = new ArrayList<>();  //Portfolio - query portfolios and stock table
 
         String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
-                "s.stockID, s.stockName, s.symbol, s.category, s.description " +
+                "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
                 "FROM portfolioStock ps " +
                 "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
                 "JOIN stocks s ON ps.stockID = s.stockID " +
@@ -190,13 +192,14 @@ public class DatabaseUtil {
             String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
             String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
             String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+            Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
             double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
             String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
             // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description);
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
 
             // Create PortfolioStock
             PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
@@ -214,7 +217,7 @@ public class DatabaseUtil {
         List<Stock> results = new ArrayList<>();
         //Cursor cursor = db.rawQuery("SELECT * FROM stocks WHERE stockName LIKE ? COLLATE NOCASE", new String[]{"%"+searchCriteria+"%"});
 
-        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
+        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
                 "FROM stocks s " +
                 "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
                 "WHERE cs.chapterID = ? AND s.stockname LIKE ? COLLATE NOCASE";
@@ -228,8 +231,9 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-                Stock stock = new Stock(stockID, stockName, symbol, category, description);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
                 results.add(stock);
             } while (cursor.moveToNext());
         }
@@ -241,7 +245,7 @@ public class DatabaseUtil {
     {
         List<PortfolioStock> results = new ArrayList<>();
         String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
-                "s.stockID, s.stockName, s.symbol, s.category, s.description " +
+                "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
                 "FROM portfolioStock ps " +
                 "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
                 "JOIN stocks s ON ps.stockID = s.stockID " +
@@ -256,13 +260,14 @@ public class DatabaseUtil {
             String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
             String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
             String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+            Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
             double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
             String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
-            // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description);
+
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
 
             // Create PortfolioStock
             PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
@@ -282,7 +287,7 @@ public class DatabaseUtil {
                 "SELECT * FROM stocks WHERE category = ? AND stockName LIKE ? COLLATE NOCASE",
                 new String[]{filterCategory, "%"+searchCriteria+"%"});*/
 
-        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description " +
+        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
                 "FROM chapter_stock cs " +
                 "JOIN stocks s ON cs.stockID = s.stockID " +
                 "WHERE cs.chapterID = ? AND s.category = ? AND s.stockname LIKE ? COLLATE NOCASE";
@@ -296,8 +301,9 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
 
-                Stock stock = new Stock(stockID, stockName, symbol, category, description);
                 result.add(stock);
             } while (cursor.moveToNext());
         }
@@ -310,7 +316,7 @@ public class DatabaseUtil {
         List<PortfolioStock> result = new ArrayList<>();  //Portfolio - query portfolios and stock table
 
         String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
-                "s.stockID, s.stockName, s.symbol, s.category, s.description " +
+                "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
                 "FROM portfolioStock ps " +
                 "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
                 "JOIN stocks s ON ps.stockID = s.stockID " +
@@ -325,13 +331,14 @@ public class DatabaseUtil {
             String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
             String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
             String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+            Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
             double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
             String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
             // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description);
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
 
             // Create PortfolioStock
             PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
@@ -417,17 +424,16 @@ public class DatabaseUtil {
         return null;
     }
 
+
     public Double getCurrentStockPrice(Integer stockID){
         Integer timeStamp = Game.getInstance().getCurrentTimeStamp();
 
         StockPriceFunction stockPriceFunction = getStockPriceFunction(stockID);
 
-        //I am rounding using BigDecimal for better precision
+        Double priceChange = stockPriceFunction.getCurrentPriceChange(timeStamp);
+        Double value = getStock(stockID).getCurrentPrice() + priceChange;
 
-        Double value = stockPriceFunction.getCurrentPrice(timeStamp);
-        BigDecimal bd = new BigDecimal(value);
-        bd = bd.setScale(2, RoundingMode.HALF_UP);
-        return bd.doubleValue();
+        return value;
     }
 
     //buy stock
@@ -623,7 +629,7 @@ public class DatabaseUtil {
         List<PortfolioStock> list = new ArrayList<>();
 
         String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
-                "s.stockID, s.stockName, s.symbol, s.category, s.description " +
+                "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
                 "FROM portfolioStock ps " +
                 "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
                 "JOIN stocks s ON ps.stockID = s.stockID " +
@@ -638,13 +644,14 @@ public class DatabaseUtil {
             String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
             String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
             String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+            Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
             double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
             String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
             // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description);
+            Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
 
             // Create PortfolioStock
             PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
@@ -710,5 +717,13 @@ public class DatabaseUtil {
         cursor.close();
         Log.d("DB_LOG", "Retrieved " + transactions.size() + " transactions for user " + username);
         return transactions;
+    }
+
+    public void updateMarketFactor(int stockID, double marketFactor){
+        String sql = "UPDATE stockPriceFunction SET marketFactor = ? WHERE stockID = ?";
+        SQLiteStatement stmt = db.compileStatement(sql);
+        stmt.bindDouble(1, marketFactor);
+        stmt.bindLong(2, stockID);
+
     }
 }

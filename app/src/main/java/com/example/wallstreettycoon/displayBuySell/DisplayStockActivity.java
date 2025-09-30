@@ -311,13 +311,13 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         for (int i = 0; i < daysBack; i++) {
             int timestamp = currentTimestamp - (daysBack - i - 1);
             if (timestamp >= 0) {
-                double price = func.getCurrentPrice(timestamp);
+                double price = func.getCurrentPriceChange(timestamp);
                 entries.add(new Entry(i, (float) price));
             }
         }
 
         // Add the current price as the last point
-        double currentPrice = func.getCurrentPrice(currentTimestamp);
+        double currentPrice = func.getCurrentPriceChange(currentTimestamp);
         entries.add(new Entry(daysBack, (float) currentPrice));
 
         return entries;

@@ -61,7 +61,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
         List<Stock> stockList = readCommaDelimitedStocks(R.raw.stocks);
         for(Stock s: stockList){
-            db.execSQL("INSERT INTO stocks (stockName, symbol, category, description) VALUES ('" + s.getStockName() + "', '" + s.getSymbol() + "', '" + s.getCategory() + "', '" + s.getDescription() + "')");
+            db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('" + s.getStockName() + "', '" + s.getSymbol() + "', '" + s.getCategory() + "', '" + s.getDescription()+ "', '" + s.getCurrentPrice() + "')");
         }
         // StockPriceFunction table
         db.execSQL(
@@ -69,6 +69,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "stockPriceHistoryID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "amplitudes TEXT, " +
                         "frequencies TEXT, " +
+                        "marketFactor REAL, " +
                         "stockID INTEGER, " +
                         "FOREIGN KEY (stockID) REFERENCES stocks(stockID)" +
                         ")"
@@ -81,11 +82,14 @@ public class DatabaseCreator extends SQLiteOpenHelper {
            String frequencyString = arrayToCommaString(frequencyArray);
            String amplitudeString = arrayToCommaString(amplitudeArray);
 
-            db.execSQL("INSERT INTO stockPriceFunction (amplitudes, frequencies, stockID) VALUES (" +
+            db.execSQL("INSERT INTO stockPriceFunction (amplitudes, frequencies, marketFactor, stockID) VALUES (" +
                     "'" + amplitudeString + "', " +
                     "'" + frequencyString + "', " +
+                    "0.0, " +
                     stockID + ")");
         }
+
+
 
 //        db.execSQL("INSERT INTO stockPriceFunction (amplitudes, frequencies, stockID) VALUES " +
 //                "('8.2,6.5,4.9,3.3,2.8,2.1,1.7,1.3,1.0,0.8', '0.6,1.1,1.9,2.5,3.2,4.0,5.7,6.8,8.3,9.7', 1)");
@@ -254,7 +258,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                     for (int i = 0; i < tokens.length; i++) {
                         tokens[i] = tokens[i].trim();
                     }
-                    Stock stock = new Stock(stockID, tokens[0], tokens[1], tokens[2], tokens[3]);
+                    Stock stock = new Stock(stockID, tokens[0], tokens[1], tokens[2], tokens[3], Double.parseDouble(tokens[4]));
                     result.add(stock);
                     Log.d("STOCK", stock.getStockName());
                     stockID++;
