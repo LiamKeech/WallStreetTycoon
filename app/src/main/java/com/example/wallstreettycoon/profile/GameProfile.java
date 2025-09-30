@@ -177,17 +177,17 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
 
         double totalValue = 0.0;
         for (PortfolioStock ps : holdings) { //Calculate total portfolio value
-            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID());
+            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID()); //FIXME
             totalValue += ps.getQuantity() * currentPrice;
         }
 
         for (PortfolioStock ps : holdings) { //Create pie entries with current values
-            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID());
+            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID()); //FIXME
             double stockValue = ps.getQuantity() * currentPrice;
             float percentage = (float) ((stockValue / totalValue) * 100);
 
             entries.add(new PieEntry(percentage, ps.getStock().getSymbol()));
-            colors.add(generateColorForStock(ps.getStock().getStockID()));
+            colors.add(getColourForStock(ps.getStock().getStockID()));
         }
         // Dataset
         PieDataSet dataSet = new PieDataSet(entries, "Holdings");
@@ -212,6 +212,8 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         pieChart.setHoleRadius(60f);
         pieChart.setRotationEnabled(false);
         pieChart.setHighlightPerTapEnabled(true);
+        pieChart.setCenterText("Portfolio\nDistribution");
+        pieChart.setCenterTextSize(14f);
         pieChart.animateY(1000);
 
         // Create legend (category, %)
@@ -240,16 +242,19 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         }
     }
 
-    private int generateColorForStock(int stockId) {
+
+    private int getColourForStock(int stockId) {
         int[] chartColors = new int[]{
-                Color.parseColor("#4CAF50"), // Green
-                Color.parseColor("#2196F3"), // Blue
-                Color.parseColor("#FFC107"), // Yellow
-                Color.parseColor("#FF5722"), // Orange
-                Color.parseColor("#9C27B0"), // Purple
-                Color.parseColor("#E91E63"), // Pink
-                Color.parseColor("#607D8B"), // Gray-blue
-                Color.parseColor("#CDDC39")  // Lime
+                Color.parseColor("#4CAF50"),  // Material Green
+                Color.parseColor("#2196F3"),  // Material Blue
+                Color.parseColor("#FF9800"),  // Material Orange
+                Color.parseColor("#9C27B0"),  // Material Purple
+                Color.parseColor("#F44336"),  // Material Red
+                Color.parseColor("#00BCD4"),  // Material Cyan
+                Color.parseColor("#FFEB3B"),  // Material Yellow
+                Color.parseColor("#795548"),  // Material Brown
+                Color.parseColor("#607D8B"),  // Material Blue Grey
+                Color.parseColor("#E91E63")   // Material Pink
         };
         return chartColors[stockId % chartColors.length];
     }

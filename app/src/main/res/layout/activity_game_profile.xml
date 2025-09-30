@@ -44,11 +44,11 @@
         app:layout_constraintTop_toBottomOf="@id/backButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="4dp">
+        android:layout_marginTop="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="95dp"
             android:orientation="horizontal"
             android:padding="8dp">
 
@@ -70,9 +70,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="$25,450.32"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/jua"
                     android:layout_marginTop="4dp" />
             </LinearLayout>
 
@@ -95,9 +96,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="+$127.45"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@color/Green"
+                    android:fontFamily="@font/jua"
                     android:layout_marginTop="4dp" />
 
                 <TextView
@@ -105,7 +107,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="(+0.5%)"
-                    android:textSize="14sp"
+                    android:textSize="18sp"
+                    android:fontFamily="@font/jua"
                     android:textColor="@color/Green" />
             </LinearLayout>
 
@@ -122,7 +125,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp">
 
         <!-- Pie Chart -->
