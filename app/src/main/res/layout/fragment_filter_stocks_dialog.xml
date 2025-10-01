@@ -23,37 +23,52 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.216" />
 
-    <SearchView
-        android:id="@+id/searchText"
-        android:layout_width="460dp"
-        android:layout_height="54dp"
-        android:layout_marginStart="16dp"
+
+    <TextView
+        android:id="@+id/lblSearchCriteria"
+        style="@style/subHeading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="38dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/textbox_border"
+        android:layout_marginEnd="20dp"
+        android:text="Search stock name:"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/searchText"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/rdgFilter"
         app:layout_constraintVertical_bias="0.0" />
 
+    <SearchView
+        android:id="@+id/searchText"
+        android:layout_width="380dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/textbox_border"
+        android:fontFamily="@font/jua"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.72"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rdgFilter"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageButton
         android:id="@+id/imgSearch"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="156dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="17dp"
         android:backgroundTint="@color/Orange"
         android:scaleType="fitXY"
         android:src="@drawable/search_657031"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.117"
         app:layout_constraintStart_toEndOf="@+id/searchText"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.947" />
+        app:layout_constraintVertical_bias="0.918" />
 
     <RadioGroup
         android:id="@+id/rdgFilter"
@@ -73,6 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/jua"
             android:text="Technology" />
 
         <RadioButton
@@ -80,6 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/jua"
             android:text="Social Media" />
 
         <RadioButton
@@ -87,6 +104,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/jua"
             android:text="Automotive" />
 
         <RadioButton
@@ -94,6 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/jua"
             android:text="Healthcare" />
 
         <RadioButton
@@ -101,6 +120,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/jua"
             android:text="Entertainment" />
 
         <RadioButton
@@ -108,6 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/jua"
             android:text="Consumer Goods" />
     </RadioGroup>
 

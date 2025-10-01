@@ -53,7 +53,8 @@
             android:exported="false" />
         <activity
             android:name=".useraccount.Login"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

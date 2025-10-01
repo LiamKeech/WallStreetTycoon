@@ -379,4 +379,10 @@
         <item name="android:paddingRight">0dp</item>
     </style>
 
+    <style name="DrawerItems" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/jua</item>
+         <item name="android:textSize">20sp</item>
+         <item name="android:textColor">@color/LightBlue</item>
+    </style>
+
 </resources>

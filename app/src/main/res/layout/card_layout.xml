@@ -64,7 +64,8 @@
                 android:text="Current Price:"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/jua"/>
 
             <TextView
                 android:id="@+id/lblStockCurrentPrice"
@@ -73,7 +74,8 @@
                 android:text="$125.50"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/jua"/>
 
         </LinearLayout>
 

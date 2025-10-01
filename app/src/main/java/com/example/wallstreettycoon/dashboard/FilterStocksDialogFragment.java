@@ -42,6 +42,7 @@ public class FilterStocksDialogFragment extends DialogFragment {
             }
 
             SearchView searchView = view.findViewById(R.id.searchText);
+
             searchCriteria = searchView.getQuery().toString();
 
             //carry over filter category and entered criteria
