@@ -352,7 +352,7 @@ public class DatabaseUtil {
     }
 
     public Stock getStock(Integer stockID){
-        for(Stock stock : getStockList()){
+        for(Stock stock : getChapterStock()){
             if(stock.getStockID().equals(stockID)){
                 return stock;
             }
@@ -431,7 +431,7 @@ public class DatabaseUtil {
         StockPriceFunction stockPriceFunction = getStockPriceFunction(stockID);
 
         Double priceChange = stockPriceFunction.getCurrentPriceChange(timeStamp);
-        Double value = getStock(stockID).getCurrentPrice() + priceChange;
+        Double value = getStock(stockID).getCurrentPrice() + priceChange;               //take out price from stock
 
         return value;
     }

@@ -30,6 +30,7 @@ public class StockPriceFunction implements GameObserver {
         Double priceChange = marketFactor * timeStamp + fourierSeries;
 
         return priceChange;
+
     }
 
     @Override
