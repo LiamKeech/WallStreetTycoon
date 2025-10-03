@@ -11,7 +11,6 @@ import java.util.List;
 public class Timer {
     public long startTime;
     private long elapsedTime = 0;
-
     private boolean isPaused = false;
     private int currentEventIndex = 0;
     private List<MarketEvent> marketEventList;
