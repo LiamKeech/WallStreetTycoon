@@ -27,7 +27,7 @@ public class StockPriceFunction implements GameObserver {
             fourierSeries += amplitudes[i] * Math.sin(frequencies[i] * timeStamp.doubleValue());
         }
 
-        Double priceChange = marketFactor * timeStamp + fourierSeries;
+        Double priceChange = marketFactor + fourierSeries;
 
         return priceChange;
 
@@ -37,7 +37,7 @@ public class StockPriceFunction implements GameObserver {
     public void onGameEvent(GameEvent event) {
         //set current market factor
         switch (event.getType()) {
-            case NOTIFICATION:
+            case MARKET_EVENT:
                 marketFactor = (Double) event.getCargo();
                 break;
             default:

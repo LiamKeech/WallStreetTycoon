@@ -41,7 +41,9 @@
         </activity>
         <activity
             android:name=".minigames.miniGame1.miniGame1"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".dashboard.ListStocks"
             android:exported="false"></activity>
