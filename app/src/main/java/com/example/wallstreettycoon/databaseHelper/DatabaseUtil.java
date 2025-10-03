@@ -745,6 +745,7 @@ public class DatabaseUtil {
                 int duration = cursor.getInt(cursor.getColumnIndexOrThrow("eventDuration"));
                 String title = cursor.getString(cursor.getColumnIndexOrThrow("eventTitle"));
                 String info = cursor.getString(cursor.getColumnIndexOrThrow("eventInfo"));
+                String marketFactors = cursor.getString(cursor.getColumnIndexOrThrow("marketFactors"));
 
                 MarketEvent event = new MarketEvent(
                         marketEventID,

@@ -115,7 +115,9 @@ public class Game implements GameObserver, java.io.Serializable {
                 notifyObservers(event);
                 break;
             case MARKET_EVENT:
+                MarketEvent marketEvent = (MarketEvent)event.getCargo();
 
+                marketEvent.applyMarketFactors();
                 notifyObservers(event);
                 break;
         }

@@ -14,7 +14,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -151,6 +153,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "eventTitle TEXT, " +
                         "eventInfo TEXT, " +
                         "chapterPresent INTEGER, " +
+                        "marketFactors TEXT, " +
                         "FOREIGN KEY (chapterID) REFERENCES chapters(chapterID), " +
                         "FOREIGN KEY (minigameID) REFERENCES minigames(minigameID))"
         );
@@ -325,16 +328,18 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                 }
 
                 // Split into 5 parts: chapterID;minigameID;eventDuration;eventTitle;eventInfo
-                String[] parts = line.split(";", 5);
+                String[] parts = line.split(";", 6);
                 if (parts.length < 5) {
                     continue; // skip malformed lines
                 }
+
 
                 String chapterIDStr = parts[0].trim();
                 String minigameIDStr = parts[1].trim();
                 String eventDurationStr = parts[2].trim();
                 String eventTitle = parts[3].trim();
                 String eventInfo = parts[4].trim();
+
 
                 // Convert null to actual null
                 Integer chapterID = chapterIDStr.equals("null") ? null : Integer.valueOf(chapterIDStr);
@@ -345,10 +350,20 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                 ContentValues values = new ContentValues();
                 if (chapterID != null) values.put("chapterID", chapterID);
                 if (minigameID != null) values.put("minigameID", minigameID);
+
+
                 values.put("eventDuration", eventDuration);
                 values.put("eventTitle", eventTitle);
                 values.put("eventInfo", eventInfo);
                 values.put("chapterPresent", (chapterID != null) ? 1 : 0);
+
+                if(parts.length == 6) {
+                    String marketFactorsStr = parts[5].trim();
+                    values.put("marketFactors", marketFactorsStr);
+                }
+                else{
+                    values.put("marketFactors", "");
+                }
 
                 // Insert
                 db.insert("marketEvents", null, values);
@@ -359,5 +374,4 @@ public class DatabaseCreator extends SQLiteOpenHelper {
             Log.d("DATABASE CREATOR", "Error improting market events, " + e.getMessage());
         }
     }
-
 }
