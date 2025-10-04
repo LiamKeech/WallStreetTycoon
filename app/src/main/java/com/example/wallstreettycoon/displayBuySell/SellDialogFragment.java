@@ -53,10 +53,10 @@ public class SellDialogFragment extends DialogFragment {
         confirmButton = view.findViewById(R.id.btnConfirm);
         confirmButton.setText("Sell");
 
-        // Get owned shares from DB
-        DatabaseUtil dbUtil = new DatabaseUtil(requireContext());
+        // Get owned shares from DB - SINGLETON FIX
+        DatabaseUtil dbUtil = DatabaseUtil.getInstance(requireContext());
         int portfolioID = dbUtil.getPortfolioID(username);
-        ownedShares = dbUtil.getOwnedQuantity(portfolioID, stockID);
+        ownedShares = dbUtil.getQuantity(portfolioID, stockID);
         remainingShares.setText(String.format("%.2f", ownedShares));
 
         // If no shares owned, disable confirm or show message

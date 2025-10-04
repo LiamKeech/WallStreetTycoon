@@ -82,7 +82,7 @@ public class BuyDialogFragment extends DialogFragment {
             if (!quantityStr.isEmpty()) {
                 int quantity = Integer.parseInt(quantityStr);
 
-                DatabaseUtil dbUtil = new DatabaseUtil(requireContext());
+                DatabaseUtil dbUtil = DatabaseUtil.getInstance(requireContext()); // SINGLETON FIX
 
                 boolean success = dbUtil.buyStock(username, stockID, quantity, currentPriceValue);
 

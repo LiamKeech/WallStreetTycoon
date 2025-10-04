@@ -64,7 +64,7 @@ public class CreateAccount extends AppCompatActivity {
                 if (!name.isEmpty() && !surname.isEmpty() && !username.isEmpty() && !password.isEmpty()) {
 
                     //check if username doesn't already exist:
-                    DatabaseUtil dbUtil = new DatabaseUtil(context);
+                    DatabaseUtil dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
                     if (!dbUtil.userExists(username)) {
 
                         //insert user into db:

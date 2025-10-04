@@ -56,7 +56,7 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         setContentView(R.layout.activity_game_profile);
 
         Game.getInstance().addObserver(this);
-        dbUtil = new DatabaseUtil(this);
+        dbUtil = DatabaseUtil.getInstance(this); // SINGLETON FIX
 
         // Get username
         username = getIntent().getStringExtra("username");
@@ -285,5 +285,6 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Game.getInstance().removeObserver(this);
     }
 }

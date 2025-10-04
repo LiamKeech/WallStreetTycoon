@@ -25,375 +25,166 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * SINGLETON DatabaseUtil - Ensures only ONE database connection exists
+ * All cursor operations wrapped in try-finally for proper resource management
+ */
 public class DatabaseUtil {
-    public static DatabaseCreator dbCreator;
-    public static SQLiteDatabase db;
-    public DatabaseUtil(Context context) {
-        dbCreator = new DatabaseCreator(context);
-        db = dbCreator.getWritableDatabase();
+    private static DatabaseUtil instance;
+    private static DatabaseCreator dbCreator;
+    private static SQLiteDatabase db;
+
+    // Private constructor prevents direct instantiation
+    private DatabaseUtil(Context context) {
+        if (dbCreator == null) {
+            dbCreator = new DatabaseCreator(context.getApplicationContext());
+        }
+        if (db == null || !db.isOpen()) {
+            db = dbCreator.getWritableDatabase();
+        }
+    }
+
+    // Singleton getInstance method - THREAD SAFE
+    public static synchronized DatabaseUtil getInstance(Context context) {
+        if (instance == null) {
+            instance = new DatabaseUtil(context.getApplicationContext());
+        }
+        return instance;
     }
 
     // Stock related methods
 
-    //getter for stockList
     public List<Stock> getStockList(){
         List<Stock> stockList = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT * FROM stocks", null);
+            if (cursor.moveToFirst()) {
+                do {
+                    int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                    String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                    String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                    String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                    String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                    Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-        Cursor cursor = db.rawQuery("SELECT * FROM stocks", null);
-        if (cursor.moveToFirst()) {
-            do {
-                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-                stockList.add(stock);
-            } while (cursor.moveToNext());
+                    Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                    stockList.add(stock);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
-
-        cursor.close();
-
         return stockList;
     }
 
     public List<Stock> getStockListByCategory(String category) {
         List<Stock> stockList = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT * FROM stocks WHERE category = ?", new String[]{category});
+            if (cursor.moveToFirst()) {
+                do {
+                    int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                    String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                    String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                    String stockCategory = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                    String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                    Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-        Cursor cursor = db.rawQuery(
-                "SELECT * FROM stocks WHERE category = ?",
-                new String[]{ category }
-        );
-
-        if (cursor.moveToFirst()) {
-            do {
-                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-                String stockCategory = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-                stockList.add(stock);
-            } while (cursor.moveToNext());
+                    Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                    stockList.add(stock);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
-
-        cursor.close();
         return stockList;
     }
 
-
-    public void setUpChapterStock()
-    {
-        Map<Integer, List<String>> chapterStocks = new HashMap<>();
-        chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR","GPLX","ORNG","BNNF","ISAM","CHRP","LMTC","OCSD","RDTN","FRBT","PNOS","NSCM","ZYND","FAUD","PLLC","ESKM","SNKS")); // Chapter 1: Tech + Random
-        chapterStocks.put(2, Arrays.asList("GDBK", "MRGS","LB20","SCMP","JPMG","BRST","CTRB","HDBC","PNZI","DMHC","FAUD","BNZO","HLIX","IRCL","SKLH"));  // Chapter 2: Investments + Random
-        chapterStocks.put(3, Arrays.asList("DGCS", "INST", "BTCN", "HODL","SHDY","MNBK","PUMP","ELNM","ZRCN","BNNA","BGNI","HDHP","GLOW","HVHP","FAUD"));  // Chapter 3: Crypto + Random
-        chapterStocks.put(4, Arrays.asList("SKHA", "EJTN","CLDN","WGIT","PRLC","JTLG","YLVC","ARFO","BGBL","NVLT","TTCK","FLIK","SLPC","VRRL","FAUD","MDMS","WNDO","GKRT","SKFI"));    // Chapter 4: Travel + Entertainment
-        chapterStocks.put(5, Arrays.asList("TKAI","NRND","DFMD","PSSE","CGSM","PRTA","AGPT","WKBT","RBLB","PRBL","CLAI","FAUD","VRRL"));   // Chapter 5: AI
-
-        for (Map.Entry<Integer, List<String>> entry : chapterStocks.entrySet()) {
-            int chapterID = entry.getKey();
-            List<String> symbols = entry.getValue();
-
-            for (String symbol : symbols) {
-                Cursor cursor = db.rawQuery("SELECT stockID FROM stocks WHERE symbol = ?", new String[]{symbol});
-                if (cursor.moveToFirst()) {
-                    int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-
-                    ContentValues values = new ContentValues();
-                    values.put("chapterID", chapterID);
-                    values.put("stockID", stockID);
-
-                    db.insert("chapter_stock", null, values);
-                }
-                cursor.close();
+    public Stock getStock(int stockID) {
+        Stock stock = null;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT * FROM stocks WHERE stockID = ?", new String[]{String.valueOf(stockID)});
+            if (cursor.moveToFirst()) {
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+                stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
             }
+        } finally {
+            if (cursor != null) cursor.close();
         }
+        return stock;
     }
 
-    public List<Stock> getChapterStock() {
-
-        setUpChapterStock();
-
-        List<Stock> list = new ArrayList<>();
-
-        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
-                "FROM stocks s " +
-                "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
-                "WHERE cs.chapterID = ?";
-
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter)});
-
-        while (cursor.moveToNext()) {
-            int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-            Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-            list.add(stock);
-        }
-
-        cursor.close();
-        return list;
-    }
-
-    public List<Stock> getFilteredStockM(String filterCategory) {
-        List<Stock> filteredList = new ArrayList<>();   //Market - query stocks table
-
-        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
-                "FROM stocks s " +
-                "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
-                "WHERE cs.chapterID = ? AND s.category = ?";
-
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), filterCategory});
-
-        if (cursor.moveToFirst()) {
-            do {
-                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-                filteredList.add(stock);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        return filteredList;
-    }
-
-    public List<PortfolioStock> getFilteredStockP(String filterCategory)
-    {
-        List<PortfolioStock> filteredList = new ArrayList<>();  //Portfolio - query portfolios and stock table
-
-        String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
-                "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
-                "FROM portfolioStock ps " +
-                "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
-                "JOIN stocks s ON ps.stockID = s.stockID " +
-                "WHERE s.category = ?";
-
-        Cursor cursor = db.rawQuery(query, new String[]{filterCategory});
-
-        while (cursor.moveToNext()) {
-            int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
-            int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-            Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-
-            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
-            double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
-            String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
-
-            // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-
-            // Create PortfolioStock
-            PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
-
-            filteredList.add(ps);
-        }
-
-        cursor.close();
-
-        return filteredList;
-    }
-
-    public List<Stock> searchStocksM(String searchCriteria)
-    {
-        List<Stock> results = new ArrayList<>();
-        //Cursor cursor = db.rawQuery("SELECT * FROM stocks WHERE stockName LIKE ? COLLATE NOCASE", new String[]{"%"+searchCriteria+"%"});
-
-        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
-                "FROM stocks s " +
-                "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
-                "WHERE cs.chapterID = ? AND s.stockname LIKE ? COLLATE NOCASE";
-
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), "%"+searchCriteria+"%"});
-
-        if(cursor.moveToFirst()) {
-            do {
-                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-                results.add(stock);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return results;
-    }
-
-    public List<PortfolioStock> searchStocksP(String searchCriteria)
-    {
-        List<PortfolioStock> results = new ArrayList<>();
-        String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
-                "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
-                "FROM portfolioStock ps " +
-                "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
-                "JOIN stocks s ON ps.stockID = s.stockID " +
-                "WHERE s.stockName LIKE ? COLLATE NOCASE";
-
-        Cursor cursor = db.rawQuery(query, new String[]{"%"+searchCriteria+"%"});
-
-        while (cursor.moveToNext()) {
-            int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
-            int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-            Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-
-            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
-            double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
-            String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
-
-
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-
-            // Create PortfolioStock
-            PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
-
-            results.add(ps);
-        }
-
-        cursor.close();
-
-        return results;
-    }
-
-    public List<Stock> combinedSearchM(String filterCategory, String searchCriteria) {
-        List<Stock> result = new ArrayList<>();   //Market - query stocks table
-
-        /*Cursor cursor = db.rawQuery(
-                "SELECT * FROM stocks WHERE category = ? AND stockName LIKE ? COLLATE NOCASE",
-                new String[]{filterCategory, "%"+searchCriteria+"%"});*/
-
-        String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
-                "FROM chapter_stock cs " +
-                "JOIN stocks s ON cs.stockID = s.stockID " +
-                "WHERE cs.chapterID = ? AND s.category = ? AND s.stockname LIKE ? COLLATE NOCASE";
-
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), filterCategory, "%"+searchCriteria+"%"});
-
-        if (cursor.moveToFirst()) {
-            do {
-                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-
-                result.add(stock);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-
-        return result;
-    }
-
-    public List<PortfolioStock> combinedSearchP(String filterCategory, String searchCriteria) {
-        List<PortfolioStock> result = new ArrayList<>();  //Portfolio - query portfolios and stock table
-
-        String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
-                "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
-                "FROM portfolioStock ps " +
-                "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
-                "JOIN stocks s ON ps.stockID = s.stockID " +
-                "WHERE s.category = ? AND s.stockName LIKE ? COLLATE NOCASE";
-
-        Cursor cursor = db.rawQuery(query, new String[]{filterCategory, "%"+searchCriteria+"%"});
-
-        while (cursor.moveToNext()) {
-            int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
-            int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-            Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-
-            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
-            double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
-            String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
-
-            // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-
-            // Create PortfolioStock
-            PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
-
-            result.add(ps);
-        }
-
-        cursor.close();
-
-        return result;
-    }
-
-    public Stock getStock(Integer stockID){
-        for(Stock stock : getChapterStock()){
-            if(stock.getStockID().equals(stockID)){
-                return stock;
-            }
-        }
-        return null;
-    }
-
-    public String getStockSymbol (int stockID) {
-        Cursor cursor = db.rawQuery("SELECT symbol FROM stocks WHERE stockID = ?", new String[]{String.valueOf(stockID)});
+    public String getSymbol(int stockID) {
         String symbol = null;
-        if (cursor.moveToFirst()) {
-            do {
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT symbol FROM stocks WHERE stockID = ?", new String[]{String.valueOf(stockID)});
+            if (cursor.moveToFirst()) {
                 symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-            } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
-
-        cursor.close();
         return symbol;
     }
 
     public String getStockName(int stockID) {
-        Cursor cursor = db.rawQuery("SELECT stockName FROM stocks WHERE stockID = ?", new String[]{String.valueOf(stockID)});
         String name = null;
-        if (cursor.moveToFirst()) {
-            name = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT stockName FROM stocks WHERE stockID = ?", new String[]{String.valueOf(stockID)});
+            if (cursor.moveToFirst()) {
+                name = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
-
-        cursor.close();
-        if (name != null) {
-            return name;
-        } else return "unknown stock";
+        return name != null ? name : "unknown stock";
     }
 
-    //getter for stockPriceFunction
     public List<StockPriceFunction> getStockPriceFunctions(){
         List<StockPriceFunction> stockPriceHistories = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT * FROM stockPriceFunction", null);
+            if (cursor.moveToFirst()) {
+                do {
+                    Integer stockPriceHistoryID = cursor.getInt(cursor.getColumnIndexOrThrow("stockPriceHistoryID"));
+                    String[] amplitudesString = cursor.getString(cursor.getColumnIndexOrThrow("amplitudes")).split(",");
+                    Double[] amplitudes = Arrays.stream(amplitudesString)
+                            .map(Double::parseDouble)
+                            .toArray(Double[]::new);
 
-        Cursor cursor = db.rawQuery("SELECT * FROM stockPriceFunction",null);
+                    String[] frequenciesString = cursor.getString(cursor.getColumnIndexOrThrow("frequencies")).split(",");
+                    Double[] frequencies = Arrays.stream(frequenciesString)
+                            .map(Double::parseDouble)
+                            .toArray(Double[]::new);
 
-        if (cursor.moveToFirst()) {
-            do {
+                    Integer stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                    StockPriceFunction s = new StockPriceFunction(stockPriceHistoryID, amplitudes, frequencies, stockID);
+                    stockPriceHistories.add(s);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return stockPriceHistories;
+    }
+
+    public StockPriceFunction getStockPriceFunction(Integer stockID){
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT * FROM stockPriceFunction WHERE stockID = ?",
+                    new String[]{String.valueOf(stockID)});
+
+            if (cursor.moveToFirst()) {
                 Integer stockPriceHistoryID = cursor.getInt(cursor.getColumnIndexOrThrow("stockPriceHistoryID"));
                 String[] amplitudesString = cursor.getString(cursor.getColumnIndexOrThrow("amplitudes")).split(",");
                 Double[] amplitudes = Arrays.stream(amplitudesString)
@@ -405,142 +196,173 @@ public class DatabaseUtil {
                         .map(Double::parseDouble)
                         .toArray(Double[]::new);
 
-                Integer stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-
-                StockPriceFunction s = new StockPriceFunction(stockPriceHistoryID, amplitudes, frequencies, stockID);
-                stockPriceHistories.add(s);
-            } while (cursor.moveToNext());
-        }
-        cursor.close();
-        return stockPriceHistories;
-    }
-
-    public StockPriceFunction getStockPriceFunction(Integer stockID){
-        for (StockPriceFunction stockPriceFunction : getStockPriceFunctions()) {
-            if (stockPriceFunction.getStockID().equals(stockID)) {
-                return stockPriceFunction;
+                return new StockPriceFunction(stockPriceHistoryID, amplitudes, frequencies, stockID);
             }
+        } finally {
+            if (cursor != null) cursor.close();
         }
         return null;
     }
 
-
     public Double getCurrentStockPrice(Integer stockID){
         Integer timeStamp = Game.getInstance().getCurrentTimeStamp();
-
         StockPriceFunction stockPriceFunction = getStockPriceFunction(stockID);
+        if (stockPriceFunction == null) return 0.0;
 
         Double priceChange = stockPriceFunction.getCurrentPriceChange(timeStamp);
-        Double value = getStock(stockID).getCurrentPrice() + priceChange;               //take out price from stock
+        Stock stock = getStock(stockID);
+        if (stock == null) return 0.0;
 
-        return value;
+        return stock.getCurrentPrice() + priceChange;
     }
 
-    //buy stock
-    public boolean buyStock(String username, int stockID, int quantity, double price) {
-        int portfolioID = getPortfolioID(username);
-        BigDecimal totalCost = BigDecimal.valueOf(quantity).multiply(BigDecimal.valueOf(price));
-
-        // Calculate balance
-        User user = getUser(username);
-        BigDecimal newBalance = BigDecimal.valueOf(user.getUserBalance()).subtract(totalCost);
-        if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
-            Log.d("DB_LOG", "Insufficient funds for user: " + username);
-            return false; // Insufficient funds
+    public void setUpChapterStock() {
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT COUNT(*) FROM chapter_stock", null);
+            if (cursor.moveToFirst() && cursor.getInt(0) > 0) {
+                return;
+            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
 
-        // Update balance
-        updateBalance(newBalance.doubleValue(), username);
-        Log.d("DB_LOG", "User " + username + " balance updated to: " + newBalance);
+        Map<Integer, List<String>> chapterStocks = new HashMap<>();
+        chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR","GPLX","ORNG","BNNF","ISAM","CHRP","LMTC","OCSD","RDTN","FRBT","PNOS","NSCM","ZYND","FAUD","PLLC","ESKM","SNKS"));
+        chapterStocks.put(2, Arrays.asList("GDBK", "MRGS","LB20","SCMP","JPMG","BRST","CTRB","HDBC","PNZI","DMHC","FAUD","BNZO","HLIX","IRCL","SKLH"));
+        chapterStocks.put(3, Arrays.asList("DGCS", "INST", "BTCN", "HODL","SHDY","MNBK","PUMP","ELNM","ZRCN","BNNA","BGNI","HDHP","GLOW","HVHP","FAUD"));
+        chapterStocks.put(4, Arrays.asList("SKHA", "EJTN","CLDN","WGIT","PRLC","JTLG","YLVC","ARFO","BGBL","NVLT","TTCK","FLIK","SLPC","VRRL","FAUD","MDMS","WNDO","GKRT","SKFI"));
+        chapterStocks.put(5, Arrays.asList("TKAI","NRND","DFMD","PSSE","CGSM","PRTA","AGPT","WKBT","RBLB","PRBL","CLAI","FAUD","VRRL"));
 
-        // Record transaction before updating portfolio
-        insertTransaction(username, stockID, "BUY", quantity, BigDecimal.valueOf(price));
+        for (Map.Entry<Integer, List<String>> entry : chapterStocks.entrySet()) {
+            int chapterID = entry.getKey();
+            List<String> symbols = entry.getValue();
 
-        // Check if stock already in portfolio
-        Cursor cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?", new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
-
-        if (cursor.moveToFirst()) {
-            int existingQty = cursor.getInt(0);
-            int updatedQty = existingQty + quantity;
-
-            SQLiteStatement stmt = db.compileStatement("UPDATE portfolioStock SET quantity = ?, buyPrice = ?, buyDate = date('now') WHERE portfolioID = ? AND stockID = ?");
-            stmt.bindLong(1, updatedQty);
-            stmt.bindDouble(2, price);
-            stmt.bindLong(3, portfolioID);
-            stmt.bindLong(4, stockID);
-            stmt.executeUpdateDelete(); //method is used for updates
-            Log.d("DB_LOG", "Updated existing stock: stockID=" + stockID + ", newQty=" + updatedQty + " for user " + username);
-        } else {
-            SQLiteStatement stmt = db.compileStatement("INSERT INTO portfolioStock (portfolioID, stockID, quantity, buyPrice, buyDate) VALUES (?, ?, ?, ?, date('now'))");
-            stmt.bindLong(1, portfolioID);
-            stmt.bindLong(2, stockID);
-            stmt.bindLong(3, quantity);
-            stmt.bindDouble(4, price);
-            stmt.executeInsert();
-            Log.d("DB_LOG", "Inserted new stock: stockID=" + stockID + ", qty=" + quantity + " for user " + username);
+            for (String symbol : symbols) {
+                cursor = null;
+                try {
+                    cursor = db.rawQuery("SELECT stockID FROM stocks WHERE symbol = ?", new String[]{symbol});
+                    if (cursor.moveToFirst()) {
+                        int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                        ContentValues values = new ContentValues();
+                        values.put("chapterID", chapterID);
+                        values.put("stockID", stockID);
+                        db.insert("chapter_stock", null, values);
+                    }
+                } finally {
+                    if (cursor != null) cursor.close();
+                }
             }
-        cursor.close();
-        return true;
+        }
     }
 
+    public List<Stock> getChapterStock() {
+        setUpChapterStock();
+        List<Stock> list = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
+                    "FROM stocks s " +
+                    "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
+                    "WHERE cs.chapterID = ?";
+            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter)});
 
-    //sell stock
-    public boolean sellStock(String username, int stockID, int quantityToSell, double price) {
-        int portfolioID = getPortfolioID(username);
+            while (cursor.moveToNext()) {
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-        // check how many shares user owns
-        Cursor cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?", new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
-
-        if (cursor.moveToFirst()) {
-            int existingQty = cursor.getInt(0);
-            if (quantityToSell > existingQty) {
-                cursor.close();
-                Log.d("DB_LOG", "Insufficient shares for stockID=" + stockID + " for user " + username);
-                return false; // insufficient shares
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                list.add(stock);
             }
-
-            BigDecimal totalValue = BigDecimal.valueOf(quantityToSell).multiply(BigDecimal.valueOf(price));
-            User user = getUser(username);
-            if (user == null) {
-                Log.e("DB_LOG", "User not found: " + username);
-                return false;
-            }
-            updateBalance(user.getUserBalance() + totalValue.doubleValue(), username);
-            Log.d("DB_LOG", "User " + username + " balance updated by: " + totalValue);
-
-            // Record the transaction
-            insertTransaction(username, stockID, "SELL", quantityToSell, BigDecimal.valueOf(price));
-
-            int remainingQty = existingQty - quantityToSell;
-            if (remainingQty == 0) { //remove from table if all shares sold
-                SQLiteStatement stmt = db.compileStatement("DELETE FROM portfolioStock WHERE portfolioID = ? AND stockID = ?");
-                stmt.bindLong(1, portfolioID);
-                stmt.bindLong(2, stockID);
-                stmt.executeUpdateDelete();
-                Log.d("DB_LOG", "Stock fully sold: stockID=" + stockID + " removed from portfolio for user " + username);
-            } else {
-                SQLiteStatement stmt = db.compileStatement("UPDATE portfolioStock SET quantity = ? WHERE portfolioID = ? AND stockID = ?"); //update quantity with shares
-                stmt.bindLong(1, remainingQty);
-                stmt.bindLong(2, portfolioID);
-                stmt.bindLong(3, stockID);
-                stmt.executeUpdateDelete();
-                Log.d("DB_LOG", "Stock partially sold: stockID=" + stockID + ", remainingQty=" + remainingQty + " for user " + username);
-            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
-        cursor.close();
-        return true;
+        return list;
     }
 
-    public double getOwnedQuantity(int portfolioID, int stockID) {
-        double qty = 0;
-        Cursor cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?", new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
+    public List<Stock> getFilteredStockM(String filterCategory) {
+        List<Stock> filteredList = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
+                    "FROM stocks s " +
+                    "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
+                    "WHERE cs.chapterID = ? AND s.category = ?";
+            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), filterCategory});
 
-        if (cursor.moveToFirst()) {
-            qty = cursor.getDouble(cursor.getColumnIndexOrThrow("quantity"));
+            while (cursor.moveToNext()) {
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                filteredList.add(stock);
+            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
-        cursor.close();
+        return filteredList;
+    }
 
-        return qty;
+    public List<Stock> searchStocksM(String searchCriteria) {
+        List<Stock> results = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
+                    "FROM stocks s " +
+                    "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
+                    "WHERE cs.chapterID = ? AND s.stockname LIKE ? COLLATE NOCASE";
+            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), "%" + searchCriteria + "%"});
+
+            while (cursor.moveToNext()) {
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                results.add(stock);
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return results;
+    }
+
+    public List<Stock> combinedSearchM(String filterCategory, String searchCriteria) {
+        List<Stock> result = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
+                    "FROM chapter_stock cs " +
+                    "JOIN stocks s ON cs.stockID = s.stockID " +
+                    "WHERE cs.chapterID = ? AND s.category = ? AND s.stockname LIKE ? COLLATE NOCASE";
+            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), filterCategory, "%" + searchCriteria + "%"});
+
+            while (cursor.moveToNext()) {
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                result.add(stock);
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return result;
     }
 
     // User related methods
@@ -561,7 +383,6 @@ public class DatabaseUtil {
         stmt.bindDouble(5, balance);
         stmt.executeInsert();
 
-        //create portfolio for user
         String sql2 = "INSERT INTO portfolios (username) VALUES (?)";
         SQLiteStatement stmt2 = db.compileStatement(sql2);
         stmt2.bindString(1, username);
@@ -569,24 +390,23 @@ public class DatabaseUtil {
     }
 
     public User getUser(String username){
-        Cursor cursor = db.rawQuery(
-                "SELECT userFName, userLName, password, balance FROM users WHERE username = ?",
-                new String[]{username}
-        );
-
         User user = null;
-
-        if (cursor.moveToFirst()) {
-            String fName = cursor.getString(cursor.getColumnIndexOrThrow("userFName"));
-            String lName = cursor.getString(cursor.getColumnIndexOrThrow("userLName"));
-            String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
-            double balance = cursor.getDouble(cursor.getColumnIndexOrThrow("balance"));
-
-            user = new User(username, fName, lName, password, balance);
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(
+                    "SELECT userFName, userLName, password, balance FROM users WHERE username = ?",
+                    new String[]{username}
+            );
+            if (cursor.moveToFirst()) {
+                String fName = cursor.getString(cursor.getColumnIndexOrThrow("userFName"));
+                String lName = cursor.getString(cursor.getColumnIndexOrThrow("userLName"));
+                String password = cursor.getString(cursor.getColumnIndexOrThrow("password"));
+                double balance = cursor.getDouble(cursor.getColumnIndexOrThrow("balance"));
+                user = new User(username, fName, lName, password, balance);
+            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
-        cursor.close();
-
-
         return user;
     }
 
@@ -599,16 +419,19 @@ public class DatabaseUtil {
     }
 
     public boolean userExists(String username) {
-        String query = "SELECT 1 FROM users WHERE username = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{username});
-
-        boolean exists = cursor.getCount() > 0;
-        cursor.close();
+        boolean exists = false;
+        Cursor cursor = null;
+        try {
+            String query = "SELECT 1 FROM users WHERE username = ?";
+            cursor = db.rawQuery(query, new String[]{username});
+            exists = cursor.getCount() > 0;
+        } finally {
+            if (cursor != null) cursor.close();
+        }
         return exists;
     }
 
-    public void updateUser(String username, String name, String surname, String passw)
-    {
+    public void updateUser(String username, String name, String surname, String passw) {
         String query = "UPDATE users SET userFName = ?, userLName = ?, password = ? WHERE username = ?";
         db.execSQL(query, new Object[]{name, surname, passw, username});
     }
@@ -616,53 +439,283 @@ public class DatabaseUtil {
     // Portfolio related methods
 
     public int getPortfolioID(String username) {
-        Cursor cursor = db.rawQuery("SELECT portfolioID FROM portfolios WHERE username = ?", new String[]{username});
         int portfolioID = -1;
-        if (cursor.moveToFirst()) {
-            portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT portfolioID FROM portfolios WHERE username = ?", new String[]{username});
+            if (cursor.moveToFirst()) {
+                portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
-        cursor.close();
         return portfolioID;
     }
 
     public List<PortfolioStock> getPortfolio(String username) {
         List<PortfolioStock> list = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
+                    "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
+                    "FROM portfolioStock ps " +
+                    "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
+                    "JOIN stocks s ON ps.stockID = s.stockID " +
+                    "WHERE p.username = ?";
+            cursor = db.rawQuery(query, new String[]{username});
 
-        String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
-                "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
-                "FROM portfolioStock ps " +
-                "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
-                "JOIN stocks s ON ps.stockID = s.stockID " +
-                "WHERE p.username = ?";
+            while (cursor.moveToNext()) {
+                int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
 
-        Cursor cursor = db.rawQuery(query, new String[]{username});
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+                double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
+                String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
-        while (cursor.moveToNext()) {
-            int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
-            int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-            String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-            String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-            String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-            Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-
-            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
-            double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
-            String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
-
-            // First, create a Stock object
-            Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-
-            // Create PortfolioStock
-            PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
-
-            list.add(ps);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
+                list.add(ps);
+            }
+        } finally {
+            if (cursor != null) cursor.close();
         }
-
-        cursor.close();
         return list;
     }
-     //Transaction
+
+    public List<PortfolioStock> getFilteredPortfolioP(String filterCategory, String username) {
+        List<PortfolioStock> filteredList = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
+                    "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
+                    "FROM portfolioStock ps " +
+                    "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
+                    "JOIN stocks s ON ps.stockID = s.stockID " +
+                    "WHERE p.username = ? AND s.category = ?";
+            cursor = db.rawQuery(query, new String[]{username, filterCategory});
+
+            while (cursor.moveToNext()) {
+                int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+                double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
+                String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
+
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
+                filteredList.add(ps);
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return filteredList;
+    }
+
+    public List<PortfolioStock> searchPortfolioStocks(String searchCriteria, String username) {
+        List<PortfolioStock> results = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
+                    "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
+                    "FROM portfolioStock ps " +
+                    "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
+                    "JOIN stocks s ON ps.stockID = s.stockID " +
+                    "WHERE p.username = ? AND s.stockname LIKE ? COLLATE NOCASE";
+            cursor = db.rawQuery(query, new String[]{username, "%" + searchCriteria + "%"});
+
+            while (cursor.moveToNext()) {
+                int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+                double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
+                String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
+
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
+                results.add(ps);
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return results;
+    }
+
+    public List<PortfolioStock> combinedSearchP(String filterCategory, String searchCriteria, String username) {
+        List<PortfolioStock> results = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
+                    "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
+                    "FROM portfolioStock ps " +
+                    "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
+                    "JOIN stocks s ON ps.stockID = s.stockID " +
+                    "WHERE p.username = ? AND s.category = ? AND s.stockname LIKE ? COLLATE NOCASE";
+            cursor = db.rawQuery(query, new String[]{username, filterCategory, "%" + searchCriteria + "%"});
+
+            while (cursor.moveToNext()) {
+                int portfolioID = cursor.getInt(cursor.getColumnIndexOrThrow("portfolioID"));
+                int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
+                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
+                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+                double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
+                String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
+
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
+                results.add(ps);
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return results;
+    }
+
+    public Double getQuantity(int portfolioID, int stockID) {
+        Double qty = 0.0;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?",
+                    new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
+            if (cursor.moveToFirst()) {
+                qty = cursor.getDouble(cursor.getColumnIndexOrThrow("quantity"));
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return qty;
+    }
+
+    // Transaction methods
+
+    public boolean buyStock(String username, int stockID, int quantity, double price) {
+        db.beginTransaction();
+        try {
+            int portfolioID = getPortfolioID(username);
+            BigDecimal totalCost = BigDecimal.valueOf(quantity).multiply(BigDecimal.valueOf(price));
+
+            User user = getUser(username);
+            BigDecimal newBalance = BigDecimal.valueOf(user.getUserBalance()).subtract(totalCost);
+            if (newBalance.compareTo(BigDecimal.ZERO) < 0) {
+                Log.d("DB_LOG", "Insufficient funds for user: " + username);
+                return false;
+            }
+
+            updateBalance(newBalance.doubleValue(), username);
+            insertTransaction(username, stockID, "BUY", quantity, BigDecimal.valueOf(price));
+
+            Cursor cursor = null;
+            try {
+                cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?",
+                        new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
+
+                if (cursor.moveToFirst()) {
+                    int existingQty = cursor.getInt(0);
+                    int updatedQty = existingQty + quantity;
+
+                    SQLiteStatement stmt = db.compileStatement("UPDATE portfolioStock SET quantity = ?, buyPrice = ?, buyDate = date('now') WHERE portfolioID = ? AND stockID = ?");
+                    stmt.bindLong(1, updatedQty);
+                    stmt.bindDouble(2, price);
+                    stmt.bindLong(3, portfolioID);
+                    stmt.bindLong(4, stockID);
+                    stmt.executeUpdateDelete();
+                } else {
+                    SQLiteStatement stmt = db.compileStatement("INSERT INTO portfolioStock (portfolioID, stockID, quantity, buyPrice, buyDate) VALUES (?, ?, ?, ?, date('now'))");
+                    stmt.bindLong(1, portfolioID);
+                    stmt.bindLong(2, stockID);
+                    stmt.bindLong(3, quantity);
+                    stmt.bindDouble(4, price);
+                    stmt.executeInsert();
+                }
+            } finally {
+                if (cursor != null) cursor.close();
+            }
+
+            db.setTransactionSuccessful();
+            return true;
+        } catch (Exception e) {
+            Log.e("DB_LOG", "Buy stock failed: " + e.getMessage());
+            return false;
+        } finally {
+            db.endTransaction();
+        }
+    }
+    public boolean sellStock(String username, int stockID, int quantityToSell, double price) {
+        db.beginTransaction();
+        try {
+            int portfolioID = getPortfolioID(username);
+            Cursor cursor = null;
+            try {
+                cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?",
+                        new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
+
+                if (!cursor.moveToFirst()) {
+                    Log.d("DB_LOG", "User " + username + " does not own stockID=" + stockID);
+                    return false;
+                }
+
+                int ownedQty = cursor.getInt(0);
+                if (ownedQty < quantityToSell) {
+                    Log.d("DB_LOG", "User " + username + " owns only " + ownedQty + " shares, cannot sell " + quantityToSell);
+                    return false;
+                }
+
+                BigDecimal saleRevenue = BigDecimal.valueOf(quantityToSell).multiply(BigDecimal.valueOf(price));
+                User user = getUser(username);
+                BigDecimal newBalance = BigDecimal.valueOf(user.getUserBalance()).add(saleRevenue);
+                updateBalance(newBalance.doubleValue(), username);
+                Log.d("DB_LOG", "User " + username + " balance updated to: " + newBalance);
+
+                insertTransaction(username, stockID, "SELL", quantityToSell, BigDecimal.valueOf(price));
+
+                int remainingQty = ownedQty - quantityToSell;
+                if (remainingQty == 0) {
+                    SQLiteStatement stmt = db.compileStatement("DELETE FROM portfolioStock WHERE portfolioID = ? AND stockID = ?");
+                    stmt.bindLong(1, portfolioID);
+                    stmt.bindLong(2, stockID);
+                    stmt.executeUpdateDelete();
+                    Log.d("DB_LOG", "Removed stockID=" + stockID + " from portfolio (sold all shares)");
+                } else {
+                    SQLiteStatement stmt = db.compileStatement("UPDATE portfolioStock SET quantity = ? WHERE portfolioID = ? AND stockID = ?");
+                    stmt.bindLong(1, remainingQty);
+                    stmt.bindLong(2, portfolioID);
+                    stmt.bindLong(3, stockID);
+                    stmt.executeUpdateDelete();
+                    Log.d("DB_LOG", "Updated stockID=" + stockID + " to " + remainingQty + " shares");
+                }
+            } finally {
+                if (cursor != null) cursor.close();
+            }
+            return true;
+        } catch (Exception e) {
+            Log.e("DB_LOG", "Sell stock failed: " + e.getMessage());
+            return false;
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     private void insertTransaction(String username, long stockID, String transactionType, int quantity, BigDecimal price) {
         try {
             String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
@@ -675,7 +728,7 @@ public class DatabaseUtil {
             stmt.bindDouble(5, price.doubleValue());
             stmt.bindString(6, timestamp);
             stmt.executeInsert();
-            Log.d("DB_LOG", "Transaction recorded: " + transactionType + " " + quantity + " shares of stockID=" + stockID + " for user " + username);
+            Log.d("DB_LOG", "Transaction recorded: " + transactionType + " " + quantity + " shares of stockID=" + stockID);
         } catch (Exception e) {
             Log.e("DB_LOG", "Failed to insert transaction: " + e.getMessage());
         }
@@ -683,40 +736,41 @@ public class DatabaseUtil {
 
     public List<Transaction> getTransactionHistory(String username) {
         List<Transaction> transactions = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            String query = "SELECT th.transactionID, th.username, th.stockID, th.transactionType, " +
+                    "th.quantity, th.price, th.transactionDate, s.stockName, s.symbol " +
+                    "FROM transaction_history th " +
+                    "JOIN stocks s ON th.stockID = s.stockID " +
+                    "WHERE th.username = ? " +
+                    "ORDER BY th.transactionDate DESC";
+            cursor = db.rawQuery(query, new String[]{username});
 
-        String query = "SELECT th.transactionID, th.username, th.stockID, th.transactionType, " +
-                "th.quantity, th.price, th.transactionDate, s.stockName, s.symbol " +
-                "FROM transaction_history th " +
-                "JOIN stocks s ON th.stockID = s.stockID " +
-                "WHERE th.username = ? " +
-                "ORDER BY th.transactionDate DESC";
+            while (cursor.moveToNext()) {
+                long transactionID = cursor.getLong(cursor.getColumnIndexOrThrow("transactionID"));
+                long stockID = cursor.getLong(cursor.getColumnIndexOrThrow("stockID"));
+                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
+                String type = cursor.getString(cursor.getColumnIndexOrThrow("transactionType"));
+                int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
+                BigDecimal priceVal = BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow("price")));
+                String transactionDate = cursor.getString(cursor.getColumnIndexOrThrow("transactionDate"));
 
-        Cursor cursor = db.rawQuery(query, new String[]{username});
-        while (cursor.moveToNext()) {
-            long transactionID = cursor.getLong(cursor.getColumnIndexOrThrow("transactionID"));
-            long stockID = cursor.getLong(cursor.getColumnIndexOrThrow("stockID"));
-            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol")); // Get the symbol
-            String type = cursor.getString(cursor.getColumnIndexOrThrow("transactionType"));
-            int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
-            BigDecimal price = BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow("price")));
-            String transactionDate = cursor.getString(cursor.getColumnIndexOrThrow("transactionDate"));
+                Date date = null;
+                try {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+                    date = sdf.parse(transactionDate);
+                } catch (Exception e) {
+                    Log.e("DB_LOG", "Error parsing transaction date: " + e.getMessage());
+                    date = new Date();
+                }
 
-            // Create a date object
-            Date date = null;
-            try {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-                date = sdf.parse(transactionDate);
-            } catch (Exception e) {
-                Log.e("DB_LOG", "Error parsing transaction date: " + e.getMessage());
-                date = new Date();
+                Transaction tx = new Transaction(transactionID, username, stockID, symbol, type, quantity, priceVal, date);
+                transactions.add(tx);
             }
-
-            Transaction tx = new Transaction(transactionID, username, stockID, symbol, type, quantity, price, date);
-            transactions.add(tx);
+            Log.d("DB_LOG", "Retrieved " + transactions.size() + " transactions for user " + username);
+        } finally {
+            if (cursor != null) cursor.close();
         }
-
-        cursor.close();
-        Log.d("DB_LOG", "Retrieved " + transactions.size() + " transactions for user " + username);
         return transactions;
     }
 
@@ -725,16 +779,16 @@ public class DatabaseUtil {
         SQLiteStatement stmt = db.compileStatement(sql);
         stmt.bindDouble(1, marketFactor);
         stmt.bindLong(2, stockID);
-
+        stmt.executeUpdateDelete();
     }
 
     public List<MarketEvent> getMarketEvents() {
         List<MarketEvent> marketEvents = new ArrayList<>();
-
-        String sql = "SELECT * FROM marketEvents"; // ✅ table name corrected
-        Cursor cursor = db.rawQuery(sql, null);
-
+        Cursor cursor = null;
         try {
+            String sql = "SELECT * FROM marketEvents";
+            cursor = db.rawQuery(sql, null);
+
             while (cursor.moveToNext()) {
                 int marketEventID = cursor.getInt(cursor.getColumnIndexOrThrow("eventID"));
                 int chapterID = cursor.isNull(cursor.getColumnIndexOrThrow("chapterID"))
@@ -743,26 +797,25 @@ public class DatabaseUtil {
                 int minigameID = cursor.isNull(cursor.getColumnIndexOrThrow("minigameID"))
                         ? -1
                         : cursor.getInt(cursor.getColumnIndexOrThrow("minigameID"));
-                int duration = cursor.getInt(cursor.getColumnIndexOrThrow("eventDuration"));
-                String title = cursor.getString(cursor.getColumnIndexOrThrow("eventTitle"));
-                String info = cursor.getString(cursor.getColumnIndexOrThrow("eventInfo"));
-                String marketFactors = cursor.getString(cursor.getColumnIndexOrThrow("marketFactors"));
+                int eventDuration = cursor.getInt(cursor.getColumnIndexOrThrow("eventDuration"));
+                String eventTitle = cursor.getString(cursor.getColumnIndexOrThrow("eventTitle"));
+                String eventInfo = cursor.getString(cursor.getColumnIndexOrThrow("eventInfo"));
+                int chapterPresent = cursor.getInt(cursor.getColumnIndexOrThrow("chapterPresent"));
+                String marketFactorsString = cursor.getString(cursor.getColumnIndexOrThrow("marketFactors"));
 
                 MarketEvent event = new MarketEvent(
                         marketEventID,
                         chapterID,
                         minigameID,
-                        duration,
-                        title,
-                        info
+                        eventDuration,
+                        eventTitle,
+                        eventInfo
                 );
-
                 marketEvents.add(event);
             }
         } finally {
-            cursor.close();
+            if (cursor != null) cursor.close();
         }
-
         return marketEvents;
     }
 }

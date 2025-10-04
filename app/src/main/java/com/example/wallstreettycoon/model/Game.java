@@ -35,7 +35,7 @@ public class Game implements GameObserver, java.io.Serializable {
         appContext = context.getApplicationContext();
         if(INSTANCE == null) {
             INSTANCE = new Game();
-            dbUtil = new DatabaseUtil(context);
+            dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
         }
     }
 
@@ -125,6 +125,10 @@ public class Game implements GameObserver, java.io.Serializable {
 
     public void addObserver(GameObserver observer){
         observers.add(observer);
+    }
+
+    public void removeObserver(GameObserver observer){
+        observers.remove(observer);
     }
 
     private void notifyObservers(GameEvent e){

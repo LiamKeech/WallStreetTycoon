@@ -71,7 +71,7 @@ public class ManageUserAccount extends AppCompatActivity {
 
         btnUpdate = findViewById(R.id.btnUpdateManage);
         btnUpdate.setOnClickListener(v -> {
-            DatabaseUtil dbUtil = new DatabaseUtil(context);
+            DatabaseUtil dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
 
             String name = edtName.getText().toString();
             String surname = edtSurname.getText().toString();

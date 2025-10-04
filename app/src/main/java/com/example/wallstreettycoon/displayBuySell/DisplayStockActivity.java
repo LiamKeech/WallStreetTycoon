@@ -58,7 +58,7 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         juaTypeface = ResourcesCompat.getFont(this, R.font.jua);
 
         Game.getInstance().addObserver(this);
-        dbUtil = new DatabaseUtil(context);
+        dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
 
         Intent intentFromList = getIntent();
         int stockID = intentFromList.getIntExtra("stock_id", -1); // Use -1 as default

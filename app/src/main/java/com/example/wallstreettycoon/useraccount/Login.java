@@ -43,7 +43,7 @@ public class Login extends AppCompatActivity {
             return insets;
         });
 
-        dbUtil = new DatabaseUtil(context);
+        dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
 
         txtCreateAccount = findViewById(R.id.txtCreate);
         txtCreateAccount.setOnClickListener(new View.OnClickListener() {

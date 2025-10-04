@@ -23,6 +23,7 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
 
     private Context context;
     private List<PortfolioStock> PstockArrayList;
+    private DatabaseUtil dbUtil;
     private String viewType;
 
     // Constructor
@@ -30,6 +31,7 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
         this.context = context;
         this.PstockArrayList = stockModelArrayList;
         this.viewType = viewType;
+        this.dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
     }
 
     @NonNull
@@ -45,7 +47,6 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
     public void onBindViewHolder(@NonNull PortfolioStockAdapter.ViewHolder holder, int position) {
         // to set data to textview and imageview of each card layout
         PortfolioStock Pstock = PstockArrayList.get(position);
-        DatabaseUtil dbUtil = new DatabaseUtil(context);
         Stock stock = dbUtil.getStock(Pstock.getStock().getStockID());
 
         //new version

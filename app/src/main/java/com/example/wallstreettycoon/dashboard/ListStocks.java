@@ -72,7 +72,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
 
         Game.getInstance().addObserver(this);
 
-        dbUtil = new DatabaseUtil(context);
+        dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
 
         drawerLayout = findViewById(R.id.drawer_layout);
         navView = findViewById(R.id.nav_view);
@@ -312,7 +312,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
                     }
                 }
             } else { // "P" - Portfolio view
-                List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredStockP(filter);
+                List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredPortfolioP(filter, Game.currentUser.getUserUsername());
                 if (filteredPortfolio.isEmpty()) {
                     // Show no results message
                     if (lblEmpty != null) {
@@ -434,7 +434,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
                     }
                 }
             } else { // "P" - Portfolio view
-                List<PortfolioStock> searchedPortfolio = dbUtil.searchStocksP(search);
+                List<PortfolioStock> searchedPortfolio = dbUtil.searchPortfolioStocks(search, Game.currentUser.getUserUsername());
                 if (searchedPortfolio.isEmpty()) {
                     // Show no results message
                     if (lblEmpty != null) {
@@ -556,7 +556,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
                     }
                 }
             } else { // "P" - Portfolio view
-                List<PortfolioStock> combinedSearchPortfolio = dbUtil.combinedSearchP(filter, search);
+                List<PortfolioStock> combinedSearchPortfolio = dbUtil.combinedSearchP(filter, search, Game.currentUser.getUserUsername());
                 if (combinedSearchPortfolio.isEmpty()) {
                     // Show no results message
                     if (lblEmpty != null) {

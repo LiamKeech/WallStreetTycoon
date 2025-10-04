@@ -27,7 +27,7 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
     public StockAdapter(Context context, List<Stock> stockModelArrayList, String viewType) {
         this.context = context;
         this.stockArrayList = stockModelArrayList;
-        this.dbUtil = new DatabaseUtil(context);
+        this.dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
         this.viewType = viewType;
     }
 

@@ -49,7 +49,7 @@ public class miniGame1 extends AppCompatActivity {
         setContentView(R.layout.activity_mini_game1);
 
         Context context = this;
-        DatabaseUtil dbUtil = new DatabaseUtil(context);
+        DatabaseUtil dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
 
         container = findViewById(R.id.container);
         List<Stock> stockList = dbUtil.getStockListByCategory("Technology");
