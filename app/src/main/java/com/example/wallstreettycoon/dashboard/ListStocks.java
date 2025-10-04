@@ -83,7 +83,9 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
         lblResult = findViewById(R.id.lblResults);
         lblHeadingDisplayed = findViewById(R.id.lblListDisplayed);
         viewBalance = findViewById(R.id.viewBalance);
-        userBalance = "$" + dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance();
+
+        double balance = dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance();
+        userBalance = String.format("$%.2f", balance);
         viewBalance.setText(userBalance);
 
         btnToggleP = findViewById(R.id.btnToggleList);
@@ -620,8 +622,9 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
     public void onGameEvent(GameEvent event) {
         switch(event.getType()){
             case UPDATE_STOCK_PRICE:
-                if (viewType != null && viewType.equals("M")) {  displayAllStocks(); }
-                else if (viewType != null && viewType.equals("P")) { displayPortfolioStocks(); }
+                if (stockRV.getAdapter() != null) {
+                    stockRV.getAdapter().notifyDataSetChanged();
+                }
                 break;
             case MARKET_EVENT:
                 //TODO replace with proper UI notification card

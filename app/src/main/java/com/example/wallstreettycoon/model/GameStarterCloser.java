@@ -2,6 +2,8 @@ package com.example.wallstreettycoon.model;
 
 import android.app.Application;
 
+import androidx.appcompat.app.AppCompatDelegate;
+
 public class GameStarterCloser extends Application {
     @Override
     public void onTrimMemory(int level) {
@@ -17,5 +19,11 @@ public class GameStarterCloser extends Application {
         if (Game.getInstance() != null) {
             Game.pauseGame();
         }
+    }
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // Force light mode globally
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
     }
 }

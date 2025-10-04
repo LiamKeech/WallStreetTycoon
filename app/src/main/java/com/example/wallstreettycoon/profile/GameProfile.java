@@ -197,7 +197,6 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         dataSet.setValueFormatter(new PercentFormatter(pieChart));
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(8f);
-
         dataSet.setValueTypeface(ResourcesCompat.getFont(this, R.font.jua));
 
         PieData pieData = new PieData(dataSet);
@@ -208,24 +207,13 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         pieChart.getDescription().setEnabled(false);
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setEntryLabelTextSize(14f);
-        pieChart.setDrawHoleEnabled(true);
-        pieChart.setHoleColor(Color.WHITE);
-        pieChart.setTransparentCircleColor(Color.parseColor("#15000000"));
-        pieChart.setTransparentCircleRadius(70f);
-        pieChart.setHoleRadius(65f);
+        pieChart.setDrawHoleEnabled(false);  // Changed: Make it a full pie chart
         pieChart.setRotationEnabled(true);
         pieChart.setHighlightPerTapEnabled(true);
-        pieChart.setDrawEntryLabels(true);
-        pieChart.setExtraOffsets(10f, 10f, 10f, 10f);
+        pieChart.setDrawEntryLabels(false);  // Changed: Disable labels on slices
+        pieChart.setExtraOffsets(5f, 5f, 5f, 5f);  // Changed: Reduced offsets to make chart bigger
 
         pieChart.setEntryLabelTypeface(ResourcesCompat.getFont(this, R.font.jua));
-
-//        pieChart.setCenterText("Portfolio\nDistribution");
-//        pieChart.setCenterTextSize(16f);
-//        pieChart.setCenterTextColor(Color.parseColor("#424242"));
-//        pieChart.setCenterTextTypeface(ResourcesCompat.getFont(this, R.font.jua));
-//
-//        pieChart.animateY(1200);
 
         // Legend with custom font
         Legend legend = pieChart.getLegend();
@@ -236,7 +224,7 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         legend.setXEntrySpace(7f);
         legend.setYEntrySpace(0f);
         legend.setYOffset(0f);
-        legend.setTextSize(12f);
+        legend.setTextSize(14f);  // Changed: Increased from 12f to 14f
         legend.setForm(Legend.LegendForm.CIRCLE);
         legend.setFormSize(10f);
         legend.setWordWrapEnabled(true);

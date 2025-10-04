@@ -707,6 +707,8 @@ public class DatabaseUtil {
             } finally {
                 if (cursor != null) cursor.close();
             }
+
+            db.setTransactionSuccessful();
             return true;
         } catch (Exception e) {
             Log.e("DB_LOG", "Sell stock failed: " + e.getMessage());

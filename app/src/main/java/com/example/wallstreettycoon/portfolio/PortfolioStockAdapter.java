@@ -64,7 +64,7 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
             priceChangeStr = String.format("+$%.2f (+%.1f%%)", priceChange, (priceChange / Pstock.getBuyPrice()) * 100);
             holder.lblPriceChange.setTextColor(context.getResources().getColor(R.color.Green));
         } else {
-            priceChangeStr = String.format("%.2f (%.1f%%)", priceChange, (priceChange / Pstock.getBuyPrice()) * 100);
+            priceChangeStr = String.format("$%.2f (%.1f%%)", priceChange, (priceChange / Pstock.getBuyPrice()) * 100);
             holder.lblPriceChange.setTextColor(context.getResources().getColor(R.color.Red));
         }
         holder.lblPriceChange.setText(priceChangeStr);
