@@ -695,6 +695,7 @@ public class DatabaseUtil {
         while (cursor.moveToNext()) {
             long transactionID = cursor.getLong(cursor.getColumnIndexOrThrow("transactionID"));
             long stockID = cursor.getLong(cursor.getColumnIndexOrThrow("stockID"));
+            String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol")); // Get the symbol
             String type = cursor.getString(cursor.getColumnIndexOrThrow("transactionType"));
             int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
             BigDecimal price = BigDecimal.valueOf(cursor.getDouble(cursor.getColumnIndexOrThrow("price")));
@@ -707,10 +708,10 @@ public class DatabaseUtil {
                 date = sdf.parse(transactionDate);
             } catch (Exception e) {
                 Log.e("DB_LOG", "Error parsing transaction date: " + e.getMessage());
-                date = new Date(); // fallback to current date
+                date = new Date();
             }
 
-            Transaction tx = new Transaction(transactionID, username, stockID, type, quantity, price, date);
+            Transaction tx = new Transaction(transactionID, username, stockID, symbol, type, quantity, price, date);
             transactions.add(tx);
         }
 

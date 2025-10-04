@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -160,12 +161,10 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         }
     }
 
-    private void loadPieChart(List<PortfolioStock> holdings) { // https://github.com/PhilJay/MPAndroidChart
+    private void loadPieChart(List<PortfolioStock> holdings) {
         if (holdings.isEmpty()) {
             pieChart.setVisibility(View.GONE);
             tvEmptyHoldings.setVisibility(View.VISIBLE);
-            tvEmptyHoldings.setText("No holdings yet. Start investing!");
-            tvEmptyHoldings.setTextColor(getColor(R.color.LightGrey));
             return;
         }
 
@@ -176,47 +175,59 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         List<Integer> colors = new ArrayList<>();
 
         double totalValue = 0.0;
-        for (PortfolioStock ps : holdings) { //Calculate total portfolio value
-            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID()); //FIXME
+        for (PortfolioStock ps : holdings) {
+            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID());
             totalValue += ps.getQuantity() * currentPrice;
         }
 
-        for (PortfolioStock ps : holdings) { //Create pie entries with current values
-            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID()); //FIXME
+        for (PortfolioStock ps : holdings) {
+            double currentPrice = dbUtil.getCurrentStockPrice(ps.getStock().getStockID());
             double stockValue = ps.getQuantity() * currentPrice;
             float percentage = (float) ((stockValue / totalValue) * 100);
 
             entries.add(new PieEntry(percentage, ps.getStock().getSymbol()));
             colors.add(getColourForStock(ps.getStock().getStockID()));
         }
+
         // Dataset
-        PieDataSet dataSet = new PieDataSet(entries, "Holdings");
+        PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(colors);
-        dataSet.setValueTextSize(12f);
+        dataSet.setValueTextSize(14f);
         dataSet.setValueTextColor(Color.BLACK);
         dataSet.setValueFormatter(new PercentFormatter(pieChart));
+        dataSet.setSliceSpace(3f);
+        dataSet.setSelectionShift(8f);
+
+        dataSet.setValueTypeface(ResourcesCompat.getFont(this, R.font.jua));
 
         PieData pieData = new PieData(dataSet);
-        pieData.setValueTextColor(Color.BLACK);
 
-        // General pie chart config code
+        // General pie chart config
         pieChart.setData(pieData);
         pieChart.setUsePercentValues(true);
         pieChart.getDescription().setEnabled(false);
         pieChart.setEntryLabelColor(Color.BLACK);
-        pieChart.setEntryLabelTextSize(12f);
+        pieChart.setEntryLabelTextSize(14f);
         pieChart.setDrawHoleEnabled(true);
         pieChart.setHoleColor(Color.WHITE);
-        pieChart.setTransparentCircleColor(Color.parseColor("#20000000"));
-        pieChart.setTransparentCircleRadius(62f);
-        pieChart.setHoleRadius(60f);
-        pieChart.setRotationEnabled(false);
+        pieChart.setTransparentCircleColor(Color.parseColor("#15000000"));
+        pieChart.setTransparentCircleRadius(70f);
+        pieChart.setHoleRadius(65f);
+        pieChart.setRotationEnabled(true);
         pieChart.setHighlightPerTapEnabled(true);
-        pieChart.setCenterText("Portfolio\nDistribution");
-        pieChart.setCenterTextSize(14f);
-        pieChart.animateY(1000);
+        pieChart.setDrawEntryLabels(true);
+        pieChart.setExtraOffsets(10f, 10f, 10f, 10f);
 
-        // Create legend (category, %)
+        pieChart.setEntryLabelTypeface(ResourcesCompat.getFont(this, R.font.jua));
+
+//        pieChart.setCenterText("Portfolio\nDistribution");
+//        pieChart.setCenterTextSize(16f);
+//        pieChart.setCenterTextColor(Color.parseColor("#424242"));
+//        pieChart.setCenterTextTypeface(ResourcesCompat.getFont(this, R.font.jua));
+//
+//        pieChart.animateY(1200);
+
+        // Legend with custom font
         Legend legend = pieChart.getLegend();
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
@@ -225,8 +236,11 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         legend.setXEntrySpace(7f);
         legend.setYEntrySpace(0f);
         legend.setYOffset(0f);
-        legend.setTextSize(10f);
+        legend.setTextSize(12f);
         legend.setForm(Legend.LegendForm.CIRCLE);
+        legend.setFormSize(10f);
+        legend.setWordWrapEnabled(true);
+        legend.setTypeface(ResourcesCompat.getFont(this, R.font.jua));
 
         pieChart.invalidate();
     }
