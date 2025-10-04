@@ -25,7 +25,7 @@ public class Game implements GameObserver, java.io.Serializable {
     private static Context appContext;
     private static List<GameObserver> observers;
 
-    private static DatabaseUtil dbUtil;
+    public static DatabaseUtil dbUtil;
 
     private Game(){
 
@@ -112,6 +112,12 @@ public class Game implements GameObserver, java.io.Serializable {
         switch(event.getType()){
             case UPDATE_STOCK_PRICE:
                 timeStamp = timer.getElapsedTime();
+                notifyObservers(event);
+                break;
+            case MARKET_EVENT:
+                MarketEvent marketEvent = (MarketEvent)event.getCargo();
+
+                marketEvent.applyMarketFactors();
                 notifyObservers(event);
                 break;
         }

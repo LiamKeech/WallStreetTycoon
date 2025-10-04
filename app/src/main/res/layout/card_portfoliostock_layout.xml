@@ -57,7 +57,8 @@
                 android:text="25 shares"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:layout_marginTop="2dp" />
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/jua"/>
 
         </LinearLayout>
 
@@ -76,7 +77,8 @@
                 android:text="$125.50"
                 android:textColor="@color/black"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/jua"/>
 
             <!-- Price based on (current time - time bought) NB update colours dynamically -->
             <TextView
@@ -86,7 +88,8 @@
                 android:text="+$2.35 (+1.9%)"
                 android:textColor="@color/Green"
                 android:textSize="12sp"
-                android:layout_marginTop="2dp" />
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/jua"/>
 
         </LinearLayout>
 
@@ -104,7 +107,8 @@
                 android:layout_height="wrap_content"
                 android:text="Total Value"
                 android:textColor="@color/black"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                android:fontFamily="@font/jua"/>
 
             <TextView
                 android:id="@+id/lblTotalValue_numeric_portfolioCard"
@@ -114,7 +118,8 @@
                 android:textColor="@color/black"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:layout_marginTop="2dp" />
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/jua"/>
 
         </LinearLayout>
 

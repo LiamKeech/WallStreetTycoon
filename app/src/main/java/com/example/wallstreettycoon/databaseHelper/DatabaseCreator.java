@@ -1,6 +1,8 @@
 package com.example.wallstreettycoon.databaseHelper;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -12,7 +14,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -145,14 +149,16 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "eventID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "chapterID INTEGER, " +
                         "minigameID INTEGER, " +
+                        "eventDuration INTEGER, " +
                         "eventTitle TEXT, " +
                         "eventInfo TEXT, " +
                         "chapterPresent INTEGER, " +
+                        "marketFactors TEXT, " +
                         "FOREIGN KEY (chapterID) REFERENCES chapters(chapterID), " +
                         "FOREIGN KEY (minigameID) REFERENCES minigames(minigameID))"
         );
 
-        //TODO populate market event table
+        importMarketEvents(R.raw.notifications, db, context);
 
 
         // Minigame table
@@ -309,4 +315,63 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         return sb.toString();
     }
 
+    public static void importMarketEvents(int rawResId, SQLiteDatabase db, Context context) {
+        Resources res = context.getResources();
+        try (InputStream inputStream = res.openRawResource(rawResId);
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Skip comments and empty lines
+                if (line.trim().isEmpty() || line.startsWith("//")) {
+                    continue;
+                }
+
+                // Split into 5 parts: chapterID;minigameID;eventDuration;eventTitle;eventInfo
+                String[] parts = line.split(";", 6);
+                if (parts.length < 5) {
+                    continue; // skip malformed lines
+                }
+
+
+                String chapterIDStr = parts[0].trim();
+                String minigameIDStr = parts[1].trim();
+                String eventDurationStr = parts[2].trim();
+                String eventTitle = parts[3].trim();
+                String eventInfo = parts[4].trim();
+
+
+                // Convert null to actual null
+                Integer chapterID = chapterIDStr.equals("null") ? null : Integer.valueOf(chapterIDStr);
+                Integer minigameID = minigameIDStr.equals("null") ? null : Integer.valueOf(minigameIDStr);
+                int eventDuration = Integer.parseInt(eventDurationStr);
+
+                // Prepare values
+                ContentValues values = new ContentValues();
+                if (chapterID != null) values.put("chapterID", chapterID);
+                if (minigameID != null) values.put("minigameID", minigameID);
+
+
+                values.put("eventDuration", eventDuration);
+                values.put("eventTitle", eventTitle);
+                values.put("eventInfo", eventInfo);
+                values.put("chapterPresent", (chapterID != null) ? 1 : 0);
+
+                if(parts.length == 6) {
+                    String marketFactorsStr = parts[5].trim();
+                    values.put("marketFactors", marketFactorsStr);
+                }
+                else{
+                    values.put("marketFactors", "");
+                }
+
+                // Insert
+                db.insert("marketEvents", null, values);
+                Log.d("DATABASE CREATOR", "Imported market event: " + eventTitle);
+            }
+
+        } catch (Exception e) {
+            Log.d("DATABASE CREATOR", "Error improting market events, " + e.getMessage());
+        }
+    }
 }

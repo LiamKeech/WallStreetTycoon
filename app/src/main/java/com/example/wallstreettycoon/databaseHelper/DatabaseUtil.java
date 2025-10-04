@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.example.wallstreettycoon.model.Game;
+import com.example.wallstreettycoon.model.MarketEvent;
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
@@ -15,7 +16,6 @@ import com.example.wallstreettycoon.transaction.Transaction;
 import com.example.wallstreettycoon.useraccount.User;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -352,7 +352,7 @@ public class DatabaseUtil {
     }
 
     public Stock getStock(Integer stockID){
-        for(Stock stock : getStockList()){
+        for(Stock stock : getChapterStock()){
             if(stock.getStockID().equals(stockID)){
                 return stock;
             }
@@ -431,7 +431,7 @@ public class DatabaseUtil {
         StockPriceFunction stockPriceFunction = getStockPriceFunction(stockID);
 
         Double priceChange = stockPriceFunction.getCurrentPriceChange(timeStamp);
-        Double value = getStock(stockID).getCurrentPrice() + priceChange;
+        Double value = getStock(stockID).getCurrentPrice() + priceChange;               //take out price from stock
 
         return value;
     }
@@ -726,5 +726,43 @@ public class DatabaseUtil {
         stmt.bindDouble(1, marketFactor);
         stmt.bindLong(2, stockID);
 
+    }
+
+    public List<MarketEvent> getMarketEvents() {
+        List<MarketEvent> marketEvents = new ArrayList<>();
+
+        String sql = "SELECT * FROM marketEvents"; // ✅ table name corrected
+        Cursor cursor = db.rawQuery(sql, null);
+
+        try {
+            while (cursor.moveToNext()) {
+                int marketEventID = cursor.getInt(cursor.getColumnIndexOrThrow("eventID"));
+                int chapterID = cursor.isNull(cursor.getColumnIndexOrThrow("chapterID"))
+                        ? -1
+                        : cursor.getInt(cursor.getColumnIndexOrThrow("chapterID"));
+                int minigameID = cursor.isNull(cursor.getColumnIndexOrThrow("minigameID"))
+                        ? -1
+                        : cursor.getInt(cursor.getColumnIndexOrThrow("minigameID"));
+                int duration = cursor.getInt(cursor.getColumnIndexOrThrow("eventDuration"));
+                String title = cursor.getString(cursor.getColumnIndexOrThrow("eventTitle"));
+                String info = cursor.getString(cursor.getColumnIndexOrThrow("eventInfo"));
+                String marketFactors = cursor.getString(cursor.getColumnIndexOrThrow("marketFactors"));
+
+                MarketEvent event = new MarketEvent(
+                        marketEventID,
+                        chapterID,
+                        minigameID,
+                        duration,
+                        title,
+                        info
+                );
+
+                marketEvents.add(event);
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return marketEvents;
     }
 }

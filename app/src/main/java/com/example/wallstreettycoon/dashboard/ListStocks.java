@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
@@ -30,6 +31,7 @@ import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.model.GameEvent;
 import com.example.wallstreettycoon.model.GameObserver;
+import com.example.wallstreettycoon.model.MarketEvent;
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.portfolio.PortfolioStockAdapter;
 import com.example.wallstreettycoon.profile.GameProfile;
@@ -616,7 +618,20 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
 
     @Override
     public void onGameEvent(GameEvent event) {
-        if (viewType != null && viewType.equals("M")) {  displayAllStocks(); }
-        else if (viewType != null && viewType.equals("P")) { displayPortfolioStocks(); }
+        switch(event.getType()){
+            case UPDATE_STOCK_PRICE:
+                if (viewType != null && viewType.equals("M")) {  displayAllStocks(); }
+                else if (viewType != null && viewType.equals("P")) { displayPortfolioStocks(); }
+                break;
+            case MARKET_EVENT:
+                //TODO replace with proper UI notification card
+
+                Toast toast = new Toast(context);
+                MarketEvent notification = (MarketEvent)event.getCargo();
+                toast.setText(notification.getTitle());
+                toast.show();
+                break;
+        }
+
     }
 }

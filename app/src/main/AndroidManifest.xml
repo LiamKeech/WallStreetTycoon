@@ -41,7 +41,9 @@
         </activity>
         <activity
             android:name=".minigames.miniGame1.miniGame1"
-            android:exported="true"></activity>
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".dashboard.ListStocks"
             android:exported="false"></activity>
@@ -53,7 +55,8 @@
             android:exported="false" />
         <activity
             android:name=".useraccount.Login"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

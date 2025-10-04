@@ -1,6 +1,3 @@
-//CHAPTER CATOEGORIES
-
-//Technology stocks
 Cranberry Inc.,CRNB,Technology,Leading tech company known for overpriced blenders with Bluetooth.,45.20
 MicroHard Corp.,MHCD,Technology,Known for crashing software updates at the worst possible times.,38.75
 Pear Systems,PEAR,Technology,Makes phones that look suspiciously like other fruit-branded devices.,52.10
@@ -16,8 +13,6 @@ FruitByte Inc.,FRBT,Technology,Known for selling “innovative” phones with mi
 Pineapple OS Ltd.,PNOS,Technology,Revolutionary operating system that works only on Tuesdays.,39.95
 NetScam Corp.,NSCM,Technology,Internet service provider famous for charging hidden fees nobody understands.,29.45
 Zynerd Corp.,ZYND,Technology,AI company creating chatbots that give vague answers about themselves.,41.70
-
-//Investment banks
 Goldbark Sachs,GDBK,Finance,Global investment bank known for charging fees on fees.,62.35
 Morgue & Stanley,MRGS,Finance,Investment bank famous for burying portfolios.,58.40
 Lehman Brothers 2.0,LB20,Finance,Risk management firm that swears it won’t collapse again.,33.10
@@ -28,8 +23,6 @@ CitronBank,CTRB,Finance,Investment firm famous for short-selling its own clients
 Hindenburg Capital,HDBC,Finance,Hedge fund specializing in explosive losses.,31.45
 Ponzi Partners,PNZI,Finance,Wealth management company where old investors pay the new.,22.60
 Diamond Hands Capital,DMHC,Finance,Hedge fund that only buys meme stocks and never sells.,37.95
-
-//Crypto coins
 DogeCash,DGCS,Cryptocurrency,Meme-inspired coin that runs entirely on hype.,12.50
 InstaCoin,INST,Cryptocurrency,Social media token that gains value from likes and shares.,8.90
 Bitcorn,BTCN,Cryptocurrency,Coin mined only on farms with actual cornfields.,15.40
@@ -40,8 +33,6 @@ PumpNDump,PUMP,Cryptocurrency,Volatile coin whose roadmap is just a rocket emoji
 Elonium,ELNM,Cryptocurrency,Value fluctuates based on one billionaire’s tweets.,16.90
 ZeroCoin,ZRCN,Cryptocurrency,Currency worth exactly nothing but trades at high volume.,5.10
 BananaChain,BNNA,Cryptocurrency,Fruit-backed blockchain promising potassium-powered smart contracts.,10.45
-
-//Tourism and travel
 SkyHigh Airways,SKHA,Transportation,Budget airline famous for charging extra for seatbelts and oxygen.,480.75
 EconoJet,EJTN,Transportation,Low-cost airline where the planes land “most of the time.”,395.20
 CloudNine Travel,CLDN,Hospitality & Travel,Luxury travel agency that promises paradise but books motels.,625.40
@@ -52,14 +43,10 @@ YOLO Vacations,YLVC,Hospitality & Travel,Tour operator specializing in “all-in
 Air404,ARFO,Transportation,Flights frequently canceled with “error not found” messages.,402.30
 BudgetBalloon,BGBL,Hospitality & Travel,Hot-air balloon service marketed as an affordable airline alternative.,350.25
 Neverland Tours,NVLT,Hospitality & Travel,Travel agency that always advertises destinations you can’t actually visit.,799.80
-
-//Entertainment
 TickTock Corp.,TTCK,Technology,Short video platform designed to eat your entire afternoon.,44.60
 FaceLook Inc.,FLIK,Technology,Social media giant specializing in stalking your high school crush.,53.90
 SlapChat Inc.,SLPC,Technology,Messaging app where messages disappear faster than your dignity.,36.75
 VirtuReal Inc.,VRRL,Technology,VR headset company making reality more disappointing by comparison.,61.50
-
-//Ai companies
 ThinkrAI,TKAI,AI,AI startup that generates inspirational quotes that almost make sense.,42.20
 NeuralNoodle,NRND,AI,Machine learning firm specializing in spaghetti-like neural nets.,38.45
 DeepFriedMind,DFMD,AI,AI company known for overcooked algorithms with crunchy results.,27.80
@@ -71,46 +58,31 @@ WokeBot Labs,WKBT,AI,AI company making bots that argue with you about ethics.,41
 RoboLobster,RBLB,AI,AI-powered robotic crustaceans for “food and defense applications.”,56.10
 PredictaBull,PRBL,AI,Analytics firm whose AI always predicts stock prices going up.,39.20
 ClosedAI,CLAI,AI,Secretive AI company that never releases products but raises billions in funding.,58.85
-
-
-        //GENERAL CATEGORIES
-
-//Automotive
-Teslo,TESL,Automotive,Electric car company known for ambitious timelines and flamboyant CEOs.,210.75
+Teslo,TESL,Automotive,Electric car company known for ambitious timelines and flamboyant CEOs.,2.75
 Fauxd,FAUD,Automotive,Premium German-style automaker famous for overpriced SUVs.,185.40
 Chevvie,CHVV,Automotive,American car brand producing pickup trucks with personality and rust.,142.60
 Hondel,HNDE,Automotive,Japanese automaker known for reliable cars and confusing model names.,160.25
 Benzano,BNZO,Automotive,Luxury automaker producing sedans and SUVs for the elite and pretentious.,225.90
-
-//Healthcare
 PillCo,PLLC,Healthcare,Pharmaceutical company known for creating medications with confusing side effects.,118.40
 Healix,HLIX,Healthcare,Healthcare tech startup promising AI-powered diagnoses that are “mostly accurate.”,135.25
 MediScam,MDMS,Healthcare,Clinic chain famous for upselling treatments you don’t need.,102.75
 BioGenie,BGNI,Healthcare,Biotech firm developing “miracle cures” funded by hype, not science.,149.85
 Wellth,WLTH,Healthcare,Wellness company selling overpriced vitamins and inspirational yoga classes.,127.60
-
-//Energy
 Solarix,SOLX,Energy,Renewable energy company promising solar panels that power your home and ego.,175.30
 Windigo,WNDO,Energy,Wind farm operator known for turbines that spin in mysterious directions.,140.25
 Eishkom,ESKM,Energy,Electricity provider famous for loadshedding.,110.45
 HydroHype,HDHP,Energy,Hydroelectric startup claiming rivers flow faster under their management.,132.80
 GreenFlicker,GRFL,Energy,Renewable energy firm selling subscriptions to “eco-friendly electricity.”,155.90
-
-//Consumer goods
 Snacksy,SNKS,Consumer Goods,Company producing snacks that are more addictive than nutritious.,120.60
 GloWear,GLOW,Consumer Goods,Fashion brand selling clothes that glow under certain lighting conditions.,145.75
 BubbleBrew,BBRW,Consumer Goods,Beverage company famous for overpriced sparkling drinks.,132.15
 ShinyStuff,SHNF,Consumer Goods,Household goods brand specializing in things that look clean but aren’t.,108.50
 ZapTech,ZPTH,Consumer Goods,Gadgets manufacturer selling quirky tech toys nobody really needs.,125.40
-
-//Real estate
 Brickstone Capital,BRSC,Real Estate,Real estate investment fund focusing on high-rise apartments and overpriced condos.,195.80
 Skyline Holdings,SKLH,Real Estate,Property management company specializing in luxury office buildings and rooftops.,210.25
 MetroNest,MTRN,Real Estate,Urban development firm turning old warehouses into boutique apartments.,175.40
 GoldenKey REIT,GKRT,Real Estate,Real estate investment trust offering shares in commercial and residential properties.,220.35
 HavenHill Properties,HVHP,Real Estate,Real estate company buying suburban homes and pretending they’re mansions.,188.70
-
-//aerospace and defense
 Falcon Dynamics,FLDN,Defense,Aerospace and defense contractor specializing in high-tech fighter jets and missiles.,240.45
 IronClad Systems,IRCL,Defense,Military technology company building armored vehicles and robotic soldiers.,215.30
 AeroStrike,AEST,Defense,Defense firm known for drones, stealth aircraft, and overcomplicated acronyms.,198.90
