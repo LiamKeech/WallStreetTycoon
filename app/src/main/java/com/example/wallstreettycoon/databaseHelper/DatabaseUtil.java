@@ -114,11 +114,69 @@ public class DatabaseUtil {
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
                 Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
                 stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+
+                populatePriceHistory(stock);
             }
         } finally {
             if (cursor != null) cursor.close();
         }
         return stock;
+    }
+
+    private void populatePriceHistory(Stock stock) {
+        StockPriceFunction func = getStockPriceFunction(stock.getStockID());
+        if (func == null) {
+            Log.w("DatabaseUtil", "No price function for stock " + stock.getSymbol());
+            return;
+        }
+
+        int currentTimestamp = Game.getInstance().getCurrentTimeStamp();
+
+        // Generate price history for the last 30 days minimum
+        int historyDays = 30;
+        List<Double> priceHistory = stock.getPriceHistory();
+        priceHistory.clear();
+
+        // Calculate historical prices
+        for (int i = -historyDays; i <= 0; i++) {
+            int timestamp = currentTimestamp + i;
+            if (timestamp >= 0) {
+                double priceChange = func.getCurrentPriceChange(timestamp);
+                double historicalPrice = stock.getCurrentPrice() + priceChange;
+                // Ensure price is never negative
+                historicalPrice = Math.max(0, historicalPrice);
+                priceHistory.add(historicalPrice);
+            }
+        }
+
+        Log.d("DatabaseUtil", "Populated " + priceHistory.size() + " days of history for " + stock.getSymbol());
+    }
+
+    public void updateStockPriceHistory(int stockID) {
+        Stock stock = getStock(stockID);
+        if (stock != null) {
+            StockPriceFunction func = getStockPriceFunction(stockID);
+            if (func != null) {
+                int currentTimestamp = Game.getInstance().getCurrentTimeStamp();
+                double priceChange = func.getCurrentPriceChange(currentTimestamp);
+                double currentPrice = stock.getCurrentPrice() + priceChange;
+                currentPrice = Math.max(0, currentPrice);
+
+                List<Double> history = stock.getPriceHistory();
+
+                // Add to history
+                history.add(currentPrice);
+
+                int maxHistorySize = 31; // 30 days + current
+                if (history.size() > maxHistorySize) {
+                    history.remove(0); // Remove oldest entry
+                }
+
+                Log.d("DatabaseUtil", "Updated price history for " + stock.getSymbol() +
+                        ": $" + String.format("%.2f", currentPrice) +
+                        " (history size: " + history.size() + ")");
+            }
+        }
     }
 
     public String getSymbol(int stockID) {
@@ -214,6 +272,26 @@ public class DatabaseUtil {
         if (stock == null) return 0.0;
 
         return stock.getCurrentPrice() + priceChange;
+    }
+
+    public List<Integer> getAllStockIDs() {
+        List<Integer> stockIDs = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query("stocks", new String[]{"stockID"}, null, null, null, null, null);
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                    stockIDs.add(stockID);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+
+        return stockIDs;
     }
 
     public void setUpChapterStock() {

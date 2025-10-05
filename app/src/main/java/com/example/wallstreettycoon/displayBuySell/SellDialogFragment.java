@@ -1,6 +1,8 @@
 package com.example.wallstreettycoon.displayBuySell;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -14,13 +16,24 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.model.Game;
+import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameEventType;
+import com.example.wallstreettycoon.model.GameObserver;
+import com.example.wallstreettycoon.stock.Stock;
 
-public class SellDialogFragment extends DialogFragment {
-    private TextView header, symbol, price, totalCost, remainingShares;
+public class SellDialogFragment extends DialogFragment implements GameObserver {
+
+    private int stockID;
+    private String symbolText;
+    private double currentPriceValue;
+    private String username;
+    private double ownedShares;
+
+    private TextView header, symbol, priceTextView, totalCost, remainingShares;
     private EditText quantityInput;
     private Button confirmButton;
-    private double ownedShares;
-    private double currentPriceValue;
+    private Handler uiHandler = new Handler(Looper.getMainLooper());
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -28,10 +41,12 @@ public class SellDialogFragment extends DialogFragment {
         getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         Bundle args = getArguments();
-        int stockID = args.getInt("stockID");
-        String symbolText = args.getString("stockSymbol");
+        stockID = args.getInt("stockID");
+        symbolText = args.getString("stockSymbol");
         currentPriceValue = args.getDouble("currentPrice");
-        String username = args.getString("username");
+        username = args.getString("username");
+
+        Game.getInstance().addObserver(this);
 
         // Set dialog title
         header = view.findViewById(R.id.dialogHeader);
@@ -42,8 +57,8 @@ public class SellDialogFragment extends DialogFragment {
         symbol.setText(symbolText);
 
         // Display current price
-        price = view.findViewById(R.id.currentPrice);
-        price.setText(String.format("$%.2f", currentPriceValue));
+        priceTextView = view.findViewById(R.id.currentPrice);
+        priceTextView.setText(String.format("$%.2f", currentPriceValue));
 
         // Quantity and total cost logic
         quantityInput = view.findViewById(R.id.quantityInput);
@@ -53,13 +68,13 @@ public class SellDialogFragment extends DialogFragment {
         confirmButton = view.findViewById(R.id.btnConfirm);
         confirmButton.setText("Sell");
 
-        // Get owned shares from DB - SINGLETON FIX
+        // Get owned shares from DB
         DatabaseUtil dbUtil = DatabaseUtil.getInstance(requireContext());
         int portfolioID = dbUtil.getPortfolioID(username);
         ownedShares = dbUtil.getQuantity(portfolioID, stockID);
         remainingShares.setText(String.format("%.2f", ownedShares));
 
-        // If no shares owned, disable confirm or show message
+        // If no shares owned, disable confirm
         if (ownedShares <= 0) {
             confirmButton.setEnabled(false);
             totalCost.setText("No shares available");
@@ -71,38 +86,7 @@ public class SellDialogFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String input = s.toString().trim(); //remove spaces
-                if (!input.isEmpty()) {
-                    try {
-                        int quantity = Integer.parseInt(input);
-
-                        if (quantity <= 0) {
-                            totalCost.setText("Enter positive amount");
-                            confirmButton.setEnabled(false);
-                            remainingShares.setText(String.format("%.2f", ownedShares));
-                        } else if (quantity > ownedShares) {
-                            totalCost.setText("Not enough shares");
-                            confirmButton.setEnabled(false);
-                            remainingShares.setText(String.format("%.2f", ownedShares));
-                        } else {
-                            double total = quantity * currentPriceValue;
-                            totalCost.setText(String.format("$%.2f", total));
-                            confirmButton.setEnabled(true);
-
-                            // Dynamically update remaining shares
-                            double remaining = ownedShares - quantity;
-                            remainingShares.setText(String.format("%.2f", remaining));
-                        }
-                    } catch (NumberFormatException e) {
-                        totalCost.setText("Invalid input");
-                        confirmButton.setEnabled(false);
-                        remainingShares.setText(String.format("%.2f", ownedShares));
-                    }
-                } else {
-                    totalCost.setText("$0.00");
-                    confirmButton.setEnabled(false);
-                    remainingShares.setText(String.format("%.2f", ownedShares));
-                }
+                updateSellCalculations(s.toString().trim());
             }
 
             @Override
@@ -110,8 +94,6 @@ public class SellDialogFragment extends DialogFragment {
         });
 
         // Button actions
-        Button confirmButton = view.findViewById(R.id.btnConfirm);
-        confirmButton.setText("Sell");
         confirmButton.setOnClickListener(v -> {
             String quantityStr = quantityInput.getText().toString();
             if (!quantityStr.isEmpty()) {
@@ -134,6 +116,62 @@ public class SellDialogFragment extends DialogFragment {
         return view;
     }
 
+    private void updateSellCalculations(String input) {
+        if (!input.isEmpty()) {
+            try {
+                int quantity = Integer.parseInt(input);
+
+                if (quantity <= 0) {
+                    totalCost.setText("Enter positive amount");
+                    confirmButton.setEnabled(false);
+                    remainingShares.setText(String.format("%.2f", ownedShares));
+                } else if (quantity > ownedShares) {
+                    totalCost.setText("Not enough shares");
+                    confirmButton.setEnabled(false);
+                    remainingShares.setText(String.format("%.2f", ownedShares));
+                } else {
+                    double total = quantity * currentPriceValue;
+                    totalCost.setText(String.format("$%.2f", total));
+                    confirmButton.setEnabled(true);
+
+                    // Dynamically update remaining shares
+                    double remaining = ownedShares - quantity;
+                    remainingShares.setText(String.format("%.2f", remaining));
+                }
+            } catch (NumberFormatException e) {
+                totalCost.setText("Invalid input");
+                confirmButton.setEnabled(false);
+                remainingShares.setText(String.format("%.2f", ownedShares));
+            }
+        } else {
+            totalCost.setText("$0.00");
+            confirmButton.setEnabled(false);
+            remainingShares.setText(String.format("%.2f", ownedShares));
+        }
+    }
+
+    @Override
+    public void onGameEvent(GameEvent event) {
+        if (event.getType() == GameEventType.UPDATE_STOCK_PRICE) {
+            // Update price on UI thread
+            uiHandler.post(() -> {
+                DatabaseUtil dbUtil = DatabaseUtil.getInstance(requireContext());
+                Stock stock = dbUtil.getStock(stockID);
+
+                if (stock != null) {
+                    double[] priceHistory = stock.getPriceHistoryArray();
+                    if (priceHistory != null && priceHistory.length > 0) {
+                        currentPriceValue = Math.max(0, priceHistory[priceHistory.length - 1]);
+                        priceTextView.setText(String.format("$%.2f", currentPriceValue));
+
+                        // Update total proceeds with new price
+                        updateSellCalculations(quantityInput.getText().toString().trim());
+                    }
+                }
+            });
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -142,5 +180,11 @@ public class SellDialogFragment extends DialogFragment {
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
         getDialog().getWindow().setDimAmount(0.5f);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Game.getInstance().removeObserver(this);
     }
 }

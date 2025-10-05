@@ -1,11 +1,9 @@
 package com.example.wallstreettycoon.stock;
 
-import com.example.wallstreettycoon.model.Game;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Stock { //Data Model
+public class Stock {
     private int stockID;
     private String stockName;
     private String symbol;
@@ -14,8 +12,7 @@ public class Stock { //Data Model
     private Double currentPrice;
     private List<Double> priceHistory;
 
-
-    //Constructor with all parameters
+    // Constructor with all parameters
     public Stock(int stockID, String stockName, String symbol, String category, String description, Double initialPrice){
         this.stockID = stockID;
         this.stockName = stockName;
@@ -25,14 +22,13 @@ public class Stock { //Data Model
         this.currentPrice = initialPrice;
 
         priceHistory = new ArrayList<>();
+        priceHistory.add(initialPrice);
     }
 
-
-
-
-    //Constuctor with only stockID (creates null stock if needed)
+    // Constructor with only stockID (creates null stock if needed)
     public Stock(int stockID){
         this.stockID = stockID;
+        priceHistory = new ArrayList<>();
     }
 
     // Getter and Setter for stockID
@@ -80,10 +76,8 @@ public class Stock { //Data Model
         this.description = description;
     }
 
-
     @Override
-    public String toString()
-    {
+    public String toString() {
         return stockName;
     }
 
@@ -91,13 +85,34 @@ public class Stock { //Data Model
         return currentPrice;
     }
 
+    public void setCurrentPrice(Double price) {
+        this.currentPrice = price;
+    }
+
     public List<Double> getPriceHistory(){
         return priceHistory;
     }
 
-    public void updatePriceHistory(){
-        priceHistory.add(currentPrice);
+    public double[] getPriceHistoryArray() {
+        if (priceHistory == null || priceHistory.isEmpty()) {
+            return new double[0];
+        }
+
+        double[] array = new double[priceHistory.size()];
+        for (int i = 0; i < priceHistory.size(); i++) {
+            array[i] = priceHistory.get(i);
+        }
+        return array;
     }
 
+    public void updatePriceHistory(){
+        if (currentPrice != null) {
+            priceHistory.add(currentPrice);
+        }
+    }
 
+    public void updatePrice(Double newPrice) {
+        this.currentPrice = newPrice;
+        updatePriceHistory();
+    }
 }

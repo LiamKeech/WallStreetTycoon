@@ -1,6 +1,5 @@
 package com.example.wallstreettycoon.displayBuySell;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -23,7 +22,6 @@ import com.example.wallstreettycoon.model.GameEvent;
 import com.example.wallstreettycoon.model.GameEventType;
 import com.example.wallstreettycoon.model.GameObserver;
 import com.example.wallstreettycoon.stock.Stock;
-import com.example.wallstreettycoon.stock.StockPriceFunction;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -31,8 +29,8 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.components.Description;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DisplayStockActivity extends AppCompatActivity implements GameObserver {
@@ -49,7 +47,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
     private Handler uiHandler = new Handler(Looper.getMainLooper());
     private Typeface juaTypeface;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,10 +55,10 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         juaTypeface = ResourcesCompat.getFont(this, R.font.jua);
 
         Game.getInstance().addObserver(this);
-        dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
+        dbUtil = DatabaseUtil.getInstance(context);
 
         Intent intentFromList = getIntent();
-        int stockID = intentFromList.getIntExtra("stock_id", -1); // Use -1 as default
+        int stockID = intentFromList.getIntExtra("stock_id", -1);
         viewType = intentFromList.getStringExtra("view");
         currentUsername = Game.currentUser.getUserUsername();
 
@@ -80,16 +77,17 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
 
         currentStock = dbUtil.getStock(stockID);
         if (currentStock == null) {
-            finish(); // Close if stock not found
+            Log.e("DisplayStock", "Stock not found for ID: " + stockID);
+            finish();
+            return;
         }
 
         Log.d("DisplayStock", "Stock loaded: " + currentStock.getStockName());
 
-
-        //get UI
+        // Get UI
         initialiseUI();
 
-        //load data
+        // Load data
         updateChart("1M");
     }
 
@@ -158,10 +156,13 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         findViewById(R.id.btnBuy).setOnClickListener(v -> {
             BuyDialogFragment buyDialog = new BuyDialogFragment();
 
-            Bundle args = new Bundle(); //to communicate with a dialog fragment
+            // Get current price from price history
+            double currentPrice = getCurrentPrice();
+
+            Bundle args = new Bundle();
             args.putInt("stockID", currentStock.getStockID());
             args.putString("stockSymbol", currentStock.getSymbol());
-            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID()));
+            args.putDouble("currentPrice", currentPrice);
             args.putString("username", currentUsername);
 
             buyDialog.setArguments(args);
@@ -171,10 +172,13 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         findViewById(R.id.btnSell).setOnClickListener(v -> {
             SellDialogFragment sellDialog = new SellDialogFragment();
 
+            // Get current price from price history
+            double currentPrice = getCurrentPrice();
+
             Bundle args = new Bundle();
             args.putInt("stockID", currentStock.getStockID());
             args.putString("stockSymbol", currentStock.getSymbol());
-            args.putDouble("currentPrice", dbUtil.getCurrentStockPrice(currentStock.getStockID()));
+            args.putDouble("currentPrice", currentPrice);
             args.putString("username", currentUsername);
 
             sellDialog.setArguments(args);
@@ -185,7 +189,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
     private void updateButtonState(Button button, boolean isSelected) {
         if (isSelected) {
             button.setBackground(getDrawable(R.drawable.button_background_lightblue_small));
-            // Manually reapply padding from your style
             int padding = (int) (8 * getResources().getDisplayMetrics().density);
             button.setPadding(padding * 2, padding, padding * 2, padding);
         } else {
@@ -195,14 +198,31 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         }
     }
 
-    private void updatePriceDisplay() {
-        if (currentPriceTextView != null) {
-            double currentPriceValue = dbUtil.getCurrentStockPrice(currentStock.getStockID());
-            currentPriceTextView.setText(String.format("$%.2f", currentPriceValue));
+    /**
+     * Get the current price from the stock's price history array
+     */
+    private double getCurrentPrice() {
+        double[] priceHistory = currentStock.getPriceHistoryArray();
+
+        if (priceHistory != null && priceHistory.length > 0) {
+            double price = priceHistory[priceHistory.length - 1];
+            return Math.max(0, price);
+        } else {
+            // Fallback: use currentPrice directly
+            Log.w("DisplayStock", "Price history unavailable, using current price");
+            Double price = currentStock.getCurrentPrice();
+            return (price != null) ? Math.max(0, price) : 0.0;
         }
     }
 
-    // https://github.com/PhilJay/MPAndroidChart
+    private void updatePriceDisplay() {
+        if (currentPriceTextView != null) {
+            double currentPriceValue = getCurrentPrice();
+            currentPriceTextView.setText(String.format("$%.2f", currentPriceValue));
+            Log.d("DisplayStock", "Updated price display: $" + String.format("%.2f", currentPriceValue));
+        }
+    }
+
     private void updateChart(String range) {
         int timeRange;
         String chartTitle;
@@ -225,16 +245,22 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         Description description = chart.getDescription();
         description.setText(chartTitle);
         description.setEnabled(true);
-        description.setTextSize(16f);
+        description.setTextSize(14f);
         description.setTextColor(getColor(R.color.black));
+        description.setPosition(0, 0);
         if (juaTypeface != null) {
             description.setTypeface(juaTypeface);
         }
 
-        // Load price history
-        List<Entry> entries = getPriceHistoryRealTime(currentStock.getStockID(), timeRange);
+        // Load price history from priceHistory array
+        List<Entry> entries = getPriceHistoryFromArray(timeRange);
 
         Log.d("DisplayStock", "Generated " + entries.size() + " entries for chart");
+
+        if (entries.isEmpty()) {
+            Log.e("DisplayStock", "No chart data available");
+            return;
+        }
 
         // Add styling to line chart
         LineDataSet dataSet = new LineDataSet(entries, "Price");
@@ -242,7 +268,7 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         // Line styling
         dataSet.setColor(getColor(R.color.LightBlue));
         dataSet.setLineWidth(3f);
-        dataSet.setDrawCircles(true); // draws out data points
+        dataSet.setDrawCircles(true);
         dataSet.setCircleColor(getColor(R.color.LightBlue));
         dataSet.setCircleRadius(4f);
         dataSet.setCircleHoleRadius(2f);
@@ -276,11 +302,10 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         }
 
         // X-axis labels based on time range
-        if (timeRange <= 7) { // More than 1 week
+        if (timeRange <= 7) {
             xAxis.setGranularity(1f);
             xAxis.setLabelCount(Math.min(timeRange + 1, 8));
         } else {
-            // show fewer labels
             xAxis.setGranularity(5f);
             xAxis.setLabelCount(7);
         }
@@ -311,32 +336,47 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         chart.setHighlightPerTapEnabled(true);
         chart.setHighlightPerDragEnabled(false);
 
-        // Draws out the graph each time
+        // Animate the graph
         chart.animateX(1000);
 
         // Refresh chart
         chart.invalidate();
     }
 
-    public List<Entry> getPriceHistoryRealTime(int stockID, int daysBack) {
+    /**
+     * Get price history entries from the stock's priceHistory array
+     */
+    private List<Entry> getPriceHistoryFromArray(int daysBack) {
         List<Entry> entries = new ArrayList<>();
-        StockPriceFunction func = dbUtil.getStockPriceFunction(stockID);
-        if (func == null) return entries;
 
-        int currentTimestamp = Game.getInstance().getCurrentTimeStamp();
+        double[] priceHistory = currentStock.getPriceHistoryArray();
 
-        // Generate historical points leading up to current time
-        for (int i = 0; i < daysBack; i++) {
-            int timestamp = currentTimestamp - (daysBack - i - 1);
-            if (timestamp >= 0) {
-                double price = func.getCurrentPriceChange(timestamp);
-                entries.add(new Entry(i, (float) price));
-            }
+        if (priceHistory == null || priceHistory.length == 0) {
+            Log.e("DisplayStock", "Price history array is null or empty");
+            return entries;
         }
 
-        // Add the current price as the last point
-        double currentPrice = func.getCurrentPriceChange(currentTimestamp);
-        entries.add(new Entry(daysBack, (float) currentPrice));
+        int historyLength = priceHistory.length;
+        Log.d("DisplayStock", "Price history length: " + historyLength + ", requesting last " + daysBack + " days");
+
+        // Calculate starting index - get the last 'daysBack' entries
+        int startIndex = Math.max(0, historyLength - daysBack - 1);
+        int endIndex = historyLength - 1;
+
+        // Build entries from the price history
+        int entryIndex = 0;
+        for (int i = startIndex; i <= endIndex; i++) {
+            double price = priceHistory[i];
+            // Ensure no negative prices appear on chart
+            price = Math.max(0, price);
+            entries.add(new Entry(entryIndex, (float) price));
+            entryIndex++;
+        }
+
+        if (entries.size() > 0) {
+            float lastPrice = entries.get(entries.size() - 1).getY();
+            Log.d("DisplayStock", "Chart entries: " + entries.size() + ", last price: $" + String.format("%.2f", lastPrice));
+        }
 
         return entries;
     }
@@ -349,17 +389,25 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
             uiHandler.post(() -> {
                 Log.d("DisplayStock", "Updating chart due to price update event");
 
-                // Update the current price display
-                updatePriceDisplay();
+                // Reload the stock to get updated price history
+                currentStock = dbUtil.getStock(currentStock.getStockID());
 
-                // Refresh the chart with current time range
-                updateChart(currentTimeRange);
+                if (currentStock != null) {
+                    // Update the current price display
+                    updatePriceDisplay();
+
+                    // Refresh the chart with current time range
+                    updateChart(currentTimeRange);
+                } else {
+                    Log.e("DisplayStock", "Failed to reload stock data");
+                }
             });
         }
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
+        Game.getInstance().removeObserver(this);
     }
 }

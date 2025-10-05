@@ -35,7 +35,7 @@ public class Game implements GameObserver, java.io.Serializable {
         appContext = context.getApplicationContext();
         if(INSTANCE == null) {
             INSTANCE = new Game();
-            dbUtil = DatabaseUtil.getInstance(context); // SINGLETON FIX
+            dbUtil = DatabaseUtil.getInstance(context);
         }
     }
 
@@ -46,7 +46,6 @@ public class Game implements GameObserver, java.io.Serializable {
         return INSTANCE;
     }
 
-    //The first time the game is ever started, ie first ever login
     public static void startGame(Context context, User user){
         initContext(context);
         observers = new ArrayList<>();
@@ -55,22 +54,12 @@ public class Game implements GameObserver, java.io.Serializable {
         saveGame();
     }
 
-    //Every other time the game is started
-//    public static void continueGame(Context context){
-//        if(timer != null)
-//            timer.startTimer();
-//        else
-//            startGame(context);
-//    }
-
     public static void pauseGame(){
         saveGame();
     }
 
     private static void saveGame(){
-        //update elapsed time
         timeStamp = timer.getElapsedTime();
-        //serialize and store in files
         saveToFile(currentUser.getUserUsername() + ".ser");
     }
 
@@ -86,6 +75,7 @@ public class Game implements GameObserver, java.io.Serializable {
             e.printStackTrace();
         }
     }
+
     public static boolean loadFromFile(String username) {
         String filename = username + ".ser";
         try {
@@ -97,7 +87,6 @@ public class Game implements GameObserver, java.io.Serializable {
             return true;
         } catch (IOException | ClassNotFoundException e) {
             Log.d("", "Load from file did not work");
-
             return false;
         }
     }
@@ -106,21 +95,34 @@ public class Game implements GameObserver, java.io.Serializable {
         return (int)timeStamp;
     }
 
-
     @Override
     public void onGameEvent(GameEvent event) {
         switch(event.getType()){
             case UPDATE_STOCK_PRICE:
                 timeStamp = timer.getElapsedTime();
+
+                // Update price history for all stocks
+                updateAllStockPriceHistories();
+
                 notifyObservers(event);
                 break;
             case MARKET_EVENT:
                 MarketEvent marketEvent = (MarketEvent)event.getCargo();
-
                 marketEvent.applyMarketFactors();
                 notifyObservers(event);
                 break;
         }
+    }
+
+    private void updateAllStockPriceHistories() {
+        // Get all stock IDs from database
+        List<Integer> stockIDs = dbUtil.getAllStockIDs();
+
+        for (Integer stockID : stockIDs) {
+            dbUtil.updateStockPriceHistory(stockID);
+        }
+
+        Log.d("Game", "Updated price history for " + stockIDs.size() + " stocks at timestamp " + timeStamp);
     }
 
     public void addObserver(GameObserver observer){
