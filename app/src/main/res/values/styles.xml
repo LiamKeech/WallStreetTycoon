@@ -215,6 +215,30 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="GreyButtonSmall" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_background_grey_small</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textAllCaps">false</item>
+
+        <item name="android:fontFamily">@font/luckiest_guy</item>
+
+        <item name="android:textSize">15sp</item>
+        <item name="android:shadowColor">@color/black</item>
+        <item name="android:shadowDx">5</item>
+        <item name="android:shadowDy">5</item>
+        <item name="android:shadowRadius">5</item>
+
+        <item name="android:minHeight">40dp</item>
+        <item name="android:minWidth">70dp</item>
+
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+
+        <item name="android:gravity">center</item>
+    </style>
+
     <style name="RedButtonLarge" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_background_red_large</item>
         <item name="android:textColor">@color/white</item>
@@ -383,6 +407,12 @@
         <item name="android:fontFamily">@font/jua</item>
          <item name="android:textSize">20sp</item>
          <item name="android:textColor">@color/LightBlue</item>
+    </style>
+
+    <style name="notificationIcon">
+        <item name="android:background">@drawable/notification_icon_background</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/jua</item>
     </style>
 
 </resources>

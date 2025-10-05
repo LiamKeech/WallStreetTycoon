@@ -149,7 +149,7 @@ public class DatabaseUtil {
             }
         }
 
-        Log.d("DatabaseUtil", "Populated " + priceHistory.size() + " days of history for " + stock.getSymbol());
+//        Log.d("DatabaseUtil", "Populated " + priceHistory.size() + " days of history for " + stock.getSymbol());
     }
 
     public void updateStockPriceHistory(int stockID) {
@@ -172,9 +172,9 @@ public class DatabaseUtil {
                     history.remove(0); // Remove oldest entry
                 }
 
-                Log.d("DatabaseUtil", "Updated price history for " + stock.getSymbol() +
-                        ": $" + String.format("%.2f", currentPrice) +
-                        " (history size: " + history.size() + ")");
+//                Log.d("DatabaseUtil", "Updated price history for " + stock.getSymbol() +
+//                        ": $" + String.format("%.2f", currentPrice) +
+//                        " (history size: " + history.size() + ")");
             }
         }
     }

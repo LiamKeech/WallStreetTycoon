@@ -43,7 +43,7 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
     private String username;
     private TransactionsAdapter transactionsAdapter;
 
-    private TextView tvUsername, tvTotalPortfolioValue, tvProfitLoss, tvProfitLossPercentage, tvEmptyHoldings, tvEmptyTransactions;
+    private TextView tvUsername, tvTotalPortfolioValue, tvProfitLoss, tvEmptyHoldings, tvEmptyTransactions;
     private PieChart pieChart;
     private RecyclerView recyclerTransactions;
     private ImageButton backButton;
@@ -73,7 +73,6 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         tvUsername = findViewById(R.id.usernameprofile);
         tvTotalPortfolioValue = findViewById(R.id.total_portfolio_value);
         tvProfitLoss = findViewById(R.id.profit_loss);
-        tvProfitLossPercentage = findViewById(R.id.profit_loss_percentage);
         pieChart = findViewById(R.id.pie_chart_holdings);
         recyclerTransactions = findViewById(R.id.recycler_transactions);
         tvEmptyHoldings = findViewById(R.id.empty_holdings_text);
@@ -146,18 +145,14 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         }
 
         //Update UI
-        tvTotalPortfolioValue.setText(String.format("$%,.2f", totalPortfolioValue.doubleValue()));
+        tvTotalPortfolioValue.setText(String.format("$%.2f", totalPortfolioValue.doubleValue()));
 
         if (profitLoss.compareTo(BigDecimal.ZERO) >= 0) {
-            tvProfitLoss.setText(String.format("+$%.2f", profitLoss.doubleValue()));
+            tvProfitLoss.setText(String.format("+$%.2f (+%.1f%%)", profitLoss.doubleValue(), profitLossPercentage));
             tvProfitLoss.setTextColor(getResources().getColor(R.color.Green));
-            tvProfitLossPercentage.setText(String.format("+%.2f%%", profitLossPercentage));
-            tvProfitLossPercentage.setTextColor(getResources().getColor(R.color.Green));
         } else {
-            tvProfitLoss.setText(String.format("$%.2f", profitLoss.doubleValue()));
+            tvProfitLoss.setText(String.format("$%.2f (%.1f%%)", profitLoss.doubleValue(), profitLossPercentage));
             tvProfitLoss.setTextColor(getResources().getColor(R.color.Red));
-            tvProfitLossPercentage.setText(String.format("%.2f%%", profitLossPercentage));
-            tvProfitLossPercentage.setTextColor(getResources().getColor(R.color.Red));
         }
     }
 
@@ -195,8 +190,8 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         dataSet.setValueTextSize(14f);
         dataSet.setValueTextColor(Color.BLACK);
         dataSet.setValueFormatter(new PercentFormatter(pieChart));
-        dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(8f);
+        dataSet.setSliceSpace(2f);
+        dataSet.setSelectionShift(6f);
         dataSet.setValueTypeface(ResourcesCompat.getFont(this, R.font.jua));
 
         PieData pieData = new PieData(dataSet);
@@ -207,24 +202,22 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         pieChart.getDescription().setEnabled(false);
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.setEntryLabelTextSize(14f);
-        pieChart.setDrawHoleEnabled(false);  // Changed: Make it a full pie chart
+        pieChart.setDrawHoleEnabled(false);
         pieChart.setRotationEnabled(true);
         pieChart.setHighlightPerTapEnabled(true);
-        pieChart.setDrawEntryLabels(false);  // Changed: Disable labels on slices
-        pieChart.setExtraOffsets(5f, 5f, 5f, 5f);  // Changed: Reduced offsets to make chart bigger
-
+        pieChart.setDrawEntryLabels(false);
+        pieChart.setExtraOffsets(2f, 2f, 2f, 2f);
         pieChart.setEntryLabelTypeface(ResourcesCompat.getFont(this, R.font.jua));
 
-        // Legend with custom font
         Legend legend = pieChart.getLegend();
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.CENTER);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
         legend.setOrientation(Legend.LegendOrientation.VERTICAL);
         legend.setDrawInside(false);
-        legend.setXEntrySpace(7f);
+        legend.setXEntrySpace(6f);
         legend.setYEntrySpace(0f);
         legend.setYOffset(0f);
-        legend.setTextSize(14f);  // Changed: Increased from 12f to 14f
+        legend.setTextSize(14f);
         legend.setForm(Legend.LegendForm.CIRCLE);
         legend.setFormSize(10f);
         legend.setWordWrapEnabled(true);
