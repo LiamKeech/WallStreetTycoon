@@ -81,8 +81,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/txtNotificationTitle" />
 
-        <!-- Button container (only for alerts/actions) -->
-        <!-- Button container (only for alerts/actions) -->
         <LinearLayout
             android:id="@+id/buttonContainer"
             android:layout_width="0dp"

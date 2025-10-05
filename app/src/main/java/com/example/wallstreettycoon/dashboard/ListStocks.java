@@ -627,14 +627,10 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
                 }
                 break;
             case MARKET_EVENT:
-                //TODO replace with proper UI notification card
-
-                Toast toast = new Toast(context);
                 MarketEvent notification = (MarketEvent)event.getCargo();
-                toast.setText(notification.getTitle());
-                toast.show();
+                NotificationDialogFragment dialog = NotificationDialogFragment.newInstance(notification);
+                dialog.show(getSupportFragmentManager(), "MarketEventNotification");
                 break;
         }
-
     }
 }
