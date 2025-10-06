@@ -25,6 +25,7 @@ import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class ManageUserAccount extends AppCompatActivity {
     Context context = this;
@@ -53,7 +54,7 @@ public class ManageUserAccount extends AppCompatActivity {
         edtName.setText(Game.currentUser.getUserFirstName());
         EditText edtSurname = findViewById(R.id.edtSurnameManage);
         edtSurname.setText(Game.currentUser.getUserLastName());
-        EditText edtPassw = findViewById(R.id.editTextTextPassword);
+        TextInputEditText edtPassw = findViewById(R.id.editTextTextPassword);
         edtPassw.setText(Game.currentUser.getUserPassword());
 
         txtChangePassw = findViewById(R.id.lblChangePassw);

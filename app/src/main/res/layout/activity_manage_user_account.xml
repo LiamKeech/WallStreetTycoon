@@ -179,25 +179,45 @@
             app:layout_constraintTop_toBottomOf="@+id/lblUsernameManage"
             app:layout_constraintVertical_bias="0.0" />
 
-        <EditText
-            android:id="@+id/editTextTextPassword"
-            android:layout_width="178dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="100dp"
+<!--        <EditText-->
+<!--            android:id="@+id/editTextTextPassword"-->
+<!--            android:layout_width="178dp"-->
+<!--            android:layout_height="48dp"-->
+<!--            android:layout_marginTop="8dp"-->
+<!--            android:layout_marginEnd="100dp"-->
+<!--            android:background="@drawable/textbox_border"-->
+<!--            android:ems="10"-->
+<!--            android:enabled="false"-->
+<!--            android:inputType="none"-->
+<!--            android:textSize="15sp"-->
+<!--            android:fontFamily="@font/jua"-->
+<!--            android:paddingStart="5dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="1.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/lblPasswManage"-->
+<!--            app:layout_constraintVertical_bias="0.0" />-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/textbox_border"
-            android:ems="10"
-            android:enabled="false"
-            android:inputType="none"
-            android:textSize="15sp"
-            android:fontFamily="@font/jua"
-            android:paddingStart="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.58"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblPasswManage"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.105"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextTextPassword"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textbox_border"
+                android:inputType="textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/lblChangePassw"
@@ -216,16 +236,16 @@
             app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ImageView
-        android:id="@+id/imgLogo"
-        android:layout_width="100dp"
-        android:layout_height="95dp"
-        android:src="@drawable/logo"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/lblManageHeading"
-        app:layout_constraintHorizontal_bias="0.04"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.02" />
+            <ImageView
+                android:id="@+id/imgLogo"
+                android:layout_width="100dp"
+                android:layout_height="95dp"
+                android:src="@drawable/logo"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/lblManageHeading"
+                app:layout_constraintHorizontal_bias="0.04"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.02" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
