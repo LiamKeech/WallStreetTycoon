@@ -629,7 +629,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
             case MARKET_EVENT:
                 MarketEvent notification = (MarketEvent)event.getCargo();
                 NotificationDialogFragment dialog = NotificationDialogFragment.newInstance(notification);
-                dialog.show(getSupportFragmentManager(), "MarketEventNotification");
+               // dialog.show(getSupportFragmentManager(), "MarketEventNotification");
                 break;
         }
     }
