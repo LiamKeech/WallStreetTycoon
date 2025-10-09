@@ -237,12 +237,6 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         }
     }
 
-    /**
-     * Reads a text file line by line, splitting by commas.
-     * ignores blank lines, lines with only whitespace, and lines starting with //.
-     *
-     * @return list of stocks
-     */
     public List<Stock> readCommaDelimitedStocks(int rawResId) {
         Log.d("DBCREATOR", "Reading stocks");
         List<Stock> result = new ArrayList<>();

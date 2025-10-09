@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.InputType;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -97,6 +99,29 @@ public class CreateAccount extends AppCompatActivity {
             public void onClick(View view) {
                 Intent cancelIntent = new Intent(CreateAccount.this, Login.class);
                 startActivity(cancelIntent);
+            }
+        });
+
+        // Password visibility toggle
+        ImageButton togglePasswCreate = findViewById(R.id.btnTogglePasswCreate);
+        EditText passwordInput = findViewById(R.id.edtPasswCreate);
+
+        togglePasswCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selection = passwordInput.getSelectionEnd();
+
+                if (passwordInput.getTransformationMethod() == null) {
+                    // Hide password
+                    passwordInput.setTransformationMethod(new android.text.method.PasswordTransformationMethod());
+                    togglePasswCreate.setImageResource(R.drawable.ic_visibility_off);
+                } else {
+                    // Show password
+                    passwordInput.setTransformationMethod(null);
+                    togglePasswCreate.setImageResource(R.drawable.ic_visibility);
+                }
+
+                passwordInput.setSelection(selection);
             }
         });
     }

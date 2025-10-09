@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.InputType;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -94,6 +96,29 @@ public class Login extends AppCompatActivity {
                     }
                 }
                 else { incorrectToast(); }  //username or password is blank
+            }
+        });
+
+        // Password visibility toggle
+        ImageButton togglePasswLogin = findViewById(R.id.btnTogglePasswLogin);
+        EditText passwordInputField = findViewById(R.id.edtPasswLogin);
+
+        togglePasswLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selection = passwordInputField.getSelectionEnd();
+
+                if (passwordInputField.getTransformationMethod() == null) {
+                    // Hide password
+                    passwordInputField.setTransformationMethod(new android.text.method.PasswordTransformationMethod());
+                    togglePasswLogin.setImageResource(R.drawable.ic_visibility_off);
+                } else {
+                    // Show password
+                    passwordInputField.setTransformationMethod(null);
+                    togglePasswLogin.setImageResource(R.drawable.ic_visibility);
+                }
+
+                passwordInputField.setSelection(selection);
             }
         });
     }

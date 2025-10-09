@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.text.InputType;
+import android.widget.ImageButton;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,7 +56,7 @@ public class ManageUserAccount extends AppCompatActivity {
         edtName.setText(Game.currentUser.getUserFirstName());
         EditText edtSurname = findViewById(R.id.edtSurnameManage);
         edtSurname.setText(Game.currentUser.getUserLastName());
-        TextInputEditText edtPassw = findViewById(R.id.editTextTextPassword);
+        EditText edtPassw = findViewById(R.id.edtPasswManage);
         edtPassw.setText(Game.currentUser.getUserPassword());
 
         txtChangePassw = findViewById(R.id.lblChangePassw);
@@ -107,6 +109,27 @@ public class ManageUserAccount extends AppCompatActivity {
             startActivity(cancelIntent);
         });
 
+        // Password visibility toggle
+        ImageButton togglePasswManage = findViewById(R.id.btnTogglePasswManage);
+
+        togglePasswManage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int selection = edtPassw.getSelectionEnd();
+
+                if (edtPassw.getTransformationMethod() == null) {
+                    // Hide password
+                    edtPassw.setTransformationMethod(new android.text.method.PasswordTransformationMethod());
+                    togglePasswManage.setImageResource(R.drawable.ic_visibility_off);
+                } else {
+                    // Show password
+                    edtPassw.setTransformationMethod(null);
+                    togglePasswManage.setImageResource(R.drawable.ic_visibility);
+                }
+
+                edtPassw.setSelection(selection);
+            }
+        });
     }
 
     public void updateToast()

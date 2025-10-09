@@ -38,6 +38,18 @@ public class MarketEvent {
         this.marketFactors = parseToMap(marketFactors);
     }
 
+    public int getMarketEventID() {
+        return marketEventID;
+    }
+
+    public int getChapterID() {
+        return chapterID;
+    }
+
+    public int getMinigameID() {
+        return minigameID;
+    }
+
     public String getTitle(){
         return title;
     }
