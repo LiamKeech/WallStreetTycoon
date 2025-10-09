@@ -63,12 +63,11 @@
                 android:layout_height="match_parent"
                 android:background="@drawable/textbox_border"
                 android:ems="10"
-                android:fontFamily="@font/jua"
+                style="@style/text"
                 android:gravity="center_vertical"
                 android:inputType="textPassword"
                 android:paddingStart="8dp"
-                android:paddingEnd="48dp"
-                android:textSize="15sp" />
+                android:paddingEnd="48dp" />
 
             <ImageButton
                 android:id="@+id/btnTogglePasswLogin"
@@ -101,10 +100,9 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/textbox_border"
             android:ems="10"
-            android:fontFamily="@font/jua"
+            style="@style/text"
             android:inputType="text"
             android:paddingStart="5dp"
-            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.6"

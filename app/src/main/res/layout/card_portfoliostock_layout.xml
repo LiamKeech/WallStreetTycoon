@@ -47,6 +47,7 @@
                 android:layout_height="wrap_content"
                 android:text="AAPL"
                 android:textColor="@color/black"
+                android:textSize="20sp"
                 android:maxLines="1"
                 android:ellipsize="end" />
 
@@ -55,10 +56,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="25 shares"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/jua"/>
+                style="@style/text"
+                android:layout_marginTop="2dp"/>
 
         </LinearLayout>
 
@@ -76,9 +75,7 @@
                 android:layout_height="wrap_content"
                 android:text="$125.50"
                 android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/jua"/>
+                style="@style/text"/>
 
             <!-- Price based on (current time - time bought) NB update colours dynamically -->
             <TextView
@@ -87,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:text="+$2.35 (+1.9%)"
                 android:textColor="@color/Green"
-                android:textSize="12sp"
+                android:textSize="15sp"
                 android:layout_marginTop="2dp"
                 android:fontFamily="@font/jua"/>
 
@@ -106,20 +103,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Value"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:fontFamily="@font/jua"/>
+                style="@style/text"/>
 
             <TextView
                 android:id="@+id/lblTotalValue_numeric_portfolioCard"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="$3,137.50"
-                android:textColor="@color/black"
-                android:textSize="16sp"
+                style="@style/text"
                 android:textStyle="bold"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/jua"/>
+                android:layout_marginTop="2dp"/>
 
         </LinearLayout>
 

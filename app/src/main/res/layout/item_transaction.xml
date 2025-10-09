@@ -30,7 +30,6 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="AAPL"
-                android:textSize="26sp"
                 android:gravity="start|center_vertical"/>
 
             <TextView
@@ -51,8 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="July 20, 2024"
-            android:textSize="14sp"
-            android:fontFamily="@font/jua"
+            style="@style/text"
             android:layout_marginTop="2dp"
             android:gravity="start"/>
 
@@ -62,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="+$1,250.00"
-            android:textSize="32sp"
+            android:textSize="30sp"
             android:textColor="@color/Green"
             android:fontFamily="@font/jua"
             android:layout_marginTop="6dp"
@@ -75,8 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="15 Shares"
-            android:textSize="16sp"
-            android:fontFamily="@font/jua"
+            style="@style/text"
             android:layout_marginTop="4dp"
             android:gravity="start"/>
 

@@ -49,6 +49,7 @@
             android:gravity="center"
             android:text="--.--"
             android:textColor="@color/white"
+            android:textSize="20sp"
             android:fontFamily="@font/jua"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,7 +77,7 @@
             android:paddingRight="0dp"
             android:text="P"
             android:textColor="@color/white"
-            android:textSize="17sp"
+            android:textSize="20sp"
             android:fontFamily="@font/jua"
             app:cornerRadius="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -96,7 +97,7 @@
             android:paddingRight="0dp"
             android:text="M"
             android:textColor="@color/white"
-            android:textSize="17sp"
+            android:textSize="20sp"
             android:fontFamily="@font/jua"
             app:cornerRadius="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -105,20 +106,6 @@
             app:layout_constraintStart_toEndOf="@+id/btnToggleList"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.021" />
-
-        <!-- open drawer button
-        <ImageButton
-            android:id="@+id/btnDrawer"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnToggleList"
-            app:layout_constraintHorizontal_bias="0.155"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.022"
-            app:srcCompat="@drawable/menu" />-->
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -134,17 +121,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.022"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-
-            <!--<ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center"
-                android:scaleType="centerInside"
-                android:src="@drawable/menu"
-                tools:layout_editor_absoluteX="16dp" />-->
-
         </androidx.appcompat.widget.Toolbar>
-
 
         <TextView
             android:id="@+id/lblListDisplayed"
@@ -181,7 +158,7 @@
                 android:gravity="center_vertical"
                 android:includeFontPadding="false"
                 android:text="Showing results for: XYZ"
-                android:textSize="16sp"
+                style="@style/text"
                 android:visibility="gone"
                 android:layout_marginEnd="6dp"/>
 

@@ -66,8 +66,7 @@
                     style="@style/subHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total Portfolio Value"
-                    android:textSize="18sp" />
+                    android:text="Total Portfolio Value" />
 
                 <TextView
                     android:id="@+id/total_portfolio_value"
@@ -76,8 +75,7 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="@font/jua"
                     android:text="$25,450.32"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
+                    style="@style/text"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -92,8 +90,7 @@
                     style="@style/subHeading"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Profit/Loss"
-                    android:textSize="18sp" />
+                    android:text="Profit/Loss" />
 
                 <TextView
                     android:id="@+id/profit_loss"
@@ -135,8 +132,7 @@
                 style="@style/subHeading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Current Holdings"
-                android:textSize="18sp"/>
+                android:text="Current Holdings"/>
 
             <com.github.mikephil.charting.charts.PieChart
                 android:id="@+id/pie_chart_holdings"
@@ -185,7 +181,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Transaction History"
-                android:textSize="18sp"
                 android:paddingBottom="4dp"/>
 
             <!-- Scrollable Transactions -->
@@ -215,7 +210,7 @@
                         android:layout_gravity="center"
                         android:text="No transactions yet.\nMake your first trade to get started!"
                         android:gravity="center"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textColor="#999999"
                         android:fontFamily="@font/jua"
                         android:lineSpacingExtra="4dp"

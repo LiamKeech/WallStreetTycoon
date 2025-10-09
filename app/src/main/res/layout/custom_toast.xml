@@ -20,6 +20,6 @@
         android:layout_height="wrap_content"
         android:text="custom message"
         android:fontFamily="@font/jua"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp" />
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 </LinearLayout>

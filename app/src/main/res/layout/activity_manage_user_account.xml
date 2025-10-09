@@ -82,11 +82,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/textbox_border"
-            android:fontFamily="@font/jua"
+            style="@style/text"
             android:inputType="text"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblNameManage" />
@@ -112,11 +111,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/textbox_border"
-            android:fontFamily="@font/jua"
+            style="@style/text"
             android:inputType="text"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textSize="15sp"
             app:layout_constraintEnd_toStartOf="@+id/guidelineCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblSurnameManage" />
@@ -143,12 +141,10 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/textbox_border"
-            android:enabled="false"
-            android:fontFamily="@font/jua"
-            android:inputType="none"
+            style="@style/text"
+            android:inputType="text"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
-            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/guidelineCenter"
             app:layout_constraintTop_toBottomOf="@+id/lblUsernameManage" />
@@ -183,12 +179,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/textbox_border"
-                android:fontFamily="@font/jua"
+                style="@style/text"
                 android:gravity="center_vertical"
                 android:inputType="textPassword"
                 android:paddingStart="8dp"
-                android:paddingEnd="48dp"
-                android:textSize="15sp" />
+                android:paddingEnd="48dp" />
 
             <ImageButton
                 android:id="@+id/btnTogglePasswManage"
@@ -231,7 +226,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCancelManage"
-            style="@style/RedButtonMedium"
+            style="@style/OrangeButtonMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

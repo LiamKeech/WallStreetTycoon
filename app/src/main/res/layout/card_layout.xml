@@ -62,20 +62,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Current Price:"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/jua"/>
+                style="@style/text"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/lblStockCurrentPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="$125.50"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/jua"/>
+                style="@style/text"
+                android:textStyle="bold"/>
 
         </LinearLayout>
 
