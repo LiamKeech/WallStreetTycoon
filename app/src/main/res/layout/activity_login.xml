@@ -16,11 +16,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.558">
 
         <TextView
-            style="@style/subHeading"
             android:id="@+id/lblUsernameLogin"
+            style="@style/subHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -49,7 +50,7 @@
         <FrameLayout
             android:id="@+id/framePasswLogin"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="44dp"
             android:layout_marginTop="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.6"
@@ -82,8 +83,8 @@
         </FrameLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/OrangeButtonMedium"
             android:id="@+id/btnLogin"
+            style="@style/OrangeButtonMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Login"
@@ -96,14 +97,14 @@
         <EditText
             android:id="@+id/edtUsernameLogin"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="44dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/textbox_border"
             android:ems="10"
-            android:inputType="text"
-            android:textSize="15sp"
             android:fontFamily="@font/jua"
+            android:inputType="text"
             android:paddingStart="5dp"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.6"
@@ -117,9 +118,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="128dp"
+            android:fontFamily="@font/jua"
             android:text="Don't have an account?"
             android:textSize="15sp"
-            android:fontFamily="@font/jua"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -130,10 +131,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
+            android:fontFamily="@font/jua"
             android:text="Create account"
             android:textColor="@color/LightBlue"
             android:textSize="15sp"
-            android:fontFamily="@font/jua"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.03"
@@ -148,14 +149,14 @@
         android:id="@+id/lblLoginHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="6dp"
+        android:layout_marginBottom="12dp"
+        android:layout_marginTop="6dp"
         android:gravity="center_horizontal|center_vertical"
         android:text="Login"
         app:layout_constraintBottom_toTopOf="@+id/FieldLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imgLogo2"
