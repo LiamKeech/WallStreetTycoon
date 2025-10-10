@@ -306,11 +306,11 @@ public class DatabaseUtil {
         }
 
         Map<Integer, List<String>> chapterStocks = new HashMap<>();
-        chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR","GPLX","ORNG","BNNF","ISAM","CHRP","LMTC","OCSD","RDTN","FRBT","PNOS","NSCM","ZYND","FAUD","PLLC","ESKM","SNKS"));
-        chapterStocks.put(2, Arrays.asList("GDBK", "MRGS","LB20","SCMP","JPMG","BRST","CTRB","HDBC","PNZI","DMHC","FAUD","BNZO","HLIX","IRCL","SKLH"));
-        chapterStocks.put(3, Arrays.asList("DGCS", "INST", "BTCN", "HODL","SHDY","MNBK","PUMP","ELNM","ZRCN","BNNA","BGNI","HDHP","GLOW","HVHP","FAUD"));
-        chapterStocks.put(4, Arrays.asList("SKHA", "EJTN","CLDN","WGIT","PRLC","JTLG","YLVC","ARFO","BGBL","NVLT","TTCK","FLIK","SLPC","VRRL","FAUD","MDMS","WNDO","GKRT","SKFI"));
-        chapterStocks.put(5, Arrays.asList("TKAI","NRND","DFMD","PSSE","CGSM","PRTA","AGPT","WKBT","RBLB","PRBL","CLAI","FAUD","VRRL"));
+        chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR","GPLX","ORNG","BNNF","ISAM","CHRP","LMTC","OCSD","RDTN","FRBT","PNOS","NSCM","ZYND","FAUD","TESL","PLLC","ESKM","SNKS"));
+        chapterStocks.put(2, Arrays.asList("CRNB", "MHCD", "PEAR","GPLX","ORNG","BNNF","ISAM","CHRP","LMTC","OCSD","RDTN","FRBT","PNOS","NSCM","ZYND","FAUD","TESL","GDBK", "MRGS","LB20","SCMP","JPMG","BRST","CTRB","HDBC","PNZI","DMHC","FAUD","BNZO","HLIX","IRCL","SKLH"));
+        chapterStocks.put(3, Arrays.asList("CRNB", "MHCD", "PEAR","GPLX","ORNG","BNNF","ISAM","CHRP","LMTC","OCSD","RDTN","FRBT","PNOS","NSCM","ZYND","FAUD","TESL","DGCS", "INST", "BTCN", "HODL","SHDY","MNBK","PUMP","ELNM","ZRCN","BNNA","BGNI","HDHP","GLOW","HVHP","FAUD"));
+        chapterStocks.put(4, Arrays.asList("SKHA", "EJTN","CLDN","WGIT","PRLC","JTLG","YLVC","ARFO","BGBL","NVLT","TTCK","FLIK","SLPC","VRRL","FAUD","MDMS","WNDO","GKRT","SKFI","TESL"));
+        chapterStocks.put(5, Arrays.asList("TKAI","NRND","DFMD","PSSE","CGSM","PRTA","AGPT","WKBT","RBLB","PRBL","CLAI","FAUD","VRRL","TESL"));
 
         for (Map.Entry<Integer, List<String>> entry : chapterStocks.entrySet()) {
             int chapterID = entry.getKey();
