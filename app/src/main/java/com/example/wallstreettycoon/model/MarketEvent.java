@@ -29,7 +29,7 @@ public class MarketEvent {
         this.title = title;
         this.info = info;
         marketFactors = new HashMap<>();
-        this.isMinigame = false;
+        this.isMinigame = (minigameID > 0);
     }
     public MarketEvent(int marketEventID, int chapterID, int minigameID, int duration, String title, String info, String marketFactors){
         this.marketEventID = marketEventID;
@@ -39,7 +39,7 @@ public class MarketEvent {
         this.title = title;
         this.info = info;
         this.marketFactors = parseToMap(marketFactors);
-        this.isMinigame = false;
+        this.isMinigame = (minigameID > 0);
     }
 
     public MarketEvent(int marketEventID, int chapterID, int minigameID, int duration, String title, String info, boolean isMinigame, Map<Integer, Double> marketFactors) {
@@ -49,8 +49,8 @@ public class MarketEvent {
         this.duration = duration;
         this.title = title;
         this.info = info;
-        this.isMinigame = isMinigame;
         this.marketFactors = marketFactors;
+        this.isMinigame = (minigameID > 0);
     }
 
     public int getMarketEventID() {
@@ -76,7 +76,7 @@ public class MarketEvent {
     public boolean isMinigame() { return isMinigame;}
 
     //Setter
-    public void setMinigame(boolean minigame) { isMinigame = minigame;}
+    public void setMinigame(boolean minigame) { this.isMinigame = minigame && (minigameID > 0);}
 
     public void applyMarketFactors(){
         Log.d("MARKET EVENT", "Applying market factors");

@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_launcher_wst_logo_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WallStreetTycoon">
-
+        <activity
+            android:name=".marketevent.NotificationsActivity"
+            android:exported="false" />
         <activity
             android:name=".profile.GameProfile"
             android:exported="false"
@@ -20,41 +22,35 @@
         <activity
             android:name=".minigames.miniGame3.miniGame3"
             android:exported="true"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".minigames.miniGame3.miniGame3Notification"
             android:exported="true"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".minigames.miniGame2.miniGame2"
             android:exported="true"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".minigames.miniGame2.miniGame2Notification"
             android:exported="true"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".minigames.miniGame1.miniGame1Notification"
             android:exported="true"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".minigames.miniGame1.miniGame1"
             android:exported="true"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".dashboard.ListStocks"
             android:exported="false"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".displayBuySell.DisplayStockActivity"
             android:exported="true"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".useraccount.CreateAccount"
             android:exported="false"
@@ -72,14 +68,12 @@
         <activity
             android:name=".useraccount.ManageUserAccount"
             android:exported="false"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape"></activity>
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:screenOrientation="landscape"
-            tools:ignore="DiscouragedApi">
-        </activity>
+            tools:ignore="DiscouragedApi"></activity>
     </application>
 
 </manifest>

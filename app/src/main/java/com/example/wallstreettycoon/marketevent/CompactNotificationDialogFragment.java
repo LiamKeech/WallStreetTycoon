@@ -25,8 +25,8 @@ public class CompactNotificationDialogFragment extends DialogFragment {
         args.putString("title", event.getTitle());
         args.putString("info", event.getInfo());
         args.putInt("duration", event.getDuration());
-        // Add flag if this is a minigame notification
         args.putBoolean("isMinigame", event.isMinigame());
+        args.putInt("minigameID", event.getMinigameID());
         fragment.setArguments(args);
         return fragment;
     }
@@ -54,6 +54,7 @@ public class CompactNotificationDialogFragment extends DialogFragment {
         String info = getArguments().getString("info");
         int duration = getArguments().getInt("duration");
         boolean isMinigame = getArguments().getBoolean("isMinigame", false);
+        int minigameID = getArguments().getInt("minigameID", 0);
 
         TextView txtTitle = view.findViewById(R.id.txtNotificationTitle);
         TextView btnClose = view.findViewById(R.id.btnCompactClose);
@@ -69,7 +70,7 @@ public class CompactNotificationDialogFragment extends DialogFragment {
             dismiss();
 
             // Open expanded view
-            ExpandedNotificationDialogFragment expandedDialog = ExpandedNotificationDialogFragment.newInstance(title, info, duration, isMinigame);
+            ExpandedNotificationDialogFragment expandedDialog = ExpandedNotificationDialogFragment.newInstance(title, info, duration, isMinigame, minigameID);
             expandedDialog.show(getParentFragmentManager(), "ExpandedNotification");
         });
     }

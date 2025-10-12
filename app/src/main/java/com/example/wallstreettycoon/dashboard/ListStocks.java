@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallstreettycoon.marketevent.CompactNotificationDialogFragment;
+import com.example.wallstreettycoon.marketevent.NotificationsActivity;
 import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
@@ -181,7 +182,9 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 //selected item in menu based on id:
                 if (item.getItemId() == R.id.nav_notif) {
-
+                    Intent notifIntent = new Intent(context, NotificationsActivity.class);
+                    notifIntent.putExtra("viewType", viewType);
+                    startActivity(notifIntent);
                 }
 
                 if (item.getItemId() == R.id.nav_profile) {

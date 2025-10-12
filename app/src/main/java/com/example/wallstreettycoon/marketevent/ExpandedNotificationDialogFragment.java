@@ -17,13 +17,14 @@ import com.example.wallstreettycoon.R;
 
 public class ExpandedNotificationDialogFragment extends DialogFragment {
 
-    public static ExpandedNotificationDialogFragment newInstance(String title, String info, int duration, boolean isMinigame) {
+    public static ExpandedNotificationDialogFragment newInstance(String title, String info, int duration, boolean isMinigame, int minigameID) {
         ExpandedNotificationDialogFragment fragment = new ExpandedNotificationDialogFragment();
         Bundle args = new Bundle();
         args.putString("title", title);
         args.putString("info", info);
         args.putInt("duration", duration);
         args.putBoolean("isMinigame", isMinigame);
+        args.putInt("minigameID", minigameID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,8 +50,9 @@ public class ExpandedNotificationDialogFragment extends DialogFragment {
         // Get data from arguments
         String title = getArguments().getString("title");
         String info = getArguments().getString("info");
-        //int duration = getArguments().getInt("duration");
+        int duration = getArguments().getInt("duration");
         boolean isMinigame = getArguments().getBoolean("isMinigame", false);
+        int minigameID = getArguments().getInt("minigameID", 0);
 
         TextView txtTitle = view.findViewById(R.id.txtNotificationTitle);
         TextView txtInfo = view.findViewById(R.id.txtNotificationInfo);
@@ -62,12 +64,10 @@ public class ExpandedNotificationDialogFragment extends DialogFragment {
         txtInfo.setText(info);
 
         // Show/hide minigame button based on notification type
-        if (isMinigame) {
+        if (isMinigame && minigameID > 0) {
             btnPlayMinigame.setVisibility(View.VISIBLE);
             btnPlayMinigame.setOnClickListener(v -> {
-                // Launch minigame activity
-                //launchMinigame(duration);
-                launchMinigame();
+                launchMinigame(minigameID, duration);
                 dismiss();
             });
         } else {
@@ -81,13 +81,14 @@ public class ExpandedNotificationDialogFragment extends DialogFragment {
         btnDismiss.setOnClickListener(v -> dismiss());
     }
 
-    private void launchMinigame() {
-        // TODO: Replace with your actual minigame activity launch
-        // Example:
+    private void launchMinigame(int minigameID, int duration) {
+        // FIXME
+        Toast.makeText(getContext(),"Launching Minigame ID: " + minigameID + " (Duration: " + duration + ")", Toast.LENGTH_SHORT).show();
+
         // Intent intent = new Intent(getContext(), MinigameActivity.class);
+        // intent.putExtra("minigameID", minigameID);
         // intent.putExtra("duration", duration);
         // startActivity(intent);
-
     }
 
     @Override
