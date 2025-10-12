@@ -26,6 +26,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.wallstreettycoon.marketevent.CompactNotificationDialogFragment;
 import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
@@ -628,8 +629,9 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
                 break;
             case MARKET_EVENT:
                 MarketEvent notification = (MarketEvent)event.getCargo();
-                NotificationDialogFragment dialog = NotificationDialogFragment.newInstance(notification);
-               // dialog.show(getSupportFragmentManager(), "MarketEventNotification");
+                // Create and show the compact notification dialog
+                CompactNotificationDialogFragment dialog = CompactNotificationDialogFragment.newInstance(notification);
+                dialog.show(getSupportFragmentManager(), "CompactMarketEventNotification");
                 break;
         }
     }

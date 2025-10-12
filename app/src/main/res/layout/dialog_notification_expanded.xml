@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/expandedNotificationCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="24dp"
+    app:cardBackgroundColor="@color/NotificationInfo"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="12dp"
+    app:cardMaxElevation="16dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="15dp">
+
+        <!-- Header LinearLayout with icon, title, and close button -->
+        <LinearLayout
+            android:id="@+id/headerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Circular icon -->
+            <TextView
+                android:id="@+id/lblNotificationIcon"
+                style="@style/notificationIcon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="i"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <!-- Title -->
+            <TextView
+                android:id="@+id/txtNotificationTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="8dp"
+                android:text="Market Event"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                style="@style/text"
+                android:maxLines="2"
+                android:ellipsize="end" />
+
+            <!-- Close X button -->
+            <TextView
+                android:id="@+id/btnExpandedClose"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:text="✕"
+                android:textSize="20sp"
+                android:textColor="#666666"
+                android:gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
+        <!-- ScrollView for content - constrained to bottom of header -->
+        <ScrollView
+            android:id="@+id/scrollViewContent"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:layout_marginTop="24dp"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="false"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headerLayout"
+            app:layout_constraintBottom_toTopOf="@id/buttonContainer">
+
+            <!-- Description text inside ScrollView -->
+            <TextView
+                android:id="@+id/txtNotificationInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Event information appears here. This text can be very long and will scroll if needed. The user can read all the details about the market event or notification in this expanded view."
+                android:textSize="15sp"
+                android:textColor="#333333"
+                android:fontFamily="@font/jua"
+                android:lineSpacingExtra="4dp"
+                android:paddingEnd="8dp" />
+
+        </ScrollView>
+
+        <!-- Button container - always visible at bottom -->
+        <LinearLayout
+            android:id="@+id/buttonContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:gravity="end"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scrollViewContent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <!-- Play Minigame button (conditionally visible) -->
+            <androidx.appcompat.widget.AppCompatButton
+                style="@style/LightBlueButtonSmall"
+                android:id="@+id/btnPlayMinigame"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PLAY MINIGAME"
+                android:visibility="gone"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Dismiss button -->
+            <androidx.appcompat.widget.AppCompatButton
+                style="@style/GreyButtonSmall"
+                android:id="@+id/btnDismiss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DISMISS" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
