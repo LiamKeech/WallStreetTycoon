@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.dashboard.ListStocks;
 
 public class miniGame2EndDialogFragment extends DialogFragment {
     Button homeButton;
@@ -56,7 +57,8 @@ public class miniGame2EndDialogFragment extends DialogFragment {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), miniGame2Notification.class); //will change to dashboard
+                Intent intent = new Intent(getActivity(), ListStocks.class); //will change to dashboard
+                intent.putExtra("view", "M");
                 startActivity(intent);
             }
         });

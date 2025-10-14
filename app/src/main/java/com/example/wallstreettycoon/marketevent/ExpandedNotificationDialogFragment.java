@@ -14,6 +14,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.DialogFragment;
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.minigames.miniGame1.miniGame1;
+import com.example.wallstreettycoon.minigames.miniGame1.miniGame1Notification;
+import com.example.wallstreettycoon.minigames.miniGame2.miniGame2;
+import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Notification;
+import com.example.wallstreettycoon.minigames.miniGame3.miniGame3;
+import com.example.wallstreettycoon.minigames.miniGame3.miniGame3Notification;
 
 public class ExpandedNotificationDialogFragment extends DialogFragment {
 
@@ -82,13 +88,25 @@ public class ExpandedNotificationDialogFragment extends DialogFragment {
     }
 
     private void launchMinigame(int minigameID, int duration) {
-        // FIXME
-        Toast.makeText(getContext(),"Launching Minigame ID: " + minigameID + " (Duration: " + duration + ")", Toast.LENGTH_SHORT).show();
+        Intent intent;
 
-        // Intent intent = new Intent(getContext(), MinigameActivity.class);
-        // intent.putExtra("minigameID", minigameID);
-        // intent.putExtra("duration", duration);
-        // startActivity(intent);
+        switch (minigameID) {
+            case 1:
+                intent = new Intent(getContext(), miniGame1Notification.class);
+                break;
+            case 2:
+                intent = new Intent(getContext(), miniGame2Notification.class);
+                break;
+            case 3:
+                intent = new Intent(getContext(), miniGame3Notification.class);
+                break;
+            default:
+                Toast.makeText(getContext(), "Invalid minigame ID: " + minigameID, Toast.LENGTH_SHORT).show();
+                return;
+        }
+
+        //intent.putExtra("duration", duration);
+        startActivity(intent);
     }
 
     @Override

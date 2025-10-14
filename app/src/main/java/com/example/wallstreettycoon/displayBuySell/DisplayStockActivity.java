@@ -198,9 +198,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         }
     }
 
-    /**
-     * Get the current price from the stock's price history array
-     */
     private double getCurrentPrice() {
         double[] priceHistory = currentStock.getPriceHistoryArray();
 
@@ -343,9 +340,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         chart.invalidate();
     }
 
-    /**
-     * Get price history entries from the stock's priceHistory array
-     */
     private List<Entry> getPriceHistoryFromArray(int daysBack) {
         List<Entry> entries = new ArrayList<>();
 

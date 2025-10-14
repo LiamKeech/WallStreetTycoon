@@ -16,6 +16,8 @@ import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.dashboard.ListStocks;
+import com.example.wallstreettycoon.model.Game;
 
 public class miniGame1EndDialogFragment extends DialogFragment {
     Float profit;
@@ -29,6 +31,7 @@ public class miniGame1EndDialogFragment extends DialogFragment {
 
         if (getArguments() != null) {
             profit = getArguments().getFloat("profit");
+
         }
 
         profitLabel = view.findViewById(R.id.profit_end_textview);
@@ -75,7 +78,8 @@ public class miniGame1EndDialogFragment extends DialogFragment {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), miniGame1Notification.class); //will change to dashboard
+                Intent intent = new Intent(getActivity(), ListStocks.class); //will change to dashboard
+                intent.putExtra("view", "M");
                 startActivity(intent);
             }
         });

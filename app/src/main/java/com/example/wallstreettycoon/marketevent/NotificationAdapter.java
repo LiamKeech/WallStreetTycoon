@@ -1,6 +1,7 @@
 package com.example.wallstreettycoon.marketevent;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,12 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.minigames.miniGame1.miniGame1;
+import com.example.wallstreettycoon.minigames.miniGame1.miniGame1Notification;
+import com.example.wallstreettycoon.minigames.miniGame2.miniGame2;
+import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Notification;
+import com.example.wallstreettycoon.minigames.miniGame3.miniGame3;
+import com.example.wallstreettycoon.minigames.miniGame3.miniGame3Notification;
 import com.example.wallstreettycoon.model.MarketEvent;
 import java.util.List;
 
@@ -44,13 +51,25 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         if (notification.isMinigame() && notification.getMinigameID() > 0) {
             holder.btnPlayMinigame.setVisibility(View.VISIBLE);
             holder.btnPlayMinigame.setOnClickListener(v -> {
-                // FIXME
-                Toast.makeText(context, "Launching Minigame ID: " + notification.getMinigameID(), Toast.LENGTH_SHORT).show();
+                Intent intent;
 
-                // Intent intent = new Intent(context, MinigameActivity.class);
-                // intent.putExtra("minigameID", notification.getMinigameID());
-                // intent.putExtra("duration", notification.getDuration());
-                // context.startActivity(intent);
+                switch (notification.getMinigameID()) {
+                    case 1:
+                        intent = new Intent(context, miniGame1Notification.class);
+                        break;
+                    case 2:
+                        intent = new Intent(context, miniGame2Notification.class);
+                        break;
+                    case 3:
+                        intent = new Intent(context, miniGame3Notification.class);
+                        break;
+                    default:
+                        Toast.makeText(context, "Invalid minigame ID: " + notification.getMinigameID(), Toast.LENGTH_SHORT).show();
+                        return;
+                }
+
+                //intent.putExtra("duration", notification.getDuration());
+                context.startActivity(intent);
             });
         } else {
             holder.btnPlayMinigame.setVisibility(View.GONE);
