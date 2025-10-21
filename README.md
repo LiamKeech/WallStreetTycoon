@@ -87,4 +87,4 @@ Each chapter includes:
 
 1. Clone this repo:
    ```bash
-   git clone https://github.com/your-org/wall-street-tycoon.git
+   git clone https://github.com/LiamKeech/WallStreetTycoon
