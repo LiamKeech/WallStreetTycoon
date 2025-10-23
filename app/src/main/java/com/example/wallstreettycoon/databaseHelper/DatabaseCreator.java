@@ -3,6 +3,7 @@ package com.example.wallstreettycoon.databaseHelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -14,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,19 +130,58 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
 
         // Chapter table
-        db.execSQL(
-                "CREATE TABLE IF NOT EXISTS chapters (" +
-                        "chapterID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "chapterName TEXT, " +
-                        "description TEXT)"
-        );
+        db.execSQL("CREATE TABLE IF NOT EXISTS Chapter (" +
+                "chapterID INTEGER PRIMARY KEY, " +
+                "chapterName TEXT, " +
+                "description TEXT)");
 
-        db.execSQL("INSERT INTO chapters (chapterName, description) VALUES ('Chapter 1: The Dot-Com Boom', 'stocks in technology')");
-        db.execSQL("INSERT INTO chapters (chapterName, description) VALUES ('Chapter 2: The Housing Bubble', 'stocks in investments')");
-        db.execSQL("INSERT INTO chapters (chapterName, description) VALUES ('Chapter 3: The Crypto Surge', 'stocks in crypto')");
-        db.execSQL("INSERT INTO chapters (chapterName, description) VALUES ('Chapter 4: The Corona Crash:', 'stocks in travel and entertainment')");
-        db.execSQL("INSERT INTO chapters (chapterName, description) VALUES ('Chapter 5: The AI Revolution', 'stocks in ai platforms')");
+        db.execSQL("INSERT OR IGNORE INTO Chapter (chapterID, chapterName, description) VALUES " +
+                "(0, 'Tutorial', 'Brief tutorial on controls and buying/selling stocks. Purchase Teslo shares.'), " +
+                "(1, 'The Dot-Com Boom', 'Tech stock surge with reaction mini-game.'), " +
+                "(2, 'The Housing Bubble', 'Investment banks to buy and sell before crash.'), " +
+                "(3, 'The Crypto Surge', 'Sell old stocks, puzzle mini-game for crypto access.'), " +
+                "(4, 'The Corona Crash', 'Tourism stocks fall, tech/entertainment rise.'), " +
+                "(5, 'The AI Revolution', 'Invest in AI company with logic mini-game.')");
 
+        // ChapterStock join table
+        db.execSQL("CREATE TABLE IF NOT EXISTS ChapterStock (" +
+                "chapterStockID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "chapterID INTEGER, " +
+                "stockID INTEGER, " +
+                "FOREIGN KEY(chapterID) REFERENCES Chapter(chapterID), " +
+                "FOREIGN KEY(stockID) REFERENCES stocks(stockID))");
+
+        //FIXME Populate ChapterStock
+        Map<Integer, List<String>> chapterStocks = new HashMap<>();
+        chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "FAUD", "TESL", "PLLC", "ESKM", "SNKS"));
+        chapterStocks.put(2, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "FAUD", "TESL", "GDBK", "MRGS", "LB20", "SCMP", "JPMG", "BRST", "CTRB", "HDBC", "PNZI", "DMHC", "FAUD", "BNZO", "HLIX", "IRCL", "SKLH"));
+        chapterStocks.put(3, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "FAUD", "TESL", "DGCS", "INST", "BTCN", "HODL", "SHDY", "MNBK", "PUMP", "ELNM", "ZRCN", "BNNA", "BGNI", "HDHP", "GLOW", "HVHP", "FAUD"));
+        chapterStocks.put(4, Arrays.asList("SKHA", "EJTN", "CLDN", "WGIT", "PRLC", "JTLG", "YLVC", "ARFO", "BGBL", "NVLT", "TTCK", "FLIK", "SLPC", "VRRL", "FAUD", "MDMS", "WNDO", "GKRT", "SKFI", "TESL"));
+        chapterStocks.put(5, Arrays.asList("TKAI", "NRND", "DFMD", "PSSE", "CGSM", "PRTA", "AGPT", "WKBT", "RBLB", "PRBL", "CLAI", "FAUD", "VRRL", "TESL"));
+
+        Cursor cursor = null;
+        try {
+            for (Map.Entry<Integer, List<String>> entry : chapterStocks.entrySet()) {
+                int chapterID = entry.getKey();
+                List<String> symbols = entry.getValue();
+                for (String symbol : symbols) {
+                    cursor = db.rawQuery("SELECT stockID FROM stocks WHERE symbol = ?", new String[]{symbol});
+                    if (cursor.moveToFirst()) {
+                        int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
+                        ContentValues values = new ContentValues();
+                        values.put("chapterID", chapterID);
+                        values.put("stockID", stockID);
+                        db.insert("ChapterStock", null, values);
+
+                        Log.d("DATABASE CREATOR", "Added stock " + symbol + " to Chapter " + chapterID);
+                    } else {
+                        Log.w("DATABASE CREATOR", "Symbol " + symbol + " not found in stocks table");
+                    }
+                }
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
 
         // MarketEvent table
         //TEXT title
@@ -163,12 +204,18 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
         // Minigame table
         db.execSQL(
-                "CREATE TABLE IF NOT EXISTS minigames (" +
-                        "minigameID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "minigameName TEXT)"
+                "CREATE TABLE IF NOT EXISTS minigame (" +
+                        "minigameID INTEGER PRIMARY KEY, " +
+                        "minigameName TEXT, " +
+                        "description TEXT, " +
+                        "chapterID INTEGER, " +
+                        "FOREIGN KEY(chapterID) REFERENCES Chapter(chapterID))"
         );
-
-        //TODO populate minigames table
+        db.execSQL(
+                "INSERT OR IGNORE INTO minigame (minigameID, minigameName, description, chapterID) VALUES " +
+                "(1, 'Reaction Game', 'Test reaction time', 1), " +
+                "(2, 'Puzzle Game', 'Solve a puzzle', 3), " +
+                "(3, 'Logic Game', 'Logic challenge', 5)");
 
         // Portfolio table, will be empty on creation
         db.execSQL(
@@ -191,20 +238,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "FOREIGN KEY (stockID) REFERENCES stocks(stockID))"
         );
 
-        // Chapter_Stock join table
-        db.execSQL(
-                "CREATE TABLE IF NOT EXISTS chapter_stock (" +
-                        "ChapterStockID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "chapterID INTEGER, " +
-                        "stockID INTEGER, " +
-                        "FOREIGN KEY (chapterID) REFERENCES chapters(chapterID), " +
-                        "FOREIGN KEY (stockID) REFERENCES stocks(stockID))"
-        );
-
-
         // Transaction history table
-
-        ///database version issue by creating new tables
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS transaction_history (" +
                         "transactionID INTEGER PRIMARY KEY AUTOINCREMENT, " +

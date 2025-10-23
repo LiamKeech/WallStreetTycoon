@@ -1,0 +1,149 @@
+package com.example.wallstreettycoon.chapter;
+
+import com.example.wallstreettycoon.model.Game;
+import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameEventType;
+import com.example.wallstreettycoon.model.GameObserver;
+import com.example.wallstreettycoon.transaction.Transaction;
+import com.example.wallstreettycoon.useraccount.User;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public class ChapterManager implements GameObserver {
+    private static ChapterManager INSTANCE;
+    private List<Chapter> chapters;
+
+    private ChapterManager() {
+        chapters = new ArrayList<>();
+        loadChapters();
+        syncStatesFromGame();
+    }
+
+    public static synchronized ChapterManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new ChapterManager();
+        }
+        return INSTANCE;
+    }
+
+    private void loadChapters() {
+        for (int i = 0; i <= 5; i++) { // 0: Tutorial, 1-5: Chapters
+            chapters.add(new Chapter(i));
+        }
+    }
+
+    private void syncStatesFromGame() {
+        for (Map.Entry<Integer, ChapterState> entry : Game.chapterStates.entrySet()) {
+            Chapter ch = getChapter(entry.getKey());
+            if (ch != null) {
+                ch.setState(entry.getValue());
+            }
+        }
+        Game.currentChapterID = findCurrentChapterID();
+    }
+
+    private int findCurrentChapterID() {
+        // Find highest completed +1, or use saved
+        return Game.currentChapterID;
+    }
+
+    @Override
+    public void onGameEvent(GameEvent event) {
+        GameEventType type = event.getType();
+        if (type == GameEventType.STOCK_BOUGHT || type == GameEventType.STOCK_SOLD ||
+                type == GameEventType.MINIGAME_COMPLETED || type == GameEventType.MARKET_EVENT) {
+            checkProgression();
+        }
+    }
+
+    private void checkProgression() {
+        int currentID = Game.currentChapterID;
+        Chapter current = getChapter(currentID);
+        if (current == null || current.getState() != ChapterState.IN_PROGRESS) {
+            return;
+        }
+
+        if (isChapterCompleted(currentID, Game.currentUser)) {
+            current.setState(ChapterState.COMPLETED);
+            if (currentID < 5) {
+                Game.currentChapterID++;
+                Chapter next = getChapter(Game.currentChapterID);
+                next.setState(ChapterState.IN_PROGRESS);
+                Game.getInstance().onGameEvent(new GameEvent(GameEventType.CHAPTER_STARTED,
+                        "Started: " + next.getChapterName(), next));
+            } else {
+                Game.getInstance().onGameEvent(new GameEvent(GameEventType.GAME_ENDED,
+                        "Game ended. Final balance: " + Game.currentUser.getUserBalance(), null));
+                // Enable free roam/mini-game replay in UI
+            }
+            Game.saveGame();
+        }
+    }
+
+    private boolean isChapterCompleted(int chapterID, User user) {
+        List<Transaction> txs = Game.dbUtil.getTransactionHistory(user.getUserUsername());
+        boolean boughtTech = false;
+
+        switch (chapterID) {
+            case 0: // Tutorial: Bought Teslo (stockID 61)
+                for (Transaction tx : txs) {
+                    if (tx.getStockID() == 61 && "BUY".equals(tx.getTransactionType())) {
+                        return true;
+                    }
+                }
+                return false;
+            case 1: // Ch1: Bought tech stocks (e.g., CRNB=1, GPLX=4), completed mini-game 1
+                boughtTech = false;
+                for (Transaction tx : txs) {
+                    if ((tx.getStockID() == 1 || tx.getStockID() == 4) && "BUY".equals(tx.getTransactionType())) {
+                        boughtTech = true;
+                        break;
+                    }
+                }
+                return boughtTech && Game.completedMiniGames.contains(1);
+            case 2: // Ch2: Bought then sold banks (e.g., GDBK=16)
+                boolean boughtBank = false, soldBank = false;
+                for (Transaction tx : txs) {
+                    if (tx.getStockID() == 16 && "BUY".equals(tx.getTransactionType())) boughtBank = true;
+                    if (tx.getStockID() == 16 && "SELL".equals(tx.getTransactionType())) soldBank = true;
+                }
+                return boughtBank && soldBank;
+            case 3: // Ch3: Sold Ch1 stock, completed puzzle (mini 2), bought crypto
+                boolean soldCh1Stock = false, boughtCrypto = false;
+                for (Transaction tx : txs) {
+                    if ((tx.getStockID() == 1 || tx.getStockID() == 4) && "SELL".equals(tx.getTransactionType())) soldCh1Stock = true;
+                    if (tx.getStockID() >= 21 && tx.getStockID() <= 30 && "BUY".equals(tx.getTransactionType())) boughtCrypto = true;
+                }
+                return soldCh1Stock && boughtCrypto && Game.completedMiniGames.contains(2);
+            case 4: // Ch4: Sold tourism, bought tech/entertainment
+                boolean soldTourism = false;
+                boughtTech = false;
+                for (Transaction tx : txs) {
+                    if (tx.getStockID() >= 31 && tx.getStockID() <= 40 && "SELL".equals(tx.getTransactionType())) soldTourism = true;
+                    if (tx.getStockID() >= 41 && tx.getStockID() <= 50 && "BUY".equals(tx.getTransactionType())) boughtTech = true;
+                }
+                return soldTourism && boughtTech;
+            case 5: // Ch5: Bought AI company (e.g., TKAI=51), completed logic mini (3)
+                boolean boughtAI = false;
+                for (Transaction tx : txs) {
+                    if (tx.getStockID() == 51 && "BUY".equals(tx.getTransactionType())) boughtAI = true;
+                }
+                return boughtAI && Game.completedMiniGames.contains(3);
+            default:
+                return false;
+        }
+    }
+
+    public Chapter getCurrentChapter() {
+        return getChapter(Game.currentChapterID);
+    }
+
+    public Chapter getChapter(int id) {
+        if (id >= 0 && id < chapters.size()) {
+            return chapters.get(id);
+        }
+        return null;
+    }
+}

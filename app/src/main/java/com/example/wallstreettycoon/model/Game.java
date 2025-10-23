@@ -1,9 +1,10 @@
 package com.example.wallstreettycoon.model;
 
-import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.wallstreettycoon.chapter.ChapterManager;
+import com.example.wallstreettycoon.chapter.ChapterState;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.useraccount.User;
@@ -15,12 +16,21 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class Game implements GameObserver, java.io.Serializable {
 
     public static User currentUser;
-    public static int currentChapter = 1;
+
+    //Chapter fields
+    public static int currentChapterID = 0;
+    public static Map<Integer, ChapterState> chapterStates = new HashMap<>();
+    public static Set<Integer> completedMiniGames = new HashSet<>();
+
     public static Timer timer;
     private static long timeStamp;
     private static Game INSTANCE;
@@ -56,13 +66,16 @@ public class Game implements GameObserver, java.io.Serializable {
         timer = new Timer();
         currentUser = user;
         saveGame();
+
+        chapterStates.put(0, ChapterState.IN_PROGRESS); // Start tutorial
+        addObserver(ChapterManager.getInstance());
     }
 
     public static void pauseGame(){
         saveGame();
     }
 
-    private static void saveGame(){
+    public static void saveGame(){
         timeStamp = timer.getElapsedTime();
         saveToFile(currentUser.getUserUsername() + ".ser");
     }
@@ -136,7 +149,7 @@ public class Game implements GameObserver, java.io.Serializable {
         Log.d("Game", "Updated price history for " + stockIDs.size() + " stocks at timestamp " + timeStamp);
     }
 
-    public void addObserver(GameObserver observer){
+    public static  void addObserver(GameObserver observer){
         observers.add(observer);
     }
 

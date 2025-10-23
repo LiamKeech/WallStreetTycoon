@@ -246,11 +246,15 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
             stockRV.setAdapter(stockAdapter);
         }
     }
-    public void displayAllStocks(){//gets list of all stocks, put in recyclerview
-        Log.d("DASHBOARD", "Displaying stocks");
+    public void displayAllStocks() {
         lblEmpty.setVisibility(View.GONE);
-        //List<Stock> allStockList = dbUtil.getStockList();
-        List<Stock> allStockList = dbUtil.getChapterStock();
+
+        List<Stock> allStockList;
+        if (viewType != null && viewType.equals("M")) {
+            allStockList = dbUtil.getStockList();  // ALL stocks
+        } else {
+            allStockList = dbUtil.getChapterStocks(Game.currentChapterID);  // Chapter stocks
+        }
 
         StockAdapter stockAdapter = new StockAdapter(this, allStockList, "M");
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

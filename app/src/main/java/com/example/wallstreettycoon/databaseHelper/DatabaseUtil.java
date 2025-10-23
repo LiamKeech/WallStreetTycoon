@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.example.wallstreettycoon.model.Game;
+import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameEventType;
 import com.example.wallstreettycoon.model.MarketEvent;
 import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.stock.Stock;
@@ -294,72 +296,39 @@ public class DatabaseUtil {
         return stockIDs;
     }
 
-    public void setUpChapterStock() {
+    public Map<String, String> getChapterData(int chapterID) {
+        Map<String, String> chapterData = new HashMap<>();
         Cursor cursor = null;
         try {
-            cursor = db.rawQuery("SELECT COUNT(*) FROM chapter_stock", null);
-            if (cursor.moveToFirst() && cursor.getInt(0) > 0) {
-                return;
+            cursor = db.rawQuery("SELECT chapterName, description FROM Chapter WHERE chapterID = ?", new String[]{String.valueOf(chapterID)});
+            if (cursor.moveToFirst()) {
+                chapterData.put("chapterName", cursor.getString(cursor.getColumnIndexOrThrow("chapterName")));
+                chapterData.put("description", cursor.getString(cursor.getColumnIndexOrThrow("description")));
             }
+        } catch (android.database.sqlite.SQLiteException e) {
+            Log.e("DBUtil", "Table Chapter not found: " + e.getMessage());
         } finally {
             if (cursor != null) cursor.close();
         }
-
-        Map<Integer, List<String>> chapterStocks = new HashMap<>();
-        chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR","GPLX","ORNG","BNNF","ISAM","CHRP","LMTC","OCSD","RDTN","FRBT","PNOS","NSCM","ZYND","FAUD","TESL","PLLC","ESKM","SNKS"));
-        chapterStocks.put(2, Arrays.asList("CRNB", "MHCD", "PEAR","GPLX","ORNG","BNNF","ISAM","CHRP","LMTC","OCSD","RDTN","FRBT","PNOS","NSCM","ZYND","FAUD","TESL","GDBK", "MRGS","LB20","SCMP","JPMG","BRST","CTRB","HDBC","PNZI","DMHC","FAUD","BNZO","HLIX","IRCL","SKLH"));
-        chapterStocks.put(3, Arrays.asList("CRNB", "MHCD", "PEAR","GPLX","ORNG","BNNF","ISAM","CHRP","LMTC","OCSD","RDTN","FRBT","PNOS","NSCM","ZYND","FAUD","TESL","DGCS", "INST", "BTCN", "HODL","SHDY","MNBK","PUMP","ELNM","ZRCN","BNNA","BGNI","HDHP","GLOW","HVHP","FAUD"));
-        chapterStocks.put(4, Arrays.asList("SKHA", "EJTN","CLDN","WGIT","PRLC","JTLG","YLVC","ARFO","BGBL","NVLT","TTCK","FLIK","SLPC","VRRL","FAUD","MDMS","WNDO","GKRT","SKFI","TESL"));
-        chapterStocks.put(5, Arrays.asList("TKAI","NRND","DFMD","PSSE","CGSM","PRTA","AGPT","WKBT","RBLB","PRBL","CLAI","FAUD","VRRL","TESL"));
-
-        for (Map.Entry<Integer, List<String>> entry : chapterStocks.entrySet()) {
-            int chapterID = entry.getKey();
-            List<String> symbols = entry.getValue();
-
-            for (String symbol : symbols) {
-                cursor = null;
-                try {
-                    cursor = db.rawQuery("SELECT stockID FROM stocks WHERE symbol = ?", new String[]{symbol});
-                    if (cursor.moveToFirst()) {
-                        int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-                        ContentValues values = new ContentValues();
-                        values.put("chapterID", chapterID);
-                        values.put("stockID", stockID);
-                        db.insert("chapter_stock", null, values);
-                    }
-                } finally {
-                    if (cursor != null) cursor.close();
-                }
-            }
-        }
+        return chapterData;
     }
 
-    public List<Stock> getChapterStock() {
-        setUpChapterStock();
-        List<Stock> list = new ArrayList<>();
+    public List<Stock> getChapterStocks(int chapterID) {
+        List<Stock> chapterStocks = new ArrayList<>();
         Cursor cursor = null;
         try {
-            String query = "SELECT s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
-                    "FROM stocks s " +
-                    "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
-                    "WHERE cs.chapterID = ?";
-            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter)});
-
+            cursor = db.rawQuery("SELECT stockID FROM ChapterStock WHERE chapterID = ?", new String[]{String.valueOf(chapterID)});
             while (cursor.moveToNext()) {
                 int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-                String stockName = cursor.getString(cursor.getColumnIndexOrThrow("stockName"));
-                String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
-                String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
-                String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
-                list.add(stock);
+                Stock stock = getStock(stockID);
+                if (stock != null) {
+                    chapterStocks.add(stock);
+                }
             }
         } finally {
             if (cursor != null) cursor.close();
         }
-        return list;
+        return chapterStocks;
     }
 
     public List<Stock> getFilteredStockM(String filterCategory) {
@@ -370,7 +339,7 @@ public class DatabaseUtil {
                     "FROM stocks s " +
                     "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
                     "WHERE cs.chapterID = ? AND s.category = ?";
-            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), filterCategory});
+            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapterID), filterCategory});
 
             while (cursor.moveToNext()) {
                 int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
@@ -397,7 +366,7 @@ public class DatabaseUtil {
                     "FROM stocks s " +
                     "JOIN chapter_stock cs ON cs.stockID = s.stockID " +
                     "WHERE cs.chapterID = ? AND s.stockname LIKE ? COLLATE NOCASE";
-            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), "%" + searchCriteria + "%"});
+            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapterID), "%" + searchCriteria + "%"});
 
             while (cursor.moveToNext()) {
                 int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
@@ -424,7 +393,7 @@ public class DatabaseUtil {
                     "FROM chapter_stock cs " +
                     "JOIN stocks s ON cs.stockID = s.stockID " +
                     "WHERE cs.chapterID = ? AND s.category = ? AND s.stockname LIKE ? COLLATE NOCASE";
-            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapter), filterCategory, "%" + searchCriteria + "%"});
+            cursor = db.rawQuery(query, new String[]{String.valueOf(Game.currentChapterID), filterCategory, "%" + searchCriteria + "%"});
 
             while (cursor.moveToNext()) {
                 int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
@@ -731,6 +700,7 @@ public class DatabaseUtil {
             }
 
             db.setTransactionSuccessful();
+            Game.getInstance().onGameEvent(new GameEvent(GameEventType.STOCK_BOUGHT, "Bought stock " + stockID, stockID));
             return true;
         } catch (Exception e) {
             Log.e("DB_LOG", "Buy stock failed: " + e.getMessage());
@@ -787,6 +757,7 @@ public class DatabaseUtil {
             }
 
             db.setTransactionSuccessful();
+            Game.getInstance().onGameEvent(new GameEvent(GameEventType.STOCK_SOLD, "Sold stock " + stockID, stockID));
             return true;
         } catch (Exception e) {
             Log.e("DB_LOG", "Sell stock failed: " + e.getMessage());
