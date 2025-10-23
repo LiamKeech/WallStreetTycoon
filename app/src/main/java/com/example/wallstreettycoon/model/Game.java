@@ -1,8 +1,10 @@
 package com.example.wallstreettycoon.model;
 
+import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.useraccount.User;
 
@@ -26,6 +28,7 @@ public class Game implements GameObserver, java.io.Serializable {
     private static List<GameObserver> observers;
 
     public static DatabaseUtil dbUtil;
+    public static final List<GameEvent> pendingEvents = new ArrayList<>();
 
     private Game(){
 
@@ -37,6 +40,7 @@ public class Game implements GameObserver, java.io.Serializable {
             INSTANCE = new Game();
             dbUtil = DatabaseUtil.getInstance(context);
         }
+
     }
 
     public static Game getInstance(){
@@ -94,6 +98,7 @@ public class Game implements GameObserver, java.io.Serializable {
     public int getCurrentTimeStamp(){
         return (int)timeStamp;
     }
+    public static List<GameEvent> getPendingEvents(){return pendingEvents;}
 
     @Override
     public void onGameEvent(GameEvent event) {
@@ -107,9 +112,15 @@ public class Game implements GameObserver, java.io.Serializable {
                 notifyObservers(event);
                 break;
             case MARKET_EVENT:
-                MarketEvent marketEvent = (MarketEvent)event.getCargo();
-                marketEvent.applyMarketFactors();
-                notifyObservers(event);
+                if (GameStarterCloser.getCurrentActivity() instanceof ListStocks) {
+                    MarketEvent marketEvent = (MarketEvent) event.getCargo();
+                    marketEvent.applyMarketFactors();
+                    notifyObservers(event);
+                } else {
+                    pendingEvents.add(event);
+                    MarketEvent marketEvent = (MarketEvent)event.getCargo();
+                    Log.d("Game", "Queued MARKET_EVENT: " + marketEvent.getTitle() + " until ListStocks is active");
+                }
                 break;
         }
     }

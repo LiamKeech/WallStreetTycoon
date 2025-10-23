@@ -3,6 +3,8 @@ package com.example.wallstreettycoon.dashboard;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +25,7 @@ import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,11 +46,12 @@ import com.example.wallstreettycoon.useraccount.ManageUserAccount;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class ListStocks extends AppCompatActivity implements GameObserver {
     Context context = this;
     DatabaseUtil dbUtil;
-
     RecyclerView stockRV;
     TextView lblEmpty, lblResult, lblHeadingDisplayed;
     ImageButton btnClear,btnDrawer;
@@ -222,7 +226,6 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
         });
 
     }
-
     public void displayPortfolioStocks(){   //gets portfolio list, checks if empty, put it in recyclerview
         List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
         /*for(PortfolioStock stock : portfolioStock){
@@ -243,7 +246,6 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
             stockRV.setAdapter(stockAdapter);
         }
     }
-
     public void displayAllStocks(){//gets list of all stocks, put in recyclerview
         Log.d("DASHBOARD", "Displaying stocks");
         lblEmpty.setVisibility(View.GONE);
@@ -633,9 +635,45 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
             case MARKET_EVENT:
                 MarketEvent notification = (MarketEvent)event.getCargo();
                 // Create and show the compact notification dialog
-                CompactNotificationDialogFragment dialog = CompactNotificationDialogFragment.newInstance(notification);
-                dialog.show(getSupportFragmentManager(), "CompactMarketEventNotification");
+                CompactNotificationDialogFragment dialog =
+                        CompactNotificationDialogFragment.newInstance(notification);
+
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.add(dialog, "CompactMarketEventNotification");
+                ft.commitAllowingStateLoss();
                 break;
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("ListStocks", "onResume Called");
+
+        // Post to main thread after the UI has fully resumed
+        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+            List<GameEvent> pending = Game.getPendingEvents();
+
+            for (int i = 0; i < pending.size(); i++) {
+                GameEvent e = pending.get(i);
+
+                MarketEvent event = (MarketEvent) e.getCargo();
+
+                // show each one staggered by a short delay
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    showMarketEvent(event);
+                }, i * 1200L); // 1.2s apart for readability
+            }
+
+            pending.clear();
+        }, 300); // wait 300ms after resume to ensure FragmentManager is ready
+    }
+
+    private void showMarketEvent(MarketEvent event) {
+        CompactNotificationDialogFragment dialog =
+                CompactNotificationDialogFragment.newInstance(event);
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.add(dialog, "CompactMarketEventNotification");
+        ft.commitAllowingStateLoss();
     }
 }
