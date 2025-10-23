@@ -657,6 +657,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
                 GameEvent e = pending.get(i);
 
                 MarketEvent event = (MarketEvent) e.getCargo();
+                event.applyMarketFactors();
 
                 // show each one staggered by a short delay
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {

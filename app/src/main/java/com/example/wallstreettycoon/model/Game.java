@@ -149,4 +149,6 @@ public class Game implements GameObserver, java.io.Serializable {
             observer.onGameEvent(e);
         }
     }
+
+    public Context getContext(){return appContext;}
 }

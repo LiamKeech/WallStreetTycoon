@@ -10,12 +10,12 @@ public class StockPriceFunction implements GameObserver {
     Integer stockID;
     Double marketFactor;
 
-    public StockPriceFunction(Integer stockPriceHistoryID, Double[] amplitudes, Double[] frequencies, Integer fk){
+    public StockPriceFunction(Integer stockPriceHistoryID, Double[] amplitudes, Double[] frequencies, Double marketFactor, Integer fk){
         this.stockPriceHistoryID = stockPriceHistoryID;
         this.amplitudes = amplitudes;
         this.frequencies = frequencies;
         this.stockID = fk;
-        this.marketFactor = 0.0;
+        this.marketFactor = marketFactor;
     }
 
     public Integer getStockID() { return stockID; }
@@ -27,9 +27,7 @@ public class StockPriceFunction implements GameObserver {
             fourierSeries += amplitudes[i] * Math.sin(frequencies[i] * timeStamp.doubleValue());
         }
 
-        Double priceChange = marketFactor + fourierSeries;
-
-        return priceChange;
+        return marketFactor + fourierSeries;
 
     }
 
@@ -44,4 +42,6 @@ public class StockPriceFunction implements GameObserver {
                 break;
         }
     }
+
+    public Double getMarketFactor(){return marketFactor;}
 }

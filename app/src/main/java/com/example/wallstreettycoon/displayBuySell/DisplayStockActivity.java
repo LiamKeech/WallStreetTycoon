@@ -199,17 +199,18 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
     }
 
     private double getCurrentPrice() {
-        double[] priceHistory = currentStock.getPriceHistoryArray();
-
-        if (priceHistory != null && priceHistory.length > 0) {
-            double price = priceHistory[priceHistory.length - 1];
-            return Math.max(0, price);
-        } else {
-            // Fallback: use currentPrice directly
-            Log.w("DisplayStock", "Price history unavailable, using current price");
-            Double price = currentStock.getCurrentPrice();
-            return (price != null) ? Math.max(0, price) : 0.0;
-        }
+//        double[] priceHistory = currentStock.getPriceHistoryArray();
+//
+//        if (priceHistory != null && priceHistory.length > 0) {
+//            double price = priceHistory[priceHistory.length - 1];
+//            return Math.max(0, price);
+//        } else {
+//            // Fallback: use currentPrice directly
+//            Log.w("DisplayStock", "Price history unavailable, using current price");
+//            Double price = currentStock.getCurrentPrice();
+//            return (price != null) ? Math.max(0, price) : 0.0;
+//        }
+        return dbUtil.getCurrentStockPrice(currentStock.getStockID());
     }
 
     private void updatePriceDisplay() {

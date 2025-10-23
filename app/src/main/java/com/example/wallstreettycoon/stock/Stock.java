@@ -25,6 +25,16 @@ public class Stock {
         priceHistory.add(initialPrice);
     }
 
+    public Stock(int stockID, String stockName, String symbol, String category, String description, Double initialPrice, List<Double> priceHistory){
+        this.stockID = stockID;
+        this.stockName = stockName;
+        this.symbol = symbol;
+        this.category = category;
+        this.description = description;
+        this.currentPrice = initialPrice;
+        this.priceHistory = priceHistory;
+    }
+
     // Constructor with only stockID (creates null stock if needed)
     public Stock(int stockID){
         this.stockID = stockID;
