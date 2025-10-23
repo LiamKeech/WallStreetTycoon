@@ -661,11 +661,11 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
                 // show each one staggered by a short delay
                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
                     showMarketEvent(event);
-                }, i * 1200L); // 1.2s apart for readability
+                }, i * 5000);
             }
 
             pending.clear();
-        }, 300); // wait 300ms after resume to ensure FragmentManager is ready
+        }, 300);
     }
 
     private void showMarketEvent(MarketEvent event) {
