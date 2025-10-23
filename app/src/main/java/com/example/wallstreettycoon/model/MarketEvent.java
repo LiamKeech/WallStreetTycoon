@@ -5,7 +5,11 @@
 
 package com.example.wallstreettycoon.model;
 
+import android.provider.ContactsContract;
 import android.util.Log;
+
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.stock.StockPriceFunction;
 
 import java.util.HashMap;
 import java.util.List;
@@ -83,7 +87,11 @@ public class MarketEvent {
         for(Map.Entry<Integer, Double> entry : marketFactors.entrySet()){
             int stockID = entry.getKey();
             double factor = entry.getValue();
-            Game.getInstance().dbUtil.updateMarketFactor(stockID, factor);
+            DatabaseUtil.getInstance(Game.getInstance().getContext()).updateMarketFactor(stockID, factor);
+
+            //for logging
+            StockPriceFunction stf =  DatabaseUtil.getInstance(Game.getInstance().getContext()).getStockPriceFunction(61);
+            Log.d("Market Event", "StockID: " + stf.getStockID() + " Factor: " + stf.getMarketFactor());
         }
     }
 
