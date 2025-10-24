@@ -36,19 +36,23 @@ public class miniGame1EndDialogFragment extends DialogFragment {
 
         profitLabel = view.findViewById(R.id.profit_end_textview);
         if(profit > 0.0){
-            profitLabel.setText(String.format("+ $%.2f", profit));
-            profitLabel.setTextAppearance(R.style.GreenButtonLarge);
-            profitLabel.setBackgroundResource(R.drawable.button_background_green_medium);
+            profitLabel.setText(String.format("Profit: $%.2f", profit));
+            profitLabel.setTextColor(getResources().getColor(R. color. Green));
+            //profitLabel.setTextAppearance(R.style.GreenButtonLarge);
+            //profitLabel.setBackgroundResource(R.drawable.button_background_green_medium);
         }
         else if(profit == 0.0){
-            profitLabel.setText(String.format("$0.00"));
-            profitLabel.setTextAppearance(R.style.OrangeButtonLarge);
-            profitLabel.setBackgroundResource(R.drawable.button_background_orange_medium);
+            profitLabel.setText(String.format("Break even: $0.00"));
+            profitLabel.setTextColor(getResources().getColor(R.color.DarkBlue));
+            //profitLabel.setTextAppearance(R.style.OrangeButtonLarge);
+            //profitLabel.setBackgroundResource(R.drawable.button_background_orange_medium);
         }
         else{
-            profitLabel.setText(String.format("- $%.2f", profit));
-            profitLabel.setTextAppearance(R.style.RedButtonLarge);
-            profitLabel.setBackgroundResource(R.drawable.button_background_red_medium);
+
+            profitLabel.setText(String.format("Loss: $%.2f", profit));
+            profitLabel.setTextColor(getResources().getColor(R.color.Red));
+            //profitLabel.setTextAppearance(R.style.RedButtonLarge);
+            //profitLabel.setBackgroundResource(R.drawable.button_background_red_medium);
         }
 
         homeButton = view.findViewById(R.id.home_button);
@@ -69,7 +73,7 @@ public class miniGame1EndDialogFragment extends DialogFragment {
             int screenWidth = displayMetrics.widthPixels;
 
             // Set dialog width to 90% of screen width, height wrap content
-            int dialogWidth = (int) (screenWidth * 0.85);
+            int dialogWidth = (int) (screenWidth * 0.5);
             window.setLayout(dialogWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
             window.setDimAmount(0.5f); // Optional: dim background
         }

@@ -11,12 +11,12 @@
         style="@style/DarkBlueTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-
-        android:layout_marginTop="50dp"
-
+        android:layout_marginTop="20dp"
         android:gravity="center_horizontal|center_vertical"
+
         android:text="Game Over"
+        android:textSize="45dp"
+        app:layout_constraintBottom_toTopOf="@+id/profit_end_textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,48 +24,47 @@
 
     <TextView
         android:id="@+id/profit_end_textview"
-        style="@style/GreenButtonLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
+        android:fontFamily="@font/luckiest_guy"
+        android:shadowColor="@color/black"
 
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/retryButton"
-        app:layout_constraintStart_toEndOf="@+id/home_button"
-        app:layout_constraintTop_toBottomOf="@+id/game_over_textview" />
+        android:text="PROFIT: $1000"
+        android:textColor="@color/Green"
+        android:textSize="35dp"
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/home_button"
-        style="@style/OrangeButtonLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_marginStart="150dp"
-
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="50dp"
-        android:text="Home"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/game_over_textview"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/game_over_textview" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/retryButton"
-        android:layout_width="100dp"
-
-        android:layout_height="100dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginTop="50dp"
-        android:layout_marginEnd="150dp"
-        android:layout_marginBottom="50dp"
-        android:background="@drawable/button_background_retry"
+        android:paddingTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/game_over_textview"
-        app:layout_constraintTop_toBottomOf="@+id/game_over_textview" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profit_end_textview"
+        >
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/home_button"
+            style="@style/OrangeButtonMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Home"
+            android:layout_marginEnd="20dp"
+            />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/retryButton"
+            style="@style/GreenButtonMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Retry" />
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

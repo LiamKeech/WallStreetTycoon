@@ -23,7 +23,7 @@ public class miniGame3EndDialogFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mini_game2_end_dialog, container, false);
+        View view = inflater.inflate(R.layout.fragment_mini_game3_end_dialog, container, false);
         getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         homeButton = view.findViewById(R.id.home_button);
