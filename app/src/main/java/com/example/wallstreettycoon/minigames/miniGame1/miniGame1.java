@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.stock.Stock;
 
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -64,6 +65,8 @@ public class miniGame1 extends AppCompatActivity {
         }
 
         handler.postDelayed(() -> {
+            Double balance = Game.getInstance().currentUser.getUserBalance();
+            DatabaseUtil.getInstance(this).updateBalance(balance + profit, Game.getInstance().currentUser.getUserUsername());
             miniGame1EndDialogFragment endDialogFragment = new miniGame1EndDialogFragment();
 
             Bundle bundle = new Bundle();

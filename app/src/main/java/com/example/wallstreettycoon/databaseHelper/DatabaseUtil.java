@@ -117,12 +117,15 @@ public class DatabaseUtil {
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
                 Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
                 String priceHistoryString = cursor.getString(cursor.getColumnIndexOrThrow("priceHistory"));
+
+                //converts string to arraylist
                 List<Double> priceHistory = new ArrayList<>();
                 if (priceHistoryString != null) {
                     String[] prices = priceHistoryString.split(",");
                     for(int i = 0; i < prices.length; i++)
                         priceHistory.add(Double.parseDouble(prices[i]));
                 }
+
                 stock = new Stock(stockID, stockName, symbol, category, description, currentPrice, priceHistory);
 
                 //populatePriceHistory(stock);
@@ -161,6 +164,7 @@ public class DatabaseUtil {
 
 //        Log.d("DatabaseUtil", "Populated " + priceHistory.size() + " days of history for " + stock.getSymbol());
     }
+
 
     public void updateStockPriceHistory(int stockID) {
         Stock stock = getStock(stockID);
@@ -275,6 +279,7 @@ public class DatabaseUtil {
         return null;
     }
 
+    //Returns the stocks current price
     public Double getCurrentStockPrice(Integer stockID){
         Integer timeStamp = Game.getInstance().getCurrentTimeStamp();
         StockPriceFunction stockPriceFunction = getStockPriceFunction(stockID);
@@ -288,6 +293,7 @@ public class DatabaseUtil {
         return stock.getCurrentPrice() + priceChange;
     }
 
+    //updates the current stock price
     public void setStockCurrentPrice(Integer stockID, Double currentPrice) {
         // 1. Get the current price and priceHistory
         Cursor cursor = db.rawQuery("SELECT price, priceHistory FROM stocks WHERE stockID = ?",

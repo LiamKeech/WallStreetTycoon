@@ -38,7 +38,9 @@
         <activity
             android:name=".minigames.miniGame1.miniGame1Notification"
             android:exported="true"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape">
+
+        </activity>
         <activity
             android:name=".minigames.miniGame1.miniGame1"
             android:exported="true"
