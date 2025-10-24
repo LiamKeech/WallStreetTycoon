@@ -17,19 +17,19 @@
 
         android:text="Game Over"
         android:textSize="45dp"
-        app:layout_constraintBottom_toTopOf="@+id/profit_end_textview"
+        app:layout_constraintBottom_toTopOf="@+id/info_textview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
-        android:id="@+id/profit_end_textview"
+        android:id="@+id/info_textview"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         style = "@style/LightBlueTextView"
 
-        android:text="You saved the company, congratuations,\nshareholders will give you millions!"
+        android:text=""
 
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +44,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profit_end_textview"
+        app:layout_constraintTop_toBottomOf="@+id/info_textview"
         >
 
         <androidx.appcompat.widget.AppCompatButton
