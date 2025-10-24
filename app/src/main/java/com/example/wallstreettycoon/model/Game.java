@@ -26,10 +26,11 @@ public class Game implements GameObserver, java.io.Serializable {
 
     public static User currentUser;
 
-    //Chapter fields
+    // Chapter fields
     public static int currentChapterID = 0;
     public static Map<Integer, ChapterState> chapterStates = new HashMap<>();
     public static Set<Integer> completedMiniGames = new HashSet<>();
+    public static List<Integer> displayedNotifications = new ArrayList<>(); // Track displayed notification IDs
 
     public static Timer timer;
     private long timeStamp;
@@ -41,26 +42,28 @@ public class Game implements GameObserver, java.io.Serializable {
     public static DatabaseUtil dbUtil;
     public static final List<GameEvent> pendingEvents = new ArrayList<>();
 
-    private Game(){
-
+    private Game() {
+        // Initialize displayedNotifications
+        displayedNotifications = new ArrayList<>();
     }
 
-    public static void initContext(Context context){
+    public static void initContext(Context context) {
         appContext = context.getApplicationContext();
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             INSTANCE = new Game();
             dbUtil = DatabaseUtil.getInstance(context);
         }
     }
 
-    public static Game getInstance(){
-        if(INSTANCE == null){
+    public static Game getInstance() {
+        if (INSTANCE == null) {
             Log.d("CONTEXT ERR", "Call initContext first");
         }
         return INSTANCE;
     }
 
     public static void startGame(Context context, User user) {
+        Log.d("Game", "Starting game for user: " + user.getUserUsername());
         initContext(context);
         observers = new ArrayList<>();
         currentUser = user;
@@ -71,26 +74,27 @@ public class Game implements GameObserver, java.io.Serializable {
             if (INSTANCE.timer == null) {
                 INSTANCE.timer = new Timer(false);
             }
-
             INSTANCE.timer.resumeFrom(INSTANCE.timeStamp, INSTANCE.currentEventIndex);
             Log.d("GAME", String.valueOf(INSTANCE.timeStamp));
         } else {
             Log.d("Game", "Starting new game for user: " + user.getUserUsername());
             INSTANCE = new Game();
             dbUtil = DatabaseUtil.getInstance(context);
-            timer = new Timer(); // only create new timer if no save file
-            chapterStates.put(0, ChapterState.IN_PROGRESS); // Start tutorial
+            timer = new Timer();
+            chapterStates.put(0, ChapterState.IN_PROGRESS);
+            currentChapterID = 0; // Explicitly set to tutorial
+            displayedNotifications.clear();
         }
 
         addObserver(ChapterManager.getInstance());
-        saveGame(); // ensure file exists after starting
+        saveGame(); // Ensure file exists after starting
     }
 
-    public static void pauseGame(){
+    public static void pauseGame() {
         saveGame();
     }
 
-    public static void saveGame(){
+    public static void saveGame() {
         if (timer != null) {
             INSTANCE.currentEventIndex = timer.getCurrentEventIndex();
             INSTANCE.timeStamp = timer.getElapsedTime();
@@ -104,52 +108,60 @@ public class Game implements GameObserver, java.io.Serializable {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(INSTANCE);
             oos.close();
-            Log.d("SaveFile", "Saved to file: " + file.getAbsolutePath());
+            Log.d("SaveFile", "Successfully saved to file: " + file.getAbsolutePath());
         } catch (IOException e) {
-            Log.d("", "save to file did not work");
-            e.printStackTrace();
+            Log.e("SaveFile", "Failed to save to file: " + filename, e);
         }
     }
 
     public static boolean loadFromFile(String username) {
         String filename = username + ".ser";
+        File file = new File(appContext.getFilesDir(), filename);
+        if (!file.exists()) {
+            Log.d("LoadFile", "No save file found for user: " + username + " at " + file.getAbsolutePath());
+            return false;
+        }
         try {
-            File file = new File(appContext.getFilesDir(), filename);
             ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
-            INSTANCE = (Game)ois.readObject();
+            INSTANCE = (Game) ois.readObject();
             ois.close();
             Log.d("LoadFile", "Loaded from file: " + file.getAbsolutePath());
+            if (INSTANCE.displayedNotifications == null) {
+                INSTANCE.displayedNotifications = new ArrayList<>();
+            }
             return true;
         } catch (IOException | ClassNotFoundException e) {
-            Log.d("", "Load from file did not work");
+            Log.e("LoadFile", "Failed to load from file for user: " + username, e);
             return false;
         }
     }
 
-    public int getCurrentTimeStamp(){
-        return (int)timeStamp;
+    public int getCurrentTimeStamp() {
+        return (int) timeStamp;
     }
-    public static List<GameEvent> getPendingEvents(){return pendingEvents;}
+
+    public static List<GameEvent> getPendingEvents() {
+        return pendingEvents;
+    }
 
     @Override
     public void onGameEvent(GameEvent event) {
-        switch(event.getType()){
+        switch (event.getType()) {
             case UPDATE_STOCK_PRICE:
                 timeStamp = timer.getElapsedTime();
-
                 // Update price history for all stocks
                 updateAllStockPriceHistories();
-
                 notifyObservers(event);
                 break;
             case MARKET_EVENT:
+                MarketEvent marketEvent = (MarketEvent) event.getCargo();
                 if (GameStarterCloser.getCurrentActivity() instanceof ListStocks) {
-                    MarketEvent marketEvent = (MarketEvent) event.getCargo();
                     marketEvent.applyMarketFactors();
+                    // Add notification ID to displayedNotifications
+                    displayedNotifications.add(marketEvent.getMarketEventID());
                     notifyObservers(event);
                 } else {
                     pendingEvents.add(event);
-                    MarketEvent marketEvent = (MarketEvent)event.getCargo();
                     Log.d("Game", "Queued MARKET_EVENT: " + marketEvent.getTitle() + " until ListStocks is active");
                 }
                 break;
@@ -167,19 +179,21 @@ public class Game implements GameObserver, java.io.Serializable {
         Log.d("Game", "Updated price history for " + stockIDs.size() + " stocks at timestamp " + timeStamp);
     }
 
-    public static  void addObserver(GameObserver observer){
+    public static void addObserver(GameObserver observer) {
         observers.add(observer);
     }
 
-    public void removeObserver(GameObserver observer){
+    public void removeObserver(GameObserver observer) {
         observers.remove(observer);
     }
 
-    private void notifyObservers(GameEvent e){
-        for(GameObserver observer : observers){
+    private void notifyObservers(GameEvent e) {
+        for (GameObserver observer : observers) {
             observer.onGameEvent(e);
         }
     }
 
-    public Context getContext(){return appContext;}
+    public Context getContext() {
+        return appContext;
+    }
 }

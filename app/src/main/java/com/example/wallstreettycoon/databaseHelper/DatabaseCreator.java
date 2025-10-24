@@ -129,6 +129,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
         //FIXME Populate ChapterStock
         Map<Integer, List<String>> chapterStocks = new HashMap<>();
+        chapterStocks.put(0, Arrays.asList("TESL"));
         chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "FAUD", "TESL", "PLLC", "ESKM", "SNKS"));
         chapterStocks.put(2, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "FAUD", "TESL", "GDBK", "MRGS", "LB20", "SCMP", "JPMG", "BRST", "CTRB", "HDBC", "PNZI", "DMHC", "FAUD", "BNZO", "HLIX", "IRCL", "SKLH"));
         chapterStocks.put(3, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "FAUD", "TESL", "DGCS", "INST", "BTCN", "HODL", "SHDY", "MNBK", "PUMP", "ELNM", "ZRCN", "BNNA", "BGNI", "HDHP", "GLOW", "HVHP", "FAUD"));
@@ -266,16 +267,19 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
                 // split by comma and trim
                 String[] tokens = line.split(",");
-                if (tokens.length >= 4) {
+                if (tokens.length >= 5) { // Ensure price is included
                     for (int i = 0; i < tokens.length; i++) {
                         tokens[i] = tokens[i].trim();
                     }
                     Stock stock = new Stock(stockID, tokens[0], tokens[1], tokens[2], tokens[3], Double.parseDouble(tokens[4]));
                     result.add(stock);
-                    Log.d("STOCK", stock.getStockName());
+                    Log.d("DBCREATOR", "Loaded stock: " + stock.getStockName() + " (" + stock.getSymbol() + ")");
                     stockID++;
+                } else {
+                    Log.w("DBCREATOR", "Invalid stock data: " + line);
                 }
             }
+            Log.d("DBCREATOR", "Loaded " + result.size() + " stocks");
         }
         catch(Exception exception){
             Log.d("DatabaseCreator", "Error reading file: " + exception.getMessage());
