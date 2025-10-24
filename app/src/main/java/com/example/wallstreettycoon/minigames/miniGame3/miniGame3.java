@@ -1,7 +1,6 @@
 package com.example.wallstreettycoon.minigames.miniGame3;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,7 +29,7 @@ public class miniGame3 extends AppCompatActivity implements GameObserver {
         });
 
         Model model = new Model();
-        model.setGameOvserver(this);
+        model.setGameObserver(this);
 
         NetworkView networkView = findViewById(R.id.networkView);
         networkView.setModel(model);
@@ -45,7 +44,11 @@ public class miniGame3 extends AppCompatActivity implements GameObserver {
         //gameover open dialog fragment
         switch(gameEvent.getType()){
             case GAME_OVER:
+                //add win or loss condition
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("win", (boolean) gameEvent.getCargo());
                 DialogFragment endDialogFragment = new miniGame3EndDialogFragment();
+                endDialogFragment.setArguments(bundle);
                 endDialogFragment.show(getSupportFragmentManager(), "miniGame3End");
                 break;
         }

@@ -108,8 +108,7 @@ public class NetworkView extends View {
         model.timer.addTime(10000);
         if(model.network.getCurColInView() == model.network.getCols().size() - 1) {
             //win condition
-            Toast toast = Toast.makeText(getContext(), "You win!", Toast.LENGTH_SHORT);
-            toast.show();
+            model.onGameWin();
         }
         else
             setNodePositions();

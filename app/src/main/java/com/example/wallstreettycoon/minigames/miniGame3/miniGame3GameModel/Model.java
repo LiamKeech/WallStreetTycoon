@@ -5,17 +5,14 @@
 
 package com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel;
 
-import android.widget.Toast;
-
 public class Model {
     public Timer timer;
     public Network network;
-
     private GameObserver gameObserver;
 
     public Model(){
         network = new Network();
-        timer = new Timer(20000, () -> onTimerFinish());
+        timer = new Timer(30000, () -> onTimerFinish());
         timer.start();
     }
 
@@ -27,5 +24,10 @@ public class Model {
     public Network getNetwork(){return network;}
     public Timer getTimer(){return timer;}
 
-    public void setGameOvserver(GameObserver go){this.gameObserver = go;}
+    public void setGameObserver(GameObserver go){this.gameObserver = go;}
+
+    public void onGameWin(){
+        gameObserver.onGameEvent(new GameEvent(GameEventType.GAME_OVER, "Game Over", true));
+        timer.stop();
+    }
 }
