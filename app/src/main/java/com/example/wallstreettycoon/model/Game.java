@@ -32,7 +32,8 @@ public class Game implements GameObserver, java.io.Serializable {
     public static Set<Integer> completedMiniGames = new HashSet<>();
 
     public static Timer timer;
-    private static long timeStamp;
+    private long timeStamp;
+    private int currentEventIndex;
     private static Game INSTANCE;
     private static Context appContext;
     private static List<GameObserver> observers;
@@ -50,7 +51,6 @@ public class Game implements GameObserver, java.io.Serializable {
             INSTANCE = new Game();
             dbUtil = DatabaseUtil.getInstance(context);
         }
-
     }
 
     public static Game getInstance(){
@@ -60,15 +60,30 @@ public class Game implements GameObserver, java.io.Serializable {
         return INSTANCE;
     }
 
-    public static void startGame(Context context, User user){
+    public static void startGame(Context context, User user) {
         initContext(context);
         observers = new ArrayList<>();
-        timer = new Timer();
         currentUser = user;
-        saveGame();
 
-        chapterStates.put(0, ChapterState.IN_PROGRESS); // Start tutorial
+        boolean loaded = loadFromFile(user.getUserUsername());
+        if (loaded) {
+            Log.d("Game", "Resuming saved game for user: " + user.getUserUsername());
+            if (INSTANCE.timer == null) {
+                INSTANCE.timer = new Timer(false);
+            }
+
+            INSTANCE.timer.resumeFrom(INSTANCE.timeStamp, INSTANCE.currentEventIndex);
+            Log.d("GAME", String.valueOf(INSTANCE.timeStamp));
+        } else {
+            Log.d("Game", "Starting new game for user: " + user.getUserUsername());
+            INSTANCE = new Game();
+            dbUtil = DatabaseUtil.getInstance(context);
+            timer = new Timer(); // only create new timer if no save file
+            chapterStates.put(0, ChapterState.IN_PROGRESS); // Start tutorial
+        }
+
         addObserver(ChapterManager.getInstance());
+        saveGame(); // ensure file exists after starting
     }
 
     public static void pauseGame(){
@@ -76,7 +91,10 @@ public class Game implements GameObserver, java.io.Serializable {
     }
 
     public static void saveGame(){
-        timeStamp = timer.getElapsedTime();
+        if (timer != null) {
+            INSTANCE.currentEventIndex = timer.getCurrentEventIndex();
+            INSTANCE.timeStamp = timer.getElapsedTime();
+        }
         saveToFile(currentUser.getUserUsername() + ".ser");
     }
 

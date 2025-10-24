@@ -24,8 +24,12 @@ public class Timer {
         }
     };
 
-    public Timer(){
+    public Timer() {
         startTimer();
+    }
+
+    public Timer(boolean autoStart) {
+        if (autoStart) startTimer();
     }
 
     public long getElapsedTime(){ //returns elapsed time in seconds
@@ -41,7 +45,10 @@ public class Timer {
         if (marketEventList == null) {
             marketEventList = dbUtil.getMarketEvents();
         }
-        scheduleNextEvent(currentEventIndex);
+
+        handler.postDelayed(() -> {
+            scheduleNextEvent(currentEventIndex);
+        },  5000L);
     }
 
     public void pauseTimer() {
@@ -54,11 +61,6 @@ public class Timer {
         Log.d("TIMER UPDATED", String.valueOf(getElapsedTime()));
         Game.getInstance().onGameEvent(new GameEvent(GameEventType.UPDATE_STOCK_PRICE, "Price updated", (int)getElapsedTime()));
     }
-
-//    private void notificationPublisher() {
-//        List<MarketEvent> marketEventList = dbUtil.getMarketEvents();
-//        scheduleNextEvent(marketEventList, 0);
-//    }
 
     private void scheduleNextEvent(int index) {
         Log.d("SCHEDULE NEXT EVENT", String.valueOf(index));
@@ -85,5 +87,15 @@ public class Timer {
                 currentEventIndex = index + 1;
             }
         }, event.getDuration() * 1000L);
+    }
+
+    public int getCurrentEventIndex(){
+        return currentEventIndex;
+    }
+
+    public void resumeFrom(long savedElapsedTime, int currentEventIndex){
+        this.currentEventIndex = currentEventIndex;
+        this.elapsedTime = savedElapsedTime * 1_000_000_000L;
+        startTimer();
     }
 }
