@@ -45,8 +45,18 @@ public class ChapterManager implements GameObserver {
     }
 
     private int findCurrentChapterID() {
-        // Find highest completed +1, or use saved
-        return Game.currentChapterID;
+        // Find the highest completed chapter and return the next one, or 0 if none completed
+        int highestCompleted = -1;
+        for (Map.Entry<Integer, ChapterState> entry : Game.chapterStates.entrySet()) {
+            if (entry.getValue() == ChapterState.COMPLETED && entry.getKey() > highestCompleted) {
+                highestCompleted = entry.getKey();
+            }
+        }
+        int nextChapter = highestCompleted + 1;
+        if (nextChapter >= chapters.size()) {
+            nextChapter = chapters.size() - 1; // Stay at last chapter if all completed
+        }
+        return nextChapter >= 0 ? nextChapter : 0; // Default to tutorial if no chapters completed
     }
 
     @Override
@@ -85,6 +95,11 @@ public class ChapterManager implements GameObserver {
     private boolean isChapterCompleted(int chapterID, User user) {
         List<Transaction> txs = Game.dbUtil.getTransactionHistory(user.getUserUsername());
         boolean boughtTech = false;
+
+        // Check if all required notifications for the chapter have been displayed
+        if (!areChapterNotificationsDisplayed(chapterID)) {
+            return false;
+        }
 
         switch (chapterID) {
             case 0: // Tutorial: Bought Teslo (stockID 61)
@@ -134,6 +149,48 @@ public class ChapterManager implements GameObserver {
             default:
                 return false;
         }
+    }
+
+    private boolean areChapterNotificationsDisplayed(int chapterID) {
+        // Assuming Game.displayedNotifications is a List<Integer> tracking notification IDs that have been shown
+        List<Integer> requiredNotificationIds = getRequiredNotificationIdsForChapter(chapterID);
+        return Game.displayedNotifications.containsAll(requiredNotificationIds);
+    }
+
+    private List<Integer> getRequiredNotificationIdsForChapter(int chapterID) {
+        List<Integer> requiredIds = new ArrayList<>();
+        // Based on notifications.txt, determine which notification IDs are required for each chapter
+        switch (chapterID) {
+            case 0: // Tutorial: 1 notification
+                requiredIds.add(0);
+                break;
+            case 1: // Chapter 1: 4 notifications
+                requiredIds.add(1);
+                requiredIds.add(2);
+                requiredIds.add(3);
+                requiredIds.add(4);
+                break;
+            case 2: // Chapter 2: 2 notifications
+                requiredIds.add(5);
+                requiredIds.add(6);
+                break;
+            case 3: // Chapter 3: 2 notifications
+                requiredIds.add(7);
+                requiredIds.add(8);
+                break;
+            case 4: // Chapter 4: 3 notifications
+                requiredIds.add(9);
+                requiredIds.add(10);
+                requiredIds.add(11);
+                break;
+            case 5: // Chapter 5: 2 notifications
+                requiredIds.add(12);
+                requiredIds.add(13);
+                break;
+            default:
+                break;
+        }
+        return requiredIds;
     }
 
     public Chapter getCurrentChapter() {

@@ -29,6 +29,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.chapter.Chapter;
+import com.example.wallstreettycoon.chapter.ChapterManager;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.marketevent.CompactNotificationDialogFragment;
 import com.example.wallstreettycoon.marketevent.NotificationsActivity;
@@ -95,10 +97,10 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
         // Set user balance
         updateUserBalance();
 
-        // Initial display based on intent
-        Intent intent = getIntent();
-        viewType = intent.getStringExtra("view");
-        if (viewType == null) viewType = "M"; // Default to Market if not specified
+        // Force Market view as default
+        viewType = "M";
+        btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+        btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
         updateDisplay(viewType);
 
         // Toggle listeners
@@ -132,6 +134,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
         });
 
         // Handle initial filter/search from intent
+        Intent intent = getIntent();
         String filter = intent.getStringExtra("filter");
         String searchCriteria = intent.getStringExtra("search");
         if (filter != null && searchCriteria == null) {
@@ -226,13 +229,25 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
     }
 
     public void displayAllStocks() {
-        List<Stock> allStockList = dbUtil.getStockList(); // Use getStockList for all stocks in Market view
-        updateRecyclerView(allStockList, new StockAdapter(this, allStockList, "M"), allStockList.isEmpty(), "Market");
+        Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
+        List<Stock> chapterStocks;
+        if (currentChapter == null) {
+            Log.w("ListStocks", "Current chapter is null, falling back to full stock list. CurrentChapterID: " + Game.currentChapterID);
+            chapterStocks = dbUtil.getStockList();
+        } else {
+            chapterStocks = currentChapter.getChapterStocks();
+        }
+        if (chapterStocks.isEmpty()) {
+            Log.w("ListStocks", "No stocks available for display. Chapter: " + (currentChapter != null ? currentChapter.getChapterName() : "null"));
+        }
+        updateRecyclerView(chapterStocks, new StockAdapter(this, chapterStocks, "M"), chapterStocks.isEmpty(), "Market");
     }
 
     public void displayFilteredLists(String filter, String viewToggle) {
         if ("M".equals(viewToggle)) {
-            List<Stock> filteredMarket = dbUtil.getFilteredStockM(filter);
+            Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
+            List<Stock> chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+            List<Stock> filteredMarket = dbUtil.getFilteredStockM(filter, chapterStocks);
             updateRecyclerView(filteredMarket, new StockAdapter(this, filteredMarket, "M"), filteredMarket.isEmpty(), "Market");
             if (!filteredMarket.isEmpty()) {
                 lblResult.setText("Showing results for: " + filter);
@@ -243,7 +258,8 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
                 clearSearchUI();
             }
         } else {
-            List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredPortfolioP(filter, Game.currentUser.getUserUsername());
+            List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+            List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredPortfolioP(filter, Game.currentUser.getUserUsername(), portfolioStocks);
             updateRecyclerView(filteredPortfolio, new PortfolioStockAdapter(this, filteredPortfolio, "P"), filteredPortfolio.isEmpty(), "Portfolio");
             if (!filteredPortfolio.isEmpty()) {
                 lblResult.setText("Showing results for: " + filter);
@@ -258,7 +274,9 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
 
     public void displaySearchedLists(String search, String viewToggle) {
         if ("M".equals(viewToggle)) {
-            List<Stock> searchedMarket = dbUtil.searchStocksM(search);
+            Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
+            List<Stock> chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+            List<Stock> searchedMarket = dbUtil.searchStocksM(search, chapterStocks);
             updateRecyclerView(searchedMarket, new StockAdapter(this, searchedMarket, "M"), searchedMarket.isEmpty(), "Market");
             if (!searchedMarket.isEmpty()) {
                 lblResult.setText("Showing results for: " + search);
@@ -269,7 +287,8 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
                 clearSearchUI();
             }
         } else {
-            List<PortfolioStock> searchedPortfolio = dbUtil.searchPortfolioStocks(search, Game.currentUser.getUserUsername());
+            List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+            List<PortfolioStock> searchedPortfolio = dbUtil.searchPortfolioStocks(search, Game.currentUser.getUserUsername(), portfolioStocks);
             updateRecyclerView(searchedPortfolio, new PortfolioStockAdapter(this, searchedPortfolio, "P"), searchedPortfolio.isEmpty(), "Portfolio");
             if (!searchedPortfolio.isEmpty()) {
                 lblResult.setText("Showing results for: " + search);
@@ -284,7 +303,9 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
 
     public void fullSearch(String filter, String search, String viewToggle) {
         if ("M".equals(viewToggle)) {
-            List<Stock> combinedSearchMarket = dbUtil.combinedSearchM(filter, search);
+            Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
+            List<Stock> chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+            List<Stock> combinedSearchMarket = dbUtil.combinedSearchM(filter, search, chapterStocks);
             updateRecyclerView(combinedSearchMarket, new StockAdapter(this, combinedSearchMarket, "M"), combinedSearchMarket.isEmpty(), "Market");
             if (!combinedSearchMarket.isEmpty()) {
                 lblResult.setText("Showing results for: " + filter + " and " + search);
@@ -295,7 +316,8 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
                 clearSearchUI();
             }
         } else {
-            List<PortfolioStock> combinedSearchPortfolio = dbUtil.combinedSearchP(filter, search, Game.currentUser.getUserUsername());
+            List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+            List<PortfolioStock> combinedSearchPortfolio = dbUtil.combinedSearchP(filter, search, Game.currentUser.getUserUsername(), portfolioStocks);
             updateRecyclerView(combinedSearchPortfolio, new PortfolioStockAdapter(this, combinedSearchPortfolio, "P"), combinedSearchPortfolio.isEmpty(), "Portfolio");
             if (!combinedSearchPortfolio.isEmpty()) {
                 lblResult.setText("Showing results for: " + filter + " and " + search);
@@ -334,6 +356,9 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
         super.onResume();
         Log.d("ListStocks", "onResume Called");
         updateUserBalance();
+        viewType = "M"; // Force Market view on resume
+        btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+        btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
         updateDisplay(viewType); // Refresh display on resume
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             List<GameEvent> pending = Game.getPendingEvents();
