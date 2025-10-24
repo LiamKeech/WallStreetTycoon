@@ -73,6 +73,8 @@ public class Timer {
             return remainingTime;
         }
     }
+
+    public long getMaxTime(){return maxTime;}
     public boolean isRunning() {
         return running;
     }

@@ -16,13 +16,17 @@
         <com.example.wallstreettycoon.minigames.miniGame3.TimerView
             android:id="@+id/timerView"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="290dp"
+            android:layout_marginBottom="10dp"
             />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Shareholder Trust"
-            style="@style/OrangeButtonMedium"
+            style="@style/DarkBlueTextView"
+            android:layout_marginHorizontal="10dp"
+            android:textSize="23dp"
+            android:gravity="center"
             />
     </LinearLayout>
 

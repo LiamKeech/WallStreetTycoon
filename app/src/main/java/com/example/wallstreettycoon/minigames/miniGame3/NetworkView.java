@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class NetworkView extends View {
     private Model model;
-    private Paint nodePaint, wirePaint;
+    private Paint nodePaint, outlinePaint, wirePaint, wireOutlinePaint;
     private Node startNode;
     private float nodeRadius = 50;
     private float dragX, dragY;
@@ -40,9 +40,15 @@ public class NetworkView extends View {
 
     private void init(){
         nodePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        outlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         wirePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        wirePaint.setStrokeWidth(25);
+        wireOutlinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
+        wirePaint.setStrokeWidth(25);
+        wireOutlinePaint.setStrokeWidth(30);
+
+        outlinePaint.setStyle(Paint.Style.STROKE);
+        outlinePaint.setStrokeWidth(6);
     }
 
     public void setModel(Model model){
@@ -53,15 +59,23 @@ public class NetworkView extends View {
     protected void onDraw(Canvas canvas){
         setNodePositions();
         for (Node node: nodePositions.keySet()) {
-            if(node.getColour() == NodeColour.BLUE)
+            if(node.getColour() == NodeColour.BLUE) {
                 nodePaint.setColor(getResources().getColor(R.color.LightBlue));
-            else
+                outlinePaint.setColor(getResources().getColor(R.color.LightBlueShadow));
+            }
+            else {
                 nodePaint.setColor(getResources().getColor(R.color.Orange));
+                outlinePaint.setColor(getResources().getColor(R.color.OrangeShadow));
+            }
 
             Float[] pos = nodePositions.get(node);
             float x = pos[0];
             float y = pos[1];
+
+            //fill
             canvas.drawCircle(x, y, nodeRadius, nodePaint);
+            //outline
+            canvas.drawCircle(x, y, nodeRadius, outlinePaint);
         }
 
         if (startNode != null) {
@@ -77,11 +91,17 @@ public class NetworkView extends View {
             Float[] startPos = nodePositions.get(connection.getStart());
             Float[] endPos = nodePositions.get(connection.getEnd());
 
-            if(connection.getStart().getColour() == NodeColour.BLUE)
+            if(connection.getStart().getColour() == NodeColour.BLUE) {
                 wirePaint.setColor(getResources().getColor(R.color.LightBlue));
-            else
+                wireOutlinePaint.setColor(getResources().getColor(R.color.LightBlueShadow));
+            }
+            else {
                 wirePaint.setColor(getResources().getColor(R.color.Orange));
+                wireOutlinePaint.setColor(getResources().getColor(R.color.OrangeShadow));
+            }
 
+
+            //canvas.drawLine(startPos[0], startPos[1], endPos[0], endPos[1], wireOutlinePaint);
             canvas.drawLine(startPos[0], startPos[1], endPos[0], endPos[1], wirePaint);
         }
     }

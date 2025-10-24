@@ -45,23 +45,46 @@ public class TimerView extends View {
     }
 
     @Override
-    public void onDraw(Canvas canvas){
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
 
+        int width = getWidth();
+        int height = getHeight();
+
+        float progress = Math.min(1f, Math.max(0f, (float) timer.getTime() / timer.getMaxTime()));
+
+        float left = width * 0.15f;
+        float right = width * 0.85f;
+        float bottom = height;
+        float top = bottom - (height * 0.95f * progress);
+
+        Rect rect = new Rect((int) left, (int) top, (int) right, (int) bottom);
+
+        if(progress > 0.7f)
+        {
+            drawRect(rect, getResources().getColor(R.color.Green), getResources().getColor(R.color.GreenShadow), canvas);
+        }
+        else if (progress > 0.4f) {
+            drawRect(rect, getResources().getColor(R.color.Yellow), getResources().getColor(R.color.YellowShadow), canvas);
+        }
+        else{
+            drawRect(rect, getResources().getColor(R.color.Red), getResources().getColor(R.color.RedShadow), canvas);
+        }
+
+    }
+
+    private void drawRect(Rect rect, int color, int shadowColor, Canvas canvas){
         Paint paint = new Paint();
-        paint.setColor(getResources().getColor(R. color. Green));
-        paint.setStrokeWidth(20);
-
-        Rect rect = new Rect(100,  1000 - (int) timer.getTime()/20 , 400, 1000);
-
-        // fill
+        //filled rect
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(getResources().getColor(R. color. Green));
+        paint.setColor(color);
         canvas.drawRect(rect, paint);
 
-        // outline
+        //outline
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(8);
-        paint.setColor(getResources().getColor(R. color. GreenShadow));
+        paint.setColor(shadowColor);
         canvas.drawRect(rect, paint);
     }
+
 }
