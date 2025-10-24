@@ -14,7 +14,8 @@
         android:theme="@style/Theme.WallStreetTycoon">
         <activity
             android:name=".marketevent.NotificationsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".profile.GameProfile"
             android:exported="false"
