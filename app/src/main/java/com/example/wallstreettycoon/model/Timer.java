@@ -70,14 +70,17 @@ public class Timer {
 
 
         MarketEvent event = marketEventList.get(index);
-        if(event.getChapterID() == Game.getInstance().currentChapterID) {
-            GameEvent currentEvent = new GameEvent(
-                    GameEventType.MARKET_EVENT,
-                    event.getTitle(),
-                    event
-            );
-            // dispatch on main thread
-            Game.getInstance().onGameEvent(currentEvent);
+        GameEvent currentEvent = new GameEvent(
+                GameEventType.MARKET_EVENT,
+                event.getTitle(),
+                event
+        );
+        // dispatch on main thread
+        Game.getInstance().onGameEvent(currentEvent);
+        if(marketEventList.size() > index + 1) {
+            MarketEvent nextEvent = marketEventList.get(index + 1);
+
+        if(nextEvent.getChapterID() == Game.getInstance().currentChapterID) {
             // schedule the next one
             handler.postDelayed(() -> {
                 if (!isPaused) {
@@ -90,6 +93,7 @@ public class Timer {
         }
         else{
             Log.d("TIMER", "All events for current chapter displayed");
+        }
         }
 
     }

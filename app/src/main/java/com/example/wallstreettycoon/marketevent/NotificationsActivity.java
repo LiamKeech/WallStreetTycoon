@@ -60,7 +60,7 @@ public class NotificationsActivity extends AppCompatActivity {
                 .filter(event -> displayedNotificationIds.contains(event.getMarketEventID()))
                 .collect(Collectors.toList());
 
-        if (displayedNotifications == null || displayedNotifications.isEmpty()) {
+        if (displayedNotifications.isEmpty()) {
             lblEmpty.setVisibility(View.VISIBLE);
             rvNotifications.setVisibility(View.GONE);
         } else {

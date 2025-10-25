@@ -390,18 +390,9 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
             List<GameEvent> pending = Game.getPendingEvents();
             for (int i = 0; i < pending.size(); i++) {
                 GameEvent e = pending.get(i);
-                MarketEvent event = (MarketEvent) e.getCargo();
-                event.applyMarketFactors();
-                new Handler(Looper.getMainLooper()).postDelayed(() -> showMarketEvent(event), i * 5000);
+                new Handler(Looper.getMainLooper()).postDelayed(() -> Game.getInstance().onGameEvent(e), i * 5000);
             }
             pending.clear();
         }, 300);
-    }
-
-    private void showMarketEvent(MarketEvent event) {
-        CompactNotificationDialogFragment dialog = CompactNotificationDialogFragment.newInstance(event);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.add(dialog, "CompactMarketEventNotification");
-        ft.commitAllowingStateLoss();
     }
 }
