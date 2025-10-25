@@ -254,7 +254,29 @@ public class miniGame1 extends AppCompatActivity {
         buyListLayout.addView(stockView);
         stockTextViews.put(stock, stockView);
 
-        profitLabel.setText(String.format("Profit: $%.2f", profit));
+
+        if(profit >= 0){
+            profitLabel.setText(String.format("Profit: $%.2f", profit));
+
+            int paddingTop = profitLabel.getPaddingTop();
+            int paddingBottom = profitLabel.getPaddingBottom();
+            int paddingLeft = profitLabel.getPaddingLeft();
+            int paddingRight = profitLabel.getPaddingRight();
+
+            profitLabel.setBackgroundResource(R.drawable.button_background_green_medium);
+            profitLabel.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+        }
+        else{
+            profitLabel.setText(String.format("Loss: $%.2f", profit));
+
+            int paddingTop = profitLabel.getPaddingTop();
+            int paddingBottom = profitLabel.getPaddingBottom();
+            int paddingLeft = profitLabel.getPaddingLeft();
+            int paddingRight = profitLabel.getPaddingRight();
+
+            profitLabel.setBackgroundResource(R.drawable.button_background_red_medium);
+            profitLabel.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+        }
     }
     public void removeStockFromHeldStocksList(AtomicBoolean held, Button button, AtomicReference<Float> currentPrice, Stock stock){
         if(held.get()) {
@@ -273,7 +295,28 @@ public class miniGame1 extends AppCompatActivity {
                 stockTextViews.remove(stock);
             }
 
-            profitLabel.setText(String.format("Profit: $%.2f", profit));
+            if(profit >= 0){
+                profitLabel.setText(String.format("Profit: $%.2f", profit));
+
+                int paddingTop = profitLabel.getPaddingTop();
+                int paddingBottom = profitLabel.getPaddingBottom();
+                int paddingLeft = profitLabel.getPaddingLeft();
+                int paddingRight = profitLabel.getPaddingRight();
+
+                profitLabel.setBackgroundResource(R.drawable.button_background_green_medium);
+                profitLabel.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+            }
+            else{
+                profitLabel.setText(String.format("Loss: $%.2f", profit));
+
+                int paddingTop = profitLabel.getPaddingTop();
+                int paddingBottom = profitLabel.getPaddingBottom();
+                int paddingLeft = profitLabel.getPaddingLeft();
+                int paddingRight = profitLabel.getPaddingRight();
+
+                profitLabel.setBackgroundResource(R.drawable.button_background_red_medium);
+                profitLabel.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+            }
         }
     }
 

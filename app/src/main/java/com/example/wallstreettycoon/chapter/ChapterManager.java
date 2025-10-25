@@ -117,15 +117,18 @@ public class ChapterManager implements GameObserver {
                     }
                 }
                 return false;
-            case 1: // Ch1: Bought tech stocks (e.g., CRNB=1, GPLX=4), completed mini-game 1
+            case 1: // Ch1: Bought tech stocks (e.g., CRNB=1, GPLX=4), completed mini-game 1, sold tech stocks
                 boughtTech = false;
+                boolean soldTech = false;
                 for (Transaction tx : txs) {
                     if ((tx.getStockID() == 1 || tx.getStockID() == 4) && "BUY".equals(tx.getTransactionType())) {
                         boughtTech = true;
-                        break;
+                    }
+                    if ((tx.getStockID() == 1 || tx.getStockID() == 4) && "SELL".equals(tx.getTransactionType())){
+                        soldTech = true;
                     }
                 }
-                return boughtTech && Game.getInstance().completedMiniGames.contains(1);
+                return boughtTech && Game.getInstance().completedMiniGames.contains(1) && soldTech;
             case 2: // Ch2: Bought then sold banks (e.g., GDBK=16)
                 boolean boughtBank = false, soldBank = false;
                 for (Transaction tx : txs) {

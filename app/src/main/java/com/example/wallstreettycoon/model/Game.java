@@ -1,6 +1,8 @@
 package com.example.wallstreettycoon.model;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -157,10 +159,12 @@ public class Game implements GameObserver, java.io.Serializable {
             case MARKET_EVENT:
                 MarketEvent marketEvent = (MarketEvent) event.getCargo();
                 if (GameStarterCloser.getCurrentActivity() instanceof ListStocks) {
-                    marketEvent.applyMarketFactors();
+
                     // Add notification ID to displayedNotifications
                     displayedNotifications.add(marketEvent.getMarketEventID());
                     notifyObservers(event);
+                    //give the user time to read before marketfactors are applied
+                    new Handler(Looper.getMainLooper()).postDelayed(marketEvent::applyMarketFactors, 20000);
                 } else {
                     pendingEvents.add(event);
                     Log.d("Game", "Queued MARKET_EVENT: " + marketEvent.getTitle() + " until ListStocks is active");

@@ -42,7 +42,7 @@
 
         <TextView
             android:id="@+id/viewBalance"
-            android:layout_width="118dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             style = "@style/GreenButtonMedium"
             android:gravity="center"
@@ -73,10 +73,11 @@
             android:layout_height="wrap_content"
 
             style="@style/GreyButtonSmall"
-            android:text="P"
+            android:text="Portfolio"
             android:textSize="20dp"
             android:gravity="center"
             android:fontFamily="@font/jua"
+
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnSearchDashboard"
@@ -91,11 +92,11 @@
             android:layout_height="wrap_content"
 
             style="@style/GreyButtonSmall"
-            android:text="M"
+            android:text="Market"
             android:textSize="20dp"
             android:gravity="center"
             android:fontFamily="@font/jua"
-
+            android:paddingHorizontal="20dp"
 
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnSearchDashboard"

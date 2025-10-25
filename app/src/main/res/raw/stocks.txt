@@ -1,18 +1,18 @@
-Cranberry Inc.,CRNB,Technology,Leading tech company known for overpriced blenders with Bluetooth.,45.20
-MicroHard Corp.,MHCD,Technology,Known for crashing software updates at the worst possible times.,38.75
-Pear Systems,PEAR,Technology,Makes phones that look suspiciously like other fruit-branded devices.,52.10
-Googolplex Ltd.,GPLX,Technology,Search engine so advanced it tells you what you want before you think it.,60.30
-Orange Inc.,ORNG,Technology,Known for selling chargers separately at double the price.,42.90
-BananaSoft Corp.,BNNF,Technology,Creators of productivity software that peels slowly under pressure.,36.40
-Instasham Ltd.,ISAM,Technology,Photo-sharing app where nothing is real and everything is filtered.,27.55
-Chirpify Inc.,CHRP,Technology,Microblogging platform where everyone yells in 280 characters or less.,33.80
-LemonTech Inc.,LMTC,Technology,Hardware firm famous for gadgets that break a week after warranty.,25.60
-Overpriced Cloud Systems,OCSD,Technology,Enterprise cloud storage that costs more than actual clouds.,70.15
-Redditron LLC.,RDTN,Technology,Forum-based platform where opinions get upvoted into arguments.,48.25
-FruitByte Inc.,FRBT,Technology,Known for selling “innovative” phones with missing headphone jacks.,55.50
-Pineapple OS Ltd.,PNOS,Technology,Revolutionary operating system that works only on Tuesdays.,39.95
-NetScam Corp.,NSCM,Technology,Internet service provider famous for charging hidden fees nobody understands.,29.45
-Zynerd Corp.,ZYND,Technology,AI company creating chatbots that give vague answers about themselves.,41.70
+Cranberry Inc.,CRNB,Technology,Leading tech company known for overpriced blenders with Bluetooth.,4.20
+MicroHard Corp.,MHCD,Technology,Known for crashing software updates at the worst possible times.,3.75
+Pear Systems,PEAR,Technology,Makes phones that look suspiciously like other fruit-branded devices.,5.10
+Googolplex Ltd.,GPLX,Technology,Search engine so advanced it tells you what you want before you think it.,6.30
+Orange Inc.,ORNG,Technology,Known for selling chargers separately at double the price.,4.90
+BananaSoft Corp.,BNNF,Technology,Creators of productivity software that peels slowly under pressure.,3.40
+Instasham Ltd.,ISAM,Technology,Photo-sharing app where nothing is real and everything is filtered.,2.55
+Chirpify Inc.,CHRP,Technology,Microblogging platform where everyone yells in 280 characters or less.,3.80
+LemonTech Inc.,LMTC,Technology,Hardware firm famous for gadgets that break a week after warranty.,2.60
+Overpriced Cloud Systems,OCSD,Technology,Enterprise cloud storage that costs more than actual clouds.,7.15
+Redditron LLC.,RDTN,Technology,Forum-based platform where opinions get upvoted into arguments.,4.25
+FruitByte Inc.,FRBT,Technology,Known for selling “innovative” phones with missing headphone jacks.,5.50
+Pineapple OS Ltd.,PNOS,Technology,Revolutionary operating system that works only on Tuesdays.,3.95
+NetScam Corp.,NSCM,Technology,Internet service provider famous for charging hidden fees nobody understands.,9.45
+Zynerd Corp.,ZYND,Technology,AI company creating chatbots that give vague answers about themselves.,1.70
 Goldbark Sachs,GDBK,Finance,Global investment bank known for charging fees on fees.,62.35
 Morgue & Stanley,MRGS,Finance,Investment bank famous for burying portfolios.,58.40
 Lehman Brothers 2.0,LB20,Finance,Risk management firm that swears it won’t collapse again.,33.10
