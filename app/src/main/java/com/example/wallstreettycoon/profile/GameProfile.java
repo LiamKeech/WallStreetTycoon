@@ -36,6 +36,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class GameProfile extends AppCompatActivity implements GameObserver {
 
@@ -168,6 +169,7 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
 
         List<PieEntry> entries = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
+        List<Integer> usedColors = new ArrayList<>(); // Track used colors
 
         double totalValue = 0.0;
         for (PortfolioStock ps : holdings) {
@@ -180,16 +182,17 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
             double stockValue = ps.getQuantity() * currentPrice;
             float percentage = (float) ((stockValue / totalValue) * 100);
 
-            entries.add(new PieEntry(percentage, ps.getStock().getSymbol()));
-            colors.add(getColourForStock(ps.getStock().getStockID()));
+            // Format label with percentage in brackets
+            String label = ps.getStock().getSymbol() + " (" + String.format("%.1f%%", percentage) + ")";
+            entries.add(new PieEntry(percentage, label));
+            colors.add(getColourForStock(ps.getStock().getStockID(), usedColors)); // Pass usedColors
         }
 
         // Dataset
         PieDataSet dataSet = new PieDataSet(entries, "");
         dataSet.setColors(colors);
-        dataSet.setValueTextSize(14f);
-        dataSet.setValueTextColor(Color.BLACK);
-        dataSet.setValueFormatter(new PercentFormatter(pieChart));
+        dataSet.setValueTextSize(0f); // Hide percentage values on slices
+        dataSet.setValueTextColor(Color.TRANSPARENT); // Ensure no text is visible
         dataSet.setSliceSpace(2f);
         dataSet.setSelectionShift(6f);
         dataSet.setValueTypeface(ResourcesCompat.getFont(this, R.font.jua));
@@ -198,14 +201,14 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
 
         // General pie chart config
         pieChart.setData(pieData);
-        pieChart.setUsePercentValues(true);
+        pieChart.setUsePercentValues(false); // Disable percentage display on chart
         pieChart.getDescription().setEnabled(false);
-        pieChart.setEntryLabelColor(Color.BLACK);
-        pieChart.setEntryLabelTextSize(14f);
+        pieChart.setEntryLabelColor(Color.TRANSPARENT); // Hide entry labels
+        pieChart.setEntryLabelTextSize(0f);
         pieChart.setDrawHoleEnabled(false);
         pieChart.setRotationEnabled(true);
         pieChart.setHighlightPerTapEnabled(true);
-        pieChart.setDrawEntryLabels(false);
+        pieChart.setDrawEntryLabels(false); // Ensure no labels on slices
         pieChart.setExtraOffsets(2f, 2f, 2f, 2f);
         pieChart.setEntryLabelTypeface(ResourcesCompat.getFont(this, R.font.jua));
 
@@ -238,7 +241,7 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
     }
 
 
-    private int getColourForStock(int stockId) {
+    private int getColourForStock(int stockId, List<Integer> usedColors) {
         int[] chartColors = new int[]{
                 Color.parseColor("#4CAF50"),  // Material Green
                 Color.parseColor("#2196F3"),  // Material Blue
@@ -251,7 +254,29 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
                 Color.parseColor("#607D8B"),  // Material Blue Grey
                 Color.parseColor("#E91E63")   // Material Pink
         };
-        return chartColors[stockId % chartColors.length];
+
+
+        if (stockId < chartColors.length && !usedColors.contains(chartColors[stockId])) {
+            usedColors.add(chartColors[stockId]);
+            return chartColors[stockId];
+        }
+
+        for (int color : chartColors) {
+            if (!usedColors.contains(color)) {
+                usedColors.add(color);
+                return color;
+            }
+        }
+
+        // Fallback
+        Random random = new Random(stockId);
+        int newColor = Color.rgb(
+                random.nextInt(256),
+                random.nextInt(256),
+                random.nextInt(256)
+        );
+        usedColors.add(newColor);
+        return newColor;
     }
 
     public void onGameEvent(GameEvent event) {
