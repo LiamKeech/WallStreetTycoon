@@ -65,6 +65,15 @@
             android:useDefaultMargins="true"
             android:alignmentMode="alignMargins"
             android:padding="4dp" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/hintButton"
+                android:text="Hint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="20dp"
+                style = "@style/OrangeButtonMedium"/>
+
         </FrameLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

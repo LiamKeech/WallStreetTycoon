@@ -11,12 +11,12 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Connection;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Model;
-import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Network;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Node;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.NodeColour;
 
@@ -28,10 +28,10 @@ public class NetworkView extends View {
     private Model model;
     private Paint nodePaint, outlinePaint, wirePaint, wireOutlinePaint;
     private Node startNode;
-    private float nodeRadius = 50;
+    private final float nodeRadius = 50;
     private float dragX, dragY;
 
-    private Map<Node, Float[]> nodePositions = new HashMap<>();
+    private final Map<Node, Float[]> nodePositions = new HashMap<>();
 
     public NetworkView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -56,7 +56,7 @@ public class NetworkView extends View {
     }
 
     @Override
-    protected void onDraw(Canvas canvas){
+    protected void onDraw(@NonNull Canvas canvas){
         setNodePositions();
         for (Node node: nodePositions.keySet()) {
             if(node.getColour() == NodeColour.BLUE) {

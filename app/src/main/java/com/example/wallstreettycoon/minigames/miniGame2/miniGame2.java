@@ -11,6 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,7 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
     private Board board;
     private GridLayout grid;
     private LinearLayout wordListLL;
+    private androidx.appcompat.widget.AppCompatButton hintButton;
     private Integer cellSize;
     FrameLayout container;
     ConnectionOverlay connectionOverlaySelectedCells;
@@ -63,6 +65,7 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
         grid = findViewById(R.id.grid);
         wordListLL = findViewById(R.id.wordListLL);
         container = findViewById(R.id.gridContainer);
+        hintButton = findViewById(R.id.hintButton);
         //end region
 
         int inset = 15;
@@ -74,7 +77,11 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
 
         drawGrid();
         initializeWordsList();
-
+        hintButton.setOnClickListener(v -> {
+            Toast toast = new Toast(this);
+            toast.setText(gameModel.getHint());
+            toast.show();
+        });
     }
 
     public void drawGrid(){
@@ -192,7 +199,6 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 drawGrid();
                 break;
             case GAME_OVER:
-                Intent intent = new Intent(this, miniGame2EndDialogFragment.class);
                 DialogFragment endDialogFragment = new miniGame2EndDialogFragment();
                 endDialogFragment.show(getSupportFragmentManager(), "miniGame1End");
                 break;
