@@ -99,8 +99,6 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
 
         // Force Market view as default
         viewType = "M";
-//        btnToggleM.setBackgroundResource(R.drawable.button_background_lightblue_small);
-//        btnToggleP.setBackgroundResource(R.drawable.button_background_grey_small);
 
         updateDisplay(viewType);
 
@@ -250,7 +248,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
         Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
         List<Stock> chapterStocks;
         if (currentChapter == null) {
-            Log.w("ListStocks", "Current chapter is null, falling back to full stock list. CurrentChapterID: " + Game.currentChapterID);
+            Log.w("ListStocks", "Current chapter is null, falling back to full stock list. CurrentChapterID: " + Game.getInstance().currentChapterID);
             chapterStocks = dbUtil.getStockList();
         } else {
             chapterStocks = currentChapter.getChapterStocks();

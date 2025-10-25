@@ -1,5 +1,7 @@
 package com.example.wallstreettycoon.chapter;
 
+import android.util.Log;
+
 import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.model.GameEvent;
 import com.example.wallstreettycoon.model.GameEventType;
@@ -41,7 +43,7 @@ public class ChapterManager implements GameObserver {
                 ch.setState(entry.getValue());
             }
         }
-        Game.currentChapterID = findCurrentChapterID();
+        Game.getInstance().currentChapterID = findCurrentChapterID();
     }
 
     private int findCurrentChapterID() {
@@ -69,17 +71,23 @@ public class ChapterManager implements GameObserver {
     }
 
     private void checkProgression() {
-        int currentID = Game.currentChapterID;
+        Log.d("CHAPTER MANAGER", "Checking progression");
+        int currentID = Game.getInstance().currentChapterID;
         Chapter current = getChapter(currentID);
+        Log.d("CHAPER MANAGER", current.getChapterID() + " | " + current.getState());
         if (current == null || current.getState() != ChapterState.IN_PROGRESS) {
             return;
         }
 
         if (isChapterCompleted(currentID, Game.currentUser)) {
+            Log.d("CHAPTER MANAGER", "Chapter " + currentID + " completed");
             current.setState(ChapterState.COMPLETED);
             if (currentID < 5) {
-                Game.currentChapterID++;
-                Chapter next = getChapter(Game.currentChapterID);
+                int currentChapterID = Game.getInstance().currentChapterID;
+                int nextChapter = currentChapterID + 1;
+                Game.getInstance().currentChapterID = nextChapter;
+                Log.d("CHAPTER MANAGER", "Chapter incremented to chapter " + nextChapter);
+                Chapter next = getChapter(Game.getInstance().currentChapterID);
                 next.setState(ChapterState.IN_PROGRESS);
                 Game.getInstance().onGameEvent(new GameEvent(GameEventType.CHAPTER_STARTED,
                         "Started: " + next.getChapterName(), next));
@@ -194,7 +202,7 @@ public class ChapterManager implements GameObserver {
     }
 
     public Chapter getCurrentChapter() {
-        return getChapter(Game.currentChapterID);
+        return getChapter(Game.getInstance().currentChapterID);
     }
 
     public Chapter getChapter(int id) {

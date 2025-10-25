@@ -3,6 +3,7 @@ package com.example.wallstreettycoon.model;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.wallstreettycoon.chapter.Chapter;
 import com.example.wallstreettycoon.chapter.ChapterManager;
 import com.example.wallstreettycoon.chapter.ChapterState;
 import com.example.wallstreettycoon.dashboard.ListStocks;
@@ -27,7 +28,7 @@ public class Game implements GameObserver, java.io.Serializable {
     public static User currentUser;
 
     // Chapter fields
-    public static int currentChapterID = 0;
+    public int currentChapterID = 0;
     public static Map<Integer, ChapterState> chapterStates = new HashMap<>();
     public static Set<Integer> completedMiniGames = new HashSet<>();
     public static List<Integer> displayedNotifications = new ArrayList<>(); // Track displayed notification IDs
@@ -82,7 +83,7 @@ public class Game implements GameObserver, java.io.Serializable {
             dbUtil = DatabaseUtil.getInstance(context);
             timer = new Timer();
             chapterStates.put(0, ChapterState.IN_PROGRESS);
-            currentChapterID = 0; // Explicitly set to tutorial
+            INSTANCE.currentChapterID = 0; // Explicitly set to tutorial
             displayedNotifications.clear();
         }
 
@@ -165,6 +166,8 @@ public class Game implements GameObserver, java.io.Serializable {
                     Log.d("Game", "Queued MARKET_EVENT: " + marketEvent.getTitle() + " until ListStocks is active");
                 }
                 break;
+            case STOCK_BOUGHT:
+                ChapterManager.getInstance().onGameEvent(event);
         }
     }
 
