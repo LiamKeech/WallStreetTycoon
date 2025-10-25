@@ -58,6 +58,45 @@ public class NetworkView extends View {
     @Override
     protected void onDraw(@NonNull Canvas canvas){
         setNodePositions();
+
+
+
+        //draw current connection
+        if (startNode != null) {
+            Float[] pos = nodePositions.get(startNode);
+            if(startNode.getColour() == NodeColour.BLUE) {
+                wirePaint.setColor(getResources().getColor(R.color.LightBlue));
+                wireOutlinePaint.setColor(getResources().getColor(R.color.LightBlueShadow));
+            }
+            else {
+                wirePaint.setColor(getResources().getColor(R.color.Orange));
+                wireOutlinePaint.setColor(getResources().getColor(R.color.OrangeShadow));
+            }
+
+            canvas.drawLine(pos[0], pos[1], dragX, dragY, wireOutlinePaint);
+            canvas.drawLine(pos[0], pos[1], dragX, dragY, wirePaint);
+        }
+
+        //draw connections
+        for (Connection connection: model.network.getConnections()){
+            Float[] startPos = nodePositions.get(connection.getStart());
+            Float[] endPos = nodePositions.get(connection.getEnd());
+
+            if(connection.getStart().getColour() == NodeColour.BLUE) {
+                wirePaint.setColor(getResources().getColor(R.color.LightBlue));
+                wireOutlinePaint.setColor(getResources().getColor(R.color.LightBlueShadow));
+            }
+            else {
+                wirePaint.setColor(getResources().getColor(R.color.Orange));
+                wireOutlinePaint.setColor(getResources().getColor(R.color.OrangeShadow));
+            }
+
+
+            canvas.drawLine(startPos[0], startPos[1], endPos[0], endPos[1], wireOutlinePaint);
+            canvas.drawLine(startPos[0], startPos[1], endPos[0], endPos[1], wirePaint);
+        }
+
+        //draw nodes
         for (Node node: nodePositions.keySet()) {
             if(node.getColour() == NodeColour.BLUE) {
                 nodePaint.setColor(getResources().getColor(R.color.LightBlue));
@@ -76,33 +115,6 @@ public class NetworkView extends View {
             canvas.drawCircle(x, y, nodeRadius, nodePaint);
             //outline
             canvas.drawCircle(x, y, nodeRadius, outlinePaint);
-        }
-
-        if (startNode != null) {
-            Float[] pos = nodePositions.get(startNode);
-            if(startNode.getColour() == NodeColour.BLUE)
-                wirePaint.setColor(getResources().getColor(R.color.LightBlue));
-            else
-                wirePaint.setColor(getResources().getColor(R.color.Orange));
-            canvas.drawLine(pos[0], pos[1], dragX, dragY, wirePaint);
-        }
-
-        for (Connection connection: model.network.getConnections()){
-            Float[] startPos = nodePositions.get(connection.getStart());
-            Float[] endPos = nodePositions.get(connection.getEnd());
-
-            if(connection.getStart().getColour() == NodeColour.BLUE) {
-                wirePaint.setColor(getResources().getColor(R.color.LightBlue));
-                wireOutlinePaint.setColor(getResources().getColor(R.color.LightBlueShadow));
-            }
-            else {
-                wirePaint.setColor(getResources().getColor(R.color.Orange));
-                wireOutlinePaint.setColor(getResources().getColor(R.color.OrangeShadow));
-            }
-
-
-            //canvas.drawLine(startPos[0], startPos[1], endPos[0], endPos[1], wireOutlinePaint);
-            canvas.drawLine(startPos[0], startPos[1], endPos[0], endPos[1], wirePaint);
         }
     }
 
