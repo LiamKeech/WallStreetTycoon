@@ -172,30 +172,30 @@ public class ChapterManager implements GameObserver {
         // Based on notifications.txt, determine which notification IDs are required for each chapter
         switch (chapterID) {
             case 0: // Tutorial: 1 notification
-                requiredIds.add(0);
+                requiredIds.add(1);
                 break;
             case 1: // Chapter 1: 4 notifications
-                requiredIds.add(1);
                 requiredIds.add(2);
                 requiredIds.add(3);
                 requiredIds.add(4);
+                requiredIds.add(5);
                 break;
             case 2: // Chapter 2: 2 notifications
-                requiredIds.add(5);
                 requiredIds.add(6);
+                requiredIds.add(7);
                 break;
             case 3: // Chapter 3: 2 notifications
-                requiredIds.add(7);
                 requiredIds.add(8);
+                requiredIds.add(9);
                 break;
             case 4: // Chapter 4: 3 notifications
-                requiredIds.add(9);
                 requiredIds.add(10);
                 requiredIds.add(11);
+                requiredIds.add(12);
                 break;
             case 5: // Chapter 5: 2 notifications
-                requiredIds.add(12);
                 requiredIds.add(13);
+                requiredIds.add(14);
                 break;
             default:
                 break;
