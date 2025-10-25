@@ -51,7 +51,7 @@ public class Chapter {
     public void setState(ChapterState state) {
         this.state = state;
         // Sync to Game for save
-        Game.chapterStates.put(chapterID, state);
+        Game.getInstance().chapterStates.put(chapterID, state);
     }
 
     public List<Stock> getChapterStocks() {

@@ -37,7 +37,7 @@ public class ChapterManager implements GameObserver {
     }
 
     private void syncStatesFromGame() {
-        for (Map.Entry<Integer, ChapterState> entry : Game.chapterStates.entrySet()) {
+        for (Map.Entry<Integer, ChapterState> entry : Game.getInstance().chapterStates.entrySet()) {
             Chapter ch = getChapter(entry.getKey());
             if (ch != null) {
                 ch.setState(entry.getValue());
@@ -49,7 +49,7 @@ public class ChapterManager implements GameObserver {
     private int findCurrentChapterID() {
         // Find the highest completed chapter and return the next one, or 0 if none completed
         int highestCompleted = -1;
-        for (Map.Entry<Integer, ChapterState> entry : Game.chapterStates.entrySet()) {
+        for (Map.Entry<Integer, ChapterState> entry : Game.getInstance().chapterStates.entrySet()) {
             if (entry.getValue() == ChapterState.COMPLETED && entry.getKey() > highestCompleted) {
                 highestCompleted = entry.getKey();
             }
@@ -106,12 +106,14 @@ public class ChapterManager implements GameObserver {
 
         // Check if all required notifications for the chapter have been displayed
         if (!areChapterNotificationsDisplayed(chapterID)) {
+            Log.d("CHAPTER MANAGER", "All notifications for chapter " + chapterID + " not yet displayed");
             return false;
         }
 
         switch (chapterID) {
             case 0: // Tutorial: Bought Teslo (stockID 61)
                 for (Transaction tx : txs) {
+                    Log.d("CHAPTER MANAGER", "Checking transaction: " + tx.getStockID());
                     if (tx.getStockID() == 61 && "BUY".equals(tx.getTransactionType())) {
                         return true;
                     }
@@ -125,7 +127,7 @@ public class ChapterManager implements GameObserver {
                         break;
                     }
                 }
-                return boughtTech && Game.completedMiniGames.contains(1);
+                return boughtTech && Game.getInstance().completedMiniGames.contains(1);
             case 2: // Ch2: Bought then sold banks (e.g., GDBK=16)
                 boolean boughtBank = false, soldBank = false;
                 for (Transaction tx : txs) {
@@ -139,7 +141,7 @@ public class ChapterManager implements GameObserver {
                     if ((tx.getStockID() == 1 || tx.getStockID() == 4) && "SELL".equals(tx.getTransactionType())) soldCh1Stock = true;
                     if (tx.getStockID() >= 21 && tx.getStockID() <= 30 && "BUY".equals(tx.getTransactionType())) boughtCrypto = true;
                 }
-                return soldCh1Stock && boughtCrypto && Game.completedMiniGames.contains(2);
+                return soldCh1Stock && boughtCrypto && Game.getInstance().completedMiniGames.contains(2);
             case 4: // Ch4: Sold tourism, bought tech/entertainment
                 boolean soldTourism = false;
                 boughtTech = false;
@@ -153,7 +155,7 @@ public class ChapterManager implements GameObserver {
                 for (Transaction tx : txs) {
                     if (tx.getStockID() == 51 && "BUY".equals(tx.getTransactionType())) boughtAI = true;
                 }
-                return boughtAI && Game.completedMiniGames.contains(3);
+                return boughtAI && Game.getInstance().completedMiniGames.contains(3);
             default:
                 return false;
         }
@@ -162,7 +164,7 @@ public class ChapterManager implements GameObserver {
     private boolean areChapterNotificationsDisplayed(int chapterID) {
         // Assuming Game.displayedNotifications is a List<Integer> tracking notification IDs that have been shown
         List<Integer> requiredNotificationIds = getRequiredNotificationIdsForChapter(chapterID);
-        return Game.displayedNotifications.containsAll(requiredNotificationIds);
+        return Game.getInstance().displayedNotifications.containsAll(requiredNotificationIds);
     }
 
     private List<Integer> getRequiredNotificationIdsForChapter(int chapterID) {

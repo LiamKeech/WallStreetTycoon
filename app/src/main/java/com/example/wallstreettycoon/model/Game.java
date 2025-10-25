@@ -29,10 +29,10 @@ public class Game implements GameObserver, java.io.Serializable {
 
     // Chapter fields
     public int currentChapterID = 0;
-    public static Map<Integer, ChapterState> chapterStates = new HashMap<>();
-    public static Set<Integer> completedMiniGames = new HashSet<>();
-    public static List<Integer> displayedNotifications = new ArrayList<>(); // Track displayed notification IDs
-
+    public Map<Integer, ChapterState> chapterStates = new HashMap<>();
+    public Set<Integer> completedMiniGames = new HashSet<>();
+    public List<Integer> displayedNotifications = new ArrayList<>(); // Track displayed notification IDs
+    public final List<GameEvent> pendingEvents = new ArrayList<>();
     public static Timer timer;
     private long timeStamp;
     private int currentEventIndex;
@@ -41,11 +41,10 @@ public class Game implements GameObserver, java.io.Serializable {
     private static List<GameObserver> observers;
 
     public static DatabaseUtil dbUtil;
-    public static final List<GameEvent> pendingEvents = new ArrayList<>();
+
 
     private Game() {
-        // Initialize displayedNotifications
-        displayedNotifications = new ArrayList<>();
+
     }
 
     public static void initContext(Context context) {
@@ -82,9 +81,9 @@ public class Game implements GameObserver, java.io.Serializable {
             INSTANCE = new Game();
             dbUtil = DatabaseUtil.getInstance(context);
             timer = new Timer();
-            chapterStates.put(0, ChapterState.IN_PROGRESS);
+            INSTANCE.chapterStates.put(0, ChapterState.IN_PROGRESS);
             INSTANCE.currentChapterID = 0; // Explicitly set to tutorial
-            displayedNotifications.clear();
+            INSTANCE.displayedNotifications.clear();
         }
 
         addObserver(ChapterManager.getInstance());
@@ -142,7 +141,7 @@ public class Game implements GameObserver, java.io.Serializable {
     }
 
     public static List<GameEvent> getPendingEvents() {
-        return pendingEvents;
+        return INSTANCE.pendingEvents;
     }
 
     @Override
