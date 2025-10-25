@@ -273,17 +273,24 @@ public class DatabaseUtil {
     }
 
     //Returns the stocks current price
-    public Double getCurrentStockPrice(Integer stockID){
-        Integer timeStamp = Game.getInstance().getCurrentTimeStamp();
-        StockPriceFunction stockPriceFunction = getStockPriceFunction(stockID);
-        if (stockPriceFunction == null) return 0.0;
-
-        Double priceChange = stockPriceFunction.getCurrentPriceChange(timeStamp);
-        Stock stock = getStock(stockID);
-        if (stock == null) return 0.0;
-
-        setStockCurrentPrice(stockID, stock.getCurrentPrice() + priceChange);
-        return stock.getCurrentPrice() + priceChange;
+    public double getCurrentStockPrice(int stockID) {
+        double price = 0;
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery("SELECT * FROM stocks WHERE stockID = ?", new String[]{String.valueOf(stockID)});
+            if (cursor.moveToFirst()) {
+                Stock stock = getStock(stockID);
+                StockPriceFunction func = getStockPriceFunction(stockID);
+                if (stock != null && func != null) {
+                    price = stock.getCurrentPrice() + func.getCurrentPriceChange(Game.getInstance().getCurrentTimeStamp());
+                    price = Math.max(0.01, price); // prevent negative prices
+                }
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        setStockCurrentPrice(stockID, price);
+        return price;
     }
 
     //updates the current stock price
