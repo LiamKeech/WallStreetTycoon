@@ -44,8 +44,7 @@
             android:id="@+id/viewBalance"
             android:layout_width="118dp"
             android:layout_height="40dp"
-            android:background="@drawable/rounded_textview"
-            android:backgroundTint="@color/Green"
+            style = "@style/GreenButtonMedium"
             android:gravity="center"
             android:text="--.--"
             android:textColor="@color/white"
@@ -68,18 +67,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/resultContainer" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnToggleList"
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:backgroundTint="@color/Grey"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            style="@style/GreyButtonSmall"
             android:text="P"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="20dp"
+            android:gravity="center"
             android:fontFamily="@font/jua"
-            app:cornerRadius="0dp"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnSearchDashboard"
             app:layout_constraintHorizontal_bias="0.572"
@@ -87,19 +85,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.021" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnToggleList2"
-            android:layout_width="60dp"
-            android:layout_height="40dp"
-            android:backgroundTint="@color/Grey"
-            android:gravity="center"
-            android:paddingLeft="0dp"
-            android:paddingRight="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            style="@style/GreyButtonSmall"
             android:text="M"
-            android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="20dp"
+            android:gravity="center"
             android:fontFamily="@font/jua"
-            app:cornerRadius="0dp"
+
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnSearchDashboard"
             app:layout_constraintHorizontal_bias="0.0"
@@ -128,11 +125,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text=""
+            android:text="Market"
             android:textColor="@color/LightBlue"
             android:textSize="20dp"
             android:textStyle="bold"
             android:visibility="visible"
+            android:fontFamily="@font/jua"
+
+
             app:layout_constraintBottom_toTopOf="@+id/RVstock"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -99,24 +99,42 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
 
         // Force Market view as default
         viewType = "M";
-        btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-        btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+//        btnToggleM.setBackgroundResource(R.drawable.button_background_lightblue_small);
+//        btnToggleP.setBackgroundResource(R.drawable.button_background_grey_small);
+
         updateDisplay(viewType);
 
         // Toggle listeners
         btnToggleP.setOnClickListener(v -> {
             viewType = "P";
             updateDisplay(viewType);
-            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+            int paddingTop = btnToggleM.getPaddingTop();
+            int paddingBottom = btnToggleM.getPaddingBottom();
+            int paddingLeft = btnToggleM.getPaddingLeft();
+            int paddingRight = btnToggleM.getPaddingRight();
+
+            btnToggleP.setBackgroundResource(R.drawable.button_background_lightblue_small);
+            btnToggleM.setBackgroundResource(R.drawable.button_background_grey_small);
+
+            btnToggleM.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+            btnToggleP.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+
             clearSearchUI();
         });
 
         btnToggleM.setOnClickListener(v -> {
             viewType = "M";
             updateDisplay(viewType);
-            btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
-            btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
+
+            int paddingTop = btnToggleM.getPaddingTop();
+            int paddingBottom = btnToggleM.getPaddingBottom();
+            int paddingLeft = btnToggleM.getPaddingLeft();
+            int paddingRight = btnToggleM.getPaddingRight();
+            btnToggleM.setBackgroundResource(R.drawable.button_background_lightblue_small);
+            btnToggleP.setBackgroundResource(R.drawable.button_background_grey_small);
+            btnToggleM.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+            btnToggleP.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+
             clearSearchUI();
         });
 
@@ -357,8 +375,18 @@ public class ListStocks extends AppCompatActivity implements GameObserver {
         Log.d("ListStocks", "onResume Called");
         updateUserBalance();
         viewType = "M"; // Force Market view on resume
-        btnToggleM.setBackgroundTintList(getResources().getColorStateList(R.color.LightBlue));
-        btnToggleP.setBackgroundTintList(getResources().getColorStateList(R.color.Grey));
+
+        int paddingTop = btnToggleM.getPaddingTop();
+        int paddingBottom = btnToggleM.getPaddingBottom();
+        int paddingLeft = btnToggleM.getPaddingLeft();
+        int paddingRight = btnToggleM.getPaddingRight();
+
+        btnToggleM.setBackgroundResource(R.drawable.button_background_lightblue_small);
+        btnToggleP.setBackgroundResource(R.drawable.button_background_grey_small);
+
+        btnToggleM.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+        btnToggleP.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+
         updateDisplay(viewType); // Refresh display on resume
         new Handler(Looper.getMainLooper()).postDelayed(() -> {
             List<GameEvent> pending = Game.getPendingEvents();
