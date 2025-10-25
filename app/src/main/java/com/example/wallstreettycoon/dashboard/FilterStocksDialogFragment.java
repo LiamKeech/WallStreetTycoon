@@ -18,10 +18,8 @@ import com.example.wallstreettycoon.R;
 
 public class FilterStocksDialogFragment extends DialogFragment {
 
-    String selectedFilter, searchCriteria, viewToggle;
-
-    public void setView(String viewToggle) {
-        this.viewToggle = viewToggle;
+    public interface FilterListener {
+        void onFilterApplied(String filter, String search);
     }
 
     @Override
@@ -30,30 +28,24 @@ public class FilterStocksDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_filter_stocks_dialog, container, false);
         getDialog().getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
-
         ImageButton btnSearch = view.findViewById(R.id.imgSearch);
         btnSearch.setOnClickListener(v -> {
             RadioGroup radioGroup = view.findViewById(R.id.rdgFilter);
             int selectedId = radioGroup.getCheckedRadioButtonId();
-
-            if (selectedId != -1) {//item has been selected:
+            String selectedFilter = null;
+            if (selectedId != -1) { // item has been selected:
                 RadioButton selectedRadioButton = view.findViewById(selectedId);
                 selectedFilter = selectedRadioButton.getText().toString();
             }
 
             SearchView searchView = view.findViewById(R.id.searchText);
+            String searchCriteria = searchView.getQuery().toString();
 
-            searchCriteria = searchView.getQuery().toString();
+            if (getActivity() instanceof FilterListener) {
+                ((FilterListener) getActivity()).onFilterApplied(selectedFilter, searchCriteria);
+            }
 
-            //carry over filter category and entered criteria
-            Intent intent = new Intent(getActivity(), ListStocks.class);
-            intent.putExtra("filter", selectedFilter);  //selected filter
-            intent.putExtra("search", searchCriteria);  //entered criteria
-            intent.putExtra("view", viewToggle);
-            startActivity(intent);
-
-
-            //close when search button selected:
+            // close when search button selected:
             dismiss();
         });
 
