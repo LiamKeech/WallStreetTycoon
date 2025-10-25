@@ -25,6 +25,7 @@ public class miniGame1EndDialogFragment extends DialogFragment {
     Float profit;
     TextView profitLabel;
     Button homeButton;
+    Button retryButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class miniGame1EndDialogFragment extends DialogFragment {
         }
 
         homeButton = view.findViewById(R.id.home_button);
+        retryButton = view.findViewById(R.id.retryButton);
 
         return view;
     }
@@ -85,10 +87,18 @@ public class miniGame1EndDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Game.getInstance().onGameEvent(new GameEvent(GameEventType.MINIGAME_COMPLETED, "Minigame 1 completed", 1));
-                Intent intent = new Intent(getActivity(), ListStocks.class); //will change to dashboard
+                Intent intent = new Intent(getActivity(), ListStocks.class);
                 intent.putExtra("view", "M");
                 startActivity(intent);
             }
         });
+        retryButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), miniGame1.class);
+                startActivity(intent);
+            }
+        });
+
     }
 }

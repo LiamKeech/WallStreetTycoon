@@ -2,10 +2,12 @@ package com.example.wallstreettycoon.chapter;
 
 import android.util.Log;
 
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.model.GameEvent;
 import com.example.wallstreettycoon.model.GameEventType;
 import com.example.wallstreettycoon.model.GameObserver;
+import com.example.wallstreettycoon.portfolio.PortfolioStock;
 import com.example.wallstreettycoon.transaction.Transaction;
 import com.example.wallstreettycoon.useraccount.User;
 
@@ -118,17 +120,26 @@ public class ChapterManager implements GameObserver {
                 }
                 return false;
             case 1: // Ch1: Bought tech stocks (e.g., CRNB=1, GPLX=4), completed mini-game 1, sold tech stocks
-                boughtTech = false;
-                boolean soldTech = false;
+                boolean holdingTech = false;
                 for (Transaction tx : txs) {
                     if ((tx.getStockID() == 1 || tx.getStockID() == 4) && "BUY".equals(tx.getTransactionType())) {
                         boughtTech = true;
                     }
-                    if ((tx.getStockID() == 1 || tx.getStockID() == 4) && "SELL".equals(tx.getTransactionType())){
-                        soldTech = true;
+
+                    //Check user has sold all tech stocks and is not holding any
+                    List<PortfolioStock> portfolio = DatabaseUtil.getInstance(Game.getInstance().getContext()).getPortfolio(user.getUserUsername());
+                    for(PortfolioStock ps: portfolio){
+                        if (ps.getStock().getCategory().equals("Technology")) {
+                            holdingTech = true;
+                            break;
+                        }
                     }
                 }
-                return boughtTech && Game.getInstance().completedMiniGames.contains(1) && soldTech;
+                if(boughtTech) Log.d("CHAPTER MANAGER", "User bought tech stocks");
+                if(!holdingTech) Log.d("CHAPTER MANAGER", "User not is holding tech stocks");
+                if(Game.getInstance().completedMiniGames.contains(1)) Log.d("CHAPTER MANAGER", "Mini-game 1 completed");
+
+                return boughtTech && Game.getInstance().completedMiniGames.contains(1) && !holdingTech;
             case 2: // Ch2: Bought then sold banks (e.g., GDBK=16)
                 boolean boughtBank = false, soldBank = false;
                 for (Transaction tx : txs) {
