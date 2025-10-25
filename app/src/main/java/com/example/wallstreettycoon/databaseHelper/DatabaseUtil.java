@@ -603,14 +603,14 @@ public class DatabaseUtil {
         return stockName.contains(searchLower) || symbol.contains(searchLower);
     }
 
-    public Double getQuantity(int portfolioID, int stockID) {
-        Double qty = 0.0;
+    public Integer getQuantity(int portfolioID, int stockID) {
+        Integer qty = 0;
         Cursor cursor = null;
         try {
             cursor = db.rawQuery("SELECT quantity FROM portfolioStock WHERE portfolioID = ? AND stockID = ?",
                     new String[]{String.valueOf(portfolioID), String.valueOf(stockID)});
             if (cursor.moveToFirst()) {
-                qty = cursor.getDouble(cursor.getColumnIndexOrThrow("quantity"));
+                qty = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
             }
         } finally {
             if (cursor != null) cursor.close();

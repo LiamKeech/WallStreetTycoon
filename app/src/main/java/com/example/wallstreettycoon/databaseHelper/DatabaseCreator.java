@@ -127,14 +127,13 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                 "FOREIGN KEY(chapterID) REFERENCES Chapter(chapterID), " +
                 "FOREIGN KEY(stockID) REFERENCES stocks(stockID))");
 
-        //FIXME Populate ChapterStock
         Map<Integer, List<String>> chapterStocks = new HashMap<>();
         chapterStocks.put(0, Arrays.asList("TESL"));
-        chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "FAUD", "TESL", "PLLC", "ESKM", "SNKS"));
-        chapterStocks.put(2, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "FAUD", "TESL", "GDBK", "MRGS", "LB20", "SCMP", "JPMG", "BRST", "CTRB", "HDBC", "PNZI", "DMHC", "FAUD", "BNZO", "HLIX", "IRCL", "SKLH"));
-        chapterStocks.put(3, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "FAUD", "TESL", "DGCS", "INST", "BTCN", "HODL", "SHDY", "MNBK", "PUMP", "ELNM", "ZRCN", "BNNA", "BGNI", "HDHP", "GLOW", "HVHP", "FAUD"));
-        chapterStocks.put(4, Arrays.asList("SKHA", "EJTN", "CLDN", "WGIT", "PRLC", "JTLG", "YLVC", "ARFO", "BGBL", "NVLT", "TTCK", "FLIK", "SLPC", "VRRL", "FAUD", "MDMS", "WNDO", "GKRT", "SKFI", "TESL"));
-        chapterStocks.put(5, Arrays.asList("TKAI", "NRND", "DFMD", "PSSE", "CGSM", "PRTA", "AGPT", "WKBT", "RBLB", "PRBL", "CLAI", "FAUD", "VRRL", "TESL"));
+        chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "TESL"));
+        chapterStocks.put(2, Arrays.asList("GDBK", "MRGS", "LB20", "SCMP", "JPMG", "BRST", "CTRB", "HDBC", "PNZI", "DMHC", "TESL"));
+        chapterStocks.put(3, Arrays.asList("CRNB", "GPLX", "DGCS", "INST", "BTCN", "HODL", "SHDY", "MNBK", "PUMP", "ELNM", "ZRCN", "BNNA", "TESL"));
+        chapterStocks.put(4, Arrays.asList("SKHA", "EJTN", "CLDN", "WGIT", "PRLC", "JTLG", "YLVC", "ARFO", "BGBL", "NVLT", "TTCK", "FLIK", "SLPC", "VRRL", "TESL"));
+        chapterStocks.put(5, Arrays.asList("TKAI", "NRND", "DFMD", "PSSE", "CGSM", "PRTA", "AGPT", "WKBT", "RBLB", "PRBL", "CLAI", "TESL"));
 
         Cursor cursor = null;
         try {
