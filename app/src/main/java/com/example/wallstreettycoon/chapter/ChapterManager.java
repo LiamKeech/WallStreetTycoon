@@ -47,7 +47,6 @@ public class ChapterManager implements GameObserver {
     }
 
     private int findCurrentChapterID() {
-        // Find the highest completed chapter and return the next one, or 0 if none completed
         int highestCompleted = -1;
         for (Map.Entry<Integer, ChapterState> entry : Game.getInstance().chapterStates.entrySet()) {
             if (entry.getValue() == ChapterState.COMPLETED && entry.getKey() > highestCompleted) {
@@ -56,9 +55,9 @@ public class ChapterManager implements GameObserver {
         }
         int nextChapter = highestCompleted + 1;
         if (nextChapter >= chapters.size()) {
-            nextChapter = chapters.size() - 1; // Stay at last chapter if all completed
+            nextChapter = chapters.size() - 1;
         }
-        return nextChapter >= 0 ? nextChapter : 0; // Default to tutorial if no chapters completed
+        return nextChapter >= 0 ? nextChapter : 0;
     }
 
     @Override
@@ -74,7 +73,7 @@ public class ChapterManager implements GameObserver {
         Log.d("CHAPTER MANAGER", "Checking progression");
         int currentID = Game.getInstance().currentChapterID;
         Chapter current = getChapter(currentID);
-        Log.d("CHAPER MANAGER", current.getChapterID() + " | " + current.getState());
+        Log.d("CHAPTER MANAGER", current.getChapterID() + " | " + current.getState());
         if (current == null || current.getState() != ChapterState.IN_PROGRESS) {
             return;
         }
@@ -94,7 +93,6 @@ public class ChapterManager implements GameObserver {
             } else {
                 Game.getInstance().onGameEvent(new GameEvent(GameEventType.GAME_ENDED,
                         "Game ended. Final balance: " + Game.currentUser.getUserBalance(), null));
-                // Enable free roam/mini-game replay in UI
             }
             Game.saveGame();
         }
@@ -105,7 +103,6 @@ public class ChapterManager implements GameObserver {
         List<Transaction> txs = Game.dbUtil.getTransactionHistory(user.getUserUsername());
         boolean boughtTech = false;
 
-        // Check if all required notifications for the chapter have been displayed
         if (!areChapterNotificationsDisplayed(chapterID)) {
             Log.d("CHAPTER MANAGER", "All notifications for chapter " + chapterID + " not yet displayed");
             return false;
@@ -140,21 +137,21 @@ public class ChapterManager implements GameObserver {
                 boolean soldCh1Stock = false, boughtCrypto = false;
                 for (Transaction tx : txs) {
                     if ((tx.getStockID() == 1 || tx.getStockID() == 4) && "SELL".equals(tx.getTransactionType())) soldCh1Stock = true;
-                    if (tx.getStockID() >= 21 && tx.getStockID() <= 30 && "BUY".equals(tx.getTransactionType())) boughtCrypto = true;
+                    if (tx.getStockID() >= 26 && tx.getStockID() <= 35 && "BUY".equals(tx.getTransactionType())) boughtCrypto = true;
                 }
                 return soldCh1Stock && boughtCrypto && Game.getInstance().completedMiniGames.contains(2);
-            case 4: // Ch4: Sold tourism, bought tech/entertainment
-                boolean soldTourism = false;
+            case 4: // Ch4: Bought tourism (36-45), bought tech/entertainment (46-49)
+                boolean boughtTourism = false;
                 boughtTech = false;
                 for (Transaction tx : txs) {
-                    if (tx.getStockID() >= 31 && tx.getStockID() <= 40 && "SELL".equals(tx.getTransactionType())) soldTourism = true;
-                    if (tx.getStockID() >= 41 && tx.getStockID() <= 50 && "BUY".equals(tx.getTransactionType())) boughtTech = true;
+                    if (tx.getStockID() >= 36 && tx.getStockID() <= 45 && "BUY".equals(tx.getTransactionType())) boughtTourism = true;
+                    if (tx.getStockID() >= 46 && tx.getStockID() <= 49 && "BUY".equals(tx.getTransactionType())) boughtTech = true;
                 }
-                return soldTourism && boughtTech;
-            case 5: // Ch5: Bought AI company (e.g., TKAI=51), completed logic mini (3)
+                return boughtTourism && boughtTech;
+            case 5: // Ch5: Bought AI company (TKAI=50), completed logic mini (3)
                 boolean boughtAI = false;
                 for (Transaction tx : txs) {
-                    if (tx.getStockID() == 51 && "BUY".equals(tx.getTransactionType())) boughtAI = true;
+                    if (tx.getStockID() == 50 && "BUY".equals(tx.getTransactionType())) boughtAI = true;
                 }
                 return boughtAI && Game.getInstance().completedMiniGames.contains(3);
             default:
@@ -163,40 +160,41 @@ public class ChapterManager implements GameObserver {
     }
 
     private boolean areChapterNotificationsDisplayed(int chapterID) {
-        // Assuming Game.displayedNotifications is a List<Integer> tracking notification IDs that have been shown
         List<Integer> requiredNotificationIds = getRequiredNotificationIdsForChapter(chapterID);
         return Game.getInstance().displayedNotifications.containsAll(requiredNotificationIds);
     }
 
     public static List<Integer> getRequiredNotificationIdsForChapter(int chapterID) {
         List<Integer> requiredIds = new ArrayList<>();
-        // Based on notifications.txt, determine which notification IDs are required for each chapter
         switch (chapterID) {
             case 0: // Tutorial: 1 notification
                 requiredIds.add(1);
                 break;
-            case 1: // Chapter 1: 4 notifications
+            case 1: // Chapter 1: 5 notifications
                 requiredIds.add(2);
                 requiredIds.add(3);
                 requiredIds.add(4);
                 requiredIds.add(5);
+                requiredIds.add(6);
                 break;
             case 2: // Chapter 2: 2 notifications
-                requiredIds.add(6);
                 requiredIds.add(7);
-                break;
-            case 3: // Chapter 3: 2 notifications
                 requiredIds.add(8);
-                requiredIds.add(9);
                 break;
-            case 4: // Chapter 4: 3 notifications
+            case 3: // Chapter 3: 3 notifications
+                requiredIds.add(9);
                 requiredIds.add(10);
                 requiredIds.add(11);
-                requiredIds.add(12);
                 break;
-            case 5: // Chapter 5: 2 notifications
+            case 4: // Chapter 4: 4 notifications
+                requiredIds.add(12);
                 requiredIds.add(13);
                 requiredIds.add(14);
+                requiredIds.add(15);
+                break;
+            case 5: // Chapter 5: 2 notifications
+                requiredIds.add(16);
+                requiredIds.add(17);
                 break;
             default:
                 break;
