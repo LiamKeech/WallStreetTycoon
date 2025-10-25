@@ -62,31 +62,36 @@ public class Timer {
         Game.getInstance().onGameEvent(new GameEvent(GameEventType.UPDATE_STOCK_PRICE, "Price updated", (int)getElapsedTime()));
     }
 
-    private void scheduleNextEvent(int index) {
+    public void scheduleNextEvent(int index) {
         Log.d("SCHEDULE NEXT EVENT", String.valueOf(index));
         if (marketEventList == null || index >= marketEventList.size()) return;
 
         currentEventIndex = index; // save position
 
+
         MarketEvent event = marketEventList.get(index);
-        GameEvent currentEvent = new GameEvent(
-                GameEventType.MARKET_EVENT,
-                event.getTitle(),
-                event
-        );
+        if(event.getChapterID() == Game.getInstance().currentChapterID) {
+            GameEvent currentEvent = new GameEvent(
+                    GameEventType.MARKET_EVENT,
+                    event.getTitle(),
+                    event
+            );
+            // dispatch on main thread
+            Game.getInstance().onGameEvent(currentEvent);
+            // schedule the next one
+            handler.postDelayed(() -> {
+                if (!isPaused) {
+                    scheduleNextEvent(index + 1);
+                } else {
+                    // wait until resumed (don’t lose position)
+                    currentEventIndex = index + 1;
+                }
+            }, event.getDuration() * 1000L);
+        }
+        else{
+            Log.d("TIMER", "All events for current chapter displayed");
+        }
 
-        // dispatch on main thread
-        Game.getInstance().onGameEvent(currentEvent);
-
-        // schedule the next one
-        handler.postDelayed(() -> {
-            if (!isPaused) {
-                scheduleNextEvent(index + 1);
-            } else {
-                // wait until resumed (don’t lose position)
-                currentEventIndex = index + 1;
-            }
-        }, event.getDuration() * 1000L);
     }
 
     public int getCurrentEventIndex(){
