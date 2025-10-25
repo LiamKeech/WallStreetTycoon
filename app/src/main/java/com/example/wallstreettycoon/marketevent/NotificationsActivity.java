@@ -11,9 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.model.MarketEvent;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class NotificationsActivity extends AppCompatActivity {
 
@@ -52,18 +54,22 @@ public class NotificationsActivity extends AppCompatActivity {
     }
 
     private void loadNotifications() {
-        List<MarketEvent> notifications = dbUtil.getMarketEvents();
+        List<Integer> displayedNotificationIds = Game.getInstance().displayedNotifications;
+        List<MarketEvent> allNotifications = dbUtil.getMarketEvents();
+        List<MarketEvent> displayedNotifications = allNotifications.stream()
+                .filter(event -> displayedNotificationIds.contains(event.getMarketEventID()))
+                .collect(Collectors.toList());
 
-        if (notifications == null || notifications.isEmpty()) {
+        if (displayedNotifications == null || displayedNotifications.isEmpty()) {
             lblEmpty.setVisibility(View.VISIBLE);
             rvNotifications.setVisibility(View.GONE);
         } else {
             lblEmpty.setVisibility(View.GONE);
             rvNotifications.setVisibility(View.VISIBLE);
 
-            Collections.reverse(notifications);
+            Collections.reverse(displayedNotifications);
 
-            NotificationAdapter adapter = new NotificationAdapter(this, notifications);
+            NotificationAdapter adapter = new NotificationAdapter(this, displayedNotifications);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             rvNotifications.setLayoutManager(layoutManager);
             rvNotifications.setAdapter(adapter);
