@@ -19,6 +19,9 @@ import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
+import com.example.wallstreettycoon.model.Game;
+import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameEventType;
 
 public class miniGame2EndDialogFragment extends DialogFragment {
     Button homeButton;
@@ -57,6 +60,7 @@ public class miniGame2EndDialogFragment extends DialogFragment {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Game.getInstance().onGameEvent(new GameEvent(GameEventType.MINIGAME_COMPLETED, "Minigame 2 completed", 2));
                 Intent intent = new Intent(getActivity(), ListStocks.class); //will change to dashboard
                 intent.putExtra("view", "M");
                 startActivity(intent);

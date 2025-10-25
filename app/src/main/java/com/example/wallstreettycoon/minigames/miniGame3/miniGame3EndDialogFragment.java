@@ -16,6 +16,9 @@ import android.widget.TextView;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Notification;
+import com.example.wallstreettycoon.model.Game;
+import com.example.wallstreettycoon.model.GameEvent;
+import com.example.wallstreettycoon.model.GameEventType;
 
 public class miniGame3EndDialogFragment extends DialogFragment {
 
@@ -65,6 +68,7 @@ public class miniGame3EndDialogFragment extends DialogFragment {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Game.getInstance().onGameEvent(new GameEvent(GameEventType.MINIGAME_COMPLETED, "Minigame 3 completed", 3));
                 Intent intent = new Intent(getActivity(), ListStocks.class); //will change to dashboard
                 intent.putExtra("view", "M");
                 startActivity(intent);

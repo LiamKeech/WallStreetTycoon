@@ -63,26 +63,21 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         currentUsername = Game.currentUser.getUserUsername();
 
         if (stockID == -1) {
-            Log.e("DisplayStock", "No stock ID provided in intent");
             finish();
             return;
         }
 
         if (currentUsername == null) {
-            Log.e("DisplayStock", "No username provided in intent");
             currentUsername = "admin";
         }
 
-        Log.d("DisplayStock", "Intent received: stockID=" + stockID + ", username=" + currentUsername);
+
 
         currentStock = dbUtil.getStock(stockID);
         if (currentStock == null) {
-            Log.e("DisplayStock", "Stock not found for ID: " + stockID);
             finish();
             return;
         }
-
-        Log.d("DisplayStock", "Stock loaded: " + currentStock.getStockName());
 
         // Get UI
         initialiseUI();
@@ -217,7 +212,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         if (currentPriceTextView != null) {
             double currentPriceValue = getCurrentPrice();
             currentPriceTextView.setText(String.format("$%.2f", currentPriceValue));
-            Log.d("DisplayStock", "Updated price display: $" + String.format("%.2f", currentPriceValue));
         }
     }
 
@@ -253,10 +247,8 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         // Load price history from priceHistory array
         List<Entry> entries = getPriceHistoryFromArray(timeRange);
 
-        Log.d("DisplayStock", "Generated " + entries.size() + " entries for chart");
 
         if (entries.isEmpty()) {
-            Log.e("DisplayStock", "No chart data available");
             return;
         }
 
@@ -347,7 +339,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         double[] priceHistory = currentStock.getPriceHistoryArray();
 
         if (priceHistory == null || priceHistory.length == 0) {
-            Log.e("DisplayStock", "Price history array is null or empty");
             return entries;
         }
 
@@ -370,7 +361,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
 
         if (entries.size() > 0) {
             float lastPrice = entries.get(entries.size() - 1).getY();
-            Log.d("DisplayStock", "Chart entries: " + entries.size() + ", last price: $" + String.format("%.2f", lastPrice));
         }
 
         return entries;
@@ -382,8 +372,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         if (event.getType() == GameEventType.UPDATE_STOCK_PRICE) {
             // Run on UI thread
             uiHandler.post(() -> {
-                Log.d("DisplayStock", "Updating chart due to price update event");
-
                 // Reload the stock to get updated price history
                 currentStock = dbUtil.getStock(currentStock.getStockID());
 
@@ -394,7 +382,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
                     // Refresh the chart with current time range
                     updateChart(currentTimeRange);
                 } else {
-                    Log.e("DisplayStock", "Failed to reload stock data");
                 }
             });
         }

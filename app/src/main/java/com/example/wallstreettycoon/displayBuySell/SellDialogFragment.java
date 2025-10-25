@@ -155,6 +155,7 @@ public class SellDialogFragment extends DialogFragment implements GameObserver {
         if (event.getType() == GameEventType.UPDATE_STOCK_PRICE) {
             // Update price on UI thread
             uiHandler.post(() -> {
+                if (!isAdded()) return;
                 DatabaseUtil dbUtil = DatabaseUtil.getInstance(requireContext());
                 Stock stock = dbUtil.getStock(stockID);
 

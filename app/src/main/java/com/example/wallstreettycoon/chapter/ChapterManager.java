@@ -90,7 +90,7 @@ public class ChapterManager implements GameObserver {
                 Chapter next = getChapter(Game.getInstance().currentChapterID);
                 next.setState(ChapterState.IN_PROGRESS);
                 Game.getInstance().onGameEvent(new GameEvent(GameEventType.CHAPTER_STARTED,
-                        "Started: " + next.getChapterName(), next));
+                        "Started chapter " + next.getChapterName(), next));
             } else {
                 Game.getInstance().onGameEvent(new GameEvent(GameEventType.GAME_ENDED,
                         "Game ended. Final balance: " + Game.currentUser.getUserBalance(), null));
@@ -101,6 +101,7 @@ public class ChapterManager implements GameObserver {
     }
 
     private boolean isChapterCompleted(int chapterID, User user) {
+        Log.d("CHAPTER MANAGER", "Checking if chapter " + chapterID + " is completed");
         List<Transaction> txs = Game.dbUtil.getTransactionHistory(user.getUserUsername());
         boolean boughtTech = false;
 
@@ -167,7 +168,7 @@ public class ChapterManager implements GameObserver {
         return Game.getInstance().displayedNotifications.containsAll(requiredNotificationIds);
     }
 
-    private List<Integer> getRequiredNotificationIdsForChapter(int chapterID) {
+    public static List<Integer> getRequiredNotificationIdsForChapter(int chapterID) {
         List<Integer> requiredIds = new ArrayList<>();
         // Based on notifications.txt, determine which notification IDs are required for each chapter
         switch (chapterID) {

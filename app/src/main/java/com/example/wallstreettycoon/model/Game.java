@@ -2,6 +2,7 @@ package com.example.wallstreettycoon.model;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.wallstreettycoon.chapter.Chapter;
 import com.example.wallstreettycoon.chapter.ChapterManager;
@@ -166,7 +167,26 @@ public class Game implements GameObserver, java.io.Serializable {
                 }
                 break;
             case STOCK_BOUGHT:
+            case STOCK_SOLD:
                 ChapterManager.getInstance().onGameEvent(event);
+                break;
+            case MINIGAME_COMPLETED:
+                completedMiniGames.add((Integer)event.getCargo());
+                ChapterManager.getInstance().onGameEvent(event);
+                break;
+            case CHAPTER_STARTED:
+                //send first notification from chapter
+//                Chapter chapter = (Chapter)event.getCargo();
+//                int chapterId = chapter.getChapterID();
+//                ChapterManager.getRequiredNotificationIdsForChapter(chapterId);
+                timer.scheduleNextEvent(displayedNotifications.size());
+            case GAME_ENDED:
+                Toast toast = new Toast(getContext());
+                toast.setText(event.getMessage());
+                toast.show();
+                break;
+
+
         }
     }
 
