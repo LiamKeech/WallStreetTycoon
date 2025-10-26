@@ -2,6 +2,7 @@ package com.example.wallstreettycoon.marketevent;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,12 +83,19 @@ public class CompactNotificationDialogFragment extends DialogFragment {
             Window window = getDialog().getWindow();
             WindowManager.LayoutParams params = window.getAttributes();
 
-            // Position at top of screen
-            params.gravity = Gravity.TOP | Gravity.CENTER_HORIZONTAL;
-            params.y = 100; // Offset from top in pixels
+            // Get screen width
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            int screenWidth = displayMetrics.widthPixels;
+            int halfScreenWidth = screenWidth / 2;
 
-            // Set width
-            params.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            // Position at top-right corner
+            params.gravity = Gravity.TOP | Gravity.END;
+            params.x = 16; // Margin from right edge in pixels
+            params.y = 16; // Margin from top edge in pixels
+
+            // Set width to half the screen
+            params.width = halfScreenWidth;
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
 
             window.setAttributes(params);
