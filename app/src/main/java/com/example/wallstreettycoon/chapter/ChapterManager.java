@@ -119,9 +119,8 @@ public class ChapterManager implements GameObserver {
                 }
             } else {
                 Game.getInstance().onGameEvent(new GameEvent(GameEventType.GAME_ENDED,
-                        "Thank you for playing WallStreet Tycoon!", null));
-                Game.getInstance().onGameEvent(new GameEvent(
-                        GameEventType.GAME_ENDED,
+                        "Thank you for playing our game!", null));
+                Game.getInstance().onGameEvent(new GameEvent(GameEventType.GAME_ENDED,
                         "Final balance: " + String.format("%.2f", Game.currentUser().getUserBalance()), null
                 ));
 
