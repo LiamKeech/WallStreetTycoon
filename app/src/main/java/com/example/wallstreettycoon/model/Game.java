@@ -158,8 +158,6 @@ public class Game implements GameObserver, java.io.Serializable {
         switch (event.getType()) {
             case UPDATE_STOCK_PRICE:
                 timeStamp = timer.getElapsedTime();
-                // Update price history for all stocks
-                //updateAllStockPriceHistories();
                 notifyObservers(event);
                 break;
             case MARKET_EVENT:
@@ -186,9 +184,6 @@ public class Game implements GameObserver, java.io.Serializable {
                 break;
             case CHAPTER_STARTED:
                 //send first notification from chapter
-//                Chapter chapter = (Chapter)event.getCargo();
-//                int chapterId = chapter.getChapterID();
-//                ChapterManager.getRequiredNotificationIdsForChapter(chapterId);
                 timer.scheduleNextEvent(displayedNotifications.size());
             case GAME_ENDED:
                 Toast toast = new Toast(getContext());
@@ -199,15 +194,6 @@ public class Game implements GameObserver, java.io.Serializable {
 
         }
     }
-
-//    private void updateAllStockPriceHistories() {
-//        // Get all stock IDs from database
-//        List<Integer> stockIDs = dbUtil.getAllStockIDs();
-//
-//        for (Integer stockID : stockIDs) {
-//            dbUtil.updateStockPriceHistory(stockID);
-//        }
-//    }
 
     public static void addObserver(GameObserver observer) {
         observers.add(observer);

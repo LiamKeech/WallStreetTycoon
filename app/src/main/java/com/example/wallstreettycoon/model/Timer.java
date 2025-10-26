@@ -82,15 +82,21 @@ public class Timer {
             return;
         }
 
-        GameEvent currentEvent = new GameEvent(
-                GameEventType.MARKET_EVENT,
-                event.getTitle(),
-                event
-        );
-        // dispatch on main thread
-        Game.getInstance().onGameEvent(currentEvent);
-        Log.d("TIMER", "Dispatched event " + event.getMarketEventID() + ": " + event.getTitle());
+        //check if this notification has already been displayed
+        if(!Game.getInstance().displayedNotifications.contains(event)){
+            GameEvent currentEvent = new GameEvent(
+                    GameEventType.MARKET_EVENT,
+                    event.getTitle(),
+                    event
+            );
+            // dispatch on main thread
+            Game.getInstance().onGameEvent(currentEvent);
+            Log.d("TIMER", "Dispatched event " + event.getMarketEventID() + ": " + event.getTitle());
+        }
 
+
+
+        // check if there is a next event
         if(marketEventList.size() > index + 1) {
             MarketEvent nextEvent = marketEventList.get(index + 1);
             if (nextEvent.getChapterID() == currentChapterID) {
