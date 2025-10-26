@@ -20,7 +20,7 @@ public class Timer {
         @Override
         public void run() {
             updateTimestamp();
-            handler.postDelayed(this, 3000);
+            handler.postDelayed(this, 5000);
         }
     };
 
