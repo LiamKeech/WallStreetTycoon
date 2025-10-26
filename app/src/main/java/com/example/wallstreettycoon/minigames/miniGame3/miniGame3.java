@@ -14,6 +14,8 @@ import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.GameEvent;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.GameObserver;
 import com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel.Model;
+import com.example.wallstreettycoon.model.Game;
+import com.example.wallstreettycoon.model.GameEventType;
 
 public class miniGame3 extends AppCompatActivity implements GameObserver {
 
@@ -46,10 +48,11 @@ public class miniGame3 extends AppCompatActivity implements GameObserver {
         switch(gameEvent.getType()){
             case GAME_OVER:
                 if((boolean)gameEvent.getCargo()){
-                    DatabaseUtil.getInstance(this).updateMarketFactor(50,100000.0);
+                    Game.getInstance().getStockPriceFunction(50).onGameEvent(new com.example.wallstreettycoon.model.GameEvent(GameEventType.MARKET_EVENT, "Market factor changed", 100000.0));
+
                 }
                 else{
-                    DatabaseUtil.getInstance(this).updateMarketFactor(50,-100.0);
+                    Game.getInstance().getStockPriceFunction(50).onGameEvent(new com.example.wallstreettycoon.model.GameEvent(GameEventType.MARKET_EVENT, "Market factor changed", -100.0));
                 }
                 //add win or loss condition
                 Bundle bundle = new Bundle();
