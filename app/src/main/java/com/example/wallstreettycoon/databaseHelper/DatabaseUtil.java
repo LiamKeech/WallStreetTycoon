@@ -1,7 +1,5 @@
 package com.example.wallstreettycoon.databaseHelper;
 
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -64,7 +62,7 @@ public class DatabaseUtil {
                     String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                     String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                     String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                    Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+                    Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("initialPrice"));
 
                     Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
                     stockList.add(stock);
@@ -88,7 +86,7 @@ public class DatabaseUtil {
                     String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                     String stockCategory = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                     String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                    Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+                    Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("initialPrice"));
 
                     Stock stock = new Stock(stockID, stockName, symbol, stockCategory, description, currentPrice);
                     stockList.add(stock);
@@ -110,80 +108,15 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
-                String priceHistoryString = cursor.getString(cursor.getColumnIndexOrThrow("priceHistory"));
+                Double initialPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("initialPrice"));
 
-                List<Double> priceHistory = new ArrayList<>();
-                if (priceHistoryString != null) {
-                    String[] prices = priceHistoryString.split(",");
-                    for (String price : prices) {
-                        priceHistory.add(Double.parseDouble(price));
-                    }
-                }
 
-                stock = new Stock(stockID, stockName, symbol, category, description, currentPrice, priceHistory);
+                stock = new Stock(stockID, stockName, symbol, category, description, initialPrice);
             }
         } finally {
             if (cursor != null) cursor.close();
         }
         return stock;
-    }
-
-    private void populatePriceHistory(Stock stock) {
-        StockPriceFunction func = getStockPriceFunction(stock.getStockID());
-        if (func == null) {
-            Log.w("DatabaseUtil", "No price function for stock " + stock.getSymbol());
-            return;
-        }
-
-        int currentTimestamp = Game.getInstance().getCurrentTimeStamp();
-
-        // Generate price history for the last 30 days minimum
-        int historyDays = 30;
-        List<Double> priceHistory = stock.getPriceHistory();
-        priceHistory.clear();
-
-        // Calculate historical prices
-        for (int i = -historyDays; i <= 0; i++) {
-            int timestamp = currentTimestamp + i;
-            if (timestamp >= 0) {
-                double priceChange = func.getCurrentPriceChange(timestamp);
-                double historicalPrice = stock.getCurrentPrice() + priceChange;
-                // Ensure price is never negative
-                historicalPrice = Math.max(0, historicalPrice);
-                priceHistory.add(historicalPrice);
-            }
-        }
-
-//        Log.d("DatabaseUtil", "Populated " + priceHistory.size() + " days of history for " + stock.getSymbol());
-    }
-
-
-    public void updateStockPriceHistory(int stockID) {
-        Stock stock = getStock(stockID);
-        if (stock != null) {
-            StockPriceFunction func = getStockPriceFunction(stockID);
-            if (func != null) {
-                int currentTimestamp = Game.getInstance().getCurrentTimeStamp();
-                double priceChange = func.getCurrentPriceChange(currentTimestamp);
-                double currentPrice = stock.getCurrentPrice() + priceChange;
-                currentPrice = Math.max(0, currentPrice);
-
-                List<Double> history = stock.getPriceHistory();
-
-                // Add to history
-                history.add(currentPrice);
-
-                int maxHistorySize = 31; // 30 days + current
-                if (history.size() > maxHistorySize) {
-                    history.remove(0); // Remove oldest entry
-                }
-
-//                Log.d("DatabaseUtil", "Updated price history for " + stock.getSymbol() +
-//                        ": $" + String.format("%.2f", currentPrice) +
-//                        " (history size: " + history.size() + ")");
-            }
-        }
     }
 
     public String getSymbol(int stockID) {
@@ -214,36 +147,6 @@ public class DatabaseUtil {
         return name != null ? name : "unknown stock";
     }
 
-    public List<StockPriceFunction> getStockPriceFunctions(){
-        List<StockPriceFunction> stockPriceHistories = new ArrayList<>();
-        Cursor cursor = null;
-        try {
-            cursor = db.rawQuery("SELECT * FROM stockPriceFunction", null);
-            if (cursor.moveToFirst()) {
-                do {
-                    Integer stockPriceHistoryID = cursor.getInt(cursor.getColumnIndexOrThrow("stockPriceHistoryID"));
-                    String[] amplitudesString = cursor.getString(cursor.getColumnIndexOrThrow("amplitudes")).split(",");
-                    Double[] amplitudes = Arrays.stream(amplitudesString)
-                            .map(Double::parseDouble)
-                            .toArray(Double[]::new);
-
-                    String[] frequenciesString = cursor.getString(cursor.getColumnIndexOrThrow("frequencies")).split(",");
-                    Double[] frequencies = Arrays.stream(frequenciesString)
-                            .map(Double::parseDouble)
-                            .toArray(Double[]::new);
-
-                    Double marketFactor = cursor.getDouble(cursor.getColumnIndexOrThrow("marketFactor"));
-                    Integer stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-                    StockPriceFunction s = new StockPriceFunction(stockPriceHistoryID, amplitudes, frequencies, marketFactor, stockID);
-                    stockPriceHistories.add(s);
-                } while (cursor.moveToNext());
-            }
-        } finally {
-            if (cursor != null) cursor.close();
-        }
-        return stockPriceHistories;
-    }
-
     public StockPriceFunction getStockPriceFunction(Integer stockID){
         Cursor cursor = null;
         try {
@@ -262,9 +165,9 @@ public class DatabaseUtil {
                         .map(Double::parseDouble)
                         .toArray(Double[]::new);
 
-                Double marketFactor = cursor.getDouble(cursor.getColumnIndexOrThrow("marketFactor"));
+                Double currentMarketFactor = cursor.getDouble(cursor.getColumnIndexOrThrow("currentMarketFactor"));
 
-                return new StockPriceFunction(stockPriceHistoryID, amplitudes, frequencies, marketFactor, stockID);
+                return new StockPriceFunction(stockPriceHistoryID, amplitudes, frequencies, currentMarketFactor, stockID);
             }
         } finally {
             if (cursor != null) cursor.close();
@@ -272,57 +175,19 @@ public class DatabaseUtil {
         return null;
     }
 
-    //Returns the stocks current price
-    public double getCurrentStockPrice(int stockID) {
-        double price = 0;
-        Cursor cursor = null;
-        try {
-            cursor = db.rawQuery("SELECT * FROM stocks WHERE stockID = ?", new String[]{String.valueOf(stockID)});
-            if (cursor.moveToFirst()) {
-                Stock stock = getStock(stockID);
-                StockPriceFunction func = getStockPriceFunction(stockID);
-                if (stock != null && func != null) {
-                    price = stock.getCurrentPrice() + func.getCurrentPriceChange(Game.getInstance().getCurrentTimeStamp());
-                    price = Math.max(0.01, price); // prevent negative prices
-                }
-            }
-        } finally {
-            if (cursor != null) cursor.close();
+    public List<StockPriceFunction> getStockPriceFunctions(){
+        List<StockPriceFunction> stockPriceFunctions = new ArrayList<>();
+        List<Stock> stocks = getStockList();
+        for(int i = 0; i < stocks.size(); i++){
+            stockPriceFunctions.add(getStockPriceFunction(stocks.get(i).getStockID()));
         }
-        setStockCurrentPrice(stockID, price);
-        return price;
+        return stockPriceFunctions;
     }
 
-    //updates the current stock price
-    public void setStockCurrentPrice(Integer stockID, Double currentPrice) {
-        // 1. Get the current price and priceHistory
-        Cursor cursor = db.rawQuery("SELECT price, priceHistory FROM stocks WHERE stockID = ?",
-                new String[]{String.valueOf(stockID)});
-
-        if (cursor.moveToFirst()) {
-            @SuppressLint("Range") double previousPrice = cursor.getDouble(cursor.getColumnIndex("price"));
-            @SuppressLint("Range") String priceHistory = cursor.getString(cursor.getColumnIndex("priceHistory"));
-
-            // 2. Append previous price to priceHistory
-            if (priceHistory == null || priceHistory.isEmpty()) {
-                priceHistory = String.valueOf(previousPrice);
-            } else {
-                priceHistory += "," + previousPrice;
-            }
-
-            cursor.close();
-
-            // 3. Update price and priceHistory in the database
-            String updateSql = "UPDATE stocks SET price = ?, priceHistory = ? WHERE stockID = ?";
-            SQLiteStatement stmt = db.compileStatement(updateSql);
-            stmt.bindDouble(1, currentPrice);
-            stmt.bindString(2, priceHistory);
-            stmt.bindLong(3, stockID);
-            stmt.executeUpdateDelete();
-        } else {
-            cursor.close();
-            Log.d("DatabaseUtil", "StockID " + stockID + " not found.");
-        }
+    //Returns the stocks current price
+    public double getCurrentStockPrice(int stockID) {
+        StockPriceFunction spf = Game.getInstance().getStockPriceFunction(stockID);
+        return spf.getCurrentPrice(Game.getInstance().getCurrentTimeStamp());
     }
 
     public List<Integer> getAllStockIDs() {
@@ -375,7 +240,7 @@ public class DatabaseUtil {
                     String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                     String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                     String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                    Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+                    Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("initialPrice"));
 
                     Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
                     stockList.add(stock);
@@ -529,7 +394,7 @@ public class DatabaseUtil {
         Cursor cursor = null;
         try {
             String query = "SELECT ps.portfolioID, ps.quantity, ps.buyPrice, ps.buyDate, " +
-                    "s.stockID, s.stockName, s.symbol, s.category, s.description, s.price " +
+                    "s.stockID, s.stockName, s.symbol, s.category, s.description, s.initialPrice " +
                     "FROM portfolioStock ps " +
                     "JOIN portfolios p ON ps.portfolioID = p.portfolioID " +
                     "JOIN stocks s ON ps.stockID = s.stockID " +
@@ -543,13 +408,13 @@ public class DatabaseUtil {
                 String symbol = cursor.getString(cursor.getColumnIndexOrThrow("symbol"));
                 String category = cursor.getString(cursor.getColumnIndexOrThrow("category"));
                 String description = cursor.getString(cursor.getColumnIndexOrThrow("description"));
-                Double currentPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("price"));
+                Double initialPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("initialPrice"));
 
                 int quantity = cursor.getInt(cursor.getColumnIndexOrThrow("quantity"));
                 double buyPrice = cursor.getDouble(cursor.getColumnIndexOrThrow("buyPrice"));
                 String buyDate = cursor.getString(cursor.getColumnIndexOrThrow("buyDate"));
 
-                Stock stock = new Stock(stockID, stockName, symbol, category, description, currentPrice);
+                Stock stock = new Stock(stockID, stockName, symbol, category, description, initialPrice);
                 PortfolioStock ps = new PortfolioStock(portfolioID, stock, quantity, buyPrice, buyDate);
                 list.add(ps);
             }
@@ -796,13 +661,15 @@ public class DatabaseUtil {
         return transactions;
     }
 
-    public void updateMarketFactor(int stockID, double marketFactor){
+    public void updateMarketFactor(int stockID, double marketFactor){ //fix error, should update the game class
         Log.d("Database Util", "Updating market factor for " + getStockName(stockID) + " to " + marketFactor);
-        String sql = "UPDATE stockPriceFunction SET marketFactor = ? WHERE stockID = ?";
-        SQLiteStatement stmt = db.compileStatement(sql);
-        stmt.bindDouble(1, marketFactor);
-        stmt.bindLong(2, stockID);
-        stmt.executeUpdateDelete();
+        Game.getInstance().getStockPriceFunction(stockID).onGameEvent(new GameEvent(GameEventType.MARKET_EVENT, "Market event", marketFactor));
+
+//        String sql = "UPDATE stockPriceFunction SET currentMarketFactor = ? WHERE stockID = ?";
+//        SQLiteStatement stmt = db.compileStatement(sql);
+//        stmt.bindDouble(1, marketFactor);
+//        stmt.bindLong(2, stockID);
+//        stmt.executeUpdateDelete();
 
     }
 

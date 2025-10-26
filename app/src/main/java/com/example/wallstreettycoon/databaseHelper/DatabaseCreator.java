@@ -23,8 +23,8 @@ import java.util.Random;
 
 
 public class DatabaseCreator extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "localdata.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final String DATABASE_NAME = "wst.db";
+    private static final int DATABASE_VERSION = 1;
     private final Context context;
 
     private final Random rand;
@@ -50,31 +50,18 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         db.execSQL(
                 "CREATE TABLE IF NOT EXISTS stocks (" +
                         "stockID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                        "stockName TEXT, symbol TEXT, category TEXT, description TEXT, price REAL, priceHistory TEXT)"
+                        "stockName TEXT, symbol TEXT, category TEXT, description TEXT, initialPrice REAL)"
         );
-
-//        db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('Apple Inc.', 'AAPL', 'Technology', 'Leading tech company known for iPhones and Macs.', 198.23)");
-//        db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('Alphabet Inc.', 'GOOGL', 'Technology', 'Parent company of Google.', 2745.30)");
-//        db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('Amazon.com Inc.', 'AMZN', 'E-Commerce', 'Largest online retailer and cloud provider.', 3450.10)");
-//        db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('Tesla Inc.', 'TSLA', 'Automotive', 'Electric vehicle and clean energy company.', 720.54)");
-//        db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('Microsoft Corp.', 'MSFT', 'Technology', 'Developer of Windows OS and Office Suite.', 310.44)");
-//        db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('Meta Platforms Inc.', 'META', 'Social Media', 'Owner of Facebook, Instagram, and WhatsApp.', 355.89)");
-//        db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('Netflix Inc.', 'NFLX', 'Entertainment', 'Streaming service provider.', 435.77)");
-//        db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('Coca-Cola Co.', 'KO', 'Consumer Goods', 'Beverage company known for Coke.', 63.25)");
-//        db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('NVIDIA Corp.', 'NVDA', 'Semiconductors', 'Graphics processing and AI chips manufacturer.', 128.88)");
-//        db.execSQL("INSERT INTO stocks (stockName, symbol, category, description, price) VALUES ('Johnson & Johnson', 'JNJ', 'Healthcare', 'Global healthcare and pharmaceutical company.', 170.55)");
-
 
         List<Stock> stockList = readCommaDelimitedStocks(R.raw.stocks);
         for(Stock s: stockList){
             db.execSQL(
-                    "INSERT INTO stocks (stockName, symbol, category, description, price, priceHistory) " +
+                    "INSERT INTO stocks (stockName, symbol, category, description, initialPrice) " +
                             "VALUES ('" + s.getStockName() + "', '" +
                             s.getSymbol() + "', '" +
                             s.getCategory() + "', '" +
                             s.getDescription() + "', '" +
-                            s.getCurrentPrice() + "', '" +
-                            s.getCurrentPrice() + "')" // initialize priceHistory with the initial price
+                            s.getInitialPrice() + "')"
             );
         }
         // StockPriceFunction table
@@ -83,7 +70,7 @@ public class DatabaseCreator extends SQLiteOpenHelper {
                         "stockPriceHistoryID INTEGER PRIMARY KEY AUTOINCREMENT, " +
                         "amplitudes TEXT, " +
                         "frequencies TEXT, " +
-                        "marketFactor REAL, " +
+                        "currentMarketFactor REAL, " +
                         "stockID INTEGER, " +
                         "FOREIGN KEY (stockID) REFERENCES stocks(stockID)" +
                         ")"
@@ -91,12 +78,12 @@ public class DatabaseCreator extends SQLiteOpenHelper {
 
         for(int i = 1; i < stockList.size(); i++){
             int stockID = i;
-           double[] frequencyArray = generateFrequencies(10);
-           double[] amplitudeArray = generateAmplitudes(10);
-           String frequencyString = arrayToCommaString(frequencyArray);
-           String amplitudeString = arrayToCommaString(amplitudeArray);
+            double[] frequencyArray = generateFrequencies(6);
+            double[] amplitudeArray = generateAmplitudes(6);
+            String frequencyString = arrayToCommaString(frequencyArray);
+            String amplitudeString = arrayToCommaString(amplitudeArray);
 
-            db.execSQL("INSERT INTO stockPriceFunction (amplitudes, frequencies, marketFactor, stockID) VALUES (" +
+            db.execSQL("INSERT INTO stockPriceFunction (amplitudes, frequencies, currentMarketFactor, stockID) VALUES (" +
                     "'" + amplitudeString + "', " +
                     "'" + frequencyString + "', " +
                     "0.0, " +
@@ -297,14 +284,14 @@ public class DatabaseCreator extends SQLiteOpenHelper {
      */
     public static double[] generateAmplitudes(int size) {
         Random rand = new Random();
-        double[] amps = new double[size];
+        double[] amps = {0.3,0.3,0.3,-0.3,-0.3,-0.3};
 
-        double value = 8 + rand.nextDouble() * 2;
-        for (int i = 0; i < size; i++) {
-            value -= rand.nextDouble() * 1.5;
-            if (value < 0.5) value = 0.5;
-            amps[i] = Math.round(value * 10.0) / 10.0;
-        }
+//        double value = 8 + rand.nextDouble() * 2;
+//        for (int i = 0; i < size; i++) {
+//            value -= rand.nextDouble() * 1.5;
+//            if (value < 0.5) value = 0.5;
+//            amps[i] = Math.round(value * 10.0) / 10.0;
+//        }
         return amps;
     }
 

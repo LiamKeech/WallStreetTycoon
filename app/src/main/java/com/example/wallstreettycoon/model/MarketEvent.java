@@ -11,11 +11,12 @@ import android.util.Log;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.stock.StockPriceFunction;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MarketEvent {
+public class MarketEvent implements Serializable {
     private int marketEventID;
     private int chapterID;
     private int minigameID;
@@ -87,11 +88,8 @@ public class MarketEvent {
         for(Map.Entry<Integer, Double> entry : marketFactors.entrySet()){
             int stockID = entry.getKey();
             double factor = entry.getValue();
-            DatabaseUtil.getInstance(Game.getInstance().getContext()).updateMarketFactor(stockID, factor);
-
-            //for logging
-            StockPriceFunction stf =  DatabaseUtil.getInstance(Game.getInstance().getContext()).getStockPriceFunction(61);
-            Log.d("Market Event", "StockID: " + stf.getStockID() + " Factor: " + stf.getMarketFactor());
+            Game.getInstance().getStockPriceFunction(stockID).onGameEvent(new GameEvent(GameEventType.MARKET_EVENT, "Market event", factor));
+            //DatabaseUtil.getInstance(Game.getInstance().getContext()).updateMarketFactor(stockID, factor);
         }
     }
 

@@ -22,6 +22,9 @@ import com.example.wallstreettycoon.model.GameEvent;
 import com.example.wallstreettycoon.model.GameEventType;
 import com.example.wallstreettycoon.model.GameObserver;
 import com.example.wallstreettycoon.stock.Stock;
+import com.example.wallstreettycoon.stock.StockPriceFunction;
+
+import java.util.List;
 
 public class BuyDialogFragment extends DialogFragment implements GameObserver {
 
@@ -131,18 +134,13 @@ public class BuyDialogFragment extends DialogFragment implements GameObserver {
             uiHandler.post(() -> {
                 if (!isAdded()) return;
                 DatabaseUtil dbUtil = DatabaseUtil.getInstance(requireContext());
-                Stock stock = dbUtil.getStock(stockID);
+                StockPriceFunction stockPriceFunction = Game.getInstance().getStockPriceFunction(stockID);
 
-                if (stock != null) {
-                    double[] priceHistory = stock.getPriceHistoryArray();
-                    if (priceHistory != null && priceHistory.length > 0) {
-                        currentPriceValue = Math.max(0, priceHistory[priceHistory.length - 1]);
-                        priceTextView.setText(String.format("$%.2f", currentPriceValue));
+                currentPriceValue = stockPriceFunction.getCurrentPrice(Game.getInstance().getCurrentTimeStamp());
+                priceTextView.setText(String.format("$%.2f", currentPriceValue));
 
-                        // Update total cost with new price
-                        updateTotalCost(quantityInput.getText().toString().trim());
-                    }
-                }
+                // Update total cost with new price
+                updateTotalCost(quantityInput.getText().toString().trim());
             });
         }
     }

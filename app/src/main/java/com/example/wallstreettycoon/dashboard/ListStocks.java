@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -50,13 +48,12 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.List;
 
 public class ListStocks extends AppCompatActivity implements GameObserver, FilterStocksDialogFragment.FilterListener {
-    private Context context = this;
+    private final Context context = this;
     private DatabaseUtil dbUtil;
     private RecyclerView stockRV;
     private TextView lblEmpty, lblResult, lblHeadingDisplayed;
     private ImageButton btnClear;
     private TextView viewBalance;
-    private String userBalance;
     private String viewType;
     private Button btnToggleP, btnToggleM, btnSearch;
     private LinearLayout resultContainer;
@@ -222,7 +219,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
     private void updateUserBalance() {
         if (Game.currentUser != null) {
             double balance = dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance();
-            userBalance = String.format("$%.2f", balance);
+            String userBalance = String.format("$%.2f", balance);
             viewBalance.setText(userBalance);
         }
     }
@@ -358,7 +355,6 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
                 break;
             case MARKET_EVENT:
                 MarketEvent notification = (MarketEvent) event.getCargo();
-                notification.applyMarketFactors(); // Apply market factors
                 CompactNotificationDialogFragment dialog = CompactNotificationDialogFragment.newInstance(notification);
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 ft.add(dialog, "CompactMarketEventNotification");

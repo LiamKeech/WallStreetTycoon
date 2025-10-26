@@ -5,7 +5,9 @@
 
 package com.example.wallstreettycoon.model;
 
-public class GameEvent {
+import java.io.Serializable;
+
+public class GameEvent implements Serializable {
     private GameEventType type;
     private String message;
     private Object cargo;

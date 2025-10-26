@@ -6,11 +6,11 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.wallstreettycoon.chapter.Chapter;
 import com.example.wallstreettycoon.chapter.ChapterManager;
 import com.example.wallstreettycoon.chapter.ChapterState;
 import com.example.wallstreettycoon.dashboard.ListStocks;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
+import com.example.wallstreettycoon.stock.StockPriceFunction;
 import com.example.wallstreettycoon.useraccount.User;
 
 import java.io.File;
@@ -44,7 +44,8 @@ public class Game implements GameObserver, java.io.Serializable {
     private static List<GameObserver> observers;
 
     public static DatabaseUtil dbUtil;
-
+    public final static int numberOfSecondsInADay = 5;
+    public List<StockPriceFunction> stockPriceFunctions;
 
     private Game() {
 
@@ -87,6 +88,7 @@ public class Game implements GameObserver, java.io.Serializable {
             INSTANCE.chapterStates.put(0, ChapterState.IN_PROGRESS);
             INSTANCE.currentChapterID = 0; // Explicitly set to tutorial
             INSTANCE.displayedNotifications.clear();
+            INSTANCE.stockPriceFunctions = dbUtil.getStockPriceFunctions();
         }
 
         addObserver(ChapterManager.getInstance());
@@ -101,6 +103,7 @@ public class Game implements GameObserver, java.io.Serializable {
         if (timer != null) {
             INSTANCE.currentEventIndex = timer.getCurrentEventIndex();
             INSTANCE.timeStamp = timer.getElapsedTime();
+            //save market factors
         }
         saveToFile(currentUser.getUserUsername() + ".ser");
     }
@@ -153,7 +156,7 @@ public class Game implements GameObserver, java.io.Serializable {
             case UPDATE_STOCK_PRICE:
                 timeStamp = timer.getElapsedTime();
                 // Update price history for all stocks
-                updateAllStockPriceHistories();
+                //updateAllStockPriceHistories();
                 notifyObservers(event);
                 break;
             case MARKET_EVENT:
@@ -194,16 +197,14 @@ public class Game implements GameObserver, java.io.Serializable {
         }
     }
 
-    private void updateAllStockPriceHistories() {
-        // Get all stock IDs from database
-        List<Integer> stockIDs = dbUtil.getAllStockIDs();
-
-        for (Integer stockID : stockIDs) {
-            dbUtil.updateStockPriceHistory(stockID);
-        }
-
-        Log.d("Game", "Updated price history for " + stockIDs.size() + " stocks at timestamp " + timeStamp);
-    }
+//    private void updateAllStockPriceHistories() {
+//        // Get all stock IDs from database
+//        List<Integer> stockIDs = dbUtil.getAllStockIDs();
+//
+//        for (Integer stockID : stockIDs) {
+//            dbUtil.updateStockPriceHistory(stockID);
+//        }
+//    }
 
     public static void addObserver(GameObserver observer) {
         observers.add(observer);
@@ -221,5 +222,13 @@ public class Game implements GameObserver, java.io.Serializable {
 
     public Context getContext() {
         return appContext;
+    }
+    public StockPriceFunction getStockPriceFunction(int stockID){
+        for(StockPriceFunction spf: INSTANCE.stockPriceFunctions){
+            if(spf.getStockID() == stockID){
+                return spf;
+            }
+        }
+        return null;
     }
 }
