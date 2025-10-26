@@ -29,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.chapter.Chapter;
 import com.example.wallstreettycoon.chapter.ChapterManager;
+import com.example.wallstreettycoon.chapter.ChapterProgressActivity;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.marketevent.CompactNotificationDialogFragment;
 import com.example.wallstreettycoon.marketevent.NotificationsActivity;
@@ -157,6 +158,12 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
                 profile.putExtra("username", Game.currentUser.getUserUsername());
                 profile.putExtra("viewType", viewType);
                 startActivity(profile);
+            } else if (item.getItemId() == R.id.nav_chapter_progress) {
+                if (Game.getInstance() != null && Game.currentUser != null) {
+                    startActivity(new Intent(ListStocks.this, ChapterProgressActivity.class));
+                } else {
+                    Log.w("ListStocks", "Game not initialized, cannot open ChapterProgressActivity");
+                }
             } else if (item.getItemId() == R.id.nav_settings) {
                 Intent manage = new Intent(context, ManageUserAccount.class);
                 manage.putExtra("viewType", viewType);
@@ -164,6 +171,16 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
             }
             drawerLayout.closeDrawers();
             return true;
+        });
+
+        // Balance listener
+        viewBalance.setOnClickListener(v -> {
+            if (Game.currentUser != null) {
+                Intent profile = new Intent(context, GameProfile.class);
+                profile.putExtra("username", Game.currentUser.getUserUsername());
+                profile.putExtra("viewType", viewType);
+                startActivity(profile);
+            }
         });
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {

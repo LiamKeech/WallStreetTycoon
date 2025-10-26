@@ -20,6 +20,8 @@
             android:name=".profile.GameProfile"
             android:exported="false"
             android:screenOrientation="landscape" />
+        <activity android:name=".chapter.ChapterProgressActivity"
+            android:exported="false" />
         <activity
             android:name=".minigames.miniGame3.miniGame3"
             android:exported="true"

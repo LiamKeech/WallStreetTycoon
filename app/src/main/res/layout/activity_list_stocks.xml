@@ -19,6 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            style="@style/text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -26,8 +27,8 @@
             app:layout_constraintVertical_bias="0.288" />
 
         <androidx.appcompat.widget.AppCompatButton
-            style="@style/OrangeButtonMedium"
             android:id="@+id/btnSearchDashboard"
+            style="@style/OrangeButtonMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -36,20 +37,23 @@
             android:textSize="17sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.725"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.022" />
 
         <TextView
             android:id="@+id/viewBalance"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            style = "@style/GreenButtonMedium"
+            style="@style/GreenButtonMedium"
             android:gravity="center"
             android:text="--.--"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:fontFamily="@font/jua"
+            android:clickable="true"
+            android:focusable="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.973"
@@ -69,75 +73,76 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnToggleList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
             style="@style/GreyButtonSmall"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+
+
+            android:fontFamily="@font/jua"
+            android:gravity="center"
             android:text="Portfolio"
             android:textSize="20dp"
-            android:gravity="center"
-            android:fontFamily="@font/jua"
-
-
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnSearchDashboard"
-            app:layout_constraintHorizontal_bias="0.572"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/toolbar"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.021" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnToggleList2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
             style="@style/GreyButtonSmall"
+            android:layout_width="wrap_content"
+
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/jua"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
             android:text="Market"
             android:textSize="20dp"
-            android:gravity="center"
-            android:fontFamily="@font/jua"
-            android:paddingHorizontal="20dp"
-
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnSearchDashboard"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/btnToggleList"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.021" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="wrap_content"
             android:layout_height="?attr/actionBarSize"
+            android:layout_marginStart="16dp"
             android:background="@drawable/button_background_orange_medium"
             android:elevation="4dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/btnToggleList"
-            app:layout_constraintHorizontal_bias="0.155"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.022"
-            app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
-        </androidx.appcompat.widget.Toolbar>
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light"></androidx.appcompat.widget.Toolbar>
 
         <TextView
             android:id="@+id/lblListDisplayed"
+            style="@style/subHeading"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             android:text="Market"
-            android:textColor="@color/LightBlue"
-            android:textSize="20dp"
             android:textStyle="bold"
             android:visibility="visible"
-            android:fontFamily="@font/jua"
-
-
             app:layout_constraintBottom_toTopOf="@+id/RVstock"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.499"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnSearchDashboard"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
         <LinearLayout

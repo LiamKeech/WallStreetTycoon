@@ -63,13 +63,25 @@ public class Timer {
     }
 
     public void scheduleNextEvent(int index) {
-        Log.d("SCHEDULE NEXT EVENT", String.valueOf(index));
-        if (marketEventList == null || index >= marketEventList.size()) return;
+        Log.d("SCHEDULE NEXT EVENT", "Index: " + index + ", Current Chapter: " + Game.getInstance().currentChapterID);
+        if (marketEventList == null || index >= marketEventList.size()) {
+            Log.d("TIMER", "No more events to schedule or marketEventList is null");
+            return;
+        }
 
         currentEventIndex = index; // save position
 
 
         MarketEvent event = marketEventList.get(index);
+        int currentChapterID = Game.getInstance().currentChapterID;
+
+        // Check if the current event belongs to the current chapter
+        if (event.getChapterID() != currentChapterID) {
+            Log.d("TIMER", "Event " + event.getMarketEventID() + " (" + event.getTitle() + ") belongs to chapter " +
+                    event.getChapterID() + ", skipping for current chapter " + currentChapterID);
+            return;
+        }
+
         GameEvent currentEvent = new GameEvent(
                 GameEventType.MARKET_EVENT,
                 event.getTitle(),
@@ -77,25 +89,27 @@ public class Timer {
         );
         // dispatch on main thread
         Game.getInstance().onGameEvent(currentEvent);
+        Log.d("TIMER", "Dispatched event " + event.getMarketEventID() + ": " + event.getTitle());
+
         if(marketEventList.size() > index + 1) {
             MarketEvent nextEvent = marketEventList.get(index + 1);
-
-        if(nextEvent.getChapterID() == Game.getInstance().currentChapterID) {
-            // schedule the next one
-            handler.postDelayed(() -> {
-                if (!isPaused) {
-                    scheduleNextEvent(index + 1);
-                } else {
-                    // wait until resumed (don’t lose position)
-                    currentEventIndex = index + 1;
-                }
-            }, event.getDuration() * 1000L);
+            if (nextEvent.getChapterID() == currentChapterID) {
+                // schedule the next one
+                handler.postDelayed(() -> {
+                    if (!isPaused) {
+                        scheduleNextEvent(index + 1);
+                    } else {
+                        // wait until resumed (don’t lose position)
+                        currentEventIndex = index + 1;
+                    }
+                }, event.getDuration() * 1000L);
+            } else {
+                Log.d("TIMER", "Next event " + nextEvent.getMarketEventID() + " belongs to chapter " +
+                        nextEvent.getChapterID() + ", stopping scheduling for chapter " + currentChapterID);
+            }
+        } else {
+            Log.d("TIMER", "Reached end of market event list");
         }
-        else{
-            Log.d("TIMER", "All events for current chapter displayed");
-        }
-        }
-
     }
 
     public int getCurrentEventIndex(){

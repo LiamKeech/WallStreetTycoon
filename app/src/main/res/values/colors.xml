@@ -40,4 +40,7 @@
 
     <color name="GreyShadow">#616161</color>
     <color name="GreyHighlight">#BDBDBD</color>
+
+    <color name="current_chapter_background">#E6F3FA</color>
+    <color name="status_color">#666666</color>
 </resources>
