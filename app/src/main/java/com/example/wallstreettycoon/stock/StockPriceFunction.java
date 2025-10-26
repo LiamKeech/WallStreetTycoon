@@ -52,11 +52,20 @@ public class StockPriceFunction implements GameObserver, java.io.Serializable {
             fourierSeries += amplitudes[i] * Math.sin(frequencies[i] * timeStamp.doubleValue());
         }
 
-        if(sumOfSegments == 0)
-            return initialPrice + 0.05 * fourierSeries;
-        else
-            return initialPrice + sumOfSegments * (1 + 0.2 * fourierSeries);
-
+        if(sumOfSegments == 0) {
+            double currentPrice = initialPrice + 0.2 * fourierSeries;
+            if (currentPrice < 0)
+                return currentPrice;
+            else
+                return Math.abs(0.2 * fourierSeries);
+        }
+        else {
+            double currentPrice = initialPrice + sumOfSegments * (1 + 0.2 * fourierSeries);
+            if (currentPrice < 0)
+                return currentPrice;
+            else
+                return Math.abs(0.2 * fourierSeries);
+        }
     }
 
     public List<Double> getPriceHistory(Integer numberOfDays){

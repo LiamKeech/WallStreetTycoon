@@ -334,7 +334,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         }
 
         int historyLength = priceHistory.size();
-        Log.d("DisplayStock", "Price history length: " + historyLength + ", requesting last " + daysBack + " days");
 
         // Calculate starting index - get the last 'daysBack' entries
         int startIndex = Math.max(0, historyLength - daysBack - 1);
