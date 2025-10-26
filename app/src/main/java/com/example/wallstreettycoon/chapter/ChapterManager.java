@@ -181,34 +181,44 @@ public class ChapterManager implements GameObserver {
     public static List<Integer> getRequiredNotificationIdsForChapter(int chapterID) {
         List<Integer> requiredIds = new ArrayList<>();
         switch (chapterID) {
-            case 0: // Tutorial: 1 notification
-                requiredIds.add(1);
+            case 0: // Tutorial: 8 notifications (UI intro + Teslo)
+                requiredIds.add(1);  // Welcome to WallStreet Tycoon!
+                requiredIds.add(2);  // Your Balance & Menu
+                requiredIds.add(3);  // Market vs Portfolio
+                requiredIds.add(4);  // Searching & Filtering
+                requiredIds.add(5);  // Trading Stocks
+                requiredIds.add(6);  // Important Notifications
+                requiredIds.add(7);  // Ready for Your First Move
+                requiredIds.add(8);  // A New Venture
                 break;
-            case 1: // Chapter 1: 5 notifications
-                requiredIds.add(2);
-                requiredIds.add(3);
-                requiredIds.add(4);
-                requiredIds.add(5);
-                requiredIds.add(6);
+            case 1: // Dot-Com Boom: 6 notifications (Cranberry–Market Reset)
+                requiredIds.add(9);   // Cranberry Inc. Ready to Blend Innovation
+                requiredIds.add(10);  // Googolplex Set to Revolutionize Online Search
+                requiredIds.add(11);  // The Dot-Com Boom
+                requiredIds.add(12);  // Buy More Tech Stocks
+                requiredIds.add(13);  // Tech Frenzy Faces Looming Market Correction
+                requiredIds.add(14);  // Market Reset Condition — Sell All Tech Holdings
                 break;
-            case 2: // Chapter 2: 2 notifications
-                requiredIds.add(7);
-                requiredIds.add(8);
+            case 2: // Housing Bubble: 3 notifications
+                requiredIds.add(15);  // Buy Goldbark Sachs
+                requiredIds.add(16);  // Housing Market Strains
+                requiredIds.add(17);  // Sell Goldbark Sachs
                 break;
-            case 3: // Chapter 3: 3 notifications
-                requiredIds.add(9);
-                requiredIds.add(10);
-                requiredIds.add(11);
+            case 3: // Crypto Surge: 3 notifications
+                requiredIds.add(18);  // Unlock Crypto Trading
+                requiredIds.add(19);  // Buy Meme Coins
+                requiredIds.add(20);  // Crypto Volatility Warning
                 break;
-            case 4: // Chapter 4: 4 notifications
-                requiredIds.add(12);
-                requiredIds.add(13);
-                requiredIds.add(14);
-                requiredIds.add(15);
+            case 4: // Corona Crash: 4 notifications
+                requiredIds.add(21);  // Tourism Stocks Plunge
+                requiredIds.add(22);  // Buy Tech Stocks
+                requiredIds.add(23);  // Teslo Opportunity
+                requiredIds.add(24);  // Tourism Stocks Recovery Opportunity
                 break;
-            case 5: // Chapter 5: 2 notifications
-                requiredIds.add(16);
-                requiredIds.add(17);
+            case 5: // AI Revolution: 3 notifications
+                requiredIds.add(25);  // Buy ThinkrAI
+                requiredIds.add(26);  // Stabilize ThinkrAI
+                requiredIds.add(27);  // Market Horizons Expand (final notification)
                 break;
             default:
                 break;
