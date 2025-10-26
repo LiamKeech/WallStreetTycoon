@@ -22,6 +22,7 @@ import com.example.wallstreettycoon.model.GameEvent;
 import com.example.wallstreettycoon.model.GameEventType;
 import com.example.wallstreettycoon.model.GameObserver;
 import com.example.wallstreettycoon.stock.Stock;
+import com.example.wallstreettycoon.stock.StockPriceFunction;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
@@ -194,17 +195,6 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
     }
 
     private double getCurrentPrice() {
-//        double[] priceHistory = currentStock.getPriceHistoryArray();
-//
-//        if (priceHistory != null && priceHistory.length > 0) {
-//            double price = priceHistory[priceHistory.length - 1];
-//            return Math.max(0, price);
-//        } else {
-//            // Fallback: use currentPrice directly
-//            Log.w("DisplayStock", "Price history unavailable, using current price");
-//            Double price = currentStock.getCurrentPrice();
-//            return (price != null) ? Math.max(0, price) : 0.0;
-//        }
         return dbUtil.getCurrentStockPrice(currentStock.getStockID());
     }
 
@@ -220,7 +210,7 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         String chartTitle;
         switch (range) {
             case "1D":
-                timeRange = 1;
+                timeRange = 2;
                 chartTitle = currentStock.getSymbol() + " - 1 Day";
                 break;
             case "1W":
@@ -336,13 +326,14 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
     private List<Entry> getPriceHistoryFromArray(int daysBack) {
         List<Entry> entries = new ArrayList<>();
 
-        double[] priceHistory = currentStock.getPriceHistoryArray();
+        StockPriceFunction spf = Game.getInstance().getStockPriceFunction(currentStock.getStockID());
+        List<Double> priceHistory = spf.getPriceHistory(daysBack);
 
-        if (priceHistory == null || priceHistory.length == 0) {
+        if (priceHistory == null || priceHistory.isEmpty()) {
             return entries;
         }
 
-        int historyLength = priceHistory.length;
+        int historyLength = priceHistory.size();
         Log.d("DisplayStock", "Price history length: " + historyLength + ", requesting last " + daysBack + " days");
 
         // Calculate starting index - get the last 'daysBack' entries
@@ -351,8 +342,8 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
 
         // Build entries from the price history
         int entryIndex = 0;
-        for (int i = startIndex; i <= endIndex; i++) {
-            double price = priceHistory[i];
+        for (int i = endIndex; i >= startIndex; i--) {
+            double price = priceHistory.get(i);
             // Ensure no negative prices appear on chart
             price = Math.max(0, price);
             entries.add(new Entry(entryIndex, (float) price));
