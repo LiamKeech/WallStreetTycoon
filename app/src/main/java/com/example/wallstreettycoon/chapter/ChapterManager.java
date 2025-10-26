@@ -104,6 +104,7 @@ public class ChapterManager implements GameObserver {
         if (isChapterCompleted(currentID, Game.currentUser())) {
             Log.d("CHAPTER MANAGER", "Chapter " + currentID + " completed");
             current.setState(ChapterState.COMPLETED);
+
             if (currentID < chapters.size() - 1) {
                 int nextChapter = currentID + 1;
                 Game.getInstance().currentChapterID = nextChapter;
@@ -118,7 +119,12 @@ public class ChapterManager implements GameObserver {
                 }
             } else {
                 Game.getInstance().onGameEvent(new GameEvent(GameEventType.GAME_ENDED,
-                        "Game ended. Final balance: " + Game.currentUser().getUserBalance(), null));
+                        "Thank you for playing WallStreet Tycoon!", null));
+                Game.getInstance().onGameEvent(new GameEvent(
+                        GameEventType.GAME_ENDED,
+                        "Final balance: " + String.format("%.2f", Game.currentUser().getUserBalance()), null
+                ));
+
             }
             Game.saveGame();
         }
@@ -204,6 +210,7 @@ public class ChapterManager implements GameObserver {
                     if (tx.getStockID() == 50 && "BUY".equals(tx.getTransactionType())) boughtAI = true;
                 }
                 boolean miniGame3Completed = Game.getInstance().completedMiniGames.contains(3);
+
                 Log.d("CHAPTER MANAGER", "Chapter 5 - boughtAI: " + boughtAI + ", miniGame3Completed: " + miniGame3Completed);
                 return boughtAI && miniGame3Completed;
             default:
@@ -261,7 +268,6 @@ public class ChapterManager implements GameObserver {
             case 5: // AI Revolution: 3 notifications
                 requiredIds.add(25);  // Buy ThinkrAI
                 requiredIds.add(26);  // Stabilize ThinkrAI
-                requiredIds.add(27);  // Market Horizons Expand (final notification)
                 break;
             default:
                 Log.w("CHAPTER MANAGER", "No notifications defined for chapter ID: " + chapterID);

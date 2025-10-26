@@ -271,22 +271,39 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
     }
 
     public void displayAllStocks() {
-        Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
-        List<Stock> chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+        List<Stock> chapterStocks;
+
+        // Show all stocks
+        if (Game.getInstance().gameEnded) {
+            chapterStocks = dbUtil.getStockList();
+        } else {
+            // Show only chapter-specific stocks
+            Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
+            chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+        }
+
         updateRecyclerView(chapterStocks, new StockAdapter(this, chapterStocks, "M"), chapterStocks.isEmpty(), "Market");
     }
 
     public void displayFilteredLists(String filter, String viewToggle) {
         if ("M".equals(viewToggle)) {
-            Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
-            List<Stock> chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+            List<Stock> chapterStocks;
+
+            // Use all stocks if game has ended
+            if (Game.getInstance().gameEnded) {
+                chapterStocks = dbUtil.getStockList();
+            } else {
+                Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
+                chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+            }
+
             List<Stock> filteredMarket = dbUtil.getFilteredStockM(filter, chapterStocks);
             updateRecyclerView(filteredMarket, new StockAdapter(this, filteredMarket, "M"), filteredMarket.isEmpty(), "Market");
             lblResult.setText(filteredMarket.isEmpty() ? "No results for: " + filter : "Showing results for: " + filter);
             lblResult.setVisibility(View.VISIBLE);
             btnClear.setVisibility(View.VISIBLE);
             resultContainer.setVisibility(View.VISIBLE);
-            lblEmpty.setVisibility(View.GONE); // Hide lblEmpty when filtering
+            lblEmpty.setVisibility(View.GONE);
         } else {
             List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser().getUserUsername());
             List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredPortfolioP(filter, Game.currentUser().getUserUsername(), portfolioStocks);
@@ -295,21 +312,29 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
             lblResult.setVisibility(View.VISIBLE);
             btnClear.setVisibility(View.VISIBLE);
             resultContainer.setVisibility(View.VISIBLE);
-            lblEmpty.setVisibility(View.GONE); // Hide lblEmpty when filtering
+            lblEmpty.setVisibility(View.GONE);
         }
     }
 
     public void displaySearchedLists(String search, String viewToggle) {
         if ("M".equals(viewToggle)) {
-            Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
-            List<Stock> chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+            List<Stock> chapterStocks;
+
+            // Use all stocks if game has ended
+            if (Game.getInstance().gameEnded) {
+                chapterStocks = dbUtil.getStockList();
+            } else {
+                Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
+                chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+            }
+
             List<Stock> searchedMarket = dbUtil.searchStocksM(search, chapterStocks);
             updateRecyclerView(searchedMarket, new StockAdapter(this, searchedMarket, "M"), searchedMarket.isEmpty(), "Market");
             lblResult.setText(searchedMarket.isEmpty() ? "No results for: " + search : "Showing results for: " + search);
             lblResult.setVisibility(View.VISIBLE);
             btnClear.setVisibility(View.VISIBLE);
             resultContainer.setVisibility(View.VISIBLE);
-            lblEmpty.setVisibility(View.GONE); // Hide lblEmpty when searching
+            lblEmpty.setVisibility(View.GONE);
         } else {
             List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser().getUserUsername());
             List<PortfolioStock> searchedPortfolio = dbUtil.searchPortfolioStocks(search, Game.currentUser().getUserUsername(), portfolioStocks);
@@ -318,21 +343,29 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
             lblResult.setVisibility(View.VISIBLE);
             btnClear.setVisibility(View.VISIBLE);
             resultContainer.setVisibility(View.VISIBLE);
-            lblEmpty.setVisibility(View.GONE); // Hide lblEmpty when searching
+            lblEmpty.setVisibility(View.GONE);
         }
     }
 
     public void fullSearch(String filter, String search, String viewToggle) {
         if ("M".equals(viewToggle)) {
-            Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
-            List<Stock> chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+            List<Stock> chapterStocks;
+
+            // Use all stocks if game has ended
+            if (Game.getInstance().gameEnded) {
+                chapterStocks = dbUtil.getStockList();
+            } else {
+                Chapter currentChapter = ChapterManager.getInstance().getCurrentChapter();
+                chapterStocks = currentChapter != null ? currentChapter.getChapterStocks() : dbUtil.getStockList();
+            }
+
             List<Stock> combinedSearchMarket = dbUtil.combinedSearchM(filter, search, chapterStocks);
             updateRecyclerView(combinedSearchMarket, new StockAdapter(this, combinedSearchMarket, "M"), combinedSearchMarket.isEmpty(), "Market");
             lblResult.setText(combinedSearchMarket.isEmpty() ? "No results for: " + filter + " and " + search : "Showing results for: " + filter + " and " + search);
             lblResult.setVisibility(View.VISIBLE);
             btnClear.setVisibility(View.VISIBLE);
             resultContainer.setVisibility(View.VISIBLE);
-            lblEmpty.setVisibility(View.GONE); // Hide lblEmpty when combined search
+            lblEmpty.setVisibility(View.GONE);
         } else {
             List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser().getUserUsername());
             List<PortfolioStock> combinedSearchPortfolio = dbUtil.combinedSearchP(filter, search, Game.currentUser().getUserUsername(), portfolioStocks);
@@ -341,7 +374,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
             lblResult.setVisibility(View.VISIBLE);
             btnClear.setVisibility(View.VISIBLE);
             resultContainer.setVisibility(View.VISIBLE);
-            lblEmpty.setVisibility(View.GONE); // Hide lblEmpty when combined search
+            lblEmpty.setVisibility(View.GONE);
         }
     }
 
@@ -361,6 +394,9 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
                 ft.add(dialog, "CompactMarketEventNotification");
                 ft.commitAllowingStateLoss();
                 updateDisplay(viewType); // Refresh display after market event
+                break;
+            case GAME_ENDED:
+                updateDisplay(viewType);
                 break;
         }
     }

@@ -33,7 +33,7 @@ public class Game implements GameObserver, java.io.Serializable {
         return dbUtil.getUser(username);
     };
 
-    // Chapter fields
+    public boolean gameEnded = false;
     public int currentChapterID = 0;
     public Map<Integer, ChapterState> chapterStates = new HashMap<>();
     public Set<Integer> completedMiniGames = new HashSet<>();
@@ -185,10 +185,14 @@ public class Game implements GameObserver, java.io.Serializable {
             case CHAPTER_STARTED:
                 //send first notification from chapter
                 timer.scheduleNextEvent(displayedNotifications.size());
+                break;
             case GAME_ENDED:
+                gameEnded = true;
+                saveGame();
                 Toast toast = new Toast(getContext());
                 toast.setText(event.getMessage());
                 toast.show();
+                notifyObservers(event);
                 break;
 
 
