@@ -176,6 +176,16 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
             return true;
         });
 
+        // Balance listener
+        viewBalance.setOnClickListener(v -> {
+            if (Game.currentUser != null) {
+                Intent profile = new Intent(context, GameProfile.class);
+                profile.putExtra("username", Game.currentUser.getUserUsername());
+                profile.putExtra("viewType", viewType);
+                startActivity(profile);
+            }
+        });
+
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
