@@ -78,7 +78,7 @@ public class Login extends AppCompatActivity {
 
                             Game.startGame(getApplicationContext(), user);
 
-                            List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.getInstance().currentUser.getUserUsername());
+                            List<PortfolioStock> portfolioStockCheck = dbUtil.getPortfolio(Game.getInstance().currentUser().getUserUsername());
                             String viewType;
                             if (portfolioStockCheck.isEmpty()) {
                                 viewType = "M";

@@ -49,13 +49,13 @@ public class ManageUserAccount extends AppCompatActivity {
 
         //set initial values to the logged in user: (from current user)
         EditText edtUser = findViewById(R.id.edtUsernameManage);
-        edtUser.setText(Game.currentUser.getUserUsername());
+        edtUser.setText(Game.currentUser().getUserUsername());
         EditText edtName = findViewById(R.id.edtNameManage);
-        edtName.setText(Game.currentUser.getUserFirstName());
+        edtName.setText(Game.currentUser().getUserFirstName());
         EditText edtSurname = findViewById(R.id.edtSurnameManage);
-        edtSurname.setText(Game.currentUser.getUserLastName());
+        edtSurname.setText(Game.currentUser().getUserLastName());
         EditText edtPassw = findViewById(R.id.edtPasswManage);
-        edtPassw.setText(Game.currentUser.getUserPassword());
+        edtPassw.setText(Game.currentUser().getUserPassword());
 
         txtChangePassw = findViewById(R.id.lblChangePassw);
         txtChangePassw.setOnClickListener(v -> {
@@ -67,7 +67,7 @@ public class ManageUserAccount extends AppCompatActivity {
         //new password value:
         Intent intent = getIntent();
         String value = intent.getStringExtra("new");
-        if (value == null) { edtPassw.setText(Game.currentUser.getUserPassword());}
+        if (value == null) { edtPassw.setText(Game.currentUser().getUserPassword());}
         else { edtPassw.setText(value);}
 
         btnUpdate = findViewById(R.id.btnUpdateManage);

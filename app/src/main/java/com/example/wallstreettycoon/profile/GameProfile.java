@@ -62,7 +62,7 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         // Get username
         username = getIntent().getStringExtra("username");
         if (username == null) {
-            username = Game.currentUser.getUserUsername();
+            username = Game.currentUser().getUserUsername();
         }
 
         initialiseViews();
