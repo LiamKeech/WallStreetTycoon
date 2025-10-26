@@ -42,6 +42,7 @@ import com.example.wallstreettycoon.portfolio.PortfolioStockAdapter;
 import com.example.wallstreettycoon.profile.GameProfile;
 import com.example.wallstreettycoon.stock.Stock;
 import com.example.wallstreettycoon.stock.StockAdapter;
+import com.example.wallstreettycoon.useraccount.LogoutConfirmationDialogFragment;
 import com.example.wallstreettycoon.useraccount.ManageUserAccount;
 import com.google.android.material.navigation.NavigationView;
 
@@ -168,7 +169,11 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
                 Intent manage = new Intent(context, ManageUserAccount.class);
                 manage.putExtra("viewType", viewType);
                 startActivity(manage);
+            } else if (item.getItemId() == R.id.nav_logout) {
+                LogoutConfirmationDialogFragment dialog = new LogoutConfirmationDialogFragment();
+                dialog.show(getSupportFragmentManager(), "LogoutConfirmationDialog");
             }
+
             drawerLayout.closeDrawers();
             return true;
         });
@@ -186,11 +191,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                } else {
-                    finish();
-                }
+                // Do nothing
             }
         });
 
@@ -391,4 +392,5 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
             pending.clear();
         }, 300);
     }
+
 }
