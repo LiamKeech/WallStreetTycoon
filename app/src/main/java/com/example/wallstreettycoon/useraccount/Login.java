@@ -69,7 +69,6 @@ public class Login extends AppCompatActivity {
                 String username = usernameInput.getText().toString();
                 String password = passwordInput.getText().toString();
 
-
                 if (!username.isEmpty() && !password.isEmpty())
                 {
                     if (dbUtil.userExists(username)) {  //username exists
