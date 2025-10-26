@@ -38,7 +38,7 @@ public class LogoutConfirmationDialogFragment extends DialogFragment {
         // Confirm button listener
         confirmButton.setOnClickListener(v -> {
             // Clear current user
-            Game.currentUser = null;
+            Game.getInstance().saveGame();
             // Navigate to Login
             Intent intent = new Intent(requireContext(), Login.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
