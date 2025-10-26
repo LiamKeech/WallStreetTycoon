@@ -41,7 +41,7 @@ public class LogoutConfirmationDialogFragment extends DialogFragment {
             Game.getInstance().saveGame();
             // Navigate to Login
             Intent intent = new Intent(requireContext(), Login.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //So the user can’t press “back” and return to the main app
             startActivity(intent);
             dismiss();
         });

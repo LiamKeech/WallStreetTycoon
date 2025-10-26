@@ -78,17 +78,17 @@ public class ChapterProgressActivity extends AppCompatActivity {
             Chapter chapter = chapters.get(position);
             holder.chapterName.setText(chapter.getChapterName());
             holder.chapterDescription.setText(chapter.getDescription());
-            // Map ChapterState to user-friendly labels
+
             String statusText = getUserFriendlyState(chapter.getState());
             holder.chapterStatus.setText(statusText);
 
             // Highlight current chapter
             if (chapter.getChapterID() == Game.getInstance().currentChapterID) {
                 holder.cardView.setCardBackgroundColor(
-                        holder.itemView.getContext().getResources().getColor(R.color.current_chapter_background));
+                        holder.itemView.getContext().getResources().getColor(R.color.NotificationInfo));
             } else {
                 holder.cardView.setCardBackgroundColor(
-                        holder.itemView.getContext().getResources().getColor(R.color.NotificationInfo));
+                        holder.itemView.getContext().getResources().getColor(R.color.white));
             }
         }
 
