@@ -32,7 +32,7 @@ public class SellDialogFragment extends DialogFragment implements GameObserver {
 
     private TextView header, symbol, priceTextView, totalCost, remainingShares;
     private EditText quantityInput;
-    private Button confirmButton;
+    private Button confirmButton, selectAllButton; // Added selectAllButton
     private Handler uiHandler = new Handler(Looper.getMainLooper());
 
     @Override
@@ -64,8 +64,8 @@ public class SellDialogFragment extends DialogFragment implements GameObserver {
         quantityInput = view.findViewById(R.id.quantityInput);
         totalCost = view.findViewById(R.id.totalProceeds);
         remainingShares = view.findViewById(R.id.sharesRemaining);
-
         confirmButton = view.findViewById(R.id.btnConfirm);
+        selectAllButton = view.findViewById(R.id.selectAllButton); // Initialize selectAllButton
         confirmButton.setText("Sell");
 
         // Get owned shares from DB
@@ -74,11 +74,18 @@ public class SellDialogFragment extends DialogFragment implements GameObserver {
         ownedShares = dbUtil.getQuantity(portfolioID, stockID);
         remainingShares.setText(String.format("%.2f", ownedShares));
 
-        // If no shares owned, disable confirm
+        // If no shares owned, disable confirm and select all
         if (ownedShares <= 0) {
             confirmButton.setEnabled(false);
+            selectAllButton.setEnabled(false); // Disable selectAllButton
             totalCost.setText("No shares available");
         }
+
+        // Select All button click listener
+        selectAllButton.setOnClickListener(v -> {
+            int sharesToSell = (int) Math.floor(ownedShares);
+            quantityInput.setText(String.valueOf(sharesToSell));
+        });
 
         quantityInput.addTextChangedListener(new TextWatcher() {
             @Override
