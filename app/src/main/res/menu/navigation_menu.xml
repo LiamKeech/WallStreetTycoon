@@ -12,6 +12,10 @@
         android:title="Profile" />
 
     <item
+        android:id="@+id/nav_chapter_progress"
+        android:title="Chapter Progress" />
+
+    <item
         android:id="@+id/nav_settings"
         android:title="Manage Account" />
 </menu>

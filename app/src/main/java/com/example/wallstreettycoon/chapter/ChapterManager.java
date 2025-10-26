@@ -32,6 +32,10 @@ public class ChapterManager implements GameObserver {
         return INSTANCE;
     }
 
+    public List<Chapter> getChapters() {
+        return chapters;
+    }
+
     private void loadChapters() {
         for (int i = 0; i <= 5; i++) { // 0: Tutorial, 1-5: Chapters
             chapters.add(new Chapter(i));
