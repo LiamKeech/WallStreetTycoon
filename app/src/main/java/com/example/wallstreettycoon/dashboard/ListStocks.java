@@ -156,11 +156,11 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
                 startActivity(notifIntent);
             } else if (item.getItemId() == R.id.nav_profile) {
                 Intent profile = new Intent(context, GameProfile.class);
-                profile.putExtra("username", Game.currentUser.getUserUsername());
+                profile.putExtra("username", Game.currentUser().getUserUsername());
                 profile.putExtra("viewType", viewType);
                 startActivity(profile);
             } else if (item.getItemId() == R.id.nav_chapter_progress) {
-                if (Game.getInstance() != null && Game.currentUser != null) {
+                if (Game.getInstance() != null && Game.currentUser() != null) {
                     startActivity(new Intent(ListStocks.this, ChapterProgressActivity.class));
                 } else {
                     Log.w("ListStocks", "Game not initialized, cannot open ChapterProgressActivity");
@@ -180,9 +180,9 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
 
         // Balance listener
         viewBalance.setOnClickListener(v -> {
-            if (Game.currentUser != null) {
+            if (Game.currentUser() != null) {
                 Intent profile = new Intent(context, GameProfile.class);
-                profile.putExtra("username", Game.currentUser.getUserUsername());
+                profile.putExtra("username", Game.currentUser().getUserUsername());
                 profile.putExtra("viewType", viewType);
                 startActivity(profile);
             }
@@ -218,8 +218,8 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
     }
 
     private void updateUserBalance() {
-        if (Game.currentUser != null) {
-            double balance = dbUtil.getUser(Game.currentUser.getUserUsername()).getUserBalance();
+        if (Game.currentUser() != null) {
+            double balance = dbUtil.getUser(Game.currentUser().getUserUsername()).getUserBalance();
             String userBalance = String.format("$%.2f", balance);
             viewBalance.setText(userBalance);
         }
@@ -266,7 +266,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
     }
 
     public void displayPortfolioStocks() {
-        List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
+        List<PortfolioStock> portfolioStock = dbUtil.getPortfolio(Game.currentUser().getUserUsername());
         updateRecyclerView(portfolioStock, new PortfolioStockAdapter(this, portfolioStock, "P"), portfolioStock.isEmpty(), "Portfolio");
     }
 
@@ -288,8 +288,8 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
             resultContainer.setVisibility(View.VISIBLE);
             lblEmpty.setVisibility(View.GONE); // Hide lblEmpty when filtering
         } else {
-            List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
-            List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredPortfolioP(filter, Game.currentUser.getUserUsername(), portfolioStocks);
+            List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser().getUserUsername());
+            List<PortfolioStock> filteredPortfolio = dbUtil.getFilteredPortfolioP(filter, Game.currentUser().getUserUsername(), portfolioStocks);
             updateRecyclerView(filteredPortfolio, new PortfolioStockAdapter(this, filteredPortfolio, "P"), filteredPortfolio.isEmpty(), "Portfolio");
             lblResult.setText(filteredPortfolio.isEmpty() ? "No results for: " + filter : "Showing results for: " + filter);
             lblResult.setVisibility(View.VISIBLE);
@@ -311,8 +311,8 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
             resultContainer.setVisibility(View.VISIBLE);
             lblEmpty.setVisibility(View.GONE); // Hide lblEmpty when searching
         } else {
-            List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
-            List<PortfolioStock> searchedPortfolio = dbUtil.searchPortfolioStocks(search, Game.currentUser.getUserUsername(), portfolioStocks);
+            List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser().getUserUsername());
+            List<PortfolioStock> searchedPortfolio = dbUtil.searchPortfolioStocks(search, Game.currentUser().getUserUsername(), portfolioStocks);
             updateRecyclerView(searchedPortfolio, new PortfolioStockAdapter(this, searchedPortfolio, "P"), searchedPortfolio.isEmpty(), "Portfolio");
             lblResult.setText(searchedPortfolio.isEmpty() ? "No results for: " + search : "Showing results for: " + search);
             lblResult.setVisibility(View.VISIBLE);
@@ -334,8 +334,8 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
             resultContainer.setVisibility(View.VISIBLE);
             lblEmpty.setVisibility(View.GONE); // Hide lblEmpty when combined search
         } else {
-            List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser.getUserUsername());
-            List<PortfolioStock> combinedSearchPortfolio = dbUtil.combinedSearchP(filter, search, Game.currentUser.getUserUsername(), portfolioStocks);
+            List<PortfolioStock> portfolioStocks = dbUtil.getPortfolio(Game.currentUser().getUserUsername());
+            List<PortfolioStock> combinedSearchPortfolio = dbUtil.combinedSearchP(filter, search, Game.currentUser().getUserUsername(), portfolioStocks);
             updateRecyclerView(combinedSearchPortfolio, new PortfolioStockAdapter(this, combinedSearchPortfolio, "P"), combinedSearchPortfolio.isEmpty(), "Portfolio");
             lblResult.setText(combinedSearchPortfolio.isEmpty() ? "No results for: " + filter + " and " + search : "Showing results for: " + filter + " and " + search);
             lblResult.setVisibility(View.VISIBLE);

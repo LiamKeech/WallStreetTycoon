@@ -28,7 +28,10 @@ import java.util.Set;
 
 public class Game implements GameObserver, java.io.Serializable {
 
-    public static User currentUser;
+    private static String username;
+    public static User currentUser(){
+        return dbUtil.getUser(username);
+    };
 
     // Chapter fields
     public int currentChapterID = 0;
@@ -70,7 +73,7 @@ public class Game implements GameObserver, java.io.Serializable {
         Log.d("Game", "Starting game for user: " + user.getUserUsername());
         initContext(context);
         observers = new ArrayList<>();
-        currentUser = user;
+        INSTANCE.username = user.getUserUsername();
 
         boolean loaded = loadFromFile(user.getUserUsername());
         if (loaded) {
@@ -105,7 +108,7 @@ public class Game implements GameObserver, java.io.Serializable {
             INSTANCE.timeStamp = timer.getElapsedTime();
             //save market factors
         }
-        saveToFile(currentUser.getUserUsername() + ".ser");
+        saveToFile(INSTANCE.username + ".ser");
     }
 
     public static void saveToFile(String filename) {

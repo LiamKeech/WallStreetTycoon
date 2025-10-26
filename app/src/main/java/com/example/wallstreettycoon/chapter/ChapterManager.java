@@ -76,7 +76,7 @@ public class ChapterManager implements GameObserver {
 
     @Override
     public void onGameEvent(GameEvent event) {
-        if (Game.currentUser == null || event == null) {
+        if (Game.currentUser() == null || event == null) {
             Log.w("CHAPTER MANAGER", "Invalid game state or event");
             return;
         }
@@ -101,7 +101,7 @@ public class ChapterManager implements GameObserver {
             return;
         }
 
-        if (isChapterCompleted(currentID, Game.currentUser)) {
+        if (isChapterCompleted(currentID, Game.currentUser())) {
             Log.d("CHAPTER MANAGER", "Chapter " + currentID + " completed");
             current.setState(ChapterState.COMPLETED);
             if (currentID < chapters.size() - 1) {
@@ -118,7 +118,7 @@ public class ChapterManager implements GameObserver {
                 }
             } else {
                 Game.getInstance().onGameEvent(new GameEvent(GameEventType.GAME_ENDED,
-                        "Game ended. Final balance: " + Game.currentUser.getUserBalance(), null));
+                        "Game ended. Final balance: " + Game.currentUser().getUserBalance(), null));
             }
             Game.saveGame();
         }

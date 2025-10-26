@@ -65,8 +65,8 @@ public class miniGame1 extends AppCompatActivity {
         }
 
         handler.postDelayed(() -> {
-            Double balance = Game.getInstance().currentUser.getUserBalance();
-            DatabaseUtil.getInstance(this).updateBalance(balance + profit, Game.getInstance().currentUser.getUserUsername());
+            Double balance = Game.getInstance().currentUser().getUserBalance();
+            DatabaseUtil.getInstance(this).updateBalance(balance + profit, Game.getInstance().currentUser().getUserUsername());
             miniGame1EndDialogFragment endDialogFragment = new miniGame1EndDialogFragment();
 
             Bundle bundle = new Bundle();

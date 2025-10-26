@@ -61,7 +61,7 @@ public class DisplayStockActivity extends AppCompatActivity implements GameObser
         Intent intentFromList = getIntent();
         int stockID = intentFromList.getIntExtra("stock_id", -1);
         viewType = intentFromList.getStringExtra("view");
-        currentUsername = Game.currentUser.getUserUsername();
+        currentUsername = Game.currentUser().getUserUsername();
 
         if (stockID == -1) {
             finish();

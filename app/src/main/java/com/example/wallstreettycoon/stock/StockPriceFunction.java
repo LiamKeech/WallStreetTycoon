@@ -54,14 +54,14 @@ public class StockPriceFunction implements GameObserver, java.io.Serializable {
 
         if(sumOfSegments == 0) {
             double currentPrice = initialPrice + 0.2 * fourierSeries;
-            if (currentPrice < 0)
+            if (currentPrice > 0)
                 return currentPrice;
             else
                 return Math.abs(0.2 * fourierSeries);
         }
         else {
             double currentPrice = initialPrice + sumOfSegments * (1 + 0.2 * fourierSeries);
-            if (currentPrice < 0)
+            if (currentPrice > 0)
                 return currentPrice;
             else
                 return Math.abs(0.2 * fourierSeries);
