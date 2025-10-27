@@ -1,11 +1,11 @@
 // Tutorial
-0;null;0;Welcome to WallStreet Tycoon!;You’re about to become the next market legend. Let’s get you familiar with how to navigate your trading empire.;{}
-0;null;0;Your Balance & Menu;The number at the top right is your current balance. Tap the menu in the top left to view past notifications, check your portfolio stats (like net worth and holdings pie chart), or manage your account.;{}
-0;null;0;Market vs Portfolio;Switch between “Market” and “Portfolio” to view all available stocks or just the ones you own. It’s your quick access to track profits and plan trades.;{}
-0;null;0;Searching & Filtering;Use the search button to find specific stocks or filter by category—tech, crypto, tourism, and more. This helps you find the next big win fast.;{}
-0;null;0;Trading Stocks;Scroll through the stock list and tap on any stock to buy or sell. Keep an eye on prices—they move with the story!;{}
-0;null;0;Important Notifications;Pay close attention to these notifications! They’ll give you insider tips, market news, and objectives that drive your progression through each phase of the game.;{}
-0;null;0;Ready for Your First Move;Now that you know the controls and where to find information, let’s try a small trade to get your hands dirty — watch for opportunities in the Market tab.;{}
+0;null;10;Welcome to WallStreet Tycoon!;You’re about to become the next market legend. Let’s get you familiar with how to navigate your trading empire.;{}
+0;null;10;Your Balance & Menu;The number at the top right is your current balance. Tap the menu in the top left to view past notifications, check your portfolio stats (like net worth and holdings pie chart), or manage your account.;{}
+0;null;10;Market vs Portfolio;Switch between “Market” and “Portfolio” to view all available stocks or just the ones you own. It’s your quick access to track profits and plan trades.;{}
+0;null;10;Searching & Filtering;Use the search button to find specific stocks or filter by category—tech, crypto, tourism, and more. This helps you find the next big win fast.;{}
+0;null;10;Trading Stocks;Scroll through the stock list and tap on any stock to buy or sell. Keep an eye on prices—they move with the story!;{}
+0;null;10;Important Notifications;Pay close attention to these notifications! They’ll give you insider tips, market news, and objectives that drive your progression through each phase of the game.;{}
+0;null;10;Ready for Your First Move;Now that you know the controls and where to find information, let’s try a small trade to get your hands dirty — watch for opportunities in the Market tab.;{}
 0;null;30;A New Venture;Teslo stock presents a strong opportunity for long-term growth in the electric vehicle industry. Its innovative technology, expanding product line, and investments in battery development and autonomous driving make it a competitive leader. With global demand for sustainable transportation accelerating, buy and hold Teslo (TESL) stock now for significant returns later as clean energy demand surges.;{61:0.1,36:1.3,37:1.4,38:1.3,39:1.2,40:2.5,41:1.6,42:1.9,43:2.0,44:1.9,45:1.8}
 
 // The Dot-Com Boom

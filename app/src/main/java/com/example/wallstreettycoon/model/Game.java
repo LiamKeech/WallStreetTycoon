@@ -105,6 +105,10 @@ public class Game implements GameObserver, java.io.Serializable {
     public static void saveGame() {
         if (timer != null) {
             INSTANCE.currentEventIndex = timer.getCurrentEventIndex();
+            for(GameEvent e: getPendingEvents()){
+                MarketEvent m = (MarketEvent) e.getCargo();
+                m.applyMarketFactors();
+            }
             INSTANCE.timeStamp = timer.getElapsedTime();
             //save market factors
         }
