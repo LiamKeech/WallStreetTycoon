@@ -179,7 +179,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnConfirm"
-            style="@style/GreenButtonMedium"
+            style="@style/RedButtonMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -188,7 +188,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnCancel"
-            style="@style/RedButtonMedium"
+            style="@style/GreyButtonMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="12dp"
