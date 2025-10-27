@@ -38,7 +38,6 @@ public class StockPriceFunction implements GameObserver, java.io.Serializable {
         Double sumOfSegments = 0.0;
 
         if(!segments.isEmpty()) {
-            Segment previous = null;
 
             int lastEnd = 0;
             for (Segment s : segments) {
@@ -77,7 +76,7 @@ public class StockPriceFunction implements GameObserver, java.io.Serializable {
         }
         else {
             double currentPrice = initialPrice + sumOfSegments * (1 + 0.2 * fourierSeries);
-            Log.d("STOCK PRICE FUNCTION", "time stamp " + timeStamp + "| initial price: " + initialPrice + "| sum of segments " + sumOfSegments + "| fourier series: " + fourierSeries + "| current price: " + currentPrice);
+            //Log.d("STOCK PRICE FUNCTION", "time stamp " + timeStamp + "| initial price: " + initialPrice + "| sum of segments " + sumOfSegments + "| fourier series: " + fourierSeries + "| current price: " + currentPrice);
             if (currentPrice > 0)
                 return currentPrice;
             else

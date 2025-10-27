@@ -118,34 +118,11 @@ public class DatabaseCreator extends SQLiteOpenHelper {
         chapterStocks.put(0, Arrays.asList("TESL"));
         chapterStocks.put(1, Arrays.asList("CRNB", "MHCD", "PEAR", "GPLX", "ORNG", "BNNF", "ISAM", "CHRP", "LMTC", "OCSD", "RDTN", "FRBT", "PNOS", "NSCM", "ZYND", "TESL"));
         chapterStocks.put(2, Arrays.asList("GDBK", "MRGS", "LB20", "SCMP", "JPMG", "BRST", "CTRB", "HDBC", "PNZI", "DMHC", "TESL"));
-        chapterStocks.put(3, Arrays.asList("CRNB", "GPLX", "DGCS", "INST", "BTCN", "HODL", "SHDY", "MNBK", "PUMP", "ELNM", "ZRCN", "BNNA", "TESL"));
+        chapterStocks.put(3, Arrays.asList("DGCS", "INST", "BTCN", "HODL", "SHDY", "MNBK", "PUMP", "ELNM", "ZRCN", "BNNA", "TESL"));
         chapterStocks.put(4, Arrays.asList("SKHA", "EJTN", "CLDN", "WGIT", "PRLC", "JTLG", "YLVC", "ARFO", "BGBL", "NVLT", "TTCK", "FLIK", "SLPC", "VRRL", "TESL"));
         chapterStocks.put(5, Arrays.asList("TKAI", "NRND", "DFMD", "PSSE", "CGSM", "PRTA", "AGPT", "WKBT", "RBLB", "PRBL", "CLAI", "TESL"));
 
         populateChapterStockTable(db, chapterStocks);
-//        Cursor cursor = null;
-//        try {
-//            for (Map.Entry<Integer, List<String>> entry : chapterStocks.entrySet()) {
-//                int chapterID = entry.getKey();
-//                List<String> symbols = entry.getValue();
-//                for (String symbol : symbols) {
-//                    cursor = db.rawQuery("SELECT stockID FROM stocks WHERE symbol = ?", new String[]{symbol});
-//                    if (cursor.moveToFirst()) {
-//                        int stockID = cursor.getInt(cursor.getColumnIndexOrThrow("stockID"));
-//                        ContentValues values = new ContentValues();
-//                        values.put("chapterID", chapterID);
-//                        values.put("stockID", stockID);
-//                        db.insert("ChapterStock", null, values);
-//
-//                        Log.d("DATABASE CREATOR", "Added stock " + symbol + " to Chapter " + chapterID);
-//                    } else {
-//                        Log.w("DATABASE CREATOR", "Symbol " + symbol + " not found in stocks table");
-//                    }
-//                }
-//            }
-//        } finally {
-//            if (cursor != null) cursor.close();
-//        }
 
 
 

@@ -89,7 +89,7 @@ public class MarketEvent implements Serializable {
             int stockID = entry.getKey();
             double factor = entry.getValue();
             Game.getInstance().getStockPriceFunction(stockID).onGameEvent(new GameEvent(GameEventType.MARKET_EVENT, "Market event", factor));
-            //DatabaseUtil.getInstance(Game.getInstance().getContext()).updateMarketFactor(stockID, factor);
+            Log.d("MARKET EVENT", "Applied factor " + factor + " to stock " + stockID);
         }
     }
 

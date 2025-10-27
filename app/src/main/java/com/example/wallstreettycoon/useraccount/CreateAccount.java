@@ -70,7 +70,7 @@ public class CreateAccount extends AppCompatActivity {
                     if (!dbUtil.userExists(username)) {
 
                         //insert user into db:
-                        User newUser = new User(username, name, surname,  password, 1000.0);
+                        User newUser = new User(username, name, surname,  password, 20.0);
                         dbUtil.setUser(newUser);
 
                         //inform user account made successfully:

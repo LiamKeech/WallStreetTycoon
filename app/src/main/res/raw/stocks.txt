@@ -33,16 +33,16 @@ PumpNDump,PUMP,Cryptocurrency,Volatile coin whose roadmap is just a rocket emoji
 Elonium,ELNM,Cryptocurrency,Value fluctuates based on one billionaire’s tweets.,16.90
 ZeroCoin,ZRCN,Cryptocurrency,Currency worth exactly nothing but trades at high volume.,5.10
 BananaChain,BNNA,Cryptocurrency,Fruit-backed blockchain promising potassium-powered smart contracts.,10.45
-SkyHigh Airways,SKHA,Transportation,Budget airline famous for charging extra for seatbelts and oxygen.,480.75
+SkyHigh Airways,SKHA,Transportation,Budget airline famous for charging extra for seatbelts and oxygen.,80.75
 EconoJet,EJTN,Transportation,Low-cost airline where the planes land “most of the time.”,395.20
-CloudNine Travel,CLDN,Hospitality & Travel,Luxury travel agency that promises paradise but books motels.,625.40
-WingIt Airlines,WGIT,Transportation,Known for overbooking every flight and then raffling off seats.,512.60
-Paradise Lost Cruises,PRLC,Hospitality & Travel,Cruise line where the buffet outlasts the plumbing.,730.15
-JetLag Express,JTLG,Transportation,Airline that guarantees maximum layovers in random cities.,455.90
-YOLO Vacations,YLVC,Hospitality & Travel,Tour operator specializing in “all-inclusive regret” packages.,680.45
+CloudNine Travel,CLDN,Hospitality & Travel,Luxury travel agency that promises paradise but books motels.,76.40
+WingIt Airlines,WGIT,Transportation,Known for overbooking every flight and then raffling off seats.,12.60
+Paradise Lost Cruises,PRLC,Hospitality & Travel,Cruise line where the buffet outlasts the plumbing.,30.15
+JetLag Express,JTLG,Transportation,Airline that guarantees maximum layovers in random cities.,55.90
+YOLO Vacations,YLVC,Hospitality & Travel,Tour operator specializing in “all-inclusive regret” packages.,60.45
 Air404,ARFO,Transportation,Flights frequently canceled with “error not found” messages.,402.30
-BudgetBalloon,BGBL,Hospitality & Travel,Hot-air balloon service marketed as an affordable airline alternative.,350.25
-Neverland Tours,NVLT,Hospitality & Travel,Travel agency that always advertises destinations you can’t actually visit.,799.80
+BudgetBalloon,BGBL,Hospitality & Travel,Hot-air balloon service marketed as an affordable airline alternative.,30.25
+Neverland Tours,NVLT,Hospitality & Travel,Travel agency that always advertises destinations you can’t actually visit.,99.80
 TickTock Corp.,TTCK,Technology,Short video platform designed to eat your entire afternoon.,44.60
 FaceLook Inc.,FLIK,Technology,Social media giant specializing in stalking your high school crush.,53.90
 SlapChat Inc.,SLPC,Technology,Messaging app where messages disappear faster than your dignity.,36.75

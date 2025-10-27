@@ -158,7 +158,7 @@ public class ChapterManager implements GameObserver {
                 boolean boughtTech = false;
                 boolean holdingTech = false;
                 for (Transaction tx : txs) {
-                    if ((tx.getStockID() == 1 || tx.getStockID() == 4) && "BUY".equals(tx.getTransactionType())) {
+                    if ((tx.getStockID() == 1 ) && "BUY".equals(tx.getTransactionType())) {
                         boughtTech = true;
                     }
                 }

@@ -83,7 +83,7 @@ public class Timer {
         }
 
         //check if this notification has already been displayed
-        if(!Game.getInstance().displayedNotifications.contains(event)){
+        if(!Game.getInstance().displayedNotifications.contains(event.getMarketEventID())){
             GameEvent currentEvent = new GameEvent(
                     GameEventType.MARKET_EVENT,
                     event.getTitle(),

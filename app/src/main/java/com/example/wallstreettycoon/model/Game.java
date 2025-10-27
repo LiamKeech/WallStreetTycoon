@@ -81,7 +81,7 @@ public class Game implements GameObserver, java.io.Serializable {
             if (INSTANCE.timer == null) {
                 INSTANCE.timer = new Timer(false);
             }
-            INSTANCE.timer.resumeFrom(INSTANCE.timeStamp, INSTANCE.currentEventIndex);
+            INSTANCE.timer.resumeFrom(INSTANCE.timeStamp, INSTANCE.currentEventIndex + 1);
             Log.d("GAME", String.valueOf(INSTANCE.timeStamp));
         } else {
             Log.d("Game", "Starting new game for user: " + user.getUserUsername());
