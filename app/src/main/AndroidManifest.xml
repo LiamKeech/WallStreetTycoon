@@ -75,11 +75,6 @@
             android:name=".useraccount.ManageUserAccount"
             android:exported="false"
             android:screenOrientation="landscape"></activity>
-        <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:screenOrientation="landscape"
-            tools:ignore="DiscouragedApi"></activity>
     </application>
 
 </manifest>
