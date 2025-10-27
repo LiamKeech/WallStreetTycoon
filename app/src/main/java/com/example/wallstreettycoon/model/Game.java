@@ -188,7 +188,9 @@ public class Game implements GameObserver, java.io.Serializable {
                 break;
             case CHAPTER_STARTED:
                 //send first notification from chapter
-                timer.scheduleNextEvent(displayedNotifications.size());
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    timer.scheduleNextEvent(displayedNotifications.size());
+                }, 10000L);
                 break;
             case GAME_ENDED:
                 gameEnded = true;

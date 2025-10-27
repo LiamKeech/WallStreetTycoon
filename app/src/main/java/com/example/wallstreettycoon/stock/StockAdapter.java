@@ -63,6 +63,9 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
             public void onClick(View v) {
                 // Get stock
                 int pos = holder.getAdapterPosition();
+                if(pos < 0){
+                    return;
+                }
                 Stock clickedStock = stockArrayList.get(pos);
 
                 Intent intent = new Intent(context, DisplayStockActivity.class);

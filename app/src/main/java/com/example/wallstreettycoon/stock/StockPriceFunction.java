@@ -45,14 +45,13 @@ public class StockPriceFunction implements GameObserver, java.io.Serializable {
                     sumOfSegments += s.getTotalInfluence();
                     lastEnd = s.getEndTimeStamp();
                 } else {
-                    // We're inside this segment, so add partial influence for this one
                     sumOfSegments += s.getMarketFactor() * (timeStamp - s.getStartTimeStamp());
-                    lastEnd = timeStamp; // We're done here
+                    lastEnd = timeStamp;
                     break;
                 }
             }
 
-            // If the timestamp is *after* all segments, extend with the current market factor
+            //if the timestamp is after all segments, extend with the current market factor
             if (timeStamp > lastEnd)
                 sumOfSegments += currentMarketFactor * (timeStamp - lastEnd);
 
