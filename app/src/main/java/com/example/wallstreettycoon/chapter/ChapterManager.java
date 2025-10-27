@@ -177,8 +177,9 @@ public class ChapterManager implements GameObserver {
                     if (tx.getStockID() == 16 && "BUY".equals(tx.getTransactionType())) boughtBank = true;
                     if (tx.getStockID() == 16 && "SELL".equals(tx.getTransactionType())) soldBank = true;
                 }
-                Log.d("CHAPTER MANAGER", "Chapter 2 - boughtBank: " + boughtBank + ", soldBank: " + soldBank);
-                return boughtBank && soldBank;
+                boolean miniGame2Completed = Game.getInstance().completedMiniGames.contains(2);
+                Log.d("CHAPTER MANAGER", "Chapter 2 - boughtBank: " + boughtBank + ", soldBank: " + soldBank + ", miniGame2Completed: " + miniGame2Completed);
+                return boughtBank && soldBank && miniGame2Completed;
             case 3: // Ch3: Sold Ch1 stock, completed puzzle (mini 2), bought crypto
                 boolean soldCh1Stock = false, boughtCrypto = false, holdingCh1Stock = false;
                 for (Transaction tx : txs) {
@@ -191,9 +192,8 @@ public class ChapterManager implements GameObserver {
                         break;
                     }
                 }
-                boolean miniGame2Completed = Game.getInstance().completedMiniGames.contains(2);
-                Log.d("CHAPTER MANAGER", "Chapter 3 - soldCh1Stock: " + soldCh1Stock + ", boughtCrypto: " + boughtCrypto + ", holdingCh1Stock: " + holdingCh1Stock + ", miniGame2Completed: " + miniGame2Completed);
-                return soldCh1Stock && boughtCrypto && miniGame2Completed && !holdingCh1Stock;
+                Log.d("CHAPTER MANAGER", "Chapter 3 - soldCh1Stock: " + soldCh1Stock + ", boughtCrypto: " + boughtCrypto + ", holdingCh1Stock: " + holdingCh1Stock);
+                return soldCh1Stock && boughtCrypto  && !holdingCh1Stock;
             case 4: // Ch4: Bought tourism (36-45), bought tech/entertainment (46-49)
                 boolean boughtTourism = false;
                 boughtTech = false;
