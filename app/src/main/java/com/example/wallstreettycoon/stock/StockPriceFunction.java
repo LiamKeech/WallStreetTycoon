@@ -10,7 +10,7 @@ import com.example.wallstreettycoon.model.GameObserver;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
+
 
 public class StockPriceFunction implements GameObserver, java.io.Serializable {
     private final Integer stockPriceFunctionID;
@@ -36,11 +36,27 @@ public class StockPriceFunction implements GameObserver, java.io.Serializable {
     public Double getCurrentPrice(Integer timeStamp){
 
         Double sumOfSegments = 0.0;
+
         if(!segments.isEmpty()) {
+            Segment previous = null;
+
+            int lastEnd = 0;
             for (Segment s : segments) {
-                sumOfSegments += s.getTotalInfluence();
+                if (timeStamp >= s.getEndTimeStamp()) {
+                    sumOfSegments += s.getTotalInfluence();
+                    lastEnd = s.getEndTimeStamp();
+                } else {
+                    // We're inside this segment, so add partial influence for this one
+                    sumOfSegments += s.getMarketFactor() * (timeStamp - s.getStartTimeStamp());
+                    lastEnd = timeStamp; // We're done here
+                    break;
+                }
             }
-            sumOfSegments += currentMarketFactor * (timeStamp - segments.getLast().getEndTimeStamp());
+
+            // If the timestamp is *after* all segments, extend with the current market factor
+            if (timeStamp > lastEnd)
+                sumOfSegments += currentMarketFactor * (timeStamp - lastEnd);
+
         }
         else{
             sumOfSegments += currentMarketFactor * (timeStamp);
@@ -61,6 +77,7 @@ public class StockPriceFunction implements GameObserver, java.io.Serializable {
         }
         else {
             double currentPrice = initialPrice + sumOfSegments * (1 + 0.2 * fourierSeries);
+            Log.d("STOCK PRICE FUNCTION", "time stamp " + timeStamp + "| initial price: " + initialPrice + "| sum of segments " + sumOfSegments + "| fourier series: " + fourierSeries + "| current price: " + currentPrice);
             if (currentPrice > 0)
                 return currentPrice;
             else
@@ -86,6 +103,9 @@ public class StockPriceFunction implements GameObserver, java.io.Serializable {
                 if(!segments.isEmpty())
                     segments.add(new Segment(segments.getLast().getEndTimeStamp(), Game.getInstance().getCurrentTimeStamp(), currentMarketFactor));
 
+                else{
+                    segments.add(new Segment(0, Game.getInstance().getCurrentTimeStamp(), currentMarketFactor));
+                }
                 //update new marketFactor
                 currentMarketFactor = (Double) event.getCargo();
                 break;
@@ -96,7 +116,7 @@ public class StockPriceFunction implements GameObserver, java.io.Serializable {
 
     public Double getCurrentMarketFactor(){return currentMarketFactor;}
 
-    private static class Segment{
+    private static class Segment implements Serializable {
         private final Integer startTimeStamp;
         private final Integer endTimeStamp;
         private final Double marketFactor;
