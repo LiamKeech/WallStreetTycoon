@@ -52,16 +52,22 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
         //new version
         holder.lblStockSymbol.setText(stock.getSymbol());
         holder.lblStockName.setText(stock.getStockName());
-        holder.lblSharesOwned.setText(Pstock.getQuantity() + " shares");
+        String sharesOwned = dbUtil.parseNumOfSharesToString(Pstock.getQuantity());
+        holder.lblSharesOwned.setText(sharesOwned);
+        //holder.lblSharesOwned.setText(Pstock.getQuantity() + " shares");
 
         double currentPrice = dbUtil.getCurrentStockPrice(stock.getStockID());
-        String currentPriceStr = String.format("$%.2f", currentPrice);
+        String currentPriceStr = dbUtil.parseDoubleToString(currentPrice);
         holder.lblCurrentPrice.setText(currentPriceStr);
 
         double priceChange = currentPrice - Pstock.getBuyPrice();
         String priceChangeStr;
         if (priceChange >= 0) {
-            priceChangeStr = String.format("+$%.2f (+%.1f%%)", priceChange, (priceChange / Pstock.getBuyPrice()) * 100);
+            //priceChangeStr = String.format("+$%.2f (+%.1f%%)", priceChange, (priceChange / Pstock.getBuyPrice()) * 100);
+            String percentIncrease = dbUtil.parseDoubleToString(Math.round((priceChange / Pstock.getBuyPrice()) * 100)); //give $9.9K
+            percentIncrease = percentIncrease.substring(1) + "%";
+            priceChangeStr = "+" + dbUtil.parseDoubleToString(priceChange) + " (+" + percentIncrease + ")" ;
+
             holder.lblPriceChange.setTextColor(context.getResources().getColor(R.color.Green));
         } else {
             priceChangeStr = String.format("$%.2f (%.1f%%)", priceChange, (priceChange / Pstock.getBuyPrice()) * 100);
@@ -70,7 +76,7 @@ public class PortfolioStockAdapter extends RecyclerView.Adapter<PortfolioStockAd
         holder.lblPriceChange.setText(priceChangeStr);
 
         double totalValueDouble = Pstock.getQuantity() * currentPrice;
-        String totalValueStr = String.format("$%.2f", totalValueDouble);
+        String totalValueStr = dbUtil.parseDoubleToString(totalValueDouble);
         holder.lblTotalValue_numeric.setText(totalValueStr);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

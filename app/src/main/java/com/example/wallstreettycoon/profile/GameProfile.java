@@ -146,7 +146,7 @@ public class GameProfile extends AppCompatActivity implements GameObserver {
         }
 
         //Update UI
-        tvTotalPortfolioValue.setText(String.format("$%.2f", totalPortfolioValue.doubleValue()));
+        tvTotalPortfolioValue.setText(dbUtil.parseDoubleToString(totalPortfolioValue.doubleValue()));
 
         if (profitLoss.compareTo(BigDecimal.ZERO) >= 0) {
             tvProfitLoss.setText(String.format("+$%.2f (+%.1f%%)", profitLoss.doubleValue(), profitLossPercentage));

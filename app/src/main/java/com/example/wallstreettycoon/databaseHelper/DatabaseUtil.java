@@ -190,6 +190,49 @@ public class DatabaseUtil {
         return spf.getCurrentPrice(Game.getInstance().getCurrentTimeStamp());
     }
 
+    public String parseDoubleToString(double value){
+        double balance = value;
+        String userBalance = "";
+        if(balance > 1_000_000_000_000.0) {
+            double dividedBalance = balance / 1_000_000_000_000.0;
+            userBalance = String.format("$%.1fB", dividedBalance);
+        }
+        else if(balance > 1_000_000_000) {
+            double dividedBalance = balance / 1_000_000_000;
+            userBalance = String.format("$%.1fB", dividedBalance);
+        }
+        else if(balance > 1_000_000){
+            double dividedBalance = balance / 1_000_000;
+            userBalance = String.format("$%.1fM", dividedBalance);
+        }
+        else if(balance > 1_000) {
+            double dividedBalance = balance / 1_000;
+            userBalance = String.format("$%.1fK", dividedBalance);
+        }
+        else
+            userBalance = String.format("$%.2f", balance);
+
+        return userBalance;
+    }
+
+    public String parseNumOfSharesToString(int numOfShares) {
+        String text;
+
+        if (numOfShares >= 1_000_000_000) {
+            double dividedShares = numOfShares / 1_000_000_000.0;
+            text = String.format("%.1fB shares", dividedShares);
+        } else if (numOfShares >= 1_000_000) {
+            double dividedShares = numOfShares / 1_000_000.0;
+            text = String.format("%.1fM shares", dividedShares);
+        } else if (numOfShares >= 1_000) {
+            double dividedShares = numOfShares / 1_000.0;
+            text = String.format("%.1fK shares", dividedShares);
+        } else {
+            text = numOfShares + " shares";
+        }
+
+        return text;
+    }
     public List<Integer> getAllStockIDs() {
         List<Integer> stockIDs = new ArrayList<>();
         Cursor cursor = null;

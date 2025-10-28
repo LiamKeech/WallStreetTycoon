@@ -60,7 +60,7 @@ public class BuyDialogFragment extends DialogFragment implements GameObserver {
         symbol.setText(symbolText);
 
         priceTextView = view.findViewById(R.id.currentPrice);
-        priceTextView.setText(String.format("$%.2f", currentPriceValue));
+        priceTextView.setText(DatabaseUtil.getInstance(getContext()).parseDoubleToString(currentPriceValue));
 
         // Quantity and total cost logic
         quantityInput = view.findViewById(R.id.quantityInput);
@@ -115,7 +115,8 @@ public class BuyDialogFragment extends DialogFragment implements GameObserver {
 
                 if (quantity > 0) {
                     double total = quantity * currentPriceValue;
-                    totalCost.setText(String.format("$%.2f", total));
+                    totalCost.setText(DatabaseUtil.getInstance(getContext()).parseDoubleToString(total));
+                    //totalCost.setText(String.format("$%.2f", total));
                 } else {
                     totalCost.setText("Enter a positive amount");
                 }

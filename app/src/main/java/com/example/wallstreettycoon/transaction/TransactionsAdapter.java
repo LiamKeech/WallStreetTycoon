@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 
 import java.util.List;
 
@@ -46,16 +47,18 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
         if (type.equals("BUY")) {
             holder.tvTypeBadge.setTextColor(context.getResources().getColor(R.color.Green));
-            holder.tvAmount.setText(String.format("+$%,.2f", totalAmount));
+            String formattedAmount = "+" + DatabaseUtil.getInstance(context).parseDoubleToString(totalAmount);
+            holder.tvAmount.setText(formattedAmount);
             holder.tvAmount.setTextColor(context.getResources().getColor(R.color.Green));
         } else {
             holder.tvTypeBadge.setTextColor(context.getResources().getColor(R.color.Red));
-            holder.tvAmount.setText(String.format("-$%,.2f", totalAmount));
+            String formattedAmount = "-" + DatabaseUtil.getInstance(context).parseDoubleToString(Math.abs(totalAmount));
+            holder.tvAmount.setText(formattedAmount);
             holder.tvAmount.setTextColor(context.getResources().getColor(R.color.Red));
         }
 
         int quantity = transaction.getQuantity();
-        holder.tvShares.setText(quantity + (quantity == 1 ? " Share" : " Shares"));
+        holder.tvShares.setText(DatabaseUtil.getInstance(context).parseNumOfSharesToString(quantity));
     }
 
     @Override

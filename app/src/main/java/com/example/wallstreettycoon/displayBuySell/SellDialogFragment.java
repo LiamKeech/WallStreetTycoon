@@ -29,7 +29,7 @@ public class SellDialogFragment extends DialogFragment implements GameObserver {
     private String symbolText;
     private double currentPriceValue;
     private String username;
-    private double ownedShares;
+    private Integer ownedShares;
 
     private TextView header, symbol, priceTextView, totalCost, remainingShares;
     private EditText quantityInput;
@@ -73,7 +73,7 @@ public class SellDialogFragment extends DialogFragment implements GameObserver {
         DatabaseUtil dbUtil = DatabaseUtil.getInstance(requireContext());
         int portfolioID = dbUtil.getPortfolioID(username);
         ownedShares = dbUtil.getQuantity(portfolioID, stockID);
-        remainingShares.setText(String.format("%.2f", ownedShares));
+        remainingShares.setText(DatabaseUtil.getInstance(getContext()).parseNumOfSharesToString(ownedShares));
 
         // If no shares owned, disable confirm and select all
         if (ownedShares <= 0) {
@@ -132,29 +132,29 @@ public class SellDialogFragment extends DialogFragment implements GameObserver {
                 if (quantity <= 0) {
                     totalCost.setText("Enter positive amount");
                     confirmButton.setEnabled(false);
-                    remainingShares.setText(String.format("%.2f", ownedShares));
+                    remainingShares.setText(DatabaseUtil.getInstance(getContext()).parseNumOfSharesToString(ownedShares));
                 } else if (quantity > ownedShares) {
                     totalCost.setText("Not enough shares");
                     confirmButton.setEnabled(false);
-                    remainingShares.setText(String.format("%.2f", ownedShares));
+                    remainingShares.setText(DatabaseUtil.getInstance(getContext()).parseNumOfSharesToString(ownedShares));
                 } else {
                     double total = quantity * currentPriceValue;
-                    totalCost.setText(String.format("$%.2f", total));
+                    totalCost.setText(DatabaseUtil.getInstance(getContext()).parseDoubleToString(total));
                     confirmButton.setEnabled(true);
 
                     // Dynamically update remaining shares
-                    double remaining = ownedShares - quantity;
-                    remainingShares.setText(String.format("%.2f", remaining));
+                    int remaining = ownedShares - quantity;
+                    remainingShares.setText(DatabaseUtil.getInstance(getContext()).parseNumOfSharesToString(remaining));
                 }
             } catch (NumberFormatException e) {
                 totalCost.setText("Invalid input");
                 confirmButton.setEnabled(false);
-                remainingShares.setText(String.format("%.2f", ownedShares));
+                remainingShares.setText(DatabaseUtil.getInstance(getContext()).parseNumOfSharesToString(ownedShares));
             }
         } else {
             totalCost.setText("$0.00");
             confirmButton.setEnabled(false);
-            remainingShares.setText(String.format("%.2f", ownedShares));
+            remainingShares.setText(DatabaseUtil.getInstance(getContext()).parseNumOfSharesToString(ownedShares));
         }
     }
 
@@ -168,7 +168,7 @@ public class SellDialogFragment extends DialogFragment implements GameObserver {
                 StockPriceFunction stockPriceFunction = Game.getInstance().getStockPriceFunction(stockID);
 
                 currentPriceValue = stockPriceFunction.getCurrentPrice(Game.getInstance().getCurrentTimeStamp());
-                priceTextView.setText(String.format("$%.2f", currentPriceValue));
+                priceTextView.setText(dbUtil.parseDoubleToString(currentPriceValue));
 
                 // Update total proceeds with new price
                 updateSellCalculations(quantityInput.getText().toString().trim());

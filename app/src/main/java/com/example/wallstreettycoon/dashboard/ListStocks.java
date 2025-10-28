@@ -220,26 +220,7 @@ public class ListStocks extends AppCompatActivity implements GameObserver, Filte
     private void updateUserBalance() {
         if (Game.currentUser() != null) {
             double balance = dbUtil.getUser(Game.currentUser().getUserUsername()).getUserBalance();
-            String userBalance = "";
-            if(balance > 1_000_000_000_000.0) {
-                double dividedBalance = balance / 1_000_000_000_000.0;
-                userBalance = String.format("$%.1fB", dividedBalance);
-            }
-            else if(balance > 1_000_000_000) {
-                double dividedBalance = balance / 1_000_000_000;
-                userBalance = String.format("$%.1fB", dividedBalance);
-            }
-            else if(balance > 1_000_000){
-                double dividedBalance = balance / 1_000_000;
-                userBalance = String.format("$%.1fM", dividedBalance);
-            }
-            else if(balance > 1_000) {
-                double dividedBalance = balance / 1_000;
-                userBalance = String.format("$%.1fK", dividedBalance);
-            }
-            else
-                userBalance = String.format("$%.2f", balance);
-
+            String userBalance = dbUtil.parseDoubleToString(balance);
             viewBalance.setText(userBalance);
         }
     }

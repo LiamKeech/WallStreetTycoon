@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.displayBuySell.DisplayStockActivity;
-import com.example.wallstreettycoon.model.Game;
 
 import java.util.List;
 
@@ -53,7 +52,7 @@ public class StockAdapter extends RecyclerView.Adapter<StockAdapter.ViewHolder> 
         holder.stockName.setText(stock.getStockName());
 
         try {
-            holder.stockPrice.setText("$" + String.format("%.2f",dbUtil.getCurrentStockPrice(stock.getStockID())));
+            holder.stockPrice.setText(dbUtil.parseDoubleToString(dbUtil.getCurrentStockPrice(stock.getStockID())));
         } catch (Exception e){
             e.printStackTrace();
         }
