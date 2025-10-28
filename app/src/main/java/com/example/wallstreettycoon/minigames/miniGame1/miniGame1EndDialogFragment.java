@@ -5,21 +5,29 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
+import java.io.OutputStream;
 
 import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
 import com.example.wallstreettycoon.dashboard.ListStocks;
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.model.Game;
 import com.example.wallstreettycoon.model.GameEvent;
 import com.example.wallstreettycoon.model.GameEventType;
+
+import org.json.JSONObject;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class miniGame1EndDialogFragment extends DialogFragment {
     Float profit;
@@ -36,6 +44,9 @@ public class miniGame1EndDialogFragment extends DialogFragment {
             profit = getArguments().getFloat("profit");
 
         }
+        new Thread(() -> {
+            DatabaseUtil.getInstance(getContext()).uploadScores(profit, "minigame1");
+        }).start();
 
         profitLabel = view.findViewById(R.id.profit_end_textview);
         if(profit > 0.0){

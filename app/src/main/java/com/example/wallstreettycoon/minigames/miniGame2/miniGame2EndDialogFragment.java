@@ -56,12 +56,11 @@ public class miniGame2EndDialogFragment extends DialogFragment {
             window.setDimAmount(0.5f); // Optional: dim background
         }
         getDialog().getWindow().setDimAmount(0.5f); // Maintain dimming
-
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Game.getInstance().onGameEvent(new GameEvent(GameEventType.MINIGAME_COMPLETED, "Minigame 2 completed", 2));
-                Intent intent = new Intent(getActivity(), ListStocks.class); //will change to dashboard
+                Intent intent = new Intent(getActivity(), ListStocks.class);
                 intent.putExtra("view", "M");
                 startActivity(intent);
             }

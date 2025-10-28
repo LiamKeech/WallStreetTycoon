@@ -16,7 +16,12 @@ import com.example.wallstreettycoon.stock.StockPriceFunction;
 import com.example.wallstreettycoon.transaction.Transaction;
 import com.example.wallstreettycoon.useraccount.User;
 
+import org.json.JSONObject;
+
+import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -753,5 +758,29 @@ public class DatabaseUtil {
             if (cursor != null) cursor.close();
         }
         return marketEvents;
+    }
+
+    public void uploadScores(Float score, String minigame){
+        try {
+            URL url = new URL("https://script.google.com/macros/s/AKfycbwuDgCY7I3RpQQVuiN1WSG0D3kRUeVOFoq4XZkEJXxk11lBSvodFUnS57C_QxInqcLy/exec");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setDoOutput(true);
+
+            JSONObject data = new JSONObject();
+            data.put("username", Game.getInstance().currentUser().getUserUsername());
+            data.put("score", score);
+            data.put("minigame", minigame);
+
+            try (OutputStream os = conn.getOutputStream()) {
+                os.write(data.toString().getBytes());
+            }
+
+            int responseCode = conn.getResponseCode();
+            Log.d("ScoreUpload", "Response: " + responseCode);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
     }
 }
