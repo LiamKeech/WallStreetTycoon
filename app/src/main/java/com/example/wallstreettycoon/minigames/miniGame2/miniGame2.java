@@ -23,6 +23,7 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.wallstreettycoon.R;
+import com.example.wallstreettycoon.databaseHelper.DatabaseUtil;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.Board;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.Cell;
 import com.example.wallstreettycoon.minigames.miniGame2.miniGame2Model.ConnectionOverlay;
@@ -199,6 +200,10 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                 drawGrid();
                 break;
             case GAME_OVER:
+                float score = (float) gameEvent.getCargo();
+                new Thread(() -> {
+                    DatabaseUtil.getInstance(getApplicationContext()).uploadScores(score, "minigame2");
+                }).start();
                 DialogFragment endDialogFragment = new miniGame2EndDialogFragment();
                 endDialogFragment.show(getSupportFragmentManager(), "miniGame1End");
                 break;

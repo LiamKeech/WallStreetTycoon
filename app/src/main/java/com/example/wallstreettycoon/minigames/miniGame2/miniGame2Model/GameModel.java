@@ -20,6 +20,8 @@ public class GameModel {
     private List<List<Cell>> wordsFound;
     private Board board;
 
+    private float numOfHintsUsed = 0;
+
     public GameModel(){
         this.board = new Board();
         wordsFound = new ArrayList<>();
@@ -122,7 +124,7 @@ public class GameModel {
 
     public void checkWinCondition(){
         if(wordsFound.size() == 7){
-            observer.onGameEvent(new GameEvent(GameEventType.GAME_OVER, getWordsFoundStrings()));
+            observer.onGameEvent(new GameEvent(GameEventType.GAME_OVER, numOfHintsUsed));
         }
     }
 
@@ -131,6 +133,7 @@ public class GameModel {
      */
     public String getHint(){
         List<String> keys = new ArrayList<>(availiableHints.keySet());
+        numOfHintsUsed++;
         return availiableHints.get(keys.getLast());
     }
 
