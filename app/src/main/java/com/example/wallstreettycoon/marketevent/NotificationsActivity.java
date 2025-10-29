@@ -55,6 +55,7 @@ public class NotificationsActivity extends AppCompatActivity {
 
     private void loadNotifications() {
         List<Integer> displayedNotificationIds = Game.getInstance().displayedNotifications;
+
         List<MarketEvent> allNotifications = dbUtil.getMarketEvents();
         List<MarketEvent> displayedNotifications = allNotifications.stream()
                 .filter(event -> displayedNotificationIds.contains(event.getMarketEventID()))
@@ -69,7 +70,8 @@ public class NotificationsActivity extends AppCompatActivity {
 
             Collections.reverse(displayedNotifications);
 
-            NotificationAdapter adapter = new NotificationAdapter(this, displayedNotifications);
+            NotificationAdapter adapter = new NotificationAdapter(this, allNotifications);
+            //NotificationAdapter adapter = new NotificationAdapter(this, displayedNotifications);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
             rvNotifications.setLayoutManager(layoutManager);
             rvNotifications.setAdapter(adapter);

@@ -6,6 +6,7 @@
 package com.example.wallstreettycoon.minigames.miniGame3.miniGame3GameModel;
 
 public class Timer {
+    private long startTime;
     private long remainingTime; // in milliseconds
     private long endTime;       //system time when the timer should end
     private long maxTime;
@@ -26,6 +27,7 @@ public class Timer {
         if (running) return;
 
         running = true;
+        startTime = System.currentTimeMillis();
         endTime = System.currentTimeMillis() + remainingTime;
 
         workerThread = new Thread(() -> {
@@ -72,6 +74,9 @@ public class Timer {
         } else {
             return remainingTime;
         }
+    }
+    public float getFinalTime(){
+        return (float) (System.currentTimeMillis() - startTime) / 1000;
     }
 
     public long getMaxTime(){return maxTime;}

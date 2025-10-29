@@ -1,6 +1,7 @@
 package com.example.wallstreettycoon.minigames.miniGame3;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +20,7 @@ import com.example.wallstreettycoon.model.GameEventType;
 
 public class miniGame3 extends AppCompatActivity implements GameObserver {
 
-
+    private Model model;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +32,7 @@ public class miniGame3 extends AppCompatActivity implements GameObserver {
             return insets;
         });
 
-        Model model = new Model();
+        model = new Model();
         model.setGameObserver(this);
 
         NetworkView networkView = findViewById(R.id.networkView);
@@ -49,6 +50,8 @@ public class miniGame3 extends AppCompatActivity implements GameObserver {
             case GAME_OVER:
                 if((boolean)gameEvent.getCargo()){
                     Game.getInstance().getStockPriceFunction(50).onGameEvent(new com.example.wallstreettycoon.model.GameEvent(GameEventType.MARKET_EVENT, "Market factor changed", 100000.0));
+                    Log.d("MINIGAME3", String.valueOf(model.getTimer().getFinalTime()));
+                    new Thread(() -> {DatabaseUtil.getInstance(getApplicationContext()).uploadScores(model.getTimer().getFinalTime(),"minigame3");}).start();
 
                 }
                 else{

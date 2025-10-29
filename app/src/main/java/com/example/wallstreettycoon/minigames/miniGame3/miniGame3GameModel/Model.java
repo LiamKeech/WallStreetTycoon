@@ -24,6 +24,8 @@ public class Model {
     public Network getNetwork(){return network;}
     public Timer getTimer(){return timer;}
 
+
+
     public void setGameObserver(GameObserver go){this.gameObserver = go;}
 
     public void onGameWin(){

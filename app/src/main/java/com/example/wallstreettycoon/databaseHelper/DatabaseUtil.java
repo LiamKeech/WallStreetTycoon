@@ -762,7 +762,7 @@ public class DatabaseUtil {
 
     public void uploadScores(Float score, String minigame){
         try {
-            URL url = new URL("https://script.google.com/macros/s/AKfycbwuDgCY7I3RpQQVuiN1WSG0D3kRUeVOFoq4XZkEJXxk11lBSvodFUnS57C_QxInqcLy/exec");
+            URL url = new URL("https://script.google.com/macros/s/AKfycbz01xarove4BaZzRSHba7N1eSTdajsQJlou8u_qAILom-SdBn8l5-SV8Pb7Ka_m36zH/exec");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("POST");
             conn.setRequestProperty("Content-Type", "application/json");
