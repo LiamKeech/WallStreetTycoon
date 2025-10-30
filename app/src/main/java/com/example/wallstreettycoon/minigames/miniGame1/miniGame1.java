@@ -68,6 +68,7 @@ public class miniGame1 extends AppCompatActivity {
             Double balance = Game.getInstance().currentUser().getUserBalance();
             DatabaseUtil.getInstance(this).updateBalance(balance + profit, Game.getInstance().currentUser().getUserUsername());
             miniGame1EndDialogFragment endDialogFragment = new miniGame1EndDialogFragment();
+            endDialogFragment.setCancelable(false);
 
             Bundle bundle = new Bundle();
             bundle.putFloat("profit", profit);

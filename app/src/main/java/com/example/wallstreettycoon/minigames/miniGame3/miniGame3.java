@@ -61,6 +61,7 @@ public class miniGame3 extends AppCompatActivity implements GameObserver {
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("win", (boolean) gameEvent.getCargo());
                 DialogFragment endDialogFragment = new miniGame3EndDialogFragment();
+                endDialogFragment.setCancelable(false);
                 endDialogFragment.setArguments(bundle);
                 endDialogFragment.show(getSupportFragmentManager(), "miniGame3End");
                 break;

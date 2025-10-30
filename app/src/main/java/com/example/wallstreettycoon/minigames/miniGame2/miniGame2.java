@@ -205,6 +205,7 @@ public class miniGame2 extends AppCompatActivity implements GameObserver {
                     DatabaseUtil.getInstance(getApplicationContext()).uploadScores(score, "minigame2");
                 }).start();
                 DialogFragment endDialogFragment = new miniGame2EndDialogFragment();
+                endDialogFragment.setCancelable(false);
                 endDialogFragment.show(getSupportFragmentManager(), "miniGame1End");
                 break;
         }
