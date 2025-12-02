@@ -18,6 +18,46 @@ The objective is to reach a net worth goal (e.g., 1 trillion in-game currency) t
 
 ---
 
+## 🧩 Core Features
+
+### 📈 Buy & Sell Stocks  
+Trade using in-game currency with real-time updates
+
+<p align="center">
+  <img width="400" src="https://github.com/user-attachments/assets/97b22c93-e26f-4008-8eb6-ca7eb7631d5f" />
+</p>
+
+---
+
+### 🧠 Mini-Games  
+
+<p align="center">
+  <img width="400" src="https://github.com/user-attachments/assets/7daa35ba-a324-4055-abd4-5e8fd2e22434" />
+  <img width="400" src="https://github.com/user-attachments/assets/e1a032d2-657c-4542-ade7-2fff712213bc" />
+</p>
+
+<p align="center">
+  <img width="400" src="https://github.com/user-attachments/assets/d96f15e4-e843-44aa-965b-50990c997b76" />
+</p>
+
+---
+
+### 📊 Dynamic Portfolio View  
+
+<p align="center">
+  <img width="400" src="https://github.com/user-attachments/assets/c93b822f-b570-4b4c-a8da-f89d959dd179" />
+</p>
+
+---
+
+### 🔔 Market Notifications  
+
+<p align="center">
+  <img width="400" src="https://github.com/user-attachments/assets/b705e207-f394-47d9-b806-fc051c530fe9" />
+</p>
+
+---
+
 ## 🎮 Game Structure
 
 The game is divided into chapters, each simulating a distinct economic era:
@@ -33,17 +73,7 @@ Each chapter includes:
 - Market notifications and story prompts
 - Pre-determined stock price changes
 - Mini-games that influence your success
-
----
-
-## 🧩 Core Features
-
-- 📈 **Buy & Sell Stocks:** Trade using in-game currency with real-time portfolio updates
-- 🧠 **Mini-Games:** Logic, reaction-time, and puzzle games tied to market outcomes
-- 🧾 **Transaction History & Analytics:** Track your performance with visual dashboards
-- 📊 **Dynamic Portfolio View:** See your holdings via interactive pie charts and value breakdowns
-- 🔔 **Market Notifications:** In-game alerts drive the narrative and player decisions
-
+  
 ---
 
 ## 💾 Data Model (Entities)
