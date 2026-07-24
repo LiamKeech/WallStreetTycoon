@@ -103,18 +103,3 @@ Each chapter includes:
 - Tools: Android Studio
 
 ---
-
-## ✅ Project Status
-
-- [x] Functional specification complete
-- [ ] Core features under development
-- [ ] UI prototyping in progress
-- [ ] Game loop and save/load features in testing
-
----
-
-## 🚀 How to Run
-
-1. Clone this repo:
-   ```bash
-   git clone https://github.com/LiamKeech/WallStreetTycoon
