@@ -98,8 +98,116 @@ Each chapter includes:
 
 ## ⚙️ Tech Stack
 
-- Language: Java
+- Language: Java 11
 - Database: SQLite
+- Charts: MPAndroidChart v3.1.0
+- Build: Gradle 8.9 with Android Gradle Plugin 8.7.3
 - Tools: Android Studio
+
+---
+
+## 📲 Download & Install
+
+Grab the latest sideloadable APK from the
+**[Releases page](https://github.com/LiamKeech/WallStreetTycoon/releases/latest)**.
+
+### Requirements
+
+| | |
+|---|---|
+| **Minimum Android version** | **Android 13 (API 33)** |
+| Target Android version | Android 15 (API 35) |
+| Compiled against | compileSdk 35 |
+| Architecture | Universal, no native code |
+| Permissions | `INTERNET` |
+| Download size | ~12.4 MB |
+
+The app will **not** install on Android 12 or older.
+
+### Installing on a phone
+
+1. Download the APK to the device, or copy it across over USB.
+2. Open it from the Files app or from the download notification.
+3. Android will ask you to allow installs from whichever app opened it
+   (Files, Chrome, and so on). Grant that, then tap **Install**.
+4. Play Protect may warn that the developer is unknown. That is expected for a
+   sideloaded build, choose **Install anyway**.
+
+### Installing over USB
+
+With USB debugging enabled on the device:
+
+```bash
+adb install -r WallStreetTycoon-v1.0-debug.apk
+```
+
+### A note on signing
+
+The published APK is **debug-signed**, using the standard Android debug
+certificate (`CN=Android Debug, O=Android, C=US`) with APK Signature Scheme v2.
+That is fine for sideloading and testing. It is not a Play Store build, and a
+future release-signed APK will not upgrade over it in place, so uninstall this
+one first if that ever happens.
+
+---
+
+## 🚀 Building from Source
+
+### Prerequisites
+
+- **JDK 17 or 21.** AGP 8.7.3 will not run on JDK 25. Android Studio's bundled
+  JBR works; point `JAVA_HOME` at it if your system default is newer.
+- **Android SDK Platform 35** and the matching build tools.
+- No Gradle install needed, the wrapper fetches Gradle 8.9 on first run.
+
+### Clone and configure
+
+```bash
+git clone https://github.com/LiamKeech/WallStreetTycoon.git
+cd WallStreetTycoon
+```
+
+Point the build at your SDK. In Android Studio, opening the project does this
+for you. Otherwise create a `local.properties` file in the project root
+(it is gitignored):
+
+```properties
+sdk.dir=C\:\\Users\\<you>\\AppData\\Local\\Android\\Sdk
+```
+
+On macOS or Linux:
+
+```properties
+sdk.dir=/Users/<you>/Library/Android/sdk
+```
+
+Alternatively, export `ANDROID_HOME` instead of creating the file.
+
+### Build
+
+```bash
+# Windows
+gradlew.bat assembleDebug
+
+# macOS / Linux
+./gradlew assembleDebug
+```
+
+The APK lands at `app/build/outputs/apk/debug/app-debug.apk`.
+
+If your default JDK is too new, override it for the build:
+
+```bash
+# Windows, using Android Studio's bundled JDK
+set "JAVA_HOME=C:\Program Files\Android\Android Studio\jbr" && gradlew.bat assembleDebug
+```
+
+### Install what you just built
+
+```bash
+./gradlew installDebug          # to a connected device or running emulator
+```
+
+Or open the project in Android Studio and press **Run**.
 
 ---
